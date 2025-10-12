@@ -1,4 +1,4 @@
-# Improve Testing & QA Agent
+﻿# Improve Testing & QA Agent
 
 **Target**: `ai_agents/testing_qa_agent.system.prompt.md`  
 **Specialty**: pytest, test generation, validation, quality assurance
@@ -49,4 +49,4 @@ Beyond standard criteria (see system_config.json), ensure:
 
 ---
 
-**Version**: 0.1 | **Updated**: 2025-01-12 | **Status**: Alpha - Untested, undergoing initial validation
+**Version**: 0.1 | **Updated**: 2025-10-12 | **Status**: Alpha - Untested, undergoing initial validation

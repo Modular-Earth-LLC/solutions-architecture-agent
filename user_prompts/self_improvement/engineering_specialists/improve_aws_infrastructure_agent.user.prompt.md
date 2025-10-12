@@ -1,4 +1,4 @@
-# Improve AWS Infrastructure Agent
+﻿# Improve AWS Infrastructure Agent
 
 **Target**: `ai_agents/aws_infrastructure_agent.system.prompt.md`  
 **Specialty**: ECS, Lambda, CDK, CloudWatch, infrastructure as code
@@ -49,4 +49,4 @@ Beyond standard criteria (see system_config.json), ensure:
 
 ---
 
-**Version**: 0.1 | **Updated**: 2025-01-12 | **Status**: Alpha - Untested, undergoing initial validation
+**Version**: 0.1 | **Updated**: 2025-10-12 | **Status**: Alpha - Untested, undergoing initial validation

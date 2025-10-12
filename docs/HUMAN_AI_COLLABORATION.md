@@ -1,4 +1,4 @@
-# Human-AI Collaboration Guide
+﻿# Human-AI Collaboration Guide
 
 **Version**: 0.1.0-alpha | **Status**: Alpha
 
@@ -138,4 +138,4 @@ A: YOU. Agents augment, you approve what gets deployed.
 
 ---
 
-**Version**: 0.1.0-alpha | **Updated**: 2025-01-12 | **Status**: Alpha
+**Version**: 0.1.0-alpha | **Updated**: 2025-10-12 | **Status**: Alpha

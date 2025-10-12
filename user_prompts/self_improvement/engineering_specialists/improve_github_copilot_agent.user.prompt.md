@@ -1,4 +1,4 @@
-# Improve GitHub & GitHub Copilot Agent
+﻿# Improve GitHub & GitHub Copilot Agent
 
 **Target**: `ai_agents/github_copilot_agent.system.prompt.md`  
 **Specialty**: GitHub Actions, CI/CD, Copilot chat modes, repository management
@@ -49,4 +49,4 @@ Beyond standard criteria (see system_config.json), ensure:
 
 ---
 
-**Version**: 0.1 | **Updated**: 2025-01-12 | **Status**: Alpha - Untested, undergoing initial validation
+**Version**: 0.1 | **Updated**: 2025-10-12 | **Status**: Alpha - Untested, undergoing initial validation

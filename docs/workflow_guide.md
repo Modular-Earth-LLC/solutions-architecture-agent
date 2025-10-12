@@ -1,4 +1,4 @@
-# Workflow Guide
+﻿# Workflow Guide
 
 **Version**: 0.1.0-alpha | **Status**: Alpha
 
@@ -112,4 +112,4 @@ Complete development lifecycle: Requirements → Architecture → Engineering �
 
 ---
 
-**Version**: 0.1.0-alpha | **Updated**: 2025-01-12
+**Version**: 0.1.0-alpha | **Updated**: 2025-10-12

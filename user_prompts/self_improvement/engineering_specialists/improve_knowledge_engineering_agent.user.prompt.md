@@ -1,4 +1,4 @@
-# Improve Knowledge Engineering Agent
+﻿# Improve Knowledge Engineering Agent
 
 **Target**: `ai_agents/knowledge_engineering_agent.system.prompt.md`  
 **Specialty**: Vector databases, RAG, embeddings, semantic search
@@ -49,4 +49,4 @@ Beyond standard criteria (see system_config.json), ensure:
 
 ---
 
-**Version**: 0.1 | **Updated**: 2025-01-12 | **Status**: Alpha - Untested, undergoing initial validation
+**Version**: 0.1 | **Updated**: 2025-10-12 | **Status**: Alpha - Untested, undergoing initial validation

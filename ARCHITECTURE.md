@@ -381,7 +381,7 @@ multi-agent-ai-development-framework/
 **Generated System Platforms**: Claude Projects • AWS Bedrock (hyper-specialized)  
 **Tech Stack Focus**: Python, Streamlit, Anthropic Claude (5 specialists), AWS Bedrock (2 specialists), MCP, LangChain  
 **Agent Count**: 23 specialized agents (1 Supervisor + 22 specialists in two-layer architecture)  
-**Last Major Update**: 2025-01-12 - Engineering Agent decomposed into 16 hyper-specialized agents
+**Last Major Update**: 2025-10-12 - Engineering Agent decomposed into 16 hyper-specialized agents
 - Anthropic Claude: 5 specialists (Code, Workspaces, Agents SDK, MCP, Projects)
 - AWS Bedrock: 2 specialists (AgentCore, Strands)
 - GitHub & Cursor: Split into separate specialists

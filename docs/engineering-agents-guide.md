@@ -1,4 +1,4 @@
-# Engineering Agents Guide
+﻿# Engineering Agents Guide
 
 **Version**: 0.1.0-alpha | **Status**: Alpha
 
@@ -107,4 +107,4 @@ Request anything → Supervisor identifies which specialist(s) → Coordinates m
 
 ---
 
-**Version**: 0.1.0-alpha | **Updated**: 2025-01-12
+**Version**: 0.1.0-alpha | **Updated**: 2025-10-12

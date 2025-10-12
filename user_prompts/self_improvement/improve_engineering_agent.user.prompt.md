@@ -1,6 +1,6 @@
-# ⚠️ DEPRECATED - Improve Engineering Agent
+﻿# ⚠️ DEPRECATED - Improve Engineering Agent
 
-**Status**: DEPRECATED as of v2.0.0 (2025-01-12)
+**Status**: DEPRECATED as of v2.0.0 (2025-10-12)
 
 ---
 
@@ -26,6 +26,6 @@
 
 ---
 
-**Deprecated**: 2025-01-12  
+**Deprecated**: 2025-10-12  
 **Reason**: Replaced by two-layer specialist architecture  
 **Migration**: Use Engineering Supervisor + specialist improvement prompts

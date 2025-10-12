@@ -1,4 +1,4 @@
-# Getting Started
+﻿# Getting Started
 
 **Version**: 0.1.0-alpha | **Status**: Alpha - First-time use guide
 
@@ -103,4 +103,4 @@ cd multi-agent-ai-development-framework
 
 ---
 
-**Version**: 0.1.0-alpha | **Updated**: 2025-01-12 | **Alpha**: Expect bugs, report issues
+**Version**: 0.1.0-alpha | **Updated**: 2025-10-12 | **Alpha**: Expect bugs, report issues

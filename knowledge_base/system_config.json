@@ -3,7 +3,7 @@
   "title": "AI Architecture Assistant - System Configuration",
   "description": "Read-only configuration file for platform settings, constraints, stakeholders, and team information. AI engineers update this manually or as human-in-the-loop.",
   "version": "0.1.0-alpha",
-  "last_updated": "2025-01-12",
+  "last_updated": "2025-10-12",
   "status": "Alpha - Untested in production, undergoing initial validation",
   
   "project": {
@@ -149,7 +149,7 @@
   "technical_references": {
     "_description": "Centralized technical documentation, research papers, frameworks, and design patterns. All agents MUST reference this section instead of duplicating URLs inline.",
     "_usage": "Agents should reference by key (e.g., 'See system_config.json → technical_references → anthropic_docs') to maintain single source of truth",
-    "_last_updated": "2025-01-12",
+    "_last_updated": "2025-10-12",
     
     "anthropic_claude": {
       "official_docs": "https://docs.anthropic.com/en/docs/intro",
@@ -312,7 +312,7 @@
   "self_improvement_framework": {
     "_description": "Shared framework for all agent self-improvement prompts. Defines common principles, methodology, and success criteria that apply across all agents.",
     "_usage": "All improve_*.user.prompt.md files reference this section instead of duplicating improvement methodology",
-    "_last_updated": "2025-01-12",
+    "_last_updated": "2025-10-12",
     
     "purpose": "Systematic agent improvement using evidence-based optimization principles",
     

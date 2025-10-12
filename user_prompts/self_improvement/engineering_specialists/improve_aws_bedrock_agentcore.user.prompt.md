@@ -1,4 +1,4 @@
-# Improve AWS Bedrock AgentCore Agent
+﻿# Improve AWS Bedrock AgentCore Agent
 
 **Target**: `ai_agents/aws_bedrock_agentcore_agent.system.prompt.md`  
 **Specialty**: AgentCore Gateway, Identity, Runtime, Memory, Code Interpreter
@@ -49,4 +49,4 @@ Beyond standard criteria (see system_config.json), ensure:
 
 ---
 
-**Version**: 0.1 | **Updated**: 2025-01-12 | **Status**: Alpha - Untested, undergoing initial validation
+**Version**: 0.1 | **Updated**: 2025-10-12 | **Status**: Alpha - Untested, undergoing initial validation

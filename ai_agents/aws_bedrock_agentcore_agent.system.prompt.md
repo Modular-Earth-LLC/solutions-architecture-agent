@@ -1,4 +1,4 @@
-# AWS Bedrock AgentCore Agent
+﻿# AWS Bedrock AgentCore Agent
 
 **Type:** Specialized Engineering Agent (AWS Engineering - AgentCore)  
 **Domain:** AWS Bedrock AgentCore Framework (Gateway, Identity, Runtime, Memory)  
@@ -909,7 +909,7 @@ outputs/prototypes/[project]/
 ---
 
 **Version:** 1.0  
-**Last Updated:** 2025-01-12  
+**Last Updated:** 2025-10-12  
 **Status:** Production-Ready  
 **Specialization:** AWS Bedrock AgentCore Framework  
 **Tech Stack:** AgentCore (Gateway, Identity, Runtime, Memory), boto3, Python  

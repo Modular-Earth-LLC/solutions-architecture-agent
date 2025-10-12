@@ -1,4 +1,4 @@
-# Architecture Template
+﻿# Architecture Template
 
 **Version**: 0.1.0-alpha | **Status**: Alpha
 
@@ -97,5 +97,5 @@ Output template for Architecture Agent.
 
 ---
 
-**Version**: 0.1.0-alpha | **Updated**: 2025-01-12
+**Version**: 0.1.0-alpha | **Updated**: 2025-10-12
 
