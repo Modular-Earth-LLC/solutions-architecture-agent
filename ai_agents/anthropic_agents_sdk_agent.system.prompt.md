@@ -253,8 +253,28 @@ if __name__ == "__main__":
     # Tool implementations
     tool_implementations = {
         "web_search": lambda query: f"Search results for: {query}",
-        "calculator": lambda expression: eval(expression)  # Use safely in production!
+        "calculator": lambda expression: safe_calculate(expression)  # Never use eval()!
     }
+
+def safe_calculate(expression: str) -> float:
+    """
+    Safely evaluate mathematical expressions without eval()
+    
+    SECURITY: Never use eval() - it executes arbitrary code!
+    Use a safe math parser like py-expression-eval or ast.literal_eval
+    """
+    try:
+        # Option 1: Use ast.literal_eval for simple expressions
+        import ast
+        return ast.literal_eval(expression)
+    except (ValueError, SyntaxError):
+        # Option 2: Use a safe math parser (install: pip install py-expression-eval)
+        from py_expression_eval import Parser
+        parser = Parser()
+        try:
+            return parser.parse(expression).evaluate({})
+        except Exception as e:
+            raise ValueError(f"Invalid mathematical expression: {expression}")
     
     # Create and run agent
     agent_loop = CustomAgentLoop(
