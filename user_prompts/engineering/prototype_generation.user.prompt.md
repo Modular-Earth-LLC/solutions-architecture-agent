@@ -1,11 +1,27 @@
 # Prototype Generation - User Prompt
 
+**⚠️ DEPRECATED**: This prompt references the old monolithic Engineering Agent which has been decomposed into 16 specialized agents.
+
+**NEW APPROACH**: Use Engineering Supervisor Agent which coordinates:
+- Streamlit UI Agent (interfaces)
+- Claude Code/Workspaces/SDK/MCP Agents (LLM integration)
+- LangChain Agent (orchestration)
+- Data Engineering Agents (databases, RAG)
+- AWS Agents (AgentCore, Strands, Infrastructure, Security)
+- Testing, GitHub, Cursor Agents (quality, DevOps)
+
+**See**: `docs/engineering-agents-guide.md` for complete specialist documentation
+
+---
+
 **Phase:** Implementation (Phase 2)  
 **Purpose:** Build working AI system prototype from architecture design  
-**Agent:** Engineering Agent  
+**Agent:** Engineering Supervisor Agent (coordinates 16 specialists)  
 **Input:** `knowledge_base/user_requirements.json`, `knowledge_base/design_decisions.json`  
 **Output:** `outputs/prototypes/[project-name]/`  
 **Duration:** 2-5 days (depending on complexity)
+
+**Migration**: For new projects, request engineering work from Engineering Supervisor Agent which will route to appropriate specialists.
 
 ---
 
