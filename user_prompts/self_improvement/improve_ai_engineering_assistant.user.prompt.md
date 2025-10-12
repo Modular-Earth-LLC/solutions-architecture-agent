@@ -57,41 +57,46 @@ Systematically analyze and improve ALL components of the AI Engineering Assistan
 
 ### 1. Agent System Prompts (`ai_agents/`)
 
-**Agents to optimize:**
-- `supervisor_agent.system.prompt.md` - Multi-agent orchestration
-- `requirements_agent.system.prompt.md` - Discovery & requirements gathering
-- `architecture_agent.system.prompt.md` - System design & planning
-- `engineering_agent.system.prompt.md` - Prototype & code generation
-- `deployment_agent.system.prompt.md` - Testing & deployment
-- `optimization_agent.system.prompt.md` - System improvement (self-improvement with extra validation)
-- `prompt_engineering_agent.system.prompt.md` - Prompt creation & optimization
+**System Architecture** (v2.0 - 23 Agents):
+- Main Supervisor (1): Multi-agent orchestration
+- Top-Level Agents (5): Requirements, Architecture, Deployment, Optimization, Prompt Engineering
+- Engineering Supervisor (1): Coordinates 16 engineering specialists
+- **Engineering Specialists (16)**: Hyper-specialized by technology
+  * Anthropic Claude (5): Code, Workspaces, SDK, MCP Services, Projects
+  * AWS Bedrock (2): AgentCore, Strands
+  * Other (9): Streamlit UI, LangChain, Data×2, AWS×2, Testing, GitHub, Cursor
 
 **Assessment focus:**
-- Anthropic/OpenAI prompt engineering best practices
+- Anthropic/OpenAI/AWS prompt engineering best practices
+- TRM validation framework integration (`ai_agents/shared/validation_framework.md`)
 - Clear role definitions, structured instructions, concrete examples
 - Chain-of-thought reasoning, tool usage patterns
-- Separation of concerns, no capability overlap
+- Separation of concerns, no capability overlap (each agent ONE technology)
 - AWS Well-Architected alignment
+- Reference system_config.json → technical_references (150+ URLs)
+- Consistent quality benchmarks across all 16 engineering specialists
 
 ---
 
 ### 2. User Prompts (`user_prompts/`)
 
-**Categories:**
+**Categories (v2.0 - ~60 prompts)**:
 - `requirements/*.user.prompt.md` - Discovery workflows (4 prompts)
 - `architecture/*.user.prompt.md` - Architecture tasks (6 prompts)
-- `engineering/*.user.prompt.md` - Engineering tasks (1 prompt)
+- `engineering/*.user.prompt.md` - Engineering tasks (22 prompts across 12 specialist categories)
 - `deployment/*.user.prompt.md` - Deployment tasks (2 prompts)
-- `self_improvement/*.user.prompt.md` - Agent improvement tasks (8 prompts, including THIS prompt)
+- `self_improvement/*.user.prompt.md` - Agent improvement (24 prompts: 17 engineering specialists + 7 others)
+- `self_improvement/engineering_specialists/*.user.prompt.md` - Specialist improvements (17 prompts)
 - `prompt_engineering/*.user.prompt.md` - Prompt engineering tasks (6 prompts)
 - `proposals/*.user.prompt.md` - Proposal assembly (4 prompts)
 
 **Assessment focus:**
 - Clarity and conciseness
-- Appropriate level of detail (task specification vs. methodology duplication)
+- Specialist-specific task coverage (each of 16 specialists needs 3-5 essential prompts)
 - Consistency across similar prompt types
-- Integration with agent system prompts
+- Integration with agent system prompts and validation framework
 - Token efficiency
+- Reference to centralized technical_references in system_config.json
 
 ---
 
@@ -293,8 +298,9 @@ Test these critical workflows:
 
 ---
 
-**Version:** 1.0  
-**Last Updated:** 2025-10-10  
+**Version:** 2.0  
+**Last Updated:** 2025-01-12  
 **Maintained By:** AI Engineering Assistant Core Team  
 **Optimization Cycle:** Quarterly or as-needed  
-**Safety Mechanism:** Iteration tracking prevents infinite loops (MAX_ITERATIONS = 1)
+**Safety Mechanism:** Iteration tracking prevents infinite loops (MAX_ITERATIONS = 1)  
+**System Version**: v2.0.0 (23 agents, 16 engineering specialists, TRM validation framework)

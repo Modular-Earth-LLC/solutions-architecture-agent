@@ -485,8 +485,9 @@ This prompt is **context-agnostic** and can be executed in multiple ways:
 
 ---
 
-**Version:** 0.1  
-**Last Updated:** 2025-10-04  
+**Version:** 1.0  
+**Last Updated:** 2025-01-12  
 **Target Agent:** Architecture Agent  
 **Optimization Cycle:** Quarterly or as-needed  
-**Execution Mode:** Context-agnostic (orchestrated or standalone)
+**Execution Mode:** Context-agnostic (orchestrated or standalone)  
+**System Context**: v2.0.0 (23-agent architecture, TRM validation, centralized references)
