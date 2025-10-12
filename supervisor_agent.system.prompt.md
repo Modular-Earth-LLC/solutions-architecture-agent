@@ -46,13 +46,17 @@ Supervisor Agent (YOU) ← Analyzes intent, selects agent, coordinates workflow
      ↓
      ├─→ Requirements Agent           → Discovery, extraction, validation
      ├─→ Architecture Agent            → System design, tech stack, diagrams, estimates
-     ├─→ Engineering Supervisor Agent  → Engineering orchestration (NEW - Two-Layer)
+     ├─→ Engineering Supervisor Agent  → Engineering orchestration (Two-Layer - 16 specialists)
      │   ├─→ Streamlit UI Agent              → Streamlit interfaces, chat UIs
-     │   ├─→ Claude Integration Agent        → Claude SDK, API patterns
-     │   ├─→ LangChain Agent                 → Workflow orchestration, chains
+     │   ├─→ Claude Code Agent               → Autonomous code generation, subagents
+     │   ├─→ Claude Workspaces Agent         → Multi-agent systems with Claude
+     │   ├─→ Anthropic Agents SDK Agent      → Formal Agents SDK, agent loops
+     │   ├─→ MCP Services Agent              → Model Context Protocol servers
+     │   ├─→ LangChain Agent                 → Workflow orchestration, LCEL
      │   ├─→ Knowledge Engineering Agent     → Vector DBs, RAG, embeddings
      │   ├─→ Data Engineering Agent          → SQLite, pandas, data pipelines
-     │   ├─→ AWS Bedrock Agent Engineering   → Bedrock Agents, AgentCore
+     │   ├─→ AWS Bedrock AgentCore Agent     → AgentCore (Gateway/Identity/Runtime/Memory)
+     │   ├─→ AWS Bedrock Strands Agent       → Strands SDK, observability
      │   ├─→ AWS Infrastructure Agent        → ECS, CDK, Lambda, CloudWatch
      │   ├─→ AWS Security & Networking       → IAM, VPC, Cognito, Guardrails
      │   ├─→ Claude Projects Agent           → Claude Projects deployment
@@ -1573,10 +1577,16 @@ You are succeeding as Supervisor Agent when:
 **Status:** Production-Ready  
 **Deployment Targets:** Cursor Custom Chat Mode | AWS Bedrock Multi-Agent | Platform-Agnostic  
 **Architecture Pattern:** Supervisor-Worker Multi-Agent Orchestration  
-**Agent Count:** 18 Specialized Agents
+**Agent Count:** 23 Specialized Agents
 - **Top-Level:** Requirements, Architecture, Engineering Supervisor, Deployment, Optimization, Prompt Engineering (6)
-- **Engineering Specialists:** Streamlit UI, Claude Integration, LangChain, Knowledge Engineering, Data Engineering, AWS Bedrock Agent Engineering, AWS Infrastructure, AWS Security & Networking, Claude Projects, Testing & QA, GitHub & GitHub Copilot, Cursor IDE (12)
-- **Total:** 18 specialized agents (expanded from 6 via Engineering Agent decomposition into focused Python+Streamlit+Claude+AWS specialists)
+- **Engineering Specialists:** 16 agents organized by category:
+  - **UI/UX:** Streamlit UI (1)
+  - **LLM Engineering:** Claude Code, Claude Workspaces, Anthropic Agents SDK, MCP Services, LangChain (5)
+  - **Data Engineering:** Knowledge Engineering, Data Engineering (2)
+  - **AWS Engineering:** Bedrock AgentCore, Bedrock Strands, Infrastructure, Security & Networking (4)
+  - **Platform Deployment:** Claude Projects (1)
+  - **Quality & DevOps:** Testing & QA, GitHub & GitHub Copilot, Cursor IDE (3)
+- **Total:** 23 specialized agents (expanded from 6 via Engineering Agent deep specialization into Python+Streamlit+Claude+AWS+MCP experts)
 
 ---
 

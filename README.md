@@ -11,7 +11,7 @@
 
 AI engineers waste weeks on repetitive tasks: structuring requirements, estimating costs, writing boilerplate code, creating deployment guides. Every new project starts from scratch. Every team reinvents the same wheels.
 
-**This framework changes that.** 18 specialized agents (organized in a two-layer architecture) handle the heavy lifting automatically:
+**This framework changes that.** 23 specialized agents (organized in a two-layer architecture) handle the heavy lifting automatically:
 - **Requirements gathering**: 2 hours instead of 2 days
 - **Architecture design**: Production-ready designs in 4 hours, not 2 weeks
 - **Cost estimation**: Accurate projections without spreadsheets
@@ -70,7 +70,7 @@ This framework enforces AWS Well-Architected principles—the industry standard 
 
 Building reliable AI systems demands expertise across requirements analysis, system architecture, software engineering, and platform deployment. Most teams struggle with inconsistent processes, knowledge silos, and reinventing solutions for every project.
 
-**This framework solves that.** 18 specialized agents (6 top-level + 12 engineering specialists) embody industry best practices, AWS Well-Architected principles, and battle-tested workflows. Each agent is hyper-specialized in a focused technology domain (Streamlit, Claude SDK, LangChain, AWS Bedrock, GitHub, Cursor, etc.), working together to deliver complete, production-ready AI systems built with Python+Streamlit+Claude+AWS.
+**This framework solves that.** 23 specialized agents (6 top-level + 1 Engineering Supervisor + 16 engineering specialists) embody industry best practices, AWS Well-Architected principles, and battle-tested workflows. Each agent is hyper-specialized in a focused technology/platform (Streamlit, Claude Code, Claude Workspaces, Anthropic Agents SDK, MCP, LangChain, AWS AgentCore, AWS Strands, etc.), working together to deliver complete, production-ready AI systems built with Python+Streamlit+Claude+AWS+MCP.
 
 **What it does**: Transforms vague ideas into deployable AI systems through systematic workflows. Handles requirements discovery, architecture design, cost estimation, prototype development, and deployment planning automatically.
 
@@ -396,7 +396,7 @@ Specialized task instructions organized by category in `user_prompts/`:
 
 **Knowledge base** — JSON files in `knowledge_base/` that store shared state across agents: `system_config.json` (platform constraints), `user_requirements.json` (business requirements), `design_decisions.json` (architecture decisions).
 
-**Agent** — Specialized AI assistant (system prompt) with a specific domain of expertise. This framework contains 18 specialized agents organized in a two-layer architecture: 1 main Supervisor, 5 top-level agents (Requirements, Architecture, Deployment, Optimization, Prompt Engineering), 1 Engineering Supervisor, and 12 hyper-specialized engineering agents (UI, LLM, Data, AWS, Platform, Testing, GitHub, Cursor).
+**Agent** — Specialized AI assistant (system prompt) with a specific domain of expertise. This framework contains 23 specialized agents organized in a two-layer architecture: 1 main Supervisor, 5 top-level agents (Requirements, Architecture, Deployment, Optimization, Prompt Engineering), 1 Engineering Supervisor, and 16 hyper-specialized engineering agents including 5 Anthropic Claude specialists (Code, Workspaces, Agents SDK, MCP, Projects), 2 AWS Bedrock specialists (AgentCore, Strands), plus UI, LangChain, Data, AWS Infrastructure/Security, Testing, GitHub, and Cursor specialists.
 
 **User prompt** — Task-specific instructions that guide an agent to execute a particular workflow (e.g., `tech_stack_selection.user.prompt.md`). Distinct from system prompts which define an agent's core capabilities.
 

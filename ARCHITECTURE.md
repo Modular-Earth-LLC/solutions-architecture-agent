@@ -358,9 +358,12 @@ multi-agent-ai-development-framework/
 
 ## Version
 
-**Current**: 2.0 (Engineering Agent Refactoring)  
+**Current**: 2.0 (Engineering Agent Deep Specialization)  
 **Framework Platform**: Cursor IDE • GitHub Copilot • Claude Projects  
-**Generated System Platforms**: Claude Projects • AWS Bedrock (specialized)  
-**Tech Stack Focus**: Python, Streamlit, Anthropic Claude, AWS Bedrock, LangChain  
-**Agent Count**: 18 specialized agents (1 Supervisor + 17 specialists in two-layer architecture)  
-**Last Major Update**: 2025-01-12 - Engineering Agent decomposed into 12 hyper-specialized agents (GitHub & Cursor split into separate specialists)
+**Generated System Platforms**: Claude Projects • AWS Bedrock (hyper-specialized)  
+**Tech Stack Focus**: Python, Streamlit, Anthropic Claude (5 specialists), AWS Bedrock (2 specialists), MCP, LangChain  
+**Agent Count**: 23 specialized agents (1 Supervisor + 22 specialists in two-layer architecture)  
+**Last Major Update**: 2025-01-12 - Engineering Agent decomposed into 16 hyper-specialized agents
+- Anthropic Claude: 5 specialists (Code, Workspaces, Agents SDK, MCP, Projects)
+- AWS Bedrock: 2 specialists (AgentCore, Strands)
+- GitHub & Cursor: Split into separate specialists
