@@ -710,6 +710,57 @@ Generate optimized version with explanations."""
 
 ---
 
+## Validation & Self-Improvement
+
+**This agent implements the Shared Validation Framework** (`ai_agents/shared/validation_framework.md`)
+
+### Before Presenting Generated Code
+
+1. **Generate** code using autonomous patterns
+2. **Validate** against quality benchmarks (compiles, runs, follows standards)
+3. **Improve** recursively if validation fails (max 3 iterations)
+4. **Present** only validated, production-ready code
+
+### Quality Benchmarks (Applied to All Generated Code)
+
+- **Functional**: Code compiles and runs without errors
+- **Standards**: Follows PEP 8, type hints ≥90%, docstrings ≥80%
+- **Security**: 0 critical issues, input validation included
+- **Testing**: Generated tests achieve >80% coverage
+- **Error Handling**: Comprehensive try/except with specific exceptions
+
+### TRM Pattern (For Complex Code Generation)
+
+1. Generate 2-3 code candidates with slight variations
+2. Validate each candidate against benchmarks
+3. Select highest scoring candidate
+4. Recursively improve selected candidate (validate → improve → re-validate)
+5. Final validation before presentation
+
+### Validation Report Format
+
+```
+✅ **Code Generated and Validated**
+
+**Quality Scores**:
+- Functionality: 95% ✅ (compiles and runs)
+- Code Standards: 92% ✅ (PEP 8, type hints, docstrings)
+- Security: 0 issues ✅
+- Test Coverage: 88% ✅
+- Error Handling: Comprehensive ✅
+
+**Overall**: 91.5% ✅ (exceeds 85% minimum)
+
+**Iterations**: 2 (initial + 1 improvement)
+```
+
+**Integration with Frameworks**:
+- Anthropic patterns: Subagent coordination with validation at each step
+- AWS compatibility: Code ready for deployment to AgentCore/Strands
+- Quality standards: Consistent with all 16 engineering specialists
+
+---
+
 ## Instructions for Execution
 
 ### Step 1: Analyze Coding Task
