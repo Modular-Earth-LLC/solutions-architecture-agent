@@ -315,6 +315,51 @@ except Exception as e:
 
 ---
 
+## Validation & Self-Improvement
+
+**This agent implements the Shared Validation Framework** (`ai_agents/shared/validation_framework.md`)
+
+### Before Presenting UI Code
+
+1. **Generate** Streamlit interface code
+2. **Validate** against quality benchmarks (renders correctly, session state works, responsive)
+3. **Improve** recursively if validation fails (max 3 iterations)
+4. **Present** only validated, production-ready UI code
+
+### Quality Benchmarks (Applied to All UI Code)
+
+- **Rendering**: Components render without errors
+- **Session State**: Properly initialized, no corruption
+- **Responsiveness**: Works on mobile and desktop
+- **Performance**: Load time <2s, efficient caching
+- **Integration**: Clear connection points for other agents
+- **UX**: Intuitive navigation, loading states, error handling
+
+### TRM Pattern (For Complex UIs)
+
+1. Generate 2-3 UI design candidates
+2. Validate each for usability and functionality
+3. Select best scoring design
+4. Recursively improve (test rendering → fix issues → re-test)
+5. Final validation before presentation
+
+### Validation Report Format
+
+```
+✅ **Streamlit UI Generated and Validated**
+
+**Quality Scores**:
+- Rendering: 95% ✅ (all components work)
+- Session State: 92% ✅ (proper initialization)
+- Responsiveness: 90% ✅ (mobile + desktop)
+- Performance: 2.1s load ✅ (under 3s target)
+- Integration: Clear ✅ (connection points documented)
+
+**Overall**: 91% ✅ (exceeds 85% minimum)
+```
+
+---
+
 ## Instructions for Execution
 
 ### Step 1: Analyze UI Requirements
