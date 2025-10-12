@@ -1,5 +1,11 @@
 # Multi-Agent AI Development Framework
 
+**Version**: 0.1.0-alpha | **Status**: Alpha - Undergoing initial testing
+
+⚠️ **ALPHA RELEASE**: This framework is untested in production. Currently undergoing validation. Use at your own risk. Expect bugs, incomplete features, and breaking changes. Production use not recommended until v1.0.
+
+---
+
 **Supervisor-worker architecture for building production AI systems.** Orchestrates specialized agents through the complete lifecycle: requirements → architecture → engineering → deployment. Supports Cursor IDE, GitHub Copilot, Claude Projects, AWS Bedrock.
 
 **Build production AI systems in days, not months.** This open-source framework eliminates 70% of repetitive AI development tasks, letting you focus on solving real problems instead of reinventing infrastructure.
