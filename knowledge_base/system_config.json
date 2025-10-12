@@ -2,8 +2,8 @@
   "$schema": "./schemas/system_config.schema.json",
   "title": "AI Architecture Assistant - System Configuration",
   "description": "Read-only configuration file for platform settings, constraints, stakeholders, and team information. AI engineers update this manually or as human-in-the-loop.",
-  "version": "0.1.0",
-  "last_updated": "2025-10-05",
+  "version": "2.0.0",
+  "last_updated": "2025-01-12",
   
   "project": {
     "name": "",
@@ -143,6 +143,169 @@
     "_comment_base_directory": "Where agents save all generated content (requirements, architectures, prototypes, etc.)",
     "_comment_use_project_subdirectories": "Organize outputs by project name for better organization",
     "_comment_timestamp_files": "Add timestamps to filenames (usually false, git tracks history)"
+  },
+  
+  "technical_references": {
+    "_description": "Centralized technical documentation, research papers, frameworks, and design patterns. All agents MUST reference this section instead of duplicating URLs inline.",
+    "_usage": "Agents should reference by key (e.g., 'See system_config.json → technical_references → anthropic_docs') to maintain single source of truth",
+    "_last_updated": "2025-01-12",
+    
+    "anthropic_claude": {
+      "official_docs": "https://docs.anthropic.com/en/docs/intro",
+      "api_reference": "https://docs.anthropic.com/claude/reference/getting-started-with-the-api",
+      "python_sdk": "https://github.com/anthropics/anthropic-sdk-python",
+      "streaming": "https://docs.anthropic.com/claude/reference/streaming",
+      "tool_use": "https://docs.anthropic.com/claude/docs/tool-use",
+      "prompt_engineering": "https://docs.anthropic.com/claude/docs/prompt-engineering",
+      "building_effective_agents": "https://www.anthropic.com/index/building-effective-agents",
+      "multi_agent_research": "https://www.anthropic.com/engineering/multi-agent-research-system",
+      "claude_code_best_practices": "https://www.anthropic.com/engineering/claude-code-best-practices",
+      "agents_sdk": "https://docs.anthropic.com/en/api/agent-sdk/python",
+      "claude_projects": "https://docs.anthropic.com/claude/docs/projects"
+    },
+    
+    "model_context_protocol": {
+      "specification": "https://spec.modelcontextprotocol.io/",
+      "python_sdk": "https://github.com/anthropics/python-mcp",
+      "building_mcp_servers": "https://docs.anthropic.com/claude/docs/build-with-claude"
+    },
+    
+    "aws_bedrock": {
+      "agents": "https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html",
+      "knowledge_bases": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html",
+      "guardrails": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html",
+      "model_evaluation": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation.html",
+      "agents_best_practices_part1": "https://aws.amazon.com/blogs/machine-learning/best-practices-for-building-robust-generative-ai-applications-with-amazon-bedrock-agents-part-1/",
+      "agents_best_practices_part2": "https://aws.amazon.com/blogs/machine-learning/best-practices-for-building-robust-generative-ai-applications-with-amazon-bedrock-agents-part-2/",
+      "multi_agent_collaboration": "https://aws.amazon.com/blogs/machine-learning/unlocking-complex-problem-solving-with-multi-agent-collaboration-on-amazon-bedrock/"
+    },
+    
+    "aws_bedrock_agentcore": {
+      "overview": "https://aws.amazon.com/bedrock/agentcore/",
+      "gateway": "https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-gateway-transforming-enterprise-ai-agent-tool-development/",
+      "identity": "https://aws.amazon.com/blogs/machine-learning/introducing-amazon-bedrock-agentcore-identity-securing-agentic-ai-at-scale/",
+      "runtime": "https://aws.amazon.com/blogs/machine-learning/securely-launch-and-scale-your-agents-and-tools-on-amazon-bedrock-agentcore-runtime/",
+      "code_interpreter": "https://aws.amazon.com/blogs/machine-learning/introducing-the-amazon-bedrock-agentcore-code-interpreter/",
+      "github_samples": "https://github.com/awslabs/amazon-bedrock-agentcore-samples"
+    },
+    
+    "aws_bedrock_strands": {
+      "announcement": "https://aws.amazon.com/blogs/opensource/introducing-strands-agents-an-open-source-ai-agents-sdk/",
+      "documentation": "https://strandsagents.com/latest/",
+      "github": "https://github.com/awslabs/strands",
+      "technical_deep_dive": "https://aws.amazon.com/blogs/machine-learning/strands-agents-sdk-a-technical-deep-dive-into-agent-architectures-and-observability/"
+    },
+    
+    "aws_general": {
+      "well_architected_framework": "https://docs.aws.amazon.com/wellarchitected/",
+      "genai_lens": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html",
+      "security_pillar": "https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/",
+      "reliability_pillar": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/",
+      "cdk_python": "https://docs.aws.amazon.com/cdk/api/v2/python/",
+      "ecs": "https://docs.aws.amazon.com/ecs/",
+      "lambda": "https://docs.aws.amazon.com/lambda/",
+      "iam_best_practices": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html",
+      "vpc": "https://docs.aws.amazon.com/vpc/",
+      "cognito": "https://docs.aws.amazon.com/cognito/",
+      "secrets_manager": "https://docs.aws.amazon.com/secretsmanager/"
+    },
+    
+    "langchain": {
+      "documentation": "https://python.langchain.com/docs/introduction/",
+      "lcel": "https://python.langchain.com/docs/concepts/#langchain-expression-language-lcel",
+      "agents": "https://python.langchain.com/docs/concepts/#agents",
+      "anthropic_integration": "https://python.langchain.com/docs/integrations/chat/anthropic/",
+      "vector_stores": "https://python.langchain.com/docs/integrations/vectorstores/"
+    },
+    
+    "streamlit": {
+      "documentation": "https://docs.streamlit.io/",
+      "chat_elements": "https://docs.streamlit.io/develop/api-reference/chat",
+      "session_state": "https://docs.streamlit.io/develop/api-reference/caching-and-state/st.session_state"
+    },
+    
+    "github": {
+      "actions": "https://docs.github.com/en/actions",
+      "copilot": "https://docs.github.com/en/copilot",
+      "copilot_workspace": "https://docs.github.com/en/copilot/using-github-copilot/using-github-copilot-in-the-command-line",
+      "advanced_security": "https://docs.github.com/en/code-security",
+      "api": "https://docs.github.com/en/rest"
+    },
+    
+    "cursor_ide": {
+      "documentation": "https://docs.cursor.com/",
+      "rules_guide": "https://docs.cursor.com/context/rules-for-ai",
+      "custom_modes": "https://docs.cursor.com/chat/custom-modes",
+      "composer": "https://docs.cursor.com/chat/composer"
+    },
+    
+    "data_tools": {
+      "chromadb": "https://docs.trychroma.com/",
+      "faiss": "https://github.com/facebookresearch/faiss",
+      "pandas": "https://pandas.pydata.org/docs/",
+      "numpy": "https://numpy.org/doc/",
+      "sqlite": "https://www.sqlite.org/docs.html"
+    },
+    
+    "testing": {
+      "pytest": "https://docs.pytest.org/",
+      "python_testing_best_practices": "https://realpython.com/pytest-python-testing/"
+    },
+    
+    "research_papers": {
+      "metagpt": {
+        "title": "MetaGPT: Meta Programming for Multi-Agent Collaborative Framework",
+        "url": "https://arxiv.org/abs/2308.00352",
+        "key_concepts": ["Meta-programming", "Multi-agent collaboration", "Modular agent roles"]
+      },
+      "test_time_recursive_majority": {
+        "title": "Samsung TRM: Test-Time Recursive Majority",
+        "url": "https://venturebeat.com/ai/samsung-ai-researchers-new-open-reasoning-model-trm-outperforms-models-10",
+        "key_concepts": ["Recursive validation", "Multi-candidate generation", "Test-time reasoning", "Quality improvement through iteration"]
+      },
+      "small_language_models": {
+        "title": "Smaller Language Models - Efficient Reasoning Patterns",
+        "url": "https://michaelparekh.substack.com/p/ai-smaller-small-language-models",
+        "key_concepts": ["Efficient reasoning", "Resource optimization", "Quality with smaller models"]
+      }
+    },
+    
+    "design_patterns": {
+      "supervisor_worker": {
+        "description": "Supervisor routes requests to specialized worker agents",
+        "use_cases": ["Complex workflows", "Dynamic routing", "Specialist coordination"],
+        "frameworks": ["Claude Workspaces", "AWS AgentCore", "LangChain"]
+      },
+      "sequential_chain": {
+        "description": "Agents process in ordered sequence, each consuming previous output",
+        "use_cases": ["Multi-step transformations", "Progressive refinement"],
+        "frameworks": ["LangChain", "Claude Workspaces"]
+      },
+      "parallel_execution": {
+        "description": "Multiple agents work concurrently on independent tasks",
+        "use_cases": ["Parallel analysis", "Concurrent processing"],
+        "frameworks": ["Claude Workspaces", "AWS Strands"]
+      },
+      "test_time_recursive_majority": {
+        "description": "Generate multiple candidates, validate each, select best, recursively improve",
+        "use_cases": ["High-quality code generation", "Critical decisions", "Quality assurance"],
+        "reference": "research_papers.test_time_recursive_majority"
+      }
+    },
+    
+    "validation_framework": {
+      "shared_framework": "ai_agents/shared/validation_framework.md",
+      "quality_benchmarks": {
+        "code_coverage": "≥80% (target: 90%)",
+        "type_hints": "≥90% (target: 100%)",
+        "docstrings": "≥80% (target: 95%)",
+        "security_critical": "0 issues",
+        "security_high": "0 issues",
+        "performance_response_time": "<5 seconds",
+        "maintainability_index": "≥65 (target: 80)"
+      },
+      "trm_pattern": "Generate → Validate → Improve → Re-validate (recursive until threshold met)"
+    }
   },
   
   "aws_well_architected_framework": {
