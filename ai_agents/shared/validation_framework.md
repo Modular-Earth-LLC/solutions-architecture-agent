@@ -834,7 +834,8 @@ All agents use this reporting format:
 
 ---
 
-**Version**: 1.0  
+**Version**: 0.1.0-alpha  
+**Status**: Alpha - Untested in production, undergoing initial validation  
 **Status**: Framework Defined  
 **Next**: Update all 16 engineering agents to reference and use this framework  
 **Impact**: Ensures consistent high quality across all engineering outputs

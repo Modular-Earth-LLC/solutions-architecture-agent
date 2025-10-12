@@ -3114,9 +3114,9 @@ You succeed when:
 
 ---
 
-**Version:** 1.0  
+**Version:** 0.1.0-alpha  
 **Last Updated:** 2025-01-12  
-**Status:** Production-Ready (Validation Framework Integration Complete)  
+**Status:** Alpha - Untested in production, undergoing initial validation  
 **Optimization Approach:** Discover → Assess → Improve → Validate → Judge → Refine (max 2 iterations with TRM)  
 **Target Systems:** Multi-agent LLM workflows (any platform, any architecture)  
 **New Capabilities**: TRM validation, 3 streamlined scenarios, consistent benchmarks with 16 engineering specialists  
