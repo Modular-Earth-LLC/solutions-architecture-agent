@@ -239,38 +239,50 @@ Deployment Agent deploys update
 
 ```
 multi-agent-ai-development-framework/
-├── supervisor_agent.system.prompt.md    # Entry point
-├── ai_agents/                           # Specialized agents (17 total)
+├── supervisor_agent.system.prompt.md    # Main supervisor (entry point)
+├── REFACTORING_COMPLETE.md             # Quick status reference
+├── ai_agents/                           # Specialized agents (23 total)
 │   ├── requirements_agent.system.prompt.md
 │   ├── architecture_agent.system.prompt.md
-│   ├── engineering_supervisor_agent.system.prompt.md    # Engineering orchestrator
-│   ├── streamlit_ui_agent.system.prompt.md             # UI specialist
-│   ├── claude_integration_agent.system.prompt.md       # Claude SDK specialist
-│   ├── langchain_agent.system.prompt.md                # Workflow orchestration
-│   ├── knowledge_engineering_agent.system.prompt.md    # Vector DB & RAG
-│   ├── data_engineering_agent.system.prompt.md         # SQLite, pandas
-│   ├── aws_bedrock_agent_engineering_agent.system.prompt.md  # Bedrock Agents
-│   ├── aws_infrastructure_agent.system.prompt.md       # ECS, CDK, CloudWatch
-│   ├── aws_security_networking_agent.system.prompt.md  # IAM, VPC, Cognito
-│   ├── claude_projects_agent.system.prompt.md          # Claude Projects deployment
-│   ├── testing_qa_agent.system.prompt.md               # pytest, QA
-│   ├── github_copilot_agent.system.prompt.md           # GitHub.com, Actions, Copilot, CI/CD
-│   ├── cursor_ide_agent.system.prompt.md               # Cursor IDE, .cursorrules, custom modes
 │   ├── deployment_agent.system.prompt.md
 │   ├── optimization_agent.system.prompt.md
-│   └── prompt_engineering_agent.system.prompt.md
-├── user_prompts/                        # Task instructions by category
+│   ├── prompt_engineering_agent.system.prompt.md
+│   ├── engineering_supervisor_agent.system.prompt.md    # Engineering orchestrator (16 specialists)
+│   ├── streamlit_ui_agent.system.prompt.md             # Streamlit UI specialist
+│   ├── claude_code_agent.system.prompt.md              # Claude autonomous coding
+│   ├── claude_workspaces_agent.system.prompt.md        # Claude multi-agent orchestration
+│   ├── anthropic_agents_sdk_agent.system.prompt.md     # Anthropic Agents SDK
+│   ├── mcp_services_agent.system.prompt.md             # Model Context Protocol
+│   ├── langchain_agent.system.prompt.md                # LangChain workflows
+│   ├── knowledge_engineering_agent.system.prompt.md    # Vector DBs, RAG
+│   ├── data_engineering_agent.system.prompt.md         # SQLite, pandas
+│   ├── aws_bedrock_agentcore_agent.system.prompt.md    # AgentCore (Gateway/Identity/Runtime/Memory)
+│   ├── aws_bedrock_strands_agent.system.prompt.md      # Strands SDK, observability
+│   ├── aws_infrastructure_agent.system.prompt.md       # ECS, CDK, CloudWatch
+│   ├── aws_security_networking_agent.system.prompt.md  # IAM, VPC, Cognito, Guardrails
+│   ├── claude_projects_agent.system.prompt.md          # Claude Projects deployment
+│   ├── testing_qa_agent.system.prompt.md               # pytest, validation
+│   ├── github_copilot_agent.system.prompt.md           # GitHub.com, Actions, Copilot
+│   ├── cursor_ide_agent.system.prompt.md               # Cursor IDE, .cursorrules
+│   └── shared/
+│       └── validation_framework.md                     # TRM patterns, benchmarks
+├── user_prompts/                        # Task instructions by category (~60 prompts)
 │   ├── architecture/                    # 6 prompts
 │   ├── requirements/                    # 4 prompts
-│   ├── engineering/                     # 1 prompt
+│   ├── engineering/                     # 22 prompts (across 12 specialist categories)
 │   ├── deployment/                      # 2 prompts
-│   ├── self_improvement/                # 9 prompts
+│   ├── self_improvement/                # 24 prompts (7 top-level + 17 engineering specialists)
+│   │   └── engineering_specialists/     # 17 specialist improvement prompts
 │   ├── prompt_engineering/              # 6 prompts
 │   └── proposals/                       # 4 prompts
 ├── knowledge_base/                      # JSON state management
-│   ├── system_config.json               # Platform constraints
+│   ├── system_config.json               # Platform config, 150+ technical refs (v2.0.0)
 │   ├── user_requirements.json           # Business requirements
 │   ├── design_decisions.json            # Architecture decisions
+│   ├── schemas/                         # JSON schemas for validation
+│   │   ├── system_config.schema.json
+│   │   ├── user_requirements.schema.json
+│   │   └── design_decisions.schema.json
 │   └── README.md                        # Knowledge base guide
 ├── docs/                                # Complete documentation (GitHub Pages-ready)
 ├── docs/                                # Technical documentation
