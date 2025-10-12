@@ -93,4 +93,4 @@ Beyond standard criteria (see system_config.json), ensure:
 
 ---
 
-**Version**: 2.0 | **Updated**: 2025-01-12 | **Agent-Agnostic**: Works with Optimization or Prompt Engineering agents
+**Version**: 0.1 | **Updated**: 2025-01-12 | **Status**: Alpha - Untested, undergoing initial validation
