@@ -745,9 +745,9 @@ Consider creating a centralized best practices reference that all agents can rea
 
 ---
 
-**Version:** 0.1  
-**Last Updated:** 2025-10-05  
-**Status:** Pre-release (Quality Assurance Testing Phase)  
+**Version:** 1.0  
+**Last Updated:** 2025-01-12  
+**Status:** Production-Ready (Updated for 23-Agent Architecture)  
 **Target File:** `ai_agents/optimization_agent.system.prompt.md`  
 **Purpose:** Ensure Optimization Agent implements effective changes while enforcing Well-Architected principles and lifecycle best practices  
 **Key Focus:** Implementation effectiveness, Well-Architected enforcement, lifecycle-aware optimization, LLM-as-judge validation  
@@ -756,11 +756,36 @@ Consider creating a centralized best practices reference that all agents can rea
 **Execution Context:** Multi-platform (Cursor, Claude Projects, AWS Bedrock)  
 **Safety Mechanism:** Recursion prevention (max 2 iterations per session)
 
-**Key Changes from v3.0:**
+**Framework Context (Critical for Optimization Agent Awareness)**:
 
-- **Streamlined recursion prevention** - Reduced from 3+ repetitions to single clear section
-- **Simplified workflow** - Removed redundant "Pre-Flight Checks" and merged into standard 4-step process
-- **Cleaner report template** - Reduced verbosity while maintaining essential information
-- **Improved clarity** - Removed duplicate sections and consolidated guidance
-- **Better alignment** - Consistent with other improvement prompts (supervisor, requirements agents)
-- **Enhanced usability** - Clearer structure, less cognitive overload, easier to follow
+This AI Engineering Assistant now has **23 specialized agents** organized in two-layer architecture:
+- **Main Supervisor** (1): Routes to top-level agents
+- **Top-Level Agents** (5): Requirements, Architecture, Deployment, Optimization, Prompt Engineering
+- **Engineering Supervisor** (1): Routes to 16 engineering specialists
+- **Engineering Specialists** (16): Hyper-specialized by technology/platform
+
+**Engineering Specialists the Optimization Agent Must Understand**:
+1. Streamlit UI Development Agent (Streamlit interfaces)
+2. Claude Code Agent (autonomous code generation, subagents)
+3. Claude Workspaces Agent (multi-agent orchestration with Claude)
+4. Anthropic Python Agents SDK Agent (formal Agents SDK)
+5. MCP Services Agent (Model Context Protocol servers)
+6. LangChain Orchestration Agent (LangChain workflows, LCEL)
+7. Knowledge Engineering Agent (vector DBs, RAG)
+8. Data Engineering Agent (SQLite, pandas)
+9. AWS Bedrock AgentCore Agent (Gateway/Identity/Runtime/Memory)
+10. AWS Bedrock Strands Agent (Strands SDK, observability)
+11. AWS Infrastructure Agent (ECS, CDK, CloudWatch)
+12. AWS Security & Networking Agent (IAM, VPC, Cognito)
+13. Claude Projects Deployment Agent (Claude Projects platform)
+14. Testing & QA Agent (pytest, validation)
+15. GitHub & GitHub Copilot Agent (GitHub ecosystem, CI/CD)
+16. Cursor IDE Agent (Cursor IDE configuration)
+
+**Tech Stack Focus**: Python, Streamlit, Anthropic Claude, AWS Bedrock, MCP, LangChain
+
+**New Capabilities Added**:
+- **TRM Validation**: Test-Time Recursive Majority pattern for quality assurance
+- **Validation Framework**: Shared quality standards across all agents (`ai_agents/shared/validation_framework.md`)
+- **3 Streamlined Scenarios**: Easy optimization workflows for common cases
+- **Consistent Benchmarks**: All 16 specialists use same quality standards
