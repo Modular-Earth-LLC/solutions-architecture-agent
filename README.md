@@ -15,7 +15,7 @@ AI engineers waste weeks on repetitive tasks: structuring requirements, estimati
 - **Requirements gathering**: 2 hours instead of 2 days
 - **Architecture design**: Production-ready designs in 4 hours, not 2 weeks
 - **Cost estimation**: Accurate projections without spreadsheets
-- **Engineering implementation**: 11 specialized agents for UI, LLM, data, AWS, testing, and DevOps
+- **Engineering implementation**: 16 specialized agents (5 Anthropic Claude, 2 AWS Bedrock, plus UI, data, testing, DevOps)
 - **Prototype development**: Working code in days, not weeks with focused tech stack (Python+Streamlit+Claude+AWS)
 - **Deployment planning**: Platform-specific guides for Claude Projects and AWS Bedrock generated automatically
 
@@ -82,9 +82,10 @@ Building reliable AI systems demands expertise across requirements analysis, sys
 
 ### Choose Your Deployment Platform
 
-**Option A: Cursor IDE** (Recommended for solo developers)
-- Full multi-agent support (7 custom chat modes)
+**Option A: Cursor IDE** (Recommended for AI development)
+- Full multi-agent support (23 custom chat modes available)
 - Local execution with file system access
+- AI-optimized: .cursorrules, Composer, CMD+K
 - Best for: Individual developers, rapid iteration, full control
 
 **Option B: GitHub Copilot** (VS Code integration)
@@ -123,44 +124,51 @@ Building reliable AI systems demands expertise across requirements analysis, sys
 **Framework deployment guide:** [docs/deployment-guide.md](docs/deployment-guide.md) (Deploy THIS repository)  
 **Generated systems deployment:** [docs/platform_deployment.md](docs/platform_deployment.md) (Deploy systems you built)
 
-## The 6 Specialized Agents
+## The 23 Specialized Agents
 
-### 🎯 Supervisor Agent
-**Orchestrates** all agents and intelligently routes user requests to specialized agents  
-**File**: `supervisor_agent.system.prompt.md`  
-**Use**: Start here for complete AI system development workflows
+### Two-Layer Architecture
 
-### 📋 Requirements Agent
-**Discovers** stakeholder needs and structures requirements through systematic inquiry  
-**File**: `ai_agents/requirements_agent.system.prompt.md`  
-**Use**: "Conduct discovery session for email automation"
+**Main Supervisor** (1) → Routes to top-level agents  
+**Top-Level Agents** (5) → Handle lifecycle phases  
+**Engineering Supervisor** (1) → Coordinates 16 engineering specialists  
+**Engineering Specialists** (16) → Hyper-specialized by technology
 
-### 🏗️ Architecture Agent
-**Designs** comprehensive system architecture following AWS Well-Architected principles  
-**File**: `ai_agents/architecture_agent.system.prompt.md`  
-**Use**: "Design complete system architecture and select optimal tech stack"
+### Top-Level Agents
 
-### ⚙️ Engineering Agent
-**Builds** functional prototypes with production-ready implementation code  
-**File**: `ai_agents/engineering_agent.system.prompt.md`  
-**Use**: "Generate working prototype implementation"
+**🎯 Supervisor Agent** - Orchestrates all 23 agents  
+**📋 Requirements Agent** - Discovery and requirements  
+**🏗️ Architecture Agent** - System design, tech stack  
+**🚀 Deployment Agent** - Platform deployment  
+**🔧 Optimization Agent** - System improvement (TRM validation)  
+**✨ Prompt Engineering Agent** - Prompt creation
 
-### 🚀 Deployment Agent
-**Guides** platform-specific deployment processes and testing strategies  
-**File**: `ai_agents/deployment_agent.system.prompt.md`  
-**Use**: "Deploy system to AWS Bedrock" or "Create comprehensive testing strategy"
+### Engineering Specialists (16)
 
-### 🔧 Optimization Agent
-**Improves** existing AI systems systematically following Well-Architected principles  
-**File**: `ai_agents/optimization_agent.system.prompt.md`  
-**Use**: "Analyze deployed system for optimization opportunities"
+**Anthropic Claude Specialists** (5):
+- **Claude Code Agent** - Autonomous coding, subagents
+- **Claude Workspaces Agent** - Multi-agent orchestration
+- **Anthropic Agents SDK Agent** - Formal SDK patterns
+- **MCP Services Agent** - Model Context Protocol servers
+- **Claude Projects Agent** - Platform deployment
 
-### ✨ Prompt Engineering Agent
-**Creates** and optimizes high-quality prompts for any AI platform  
-**File**: `ai_agents/prompt_engineering_agent.system.prompt.md`  
-**Use**: "Create production-ready technical documentation assistant"
+**AWS Bedrock Specialists** (2):
+- **AWS Bedrock AgentCore Agent** - Gateway/Identity/Runtime/Memory
+- **AWS Bedrock Strands Agent** - Strands SDK, observability
 
-**💡 Understanding the Agents**: The best way to understand each agent is to read its prompt file directly. These files are designed to be human-readable and self-documenting—they're not code, they're structured instructions written in clear English. Like reviewing any code before running it, read each agent prompt to understand its capabilities, limitations, and decision-making process. The prompts ARE the documentation.
+**Other Specialists** (9):
+- **Streamlit UI Agent** - Streamlit interfaces
+- **LangChain Agent** - Workflow orchestration
+- **Knowledge Engineering Agent** - Vector DBs, RAG
+- **Data Engineering Agent** - SQLite, pandas
+- **AWS Infrastructure Agent** - ECS, CDK
+- **AWS Security Agent** - IAM, VPC, Cognito
+- **Testing & QA Agent** - pytest, validation
+- **GitHub Copilot Agent** - GitHub.com, CI/CD
+- **Cursor IDE Agent** - Cursor configuration
+
+**📚 Complete Guide**: See `docs/engineering-agents-guide.md` for detailed documentation of all 16 engineering specialists.
+
+**🔗 Technical References**: All documentation links centralized in `knowledge_base/system_config.json` → `technical_references` (150+ URLs for Anthropic, AWS, research papers, design patterns).
 
 ## Agent Relationships & Collaboration
 
