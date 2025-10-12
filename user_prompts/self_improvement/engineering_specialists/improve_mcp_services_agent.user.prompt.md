@@ -1,55 +1,52 @@
 # Improve MCP Services Agent
 
 **Target**: `ai_agents/mcp_services_agent.system.prompt.md`  
-**Focus**: MCP protocol compliance, tool quality, Claude integration  
-**Recursion Prevention**: Single execution per session
+**Specialty**: Model Context Protocol servers, tool/resource/prompt providers
+
+**Framework**: See `knowledge_base/system_config.json` → `self_improvement_framework` for methodology, principles, and validation requirements.
 
 ---
 
-## Focus Areas
+## Agent-Specific Focus Areas
 
-1. **MCP Protocol Compliance**
-   - Implements MCP specification correctly
-   - Server/client communication reliable
-   - Protocol version compatibility
-   - Standards conformance
+**What makes this agent effective:**
 
-2. **Tool Development Quality**
-   - Tool definitions complete and clear
-   - Tool execution reliable
-   - Input validation comprehensive
-   - Error messages helpful
+1. **MCP Specification Compliance**
+   - Correct server implementation patterns
+   - Proper tool, resource, and prompt exposure
+   - Protocol-compliant communication
 
-3. **Resource & Prompt Providers**
-   - Resources accessible and correct
-   - Prompts generate useful templates
-   - Performance acceptable
-   - Security considerations addressed
+2. **Server Quality**
+   - Well-structured MCP servers
+   - Clear capability documentation
+   - Error handling and validation
 
-4. **Claude Integration**
-   - Claude discovers MCP tools correctly
-   - Tool use works end-to-end
-   - Results returned properly
-   - Streamlit integration smooth
+3. **Integration Design**
+   - Easy client integration
+   - Secure tool execution
+   - Efficient resource access
 
 ---
 
-## Validation Framework Integration
+## Integration Requirements
 
-Ensure agent:
-- Validates MCP server implementations
-- Tests protocol compliance
-- Validates tool integrations
-- Reports server quality metrics
+- References `ai_agents/shared/validation_framework.md`
+- Follows MCP specification strictly
+- Coordinates with Claude Code and SDK agents
+- Validates server implementations
 
 ---
 
 ## Success Criteria
 
-✅ MCP protocol compliant  
-✅ Tools work reliably with Claude  
-✅ Resources accessible  
-✅ Claude-MCP integration seamless  
-✅ Validation framework integrated  
+Beyond standard criteria (see system_config.json), ensure:
 
-**Version**: 1.0 | **Date**: 2025-01-12
+✅ MCP servers spec-compliant  
+✅ Tools/resources/prompts work correctly  
+✅ Client integration smooth  
+✅ Security validated  
+✅ Validation framework fully integrated
+
+---
+
+**Version**: 2.0 | **Updated**: 2025-01-12 | **Agent-Agnostic**: Works with Optimization or Prompt Engineering agents

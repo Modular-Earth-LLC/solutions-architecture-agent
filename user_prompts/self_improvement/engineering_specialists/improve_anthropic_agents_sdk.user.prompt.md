@@ -1,55 +1,52 @@
 # Improve Anthropic Python Agents SDK Agent
 
 **Target**: `ai_agents/anthropic_agents_sdk_agent.system.prompt.md`  
-**Focus**: Agents SDK patterns, agent loops, tool integration, evaluation  
-**Recursion Prevention**: Single execution per session
+**Specialty**: Formal Anthropic Agents SDK, tool use patterns, prompt caching
+
+**Framework**: See `knowledge_base/system_config.json` → `self_improvement_framework` for methodology, principles, and validation requirements.
 
 ---
 
-## Focus Areas
+## Agent-Specific Focus Areas
 
-1. **SDK Pattern Compliance**
-   - Follows official Agents SDK patterns
-   - Uses SDK features correctly
-   - Leverages built-in capabilities
-   - Stays current with SDK updates
+**What makes this agent effective:**
 
-2. **Agent Loop Implementation**
-   - Iterative tool use works correctly
-   - Max iterations respected
-   - Proper termination handling
-   - Tool results processed correctly
+1. **SDK Mastery**
+   - Correct use of Anthropic Agents SDK patterns
+   - Proper tool definition and implementation
+   - Safe tool execution (no eval, validated inputs)
 
-3. **Tool Integration Quality**
-   - Custom tools defined properly
-   - Tool execution reliable
-   - Error handling comprehensive
-   - Tool validation effective
+2. **Performance Optimization**
+   - Effective prompt caching strategies
+   - Token efficiency through SDK features
+   - Streaming responses when appropriate
 
-4. **Agent Evaluation**
-   - Evaluation criteria meaningful
-   - Test cases comprehensive
-   - Scoring objective and consistent
-   - Feedback actionable
+3. **Pattern Implementation**
+   - Subagent coordination
+   - Tool use best practices  
+   - Error handling and validation
 
 ---
 
-## Validation Framework Integration
+## Integration Requirements
 
-Ensure agent:
-- Validates agent implementations
-- Uses TRM for agent design decisions
-- Evaluates agent quality rigorously
-- Reports agent performance metrics
+- References `ai_agents/shared/validation_framework.md`
+- Uses SDK patterns from Anthropic documentation
+- Coordinates with other Claude specialists
+- Never uses eval() or unsafe code patterns
 
 ---
 
 ## Success Criteria
 
-✅ SDK patterns followed correctly  
-✅ Agent loops terminate properly  
-✅ Tools integrate reliably  
-✅ Evaluation framework effective  
-✅ Validation framework integrated  
+Beyond standard criteria (see system_config.json), ensure:
 
-**Version**: 1.0 | **Date**: 2025-01-12
+✅ SDK patterns correctly implemented  
+✅ Tool use safe and validated  
+✅ Caching strategies effective  
+✅ No security vulnerabilities  
+✅ Validation framework fully integrated
+
+---
+
+**Version**: 2.0 | **Updated**: 2025-01-12 | **Agent-Agnostic**: Works with Optimization or Prompt Engineering agents

@@ -1,55 +1,52 @@
 # Improve Claude Workspaces Agent
 
 **Target**: `ai_agents/claude_workspaces_agent.system.prompt.md`  
-**Focus**: Multi-agent orchestration, coordination patterns, state management  
-**Recursion Prevention**: Single execution per session
+**Specialty**: Multi-agent orchestration, supervisor-worker patterns, Claude Projects integration
+
+**Framework**: See `knowledge_base/system_config.json` → `self_improvement_framework` for methodology, principles, and validation requirements.
 
 ---
 
-## Focus Areas
+## Agent-Specific Focus Areas
 
-1. **Orchestration Pattern Quality**
-   - Supervisor-worker routing accuracy
-   - Sequential chain coordination
-   - Parallel execution efficiency
-   - Hybrid pattern implementation
+**What makes this agent effective:**
 
-2. **Inter-Agent Communication**
-   - Clear contracts between agents
-   - Efficient context passing
-   - State management accuracy
-   - No information loss in handoffs
+1. **Orchestration Excellence**
+   - Clear supervisor-worker coordination
+   - Efficient agent routing and handoffs
+   - Parallel execution where appropriate
 
-3. **AWS Bedrock Fallback**
-   - Smooth transition Anthropic → Bedrock
-   - Feature parity maintained
-   - Configuration-driven deployment
-   - Performance comparable
+2. **Claude Projects Integration**
+   - Proper artifact management
+   - Project knowledge utilization
+   - Context window optimization
 
-4. **Error Recovery**
-   - Failures don't cascade
-   - Fallback mechanisms work
-   - Resilient multi-agent execution
-   - Clear error reporting
+3. **Workflow Design**
+   - Sequential, parallel, and hybrid patterns
+   - Error propagation and recovery
+   - State management across agents
 
 ---
 
-## Validation Framework Integration
+## Integration Requirements
 
-Ensure agent:
-- Validates multi-agent workflows
-- Uses TRM for orchestration decisions
-- Ensures all agents' outputs validated
-- Reports coordination quality
+- References `ai_agents/shared/validation_framework.md`
+- Coordinates with all other Claude specialists
+- Uses Anthropic multi-agent research patterns
+- Validates workflows before execution
 
 ---
 
 ## Success Criteria
 
-✅ Routing accuracy >95%  
-✅ No information loss in handoffs  
-✅ AWS fallback works seamlessly  
-✅ Error recovery prevents cascading failures  
-✅ Validation framework integrated  
+Beyond standard criteria (see system_config.json), ensure:
 
-**Version**: 1.0 | **Date**: 2025-01-12
+✅ Multi-agent workflows execute correctly  
+✅ Supervisor patterns clear and effective  
+✅ Claude Projects features leveraged  
+✅ Parallel execution safe  
+✅ Validation framework fully integrated
+
+---
+
+**Version**: 2.0 | **Updated**: 2025-01-12 | **Agent-Agnostic**: Works with Optimization or Prompt Engineering agents

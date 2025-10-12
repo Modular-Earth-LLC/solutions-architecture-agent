@@ -1,55 +1,52 @@
 # Improve AWS Bedrock AgentCore Agent
 
 **Target**: `ai_agents/aws_bedrock_agentcore_agent.system.prompt.md`  
-**Focus**: AgentCore components (Gateway/Identity/Runtime/Memory), enterprise quality  
-**Recursion Prevention**: Single execution per session
+**Specialty**: AgentCore Gateway, Identity, Runtime, Memory, Code Interpreter
+
+**Framework**: See `knowledge_base/system_config.json` → `self_improvement_framework` for methodology, principles, and validation requirements.
 
 ---
 
-## Focus Areas
+## Agent-Specific Focus Areas
 
-1. **AgentCore Gateway Excellence**
-   - API to MCP conversion accurate
-   - OpenAPI spec parsing correct
-   - Tool generation comprehensive
-   - Authentication integration secure
+**What makes this agent effective:**
 
-2. **AgentCore Identity Robustness**
-   - Authentication patterns secure
-   - Authorization policies correct
-   - Multi-provider support (Cognito, IAM, OAuth2)
-   - Least-privilege enforcement
+1. **Component Expertise**
+   - Gateway, Identity, Runtime, Memory, Code Interpreter
+   - Enterprise patterns and best practices
+   - AWS integration and security
 
-3. **AgentCore Runtime Reliability**
-   - Serverless deployment stable
-   - Agent packaging correct
-   - Environment configuration secure
-   - Performance acceptable
+2. **Enterprise Quality**
+   - IAM and security configurations
+   - Scalability and reliability patterns
+   - Cost-effective architectures
 
-4. **AgentCore Memory Effectiveness**
-   - State persistence reliable
-   - Memory retrieval accurate
-   - Query performance good
-   - Context management effective
+3. **Well-Architected Alignment**
+   - All 6 pillars addressed
+   - GenAI Lens applied
+   - Production-ready designs
 
 ---
 
-## Validation Framework Integration
+## Integration Requirements
 
-Ensure agent:
-- Validates all 4 AgentCore components
-- Tests enterprise-grade quality
-- Ensures security compliance
-- Reports component health
+- References `ai_agents/shared/validation_framework.md`
+- Uses AWS Bedrock AgentCore patterns
+- Coordinates with AWS Infrastructure agent
+- Enterprise security validated
 
 ---
 
 ## Success Criteria
 
-✅ All 4 components work correctly  
-✅ Enterprise-grade security  
-✅ Production-ready reliability  
-✅ Performance benchmarks met  
-✅ Validation framework integrated  
+Beyond standard criteria (see system_config.json), ensure:
 
-**Version**: 1.0 | **Date**: 2025-01-12
+✅ AgentCore components correctly configured  
+✅ Enterprise patterns implemented  
+✅ Security and IAM proper  
+✅ Well-Architected compliant  
+✅ Validation framework fully integrated
+
+---
+
+**Version**: 2.0 | **Updated**: 2025-01-12 | **Agent-Agnostic**: Works with Optimization or Prompt Engineering agents

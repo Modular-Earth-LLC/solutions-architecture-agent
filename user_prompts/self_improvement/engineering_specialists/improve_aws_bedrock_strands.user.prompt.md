@@ -1,55 +1,52 @@
 # Improve AWS Bedrock Strands Agent
 
 **Target**: `ai_agents/aws_bedrock_strands_agent.system.prompt.md`  
-**Focus**: Strands SDK patterns, observability, reasoning patterns, production deployment  
-**Recursion Prevention**: Single execution per session
+**Specialty**: Strands SDK, observability, reasoning patterns (ChainOfThought, ReAct, PlanAndExecute)
+
+**Framework**: See `knowledge_base/system_config.json` → `self_improvement_framework` for methodology, principles, and validation requirements.
 
 ---
 
-## Focus Areas
+## Agent-Specific Focus Areas
 
-1. **Strands SDK Pattern Quality**
-   - Follows Strands SDK best practices
-   - Uses built-in features correctly
-   - Stays current with SDK updates
-   - Code examples accurate
+**What makes this agent effective:**
+
+1. **Strands SDK Mastery**
+   - Correct SDK usage patterns
+   - Reasoning patterns (COT, ReAct, PlanAndExecute)
+   - Open-source best practices
 
 2. **Observability Excellence**
-   - X-Ray tracing configured correctly
-   - CloudWatch metrics comprehensive
-   - Logging informative
-   - Performance monitoring effective
+   - Comprehensive tracing and logging
+   - Performance monitoring
+   - Debugging support
 
-3. **Reasoning Pattern Implementation**
-   - ChainOfThought works correctly
-   - ReAct pattern iterates properly
-   - PlanAndExecute coordinates effectively
-   - Pattern selection appropriate
-
-4. **Production Deployment Quality**
-   - Deployment configurations secure
-   - Auto-scaling works correctly
-   - Monitoring operational
-   - Rollback procedures clear
+3. **Production Readiness**
+   - Scalable agent architectures
+   - Error handling and recovery
+   - Cost-effective designs
 
 ---
 
-## Validation Framework Integration
+## Integration Requirements
 
-Ensure agent:
-- Validates Strands implementations
-- Uses observability for quality checks
-- Tests reasoning patterns
-- Reports production readiness
+- References `ai_agents/shared/validation_framework.md`
+- Uses Strands SDK patterns from AWS docs
+- Coordinates with AWS Infrastructure agent
+- Observability-driven validation
 
 ---
 
 ## Success Criteria
 
-✅ Strands SDK used correctly  
+Beyond standard criteria (see system_config.json), ensure:
+
+✅ Strands SDK correctly implemented  
 ✅ Observability comprehensive  
 ✅ Reasoning patterns effective  
-✅ Production deployments reliable  
-✅ Validation framework integrated  
+✅ Production-ready quality  
+✅ Validation framework fully integrated
 
-**Version**: 1.0 | **Date**: 2025-01-12
+---
+
+**Version**: 2.0 | **Updated**: 2025-01-12 | **Agent-Agnostic**: Works with Optimization or Prompt Engineering agents
