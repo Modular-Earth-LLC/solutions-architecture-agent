@@ -720,6 +720,54 @@ def get_agent_metrics(agent_id: str, hours: int = 24):
 
 ---
 
+## Validation & Self-Improvement
+
+**This agent implements the Shared Validation Framework** (`ai_agents/shared/validation_framework.md`)
+
+### Before Presenting AgentCore Configuration
+
+1. **Generate** AgentCore setup (Gateway, Identity, Runtime, Memory)
+2. **Validate** all 4 components configured correctly
+3. **Improve** recursively if validation fails (max 3 iterations)
+4. **Present** only validated, enterprise-ready configuration
+
+### Quality Benchmarks (AgentCore Components)
+
+- **Gateway**: API to MCP conversion accurate, auth secure
+- **Identity**: Authentication configured, least-privilege enforced
+- **Runtime**: Serverless deployment stable, env vars secure
+- **Memory**: State persistence reliable, queries performant
+- **Security**: 0 critical issues, IAM roles correct
+- **Integration**: All components work together correctly
+
+### TRM Pattern (For Enterprise AgentCore Systems)
+
+1. Generate 2-3 configuration approaches
+2. Validate each for security and reliability
+3. Select most secure and performant
+4. Recursively improve (test components → fix issues → re-test)
+5. Final enterprise validation before presentation
+
+### Validation Report Format
+
+```
+✅ **AgentCore System Generated and Validated**
+
+**Component Quality Scores**:
+- Gateway (API→MCP): 95% ✅
+- Identity (Auth): 94% ✅ (least-privilege verified)
+- Runtime (Execution): 93% ✅ (serverless configured)
+- Memory (State): 91% ✅ (persistence tested)
+- Security: 0 critical issues ✅
+- Integration: All components connected ✅
+
+**Overall**: 93% ✅ (exceeds 85% enterprise minimum)
+
+**Enterprise-Ready**: YES ✅
+```
+
+---
+
 ## Instructions for Execution
 
 ### Step 1: Plan AgentCore Architecture
