@@ -308,6 +308,74 @@
     }
   },
   
+  "self_improvement_framework": {
+    "_description": "Shared framework for all agent self-improvement prompts. Defines common principles, methodology, and success criteria that apply across all agents.",
+    "_usage": "All improve_*.user.prompt.md files reference this section instead of duplicating improvement methodology",
+    "_last_updated": "2025-01-12",
+    
+    "purpose": "Systematic agent improvement using evidence-based optimization principles",
+    
+    "applicable_agents": {
+      "_description": "Which agents can execute self-improvement prompts",
+      "primary": ["optimization_agent", "prompt_engineering_agent"],
+      "note": "Both agents use the same methodology but have different specializations (system-level vs prompt-level)"
+    },
+    
+    "recursion_prevention": {
+      "max_iterations": "2-3 per session",
+      "rule": "If improved 3+ times in this conversation, start fresh session",
+      "rationale": "Allows iterative refinement (initial + 1-2 improvements) while preventing infinite loops"
+    },
+    
+    "core_principles": {
+      "evidence_based": "Every improvement must have clear justification with measurable impact",
+      "incremental": "Small, testable changes over big rewrites",
+      "preserve_capabilities": "Maintain all existing functionality while enhancing",
+      "validate_thoroughly": "Test after each change to ensure no regressions",
+      "benchmark_driven": "Use consistent quality benchmarks across all assessments",
+      "well_architected_aligned": "Ensure compliance with AWS 6 pillars + GenAI Lens"
+    },
+    
+    "standard_methodology": {
+      "step_1": "Analyze current agent (assess against best practices)",
+      "step_2": "Research & apply improvements (integrate latest research)",
+      "step_3": "Validate changes (test functionality, check regressions)",
+      "step_4": "Generate report (document improvements, metrics, validation)"
+    },
+    
+    "quality_benchmarks": {
+      "_reference": "ai_agents/shared/validation_framework.md",
+      "code_quality": "Coverage ≥80%, type hints ≥90%, docstrings ≥80%",
+      "security": "0 critical issues, 0 high issues",
+      "performance": "Response time <5s, efficient resource usage",
+      "maintainability": "Index ≥65/100",
+      "well_architected": "Score ≥7/10 per pillar"
+    },
+    
+    "success_criteria": {
+      "functionality_preserved": "All existing capabilities work after improvement",
+      "measurable_improvement": "Quantified enhancement in target areas (clarity, efficiency, etc.)",
+      "no_regressions": "All tests pass, no broken functionality",
+      "backward_compatible": "Existing integrations and workflows still function",
+      "documented_changes": "Clear documentation of what changed and why"
+    },
+    
+    "validation_requirements": {
+      "functional_testing": "Test all critical workflows and features",
+      "regression_testing": "Verify no existing functionality broken",
+      "integration_testing": "Confirm agent works with other agents/systems",
+      "benchmark_validation": "Verify quality benchmarks met or exceeded"
+    },
+    
+    "common_focus_areas": {
+      "clarity": "Instructions clear, unambiguous, actionable",
+      "efficiency": "Token usage optimized, concise without losing clarity",
+      "reliability": "Consistent outputs, robust error handling",
+      "integration": "Smooth coordination with other agents",
+      "validation": "TRM patterns, quality benchmarks, self-checks"
+    }
+  },
+  
   "aws_well_architected_framework": {
     "_description": "Authoritative reference for AWS Well-Architected Framework (6 Pillars) and Generative AI Lens. All agents MUST reference this section instead of duplicating definitions.",
     "pillars": {
