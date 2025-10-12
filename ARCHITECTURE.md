@@ -11,17 +11,31 @@ User Request
      ↓
 Supervisor Agent (Orchestrator)
      ↓
-     ├─→ Requirements Agent      → Discovery, requirements
-     ├─→ Architecture Agent       → Design, tech stack, estimates
-     ├─→ Engineering Agent        → Prototypes, implementation
-     ├─→ Deployment Agent         → Platform deployment, testing
-     ├─→ Optimization Agent       → System improvement
-     └─→ Prompt Engineering Agent → Prompt creation, optimization
+     ├─→ Requirements Agent           → Discovery, requirements
+     ├─→ Architecture Agent            → Design, tech stack, estimates
+     ├─→ Engineering Supervisor Agent  → Engineering orchestration (Two-Layer)
+     │   ├─→ Streamlit UI Agent              → Streamlit interfaces
+     │   ├─→ Claude Integration Agent        → Claude SDK
+     │   ├─→ LangChain Agent                 → Workflow orchestration
+     │   ├─→ Knowledge Engineering Agent     → Vector DBs, RAG
+     │   ├─→ Data Engineering Agent          → SQLite, pandas
+     │   ├─→ AWS Bedrock Agent Engineering   → Bedrock Agents, AgentCore
+     │   ├─→ AWS Infrastructure Agent        → ECS, CDK, CloudWatch
+     │   ├─→ AWS Security & Networking       → IAM, VPC, Cognito
+     │   ├─→ Claude Projects Agent           → Claude Projects deployment
+     │   ├─→ Testing & QA Agent              → pytest, validation
+     │   ├─→ GitHub & GitHub Copilot Agent   → GitHub, Actions, Copilot, CI/CD
+     │   └─→ Cursor IDE Agent                → Cursor, .cursorrules, custom modes
+     ├─→ Deployment Agent              → Platform deployment coordination
+     ├─→ Optimization Agent            → System improvement
+     └─→ Prompt Engineering Agent      → Prompt creation, optimization
 
 Shared Knowledge Base
 ├─→ system_config.json     → Platform constraints, team info
 ├─→ user_requirements.json → Customer needs, use cases
 └─→ design_decisions.json  → Architecture decisions, costs
+
+Tech Stack Focus: Python, Streamlit, Anthropic Claude, AWS Bedrock, LangChain
 ```
 
 ### Agent Responsibilities
@@ -31,8 +45,20 @@ Shared Knowledge Base
 | **Supervisor** | Orchestration, routing | All files | None (routes only) |
 | **Requirements** | Discovery, validation | system_config.json | user_requirements.json |
 | **Architecture** | System design, planning | user_requirements.json, system_config.json | design_decisions.json |
-| **Engineering** | Prototypes, code generation | user_requirements.json, design_decisions.json | Code files, prototypes |
-| **Deployment** | Platform deployment | design_decisions.json | Deployment guides |
+| **Engineering Supervisor** | Engineering orchestration | All KB files | None (coordinates only) |
+| **Streamlit UI** | Streamlit interface development | design_decisions.json | UI code |
+| **Claude Integration** | Claude SDK implementation | design_decisions.json | Integration code |
+| **LangChain** | Workflow orchestration | design_decisions.json | Workflow code |
+| **Knowledge Engineering** | Vector DBs, RAG systems | design_decisions.json | Knowledge base code |
+| **Data Engineering** | SQLite, pandas, analytics | design_decisions.json | Data layer code |
+| **AWS Bedrock Agent Eng** | Bedrock Agents, AgentCore | design_decisions.json | Bedrock configs |
+| **AWS Infrastructure** | ECS, CDK, CloudWatch | design_decisions.json | Infrastructure code |
+| **AWS Security** | IAM, VPC, Cognito, Guardrails | design_decisions.json | Security configs |
+| **Claude Projects** | Claude Projects deployment | All KB files | Deployment guides |
+| **Testing & QA** | pytest, quality assurance | All code | Test suites |
+| **GitHub & GitHub Copilot** | GitHub.com, Actions, Copilot, CI/CD | All code | GitHub configs, workflows |
+| **Cursor IDE** | Cursor IDE, .cursorrules, custom modes | All code | Cursor configs |
+| **Deployment** | Platform deployment coordination | design_decisions.json | Deployment guides |
 | **Optimization** | System improvement | All files | Recommendations |
 | **Prompt Engineering** | Prompt creation | Optional: knowledge base | Prompts, optimization reports |
 
@@ -214,10 +240,22 @@ Deployment Agent deploys update
 ```
 multi-agent-ai-development-framework/
 ├── supervisor_agent.system.prompt.md    # Entry point
-├── ai_agents/                           # Specialized agents
+├── ai_agents/                           # Specialized agents (17 total)
 │   ├── requirements_agent.system.prompt.md
 │   ├── architecture_agent.system.prompt.md
-│   ├── engineering_agent.system.prompt.md
+│   ├── engineering_supervisor_agent.system.prompt.md    # Engineering orchestrator
+│   ├── streamlit_ui_agent.system.prompt.md             # UI specialist
+│   ├── claude_integration_agent.system.prompt.md       # Claude SDK specialist
+│   ├── langchain_agent.system.prompt.md                # Workflow orchestration
+│   ├── knowledge_engineering_agent.system.prompt.md    # Vector DB & RAG
+│   ├── data_engineering_agent.system.prompt.md         # SQLite, pandas
+│   ├── aws_bedrock_agent_engineering_agent.system.prompt.md  # Bedrock Agents
+│   ├── aws_infrastructure_agent.system.prompt.md       # ECS, CDK, CloudWatch
+│   ├── aws_security_networking_agent.system.prompt.md  # IAM, VPC, Cognito
+│   ├── claude_projects_agent.system.prompt.md          # Claude Projects deployment
+│   ├── testing_qa_agent.system.prompt.md               # pytest, QA
+│   ├── github_copilot_agent.system.prompt.md           # GitHub.com, Actions, Copilot, CI/CD
+│   ├── cursor_ide_agent.system.prompt.md               # Cursor IDE, .cursorrules, custom modes
 │   ├── deployment_agent.system.prompt.md
 │   ├── optimization_agent.system.prompt.md
 │   └── prompt_engineering_agent.system.prompt.md
@@ -320,6 +358,9 @@ multi-agent-ai-development-framework/
 
 ## Version
 
-**Current**: 1.0  
+**Current**: 2.0 (Engineering Agent Refactoring)  
 **Framework Platform**: Cursor IDE • GitHub Copilot • Claude Projects  
-**Generated System Platforms**: OpenAI • Claude • Bedrock • Cursor • Self-hosted
+**Generated System Platforms**: Claude Projects • AWS Bedrock (specialized)  
+**Tech Stack Focus**: Python, Streamlit, Anthropic Claude, AWS Bedrock, LangChain  
+**Agent Count**: 18 specialized agents (1 Supervisor + 17 specialists in two-layer architecture)  
+**Last Major Update**: 2025-01-12 - Engineering Agent decomposed into 12 hyper-specialized agents (GitHub & Cursor split into separate specialists)
