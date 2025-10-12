@@ -9,45 +9,13 @@
 
 ---
 
-## 🛡️ Recursion Prevention (CRITICAL)
+## Recursion Prevention
 
-<recursion_guardrails>
+**Max Iterations**: 2-3 per session (system-wide optimization can iterate for refinement)
 
-**MANDATORY PRE-EXECUTION CHECK:**
+**Simple Rule**: If you've run full system optimization 3 times in this conversation, stop and start a fresh session.
 
-This prompt orchestrates system-wide optimization that could trigger infinite loops. Before starting ANY work:
-
-```
-OPTIMIZATION_ITERATION_COUNT: {{CURRENT_ITERATION}}
-MAX_ITERATIONS: 1
-BASE_CASE: OPTIMIZATION_ITERATION_COUNT >= MAX_ITERATIONS
-```
-
-**Execution Rules:**
-
-1. **Check iteration count FIRST:**
-   - If `OPTIMIZATION_ITERATION_COUNT = 0`: Proceed, set to 1
-   - If `OPTIMIZATION_ITERATION_COUNT >= 1`: STOP IMMEDIATELY
-
-2. **If recursion detected, report and halt:**
-
-   ```
-   ⚠️ RECURSION DETECTED: System optimization already completed this session.
-   
-   Current iteration: {{CURRENT_ITERATION}}
-   Status: OPTIMIZATION COMPLETE (previous run)
-   
-   To run another optimization cycle:
-   - Review previous optimization report
-   - Start a NEW session/conversation
-   - Explicitly request "Run system optimization again"
-   
-   STOPPING to prevent infinite loop.
-   ```
-
-3. **Single execution guarantee:** This prompt runs ONCE per session, then increments counter to prevent re-execution
-
-</recursion_guardrails>
+**Why**: Allows iterative refinement (initial pass + 1-2 improvements) while preventing infinite loops.
 
 ---
 

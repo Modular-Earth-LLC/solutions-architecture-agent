@@ -9,36 +9,13 @@
 
 ---
 
-## 🛡️ Recursion Prevention
+## Recursion Prevention
 
-<recursion_guardrails>
+**Max Iterations**: 2-3 per session (allows refinement, prevents infinite loops)
 
-**CRITICAL: This prompt improves the Optimization Agent itself, creating potential for infinite loops.**
+**Simple Rule**: If you've already improved this agent 3 times in this conversation, stop and start a fresh session.
 
-**Before starting, verify:**
-
-```text
-✅ This is the FIRST optimization of the Optimization Agent in this session
-✅ No previous improve_optimization_agent execution in chat history
-✅ Fresh conversation context (not continuing from previous optimization)
-```
-
-**If ANY recursion detected:**
-
-```text
-⚠️ RECURSION DETECTED: Optimization Agent improvement already completed this session.
-
-To run another optimization cycle:
-- Start a NEW session/conversation
-- Review previous optimization report first
-- Explicitly request "Improve the Optimization Agent again"
-
-STOPPING to prevent infinite loop.
-```
-
-**Safety Mechanism:** This prompt executes ONCE per session. A second execution in the same session will be blocked.
-
-</recursion_guardrails>
+**Why**: Allows iterative improvement (initial + 1-2 refinements) while preventing runaway loops.
 
 ---
 

@@ -9,18 +9,11 @@
 
 ---
 
-## 🛡️ Recursion Prevention
+## Recursion Prevention
 
-**CRITICAL**: This prompt improves the Engineering Supervisor Agent itself.
+**Max Iterations**: 2-3 per session (allows refinement, prevents infinite loops)
 
-**Safety Check**:
-```
-✅ First improvement of Engineering Supervisor in this session
-✅ No previous improve_engineering_supervisor execution in history
-✅ Fresh conversation context
-```
-
-**If recursion detected**: STOP and require new session.
+**Simple Rule**: If improved 3+ times in this conversation, start fresh session.
 
 ---
 
