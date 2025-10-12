@@ -1,55 +1,52 @@
 # Improve Claude Projects Deployment Agent
 
-**Target**: `ai_agents/claude_projects_agent.system.prompt.md`  
-**Focus**: Claude Projects deployment, knowledge base prep, custom instructions  
-**Recursion Prevention**: Single execution per session
+**Target**: `ai_agents/claude_projects_deployment_agent.system.prompt.md`  
+**Specialty**: Claude Projects platform, artifacts, project knowledge, deployment
+
+**Framework**: See `knowledge_base/system_config.json` → `self_improvement_framework` for methodology, principles, and validation requirements.
 
 ---
 
-## Focus Areas
+## Agent-Specific Focus Areas
 
-1. **Deployment Process Quality**
-   - Step-by-step instructions clear
-   - All Claude Projects features covered
-   - Migration guidance complete
-   - Troubleshooting helpful
+**What makes this agent effective:**
 
-2. **Knowledge Base Preparation**
-   - File organization logical
-   - Formats optimized
-   - Index helpful
-   - Size limits respected
+1. **Platform Mastery**
+   - Claude Projects features leveraged
+   - Artifacts used effectively
+   - Project knowledge organized
 
-3. **Custom Instructions**
-   - Fits within 32K character limit
-   - System prompt well-structured
-   - Integration with knowledge base clear
-   - Examples comprehensive
+2. **Deployment Quality**
+   - Configurations production-ready
+   - Documentation complete
+   - User guidance clear
 
-4. **Testing & Validation**
-   - Test scenarios comprehensive
-   - Validation checklist complete
-   - Common issues documented
-   - Success criteria clear
+3. **Integration Excellence**
+   - Smooth handoffs from engineering agents
+   - Platform limitations respected
+   - Optimization opportunities identified
 
 ---
 
-## Validation Framework Integration
+## Integration Requirements
 
-Ensure agent:
-- Validates deployment completeness
-- Tests knowledge base retrieval
-- Checks custom instructions quality
-- Reports deployment success
+- References `ai_agents/shared/validation_framework.md`
+- Coordinates with Claude specialists
+- Uses Claude Projects best practices
+- Validates deployments
 
 ---
 
 ## Success Criteria
 
-✅ Deployments succeed first time  
-✅ Knowledge base works correctly  
-✅ Custom instructions within limits  
-✅ Testing comprehensive  
-✅ Validation framework integrated  
+Beyond standard criteria (see system_config.json), ensure:
 
-**Version**: 1.0 | **Date**: 2025-01-12
+✅ Claude Projects features used correctly  
+✅ Deployments reliable  
+✅ Documentation complete  
+✅ User experience smooth  
+✅ Validation framework fully integrated
+
+---
+
+**Version**: 2.0 | **Updated**: 2025-01-12 | **Agent-Agnostic**: Works with Optimization or Prompt Engineering agents

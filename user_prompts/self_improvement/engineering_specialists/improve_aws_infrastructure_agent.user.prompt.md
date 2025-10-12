@@ -1,55 +1,52 @@
 # Improve AWS Infrastructure Agent
 
 **Target**: `ai_agents/aws_infrastructure_agent.system.prompt.md`  
-**Focus**: AWS CDK, ECS deployment, CloudWatch monitoring, infrastructure as code  
-**Recursion Prevention**: Single execution per session
+**Specialty**: ECS, Lambda, CDK, CloudWatch, infrastructure as code
+
+**Framework**: See `knowledge_base/system_config.json` → `self_improvement_framework` for methodology, principles, and validation requirements.
 
 ---
 
-## Focus Areas
+## Agent-Specific Focus Areas
 
-1. **CDK Code Quality**
-   - Infrastructure as code follows best practices
-   - Stacks modular and reusable
-   - Type hints comprehensive
-   - Documentation clear
+**What makes this agent effective:**
 
-2. **ECS Deployment Excellence**
-   - Task definitions correct
-   - Fargate configurations optimal
-   - Health checks appropriate
-   - Auto-scaling effective
+1. **IaC Excellence**
+   - Clean CDK patterns
+   - Reusable constructs
+   - Best practice enforcement
 
-3. **Monitoring & Observability**
-   - CloudWatch dashboards comprehensive
-   - Alarms configured correctly
-   - Log retention appropriate
-   - Metrics meaningful
+2. **Service Integration**
+   - ECS deployments reliable
+   - Lambda functions optimized
+   - CloudWatch monitoring comprehensive
 
-4. **Resource Optimization**
-   - Right-sized resources
-   - Cost-effective configurations
-   - Performance acceptable
-   - Scalability built-in
+3. **Well-Architected**
+   - All 6 pillars addressed
+   - Cost-effective designs
+   - Scalable architectures
 
 ---
 
-## Validation Framework Integration
+## Integration Requirements
 
-Ensure agent:
-- Validates CDK code
-- Tests deployment configurations
-- Checks monitoring setup
-- Reports infrastructure health
+- References `ai_agents/shared/validation_framework.md`
+- Coordinates with Security and AgentCore agents
+- Uses AWS best practices
+- Validates IaC before deployment
 
 ---
 
 ## Success Criteria
 
-✅ CDK deployments work reliably  
-✅ ECS services stable  
-✅ Monitoring comprehensive  
-✅ Resources optimized  
-✅ Validation framework integrated  
+Beyond standard criteria (see system_config.json), ensure:
 
-**Version**: 1.0 | **Date**: 2025-01-12
+✅ CDK code production-ready  
+✅ Deployments reliable  
+✅ Monitoring comprehensive  
+✅ Well-Architected compliant  
+✅ Validation framework fully integrated
+
+---
+
+**Version**: 2.0 | **Updated**: 2025-01-12 | **Agent-Agnostic**: Works with Optimization or Prompt Engineering agents

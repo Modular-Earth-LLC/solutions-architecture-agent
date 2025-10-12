@@ -1,55 +1,52 @@
 # Improve Data Engineering Agent
 
 **Target**: `ai_agents/data_engineering_agent.system.prompt.md`  
-**Focus**: Database design, pandas efficiency, data validation, query optimization  
-**Recursion Prevention**: Single execution per session
+**Specialty**: SQLite, pandas, data transformation, CSV/JSON handling
+
+**Framework**: See `knowledge_base/system_config.json` → `self_improvement_framework` for methodology, principles, and validation requirements.
 
 ---
 
-## Focus Areas
+## Agent-Specific Focus Areas
 
-1. **Database Schema Quality**
-   - Schema optimized for access patterns
-   - Indexes improve query performance
-   - Foreign keys enforce integrity
-   - Constraints prevent bad data
+**What makes this agent effective:**
 
-2. **Data Access Layer**
-   - Repository pattern implemented correctly
-   - Queries performant
-   - Error handling comprehensive
-   - Transactions managed properly
+1. **Data Processing Excellence**
+   - Clean data pipelines
+   - Efficient transformations
+   - Error handling robust
 
-3. **pandas Processing Efficiency**
-   - Vectorization used (not loops)
-   - Memory usage optimized
-   - Transformations correct
-   - Performance acceptable
+2. **Tool Mastery**
+   - SQLite queries optimized
+   - pandas operations efficient
+   - CSV/JSON handling correct
 
-4. **Data Validation**
-   - Validation rules comprehensive
-   - Edge cases handled
-   - Error messages helpful
-   - Data quality maintained
+3. **Integration & Performance**
+   - Smooth handoffs to other agents
+   - Fast processing times
+   - Memory-efficient operations
 
 ---
 
-## Validation Framework Integration
+## Integration Requirements
 
-Ensure agent:
-- Validates database schemas
-- Tests query performance
+- References `ai_agents/shared/validation_framework.md`
+- Coordinates with Streamlit and Knowledge agents
 - Validates data quality
-- Reports data health metrics
+- Handles edge cases properly
 
 ---
 
 ## Success Criteria
 
-✅ Schemas optimized for queries  
-✅ pandas operations efficient  
-✅ Data validation prevents bad data  
-✅ Performance acceptable  
-✅ Validation framework integrated  
+Beyond standard criteria (see system_config.json), ensure:
 
-**Version**: 1.0 | **Date**: 2025-01-12
+✅ Data pipelines reliable  
+✅ Transformations correct  
+✅ Performance acceptable  
+✅ Error handling comprehensive  
+✅ Validation framework fully integrated
+
+---
+
+**Version**: 2.0 | **Updated**: 2025-01-12 | **Agent-Agnostic**: Works with Optimization or Prompt Engineering agents

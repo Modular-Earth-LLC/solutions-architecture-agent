@@ -1,55 +1,52 @@
 # Improve Testing & QA Agent
 
 **Target**: `ai_agents/testing_qa_agent.system.prompt.md`  
-**Focus**: Test quality, coverage, validation frameworks, quality assurance  
-**Recursion Prevention**: Single execution per session
+**Specialty**: pytest, test generation, validation, quality assurance
+
+**Framework**: See `knowledge_base/system_config.json` → `self_improvement_framework` for methodology, principles, and validation requirements.
 
 ---
 
-## Focus Areas
+## Agent-Specific Focus Areas
+
+**What makes this agent effective:**
 
 1. **Test Quality**
-   - Unit tests cover critical logic
-   - Integration tests validate workflows
-   - Mocking strategy effective
-   - Test names descriptive
+   - Comprehensive coverage (≥80%)
+   - Tests validate actual functionality
+   - Edge cases covered
 
-2. **Coverage & Completeness**
-   - Coverage >80% achieved
-   - Edge cases tested
-   - Error handling validated
-   - Performance benchmarked
+2. **Testing Strategy**
+   - Unit, integration, E2E appropriate
+   - Test organization clear
+   - Fixtures reusable
 
-3. **LLM Testing Patterns**
-   - Claude API tests effective
-   - RAG quality validated
-   - Response quality assessed
-   - Consistency verified
-
-4. **Quality Assurance**
-   - UAT scenarios realistic
-   - Acceptance criteria clear
-   - Validation comprehensive
-   - Reports actionable
+3. **Quality Assurance**
+   - Validation thorough
+   - Benchmarks enforced
+   - No regressions
 
 ---
 
-## Validation Framework Integration
+## Integration Requirements
 
-Ensure agent:
-- Uses TRM for test generation
+- References `ai_agents/shared/validation_framework.md`
+- Coordinates with all engineering specialists
+- Uses pytest best practices
 - Validates test quality
-- Ensures coverage targets met
-- Reports quality metrics
 
 ---
 
 ## Success Criteria
 
-✅ Coverage >80% achieved  
-✅ All critical paths tested  
-✅ LLM testing effective  
-✅ UAT scenarios comprehensive  
-✅ Validation framework integrated  
+Beyond standard criteria (see system_config.json), ensure:
 
-**Version**: 1.0 | **Date**: 2025-01-12
+✅ Test coverage ≥80%  
+✅ Tests catch regressions  
+✅ Edge cases handled  
+✅ Test quality high  
+✅ Validation framework fully integrated
+
+---
+
+**Version**: 2.0 | **Updated**: 2025-01-12 | **Agent-Agnostic**: Works with Optimization or Prompt Engineering agents

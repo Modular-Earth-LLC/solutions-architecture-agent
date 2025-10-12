@@ -1,55 +1,52 @@
 # Improve Knowledge Engineering Agent
 
 **Target**: `ai_agents/knowledge_engineering_agent.system.prompt.md`  
-**Focus**: Vector databases, RAG systems, retrieval accuracy, semantic search  
-**Recursion Prevention**: Single execution per session
+**Specialty**: Vector databases, RAG, embeddings, semantic search
+
+**Framework**: See `knowledge_base/system_config.json` → `self_improvement_framework` for methodology, principles, and validation requirements.
 
 ---
 
-## Focus Areas
+## Agent-Specific Focus Areas
 
-1. **Vector Database Excellence**
-   - Proper database selection (ChromaDB vs FAISS)
-   - Configuration optimized
-   - Performance acceptable
-   - Persistence reliable
+**What makes this agent effective:**
 
-2. **Document Ingestion Quality**
-   - All document types handled
-   - Chunking preserves context
-   - Metadata captured correctly
-   - Progress tracking works
+1. **Vector DB Expertise**
+   - ChromaDB, FAISS configuration
+   - Optimal indexing strategies
+   - Efficient similarity search
 
-3. **Retrieval Accuracy**
-   - Semantic search relevant (>90%)
-   - Relevance scoring accurate
-   - Performance acceptable (<1s)
-   - Citation accuracy 100%
+2. **RAG Optimization**
+   - Chunk sizing optimal
+   - Retrieval accuracy high
+   - Context assembly effective
 
-4. **RAG System Integration**
-   - LangChain integration smooth
-   - Claude integration effective
-   - Answer quality high
-   - Source citations correct
+3. **Performance & Scale**
+   - Fast query times
+   - Scalable architectures
+   - Cost-effective storage
 
 ---
 
-## Validation Framework Integration
+## Integration Requirements
 
-Ensure agent:
-- Validates RAG system quality
-- Tests retrieval accuracy
-- Measures performance
-- Reports system health
+- References `ai_agents/shared/validation_framework.md`
+- Coordinates with LangChain and Data agents
+- Uses RAG best practices
+- Validates retrieval quality
 
 ---
 
 ## Success Criteria
 
-✅ Retrieval accuracy >90%  
-✅ Performance <1s per query  
-✅ RAG answers accurate  
-✅ Citations correct 100%  
-✅ Validation framework integrated  
+Beyond standard criteria (see system_config.json), ensure:
 
-**Version**: 1.0 | **Date**: 2025-01-12
+✅ Vector DBs configured correctly  
+✅ RAG retrieval accurate  
+✅ Query performance fast  
+✅ Scalability addressed  
+✅ Validation framework fully integrated
+
+---
+
+**Version**: 2.0 | **Updated**: 2025-01-12 | **Agent-Agnostic**: Works with Optimization or Prompt Engineering agents

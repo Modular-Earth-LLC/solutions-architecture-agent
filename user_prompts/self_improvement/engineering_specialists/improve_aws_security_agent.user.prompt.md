@@ -1,55 +1,52 @@
 # Improve AWS Security & Networking Agent
 
 **Target**: `ai_agents/aws_security_networking_agent.system.prompt.md`  
-**Focus**: IAM policies, VPC configuration, Cognito, Bedrock Guardrails, security  
-**Recursion Prevention**: Single execution per session
+**Specialty**: IAM, VPC, Cognito, Secrets Manager, security best practices
+
+**Framework**: See `knowledge_base/system_config.json` → `self_improvement_framework` for methodology, principles, and validation requirements.
 
 ---
 
-## Focus Areas
+## Agent-Specific Focus Areas
+
+**What makes this agent effective:**
 
 1. **IAM Excellence**
-   - Least-privilege policies enforced
-   - Role trust policies secure
-   - Permission boundaries clear
-   - Policy validation comprehensive
+   - Least privilege policies
+   - Role-based access control
+   - Secure policy design
 
-2. **VPC & Networking**
-   - VPC properly segmented
-   - Security groups restrictive
-   - Network isolation effective
-   - NAT gateway configuration optimal
+2. **Network Security**
+   - VPC configurations secure
+   - Security groups tight
+   - Network isolation proper
 
-3. **Authentication & Secrets**
-   - Cognito configured securely
-   - Secrets Manager used correctly
-   - No credentials hardcoded
-   - Rotation policies defined
-
-4. **Bedrock Guardrails**
-   - Content filtering configured
-   - PII detection active
-   - Topic policies appropriate
-   - Word filters effective
+3. **Auth & Secrets**
+   - Cognito setup correct
+   - Secrets Manager integrated
+   - Authentication flows secure
 
 ---
 
-## Validation Framework Integration
+## Integration Requirements
 
-Ensure agent:
+- References `ai_agents/shared/validation_framework.md`
+- Coordinates with Infrastructure and AgentCore agents
+- Follows AWS security best practices
 - Validates security configurations
-- Tests IAM policies
-- Checks network isolation
-- Reports security posture
 
 ---
 
 ## Success Criteria
 
-✅ IAM follows least-privilege  
-✅ VPC properly secured  
-✅ Secrets never exposed  
-✅ Guardrails active and tested  
-✅ Validation framework integrated  
+Beyond standard criteria (see system_config.json), ensure:
 
-**Version**: 1.0 | **Date**: 2025-01-12
+✅ IAM policies least-privilege  
+✅ Network security tight  
+✅ Authentication secure  
+✅ Secrets managed properly  
+✅ Validation framework fully integrated
+
+---
+
+**Version**: 2.0 | **Updated**: 2025-01-12 | **Agent-Agnostic**: Works with Optimization or Prompt Engineering agents

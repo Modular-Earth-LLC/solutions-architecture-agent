@@ -1,55 +1,52 @@
 # Improve Cursor IDE Agent
 
 **Target**: `ai_agents/cursor_ide_agent.system.prompt.md`  
-**Focus**: .cursorrules quality, custom modes, Composer, CMD+K optimization  
-**Recursion Prevention**: Single execution per session
+**Specialty**: .cursorrules, custom modes, composer, IDE configuration
+
+**Framework**: See `knowledge_base/system_config.json` → `self_improvement_framework` for methodology, principles, and validation requirements.
 
 ---
 
-## Focus Areas
+## Agent-Specific Focus Areas
 
-1. **cursorrules Excellence**
-   - Comprehensive standards documented
-   - Python AI patterns complete
-   - Security requirements clear
-   - Team alignment effective
+**What makes this agent effective:**
 
-2. **Custom Chat Modes**
-   - All 23 agents documented for setup
-   - Mode configurations correct
-   - Tool enablement optimal
-   - Usage guidance clear
+1. **Configuration Excellence**
+   - .cursorrules effective
+   - Custom modes well-designed
+   - IDE features leveraged
 
-3. **Cursor Feature Optimization**
-   - Composer workflows effective
-   - CMD+K patterns comprehensive
-   - Codebase indexing optimized (.cursorignore)
-   - AI prediction tuned
+2. **Developer Experience**
+   - Clear guidance
+   - Efficient workflows
+   - Tool usage optimized
 
-4. **Project Templates**
-   - Templates current and complete
-   - Quick start instructions clear
-   - Best practices embedded
-   - Junior engineer friendly
+3. **Integration Quality**
+   - Smooth multi-agent coordination
+   - File operations reliable
+   - Context management good
 
 ---
 
-## Validation Framework Integration
+## Integration Requirements
 
-Ensure agent:
-- Validates .cursorrules completeness
-- Tests custom mode configs
-- Checks Cursor feature usage
-- Reports IDE optimization quality
+- References `ai_agents/shared/validation_framework.md`
+- Coordinates with all other agents
+- Uses Cursor best practices
+- Validates configurations
 
 ---
 
 ## Success Criteria
 
-✅ .cursorrules comprehensive  
-✅ Custom modes configured correctly  
-✅ Cursor features optimized  
-✅ Templates complete and current  
-✅ Validation framework integrated  
+Beyond standard criteria (see system_config.json), ensure:
 
-**Version**: 1.0 | **Date**: 2025-01-12
+✅ .cursorrules effective  
+✅ Custom modes work well  
+✅ Developer experience smooth  
+✅ Integration seamless  
+✅ Validation framework fully integrated
+
+---
+
+**Version**: 2.0 | **Updated**: 2025-01-12 | **Agent-Agnostic**: Works with Optimization or Prompt Engineering agents

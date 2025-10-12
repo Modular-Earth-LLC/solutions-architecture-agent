@@ -1,55 +1,52 @@
 # Improve GitHub & GitHub Copilot Agent
 
 **Target**: `ai_agents/github_copilot_agent.system.prompt.md`  
-**Focus**: GitHub Actions CI/CD, GitHub Copilot optimization, security scanning  
-**Recursion Prevention**: Single execution per session
+**Specialty**: GitHub Actions, CI/CD, Copilot chat modes, repository management
+
+**Framework**: See `knowledge_base/system_config.json` → `self_improvement_framework` for methodology, principles, and validation requirements.
 
 ---
 
-## Focus Areas
+## Agent-Specific Focus Areas
 
-1. **GitHub Actions Excellence**
-   - CI pipelines comprehensive (test, lint, security)
-   - CD pipelines reliable (deploy to AWS)
-   - Background automation effective
-   - Reusable workflows DRY
+**What makes this agent effective:**
 
-2. **GitHub Copilot Optimization**
-   - Copilot instructions comprehensive
-   - @workspace commands documented
-   - Code suggestions relevant
-   - Chat mode optimized
+1. **GitHub Actions Mastery**
+   - CI/CD workflows efficient
+   - Workflows well-structured
+   - Security best practices
 
-3. **Security Scanning**
-   - CodeQL configured correctly
-   - Dependabot active and tuned
-   - Secret scanning catches issues
-   - Vulnerability reports actionable
+2. **Copilot Integration**
+   - Chat mode configuration correct
+   - Instructions effective
+   - Agent coordination smooth
 
-4. **Repository Configuration**
-   - .gitignore comprehensive
-   - Branch protection effective
-   - PR templates enforce quality
-   - Collaboration workflows clear
+3. **Repository Management**
+   - Branch strategies sound
+   - Code review workflows
+   - Release automation
 
 ---
 
-## Validation Framework Integration
+## Integration Requirements
 
-Ensure agent:
-- Validates GitHub configurations
-- Tests CI/CD pipelines
-- Checks security scanning
-- Reports repository health
+- References `ai_agents/shared/validation_framework.md`
+- Coordinates with Testing agent
+- Uses GitHub best practices
+- Validates workflows before deployment
 
 ---
 
 ## Success Criteria
 
-✅ CI/CD pipelines work reliably  
-✅ Copilot optimized for project  
-✅ Security scanning catches issues  
-✅ Repository well-configured  
-✅ Validation framework integrated  
+Beyond standard criteria (see system_config.json), ensure:
 
-**Version**: 1.0 | **Date**: 2025-01-12
+✅ GitHub Actions work correctly  
+✅ Copilot modes effective  
+✅ CI/CD pipelines reliable  
+✅ Security validated  
+✅ Validation framework fully integrated
+
+---
+
+**Version**: 2.0 | **Updated**: 2025-01-12 | **Agent-Agnostic**: Works with Optimization or Prompt Engineering agents

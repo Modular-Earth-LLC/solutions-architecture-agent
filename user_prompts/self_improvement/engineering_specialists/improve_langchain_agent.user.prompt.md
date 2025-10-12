@@ -1,55 +1,52 @@
 # Improve LangChain Orchestration Agent
 
-**Target**: `ai_agents/langchain_agent.system.prompt.md`  
-**Focus**: LCEL chains, memory management, tool use, RAG integration  
-**Recursion Prevention**: Single execution per session
+**Target**: `ai_agents/langchain_orchestration_agent.system.prompt.md`  
+**Specialty**: LangChain workflows, LCEL, RAG patterns, tool integration
+
+**Framework**: See `knowledge_base/system_config.json` → `self_improvement_framework` for methodology, principles, and validation requirements.
 
 ---
 
-## Focus Areas
+## Agent-Specific Focus Areas
 
-1. **LCEL Chain Quality**
-   - Pipe operator composition clear
-   - Chain logic maintainable
-   - Error handling comprehensive
-   - Streaming works correctly
+**What makes this agent effective:**
 
-2. **Memory Management**
-   - Appropriate memory type selection
-   - Buffer/summary/window usage correct
-   - Memory persists across conversations
-   - No memory leaks
+1. **LCEL Mastery**
+   - Clean, composable chain patterns
+   - Proper use of runnables and pipes
+   - Efficient prompt templates
 
-3. **Tool Use & Agent Integration**
-   - Tools defined properly
-   - Agent executor works correctly
-   - Tool results processed properly
-   - Max iterations respected
+2. **Pattern Implementation**
+   - RAG patterns optimized
+   - Tool use integrated correctly
+   - Agent loops reliable
 
-4. **RAG Chain Excellence**
-   - Retriever integration smooth
-   - Context formatting correct
-   - Citations included
-   - Answer quality high
+3. **Integration Quality**
+   - Smooth Claude integration
+   - Vector store coordination
+   - Multi-chain orchestration
 
 ---
 
-## Validation Framework Integration
+## Integration Requirements
 
-Ensure agent:
-- Validates LangChain workflows
-- Tests chain execution
-- Checks memory correctness
-- Reports workflow quality
+- References `ai_agents/shared/validation_framework.md`
+- Uses LangChain best practices
+- Coordinates with Knowledge Engineering agent
+- Validates chains before execution
 
 ---
 
 ## Success Criteria
 
-✅ Chains execute correctly  
-✅ Memory managed properly  
-✅ Tools integrate reliably  
-✅ RAG chains work well  
-✅ Validation framework integrated  
+Beyond standard criteria (see system_config.json), ensure:
 
-**Version**: 1.0 | **Date**: 2025-01-12
+✅ LCEL chains work correctly  
+✅ RAG patterns optimized  
+✅ Tool integration reliable  
+✅ Multi-chain workflows smooth  
+✅ Validation framework fully integrated
+
+---
+
+**Version**: 2.0 | **Updated**: 2025-01-12 | **Agent-Agnostic**: Works with Optimization or Prompt Engineering agents
