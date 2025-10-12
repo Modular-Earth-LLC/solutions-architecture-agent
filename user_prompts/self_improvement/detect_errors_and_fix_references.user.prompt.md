@@ -868,15 +868,63 @@ def check_new_issue_type():
 
 ### 1. **Discovery Summary**
 
+Present comprehensive baseline assessment with actionable insights:
+
 ```text
-REPOSITORY SCAN COMPLETE
-├── Total Files Analyzed: [COUNT]
-├── Existing Validation Results:
-│   ├── validate_consistency.py: [PASS/FAIL - X errors]
-│   └── validate_knowledge_base.py: [PASS/FAIL - Y errors]
-├── References Extracted: [COUNT]
-├── Issues Detected: [COUNT]
-└── Repository Health Score: [X/100] [🔴/��/🟢]
+REPOSITORY VALIDATION - PHASE 1 COMPLETE
+
+Files Analyzed: [COUNT total]
+├── Agent prompts: [COUNT] (.system.prompt.md)
+├── User prompts: [COUNT] (.user.prompt.md)
+├── Documentation: [COUNT] (.md)
+├── Knowledge base: [COUNT] (.json)
+└── Code files: [COUNT] (.py, .js, .ts)
+
+Validation Results:
+├── validate_consistency.py: [PASS/FAIL - X errors, Y warnings]
+└── validate_knowledge_base.py: [PASS/FAIL - X schema violations]
+
+References: [COUNT total]
+├── File paths: [COUNT]
+├── Line numbers: [COUNT]
+├── KB fields: [COUNT]
+├── External URLs: [COUNT]
+└── Variables: [COUNT]
+
+Issues: [COUNT total]
+├── Critical: [COUNT] (breaks functionality)
+├── High: [COUNT] (causes errors/confusion)
+├── Medium: [COUNT] (reduces quality)
+└── Low: [COUNT] (cosmetic)
+
+Health Score: [X/100] [Status]
+├── Reference Integrity: [X/100]
+├── Documentation Currency: [X/100]
+├── Consistency: [X/100]
+├── Validation Pass Rate: [X/100]
+└── Code Quality: [X/100]
+```
+
+**Example Output**:
+```
+VALIDATION COMPLETE - PHASE 1
+
+Files: 127 (23 agents, 45 user prompts, 42 docs, 3 KB, 14 code)
+Validation: consistency PASS (3 warnings), knowledge_base FAIL (5 errors)
+References: 342 (289 file paths, 47 line refs, 6 URLs, 28 vars)
+Issues: 23 (1 critical, 7 high, 11 medium, 4 low)
+Health: 73/100 GOOD
+
+Top 5 Issues:
+1. CRITICAL: Missing file ai_agents/old_agent.md (referenced 5x)
+2. HIGH: Invalid KB field system_config.deployment.region
+3. HIGH: Circular dependency architecture_agent <-> engineering_agent
+4. MEDIUM: 12 stale line number references
+5. MEDIUM: Term inconsistency "AI system" vs "AI agent" (8x)
+
+Est. fix time: 45-60 min | Est. improvement: +15-20 pts
+
+Proceed with automated fixes? [Y/n]
 ```
 
 ### 2. **Issue Report**
