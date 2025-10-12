@@ -1,5 +1,11 @@
 # System Architecture
 
+**Version**: 0.1.0-alpha | **Status**: Alpha - Undergoing initial testing
+
+⚠️ **ALPHA RELEASE**: Architecture untested in production. Undergoing validation. Breaking changes expected before v1.0.
+
+---
+
 **Multi-agent AI development framework** featuring supervisor-worker architecture pattern, shared knowledge base state management, and two-tier deployment model supporting three primary platforms: Cursor IDE, Claude Projects, and GitHub Copilot.
 
 ## Core Architecture
