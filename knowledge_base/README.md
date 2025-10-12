@@ -285,5 +285,5 @@ validate_knowledge_base_file(
 ---
 
 **Version:** 1.0  
-**Last Updated:** 2025-10-10  
+**Last Updated:** 2025-10-12  
 **Schema Support:** Added in v1.0 (JSON Schema Draft 2020-12)

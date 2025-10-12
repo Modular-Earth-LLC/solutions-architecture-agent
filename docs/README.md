@@ -13,13 +13,13 @@
 - **[workflow_guide.md](workflow_guide.md)** - Step-by-step guide through the complete AI development lifecycle
 
 ### Agent Documentation
-- **[agent-architecture-and-collaboration.md](agent-architecture-and-collaboration.md)** - Comprehensive guide to all 6 agents, their relationships, and collaboration patterns
 - **[agent-design-patterns.md](agent-design-patterns.md)** - Reusable AI agent design patterns and best practices
+- **[engineering-agents-guide.md](engineering-agents-guide.md)** - Complete reference for all 16 engineering specialists
 
 ### Deployment & Operations
 - **[deployment-guide.md](deployment-guide.md)** - Platform-specific deployment guidance for Cursor IDE, Claude Projects, and GitHub Copilot
-- **[platform_deployment.md](platform_deployment.md)** - Advanced platform-specific configurations
 - **[executive_overview.md](executive_overview.md)** - Business perspective, value proposition, and ROI analysis
+- **[human-ai-collaboration.md](human-ai-collaboration.md)** - Your role vs agent role, automation levels
 
 ### Examples
 - **[examples/](examples/)** - Real-world implementation examples and use cases
@@ -55,10 +55,10 @@
 
 ### For Developers
 **Deep dive:**
-1. [agent-architecture-and-collaboration.md](agent-architecture-and-collaboration.md) - Understand all agents
-2. [agent-design-patterns.md](agent-design-patterns.md) - Learn AI agent patterns
+1. [agent-design-patterns.md](agent-design-patterns.md) - Learn AI agent patterns
+2. [engineering-agents-guide.md](engineering-agents-guide.md) - All 16 specialists
 3. [../ARCHITECTURE.md](../ARCHITECTURE.md) - System architecture
-4. [platform_deployment.md](platform_deployment.md) - Deploy your systems
+4. [deployment-guide.md](deployment-guide.md) - Deploy your systems
 
 **Estimated time:** 2-3 hours for complete understanding
 
@@ -74,19 +74,15 @@
 
 ---
 
-## GitHub Features
+## Platform-Agnostic Documentation
 
-### Automatic Display
-GitHub automatically displays this README when browsing the `docs/` directory.
+This documentation works on any platform:
+- **GitHub**: Auto-displays in docs/ directory, GitHub Pages support
+- **GitLab**: Auto-renders markdown, GitLab Pages support
+- **Bitbucket**: Auto-renders markdown
+- **Local**: Read with any markdown viewer
 
-### GitHub Pages Support
-This documentation structure is GitHub Pages-ready:
-- Enable Pages in repository settings
-- Select `docs/` folder as source
-- Documentation becomes web-accessible
-
-### Search
-Use GitHub's search to find specific topics across all documentation.
+**Tip**: Most git hosting platforms automatically display README.md files in directories.
 
 ---
 
@@ -116,5 +112,5 @@ Use GitHub's search to find specific topics across all documentation.
 ---
 
 **Version:** 1.0  
-**Last Updated:** 2025-10-10  
+**Last Updated:** 2025-10-12  
 **Structure:** GitHub Pages-ready, comprehensive navigation hub

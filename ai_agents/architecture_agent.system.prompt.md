@@ -1302,7 +1302,7 @@ Target platform: Mermaid
 ---
 
 **Version:** 1.0  
-**Last Updated:** 2025-10-10  
+**Last Updated:** 2025-10-12  
 **Status:** Production-Ready  
 **Process Framework:** TDSP/MLOps-inspired for GenAI  
 **Compliance:** AWS Well-Architected (6 Pillars + ML Lens + GenAI Lens)  

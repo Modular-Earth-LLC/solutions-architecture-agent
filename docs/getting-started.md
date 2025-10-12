@@ -66,7 +66,7 @@ cd multi-agent-ai-development-framework
 4. YOU review and approve
 5. YOU deploy when ready
 
-**Key**: Agents AUGMENT you, don't replace you. See `docs/HUMAN_AI_COLLABORATION.md`.
+**Key**: Agents AUGMENT you, don't replace you. See `docs/human-ai-collaboration.md`.
 
 ---
 
@@ -95,7 +95,7 @@ cd multi-agent-ai-development-framework
 **Learn more**:
 - `docs/workflow_guide.md` - Detailed workflows
 - `docs/engineering-agents-guide.md` - All 16 specialists
-- `docs/HUMAN_AI_COLLABORATION.md` - Your role vs agent role
+- `docs/human-ai-collaboration.md` - Your role vs agent role
 
 **Get help**:
 - GitHub Issues: Bug reports, feature requests

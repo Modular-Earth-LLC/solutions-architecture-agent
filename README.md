@@ -569,7 +569,7 @@ Every architecture evaluated against **6 pillars**:
 - `README.md` - This file (overview + quick start)
 - `docs/getting-started.md` - First project walkthrough (15 min)
 - `docs/deployment-guide.md` - Platform deployment
-- `docs/HUMAN_AI_COLLABORATION.md` - Your role vs agent role
+- `docs/human-ai-collaboration.md` - Your role vs agent role
 
 **Reference**:
 - `docs/workflow_guide.md` - Complete workflows
