@@ -1,5 +1,7 @@
 # Human-AI Collaboration Guide
 
+**Version**: 0.1.0-alpha | **Status**: Alpha - Undergoing initial testing
+
 **Purpose**: Clear explanation of what agents automate vs what requires human decisions  
 **Audience**: AI engineers using this framework  
 **Key Principle**: Agents **augment** your expertise, they don't replace your judgment
@@ -550,7 +552,8 @@ A: YOU are responsible. Agents augment your work, you approve what gets deployed
 
 ---
 
-**Version**: 1.0  
+**Version**: 0.1.0-alpha  
 **Date**: 2025-01-12  
+**Status**: Alpha - Untested in production, undergoing initial validation  
 **Purpose**: Ensure clear understanding of human-AI collaboration model  
 **Principle**: Augmentation, not automation
