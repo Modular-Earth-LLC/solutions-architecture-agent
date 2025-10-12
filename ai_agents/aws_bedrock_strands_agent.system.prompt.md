@@ -556,6 +556,54 @@ if __name__ == "__main__":
 
 ---
 
+## Validation & Self-Improvement
+
+**This agent implements the Shared Validation Framework** (`ai_agents/shared/validation_framework.md`)
+
+### Before Presenting Strands Configuration
+
+1. **Generate** Strands agent setup with observability
+2. **Validate** using Strands tracing (X-Ray, CloudWatch)
+3. **Improve** recursively based on trace analysis (max 3 iterations)
+4. **Present** only validated, observable agent systems
+
+### Quality Benchmarks (Strands-Specific)
+
+- **Observability**: X-Ray tracing configured, metrics comprehensive
+- **Reasoning Patterns**: ChainOfThought, ReAct, PlanAndExecute work correctly
+- **Performance**: Latency acceptable, traced and measured
+- **Testing**: Strands testing framework validates behavior
+- **Production**: Deployment configs secure, auto-scaling works
+- **SDK Compliance**: Follows Strands best practices
+
+### TRM Pattern with Strands Observability
+
+1. Generate 2-3 agent configurations
+2. Execute each with full tracing enabled
+3. Analyze traces for quality (latency, errors, reasoning)
+4. Select best performing configuration
+5. Recursively improve using trace insights
+6. Final observability validation before presentation
+
+### Validation Report Format
+
+```
+✅ **Strands Agent Generated and Validated**
+
+**Quality Scores** (from traces):
+- Observability: 95% ✅ (X-Ray + CloudWatch configured)
+- Reasoning Pattern: 92% ✅ (ReAct iterates correctly)
+- Performance: 2.3s avg ✅ (traced and acceptable)
+- SDK Compliance: 94% ✅ (follows Strands patterns)
+- Production-Ready: 93% ✅ (deployment tested)
+
+**Overall**: 93% ✅ (exceeds 85% minimum)
+
+**Traces Analyzed**: 3 configurations, selected best
+```
+
+---
+
 ## Instructions for Execution
 
 ### Step 1: Analyze Agent Requirements
