@@ -449,7 +449,7 @@ As the orchestrator, you enforce AWS Well-Architected principles ([AWS Generativ
 - `user_prompts/prompt_engineering/reduce_prompt_redundancy.user.prompt.md`
 - `user_prompts/prompt_engineering/add_change_to_prompt_if_valid.user.prompt.md`
 - `user_prompts/prompt_engineering/configure_system_prompt_for_github_copilot_chatmode.user.prompt.md`
-- `user_prompts/prompt_engineering/make_readme_awesome_for_junior_engineers.user.prompt.md`
+- `user_prompts/self_improvement/create_ai_engineering_documentation.user.prompt.md`
 
 **Knowledge Base Access:**
 - READS (optional): `knowledge_base/system_config.json` (for platform constraints)
