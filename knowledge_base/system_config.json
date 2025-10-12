@@ -2,8 +2,9 @@
   "$schema": "./schemas/system_config.schema.json",
   "title": "AI Architecture Assistant - System Configuration",
   "description": "Read-only configuration file for platform settings, constraints, stakeholders, and team information. AI engineers update this manually or as human-in-the-loop.",
-  "version": "2.0.0",
+  "version": "0.1.0-alpha",
   "last_updated": "2025-01-12",
+  "status": "Alpha - Untested in production, undergoing initial validation",
   
   "project": {
     "name": "",
