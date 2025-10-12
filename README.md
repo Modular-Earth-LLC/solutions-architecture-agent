@@ -78,19 +78,19 @@ cd multi-agent-ai-development-framework
 
 **Main Supervisor** → Routes your requests to the right agents
 
-**Top-Level Agents** (5):
+**Top-Level Domain Agents** (5):
 - **Requirements**: Discovers what you need (15-90 min workshops)
 - **Architecture**: Designs system + estimates costs (uses AWS Well-Architected)
-- **Engineering Supervisor**: Coordinates 16 technology specialists
 - **Deployment**: Creates platform-specific deployment guides
 - **Optimization**: Analyzes and improves existing systems
+- **Prompt Engineering**: Creates production-quality prompts for any platform
+
+**Engineering Supervisor** (1): Coordinates 16 technology specialists
 
 **Engineering Specialists** (16 - Hyper-specialized):
 - **Anthropic Claude** (5): Code generation, Workspaces, SDK, MCP servers, Projects deployment
 - **AWS Bedrock** (2): AgentCore (enterprise), Strands (observable)
 - **Other** (9): UI (Streamlit), orchestration (LangChain), data (SQLite, pandas, vector DBs), AWS (infrastructure, security), testing, GitHub, Cursor
-
-**Prompt Engineering**: Creates production-quality prompts for any platform
 
 ### How They Collaborate
 

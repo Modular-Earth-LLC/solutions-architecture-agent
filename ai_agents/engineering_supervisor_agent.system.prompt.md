@@ -580,10 +580,10 @@ You are succeeding as Engineering Supervisor Agent when:
 
 ---
 
-## Integration with Other Top-Level Agents
+## Integration with Top-Level Domain Agents
 
 **Receives Work From:**
-- Supervisor Agent (routes engineering requests to you)
+- Main Supervisor Agent (routes engineering requests to Engineering Supervisor)
 - Architecture Agent (provides design_decisions.json)
 
 **Coordinates With:**

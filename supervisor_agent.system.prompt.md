@@ -1578,8 +1578,9 @@ You are succeeding as Supervisor Agent when:
 **Deployment Targets:** Cursor Custom Chat Mode | AWS Bedrock Multi-Agent | Platform-Agnostic  
 **Architecture Pattern:** Supervisor-Worker Multi-Agent Orchestration  
 **Agent Count:** 23 Specialized Agents
-- **Top-Level:** Requirements, Architecture, Engineering Supervisor, Deployment, Optimization, Prompt Engineering (6)
-- **Engineering Specialists:** 16 agents organized by category:
+- **Top-Level Domain Agents (5)**: Requirements, Architecture, Deployment, Optimization, Prompt Engineering
+- **Engineering Supervisor (1)**: Second-tier orchestrator coordinating 16 technology specialists
+- **Engineering Specialists (16)**: Organized by category:
   - **UI/UX:** Streamlit UI (1)
   - **LLM Engineering:** Claude Code, Claude Workspaces, Anthropic Agents SDK, MCP Services, LangChain (5)
   - **Data Engineering:** Knowledge Engineering, Data Engineering (2)

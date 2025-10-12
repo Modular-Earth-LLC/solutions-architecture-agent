@@ -55,8 +55,8 @@ cd multi-agent-ai-development-framework
 
 **23 specialized agents**:
 - **1 Main Supervisor**: Routes your requests
-- **5 Top-Level**: Requirements, Architecture, Deployment, Optimization, Prompt Engineering
-- **1 Engineering Supervisor**: Coordinates 16 specialists
+- **5 Top-Level Domain Agents**: Requirements, Architecture, Deployment, Optimization, Prompt Engineering
+- **1 Engineering Supervisor**: Second-tier orchestrator coordinating 16 technology specialists
 - **16 Engineering Specialists**: One technology each (Streamlit, Claude Code, AWS Bedrock, etc.)
 
 **How it works**:

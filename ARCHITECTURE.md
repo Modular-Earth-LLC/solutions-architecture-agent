@@ -74,7 +74,7 @@ Tech Stack Focus: Python, Streamlit, Anthropic Claude, AWS Bedrock, LangChain
 
 **Execution Environment**: Cursor IDE • Claude Projects • GitHub Copilot (VS Code)
 **Purpose**: AI engineering assistance for developers  
-**Components**: 6 specialized agents + Supervisor + User prompts
+**Components**: 23 total agents (1 Main Supervisor + 5 Top-Level Domain Agents + 1 Engineering Supervisor + 16 Engineering Specialists) + User prompts
 
 **Platform Options:**
 
