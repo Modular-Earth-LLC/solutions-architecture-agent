@@ -1,5 +1,5 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$schema": "./schemas/user_requirements.schema.json",
   "title": "AI Architecture Assistant - User Requirements",
   "description": "Requirements gathered during discovery phase. Written by Requirements Agent, read by Architecture Agent.",
   "version": "0.1.0",
@@ -238,8 +238,9 @@
   
   "_usage_notes": {
     "purpose": "This file stores all requirements gathered during discovery phase. Requirements Agent WRITES to this file. Architecture Agent READS from this file.",
-    "write_access": "Requirements Agent only",
-    "read_access": "All agents",
+    "write_access": "Requirements Agent",
+    "read_access": "Architecture Agent (primary), Engineering Supervisor (reference), Optimization Agent (analysis), Deployment Agent (reference)",
+    "primary_consumers": ["Architecture Agent - designs system from requirements", "Engineering Supervisor - validates implementation matches requirements"],
     "update_frequency": "Updated during discovery sessions and when new requirements emerge during architecture/implementation",
     "version_control": "Track changes in git to maintain requirements history"
   }
