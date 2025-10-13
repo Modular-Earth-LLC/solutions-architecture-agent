@@ -26,7 +26,8 @@ Supervisor Agent (Orchestrator)
      │   ├─→ LangChain Agent                 → Workflow orchestration
      │   ├─→ Knowledge Engineering Agent     → Vector DBs, RAG
      │   ├─→ Data Engineering Agent          → SQLite, pandas
-     │   ├─→ AWS Bedrock Agent Engineering   → Bedrock Agents, AgentCore
+     │   ├─→ AWS Bedrock AgentCore Agent     → AgentCore (Gateway/Identity/Runtime/Memory)
+     │   ├─→ AWS Bedrock Strands Agent       → Strands SDK, observability
      │   ├─→ AWS Infrastructure Agent        → ECS, CDK, CloudWatch
      │   ├─→ AWS Security & Networking       → IAM, VPC, Cognito
      │   ├─→ Claude Projects Agent           → Claude Projects deployment
