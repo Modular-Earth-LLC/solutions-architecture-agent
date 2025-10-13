@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/paulpham157/multi-agent-ai-development-framework/schemas/repo-metadata.schema.json",
+  "title": "Repository Metadata",
+  "description": "Centralized metadata for the Multi-Agent AI Development Framework repository",
+  "type": "object",
+  "required": ["version", "architecture", "prompts"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9]+)?$",
+      "description": "Repository version following semantic versioning"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date",
+      "description": "Last update date in YYYY-MM-DD format"
+    },
+    "status": {
+      "type": "string",
+      "description": "Current release status"
+    },
+    "architecture": {
+      "type": "object",
+      "properties": {
+        "total_agents": {"type": ["number", "string"]},
+        "main_supervisor": {"type": "number"},
+        "top_level_agents": {"type": "number"},
+        "engineering_supervisor": {"type": "number"},
+        "engineering_specialists": {"type": "number"},
+        "agent_categories": {"type": "object"}
+      }
+    },
+    "prompts": {
+      "type": "object",
+      "properties": {
+        "total_user_prompts": {"type": ["number", "string"]},
+        "categories": {"type": "object"}
+      }
+    },
+    "knowledge_base": {"type": "object"},
+    "documentation": {"type": "object"},
+    "tech_stack": {"type": "object"},
+    "maintenance": {"type": "object"}
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "$schema": "./knowledge_base/schemas/.repo-metadata.schema.json",
+  "version": "0.1.0-alpha",
+  "last_updated": "2025-10-12",
+  "status": "Alpha - Untested in production, undergoing initial validation",
+  "_comment": "Single source of truth for repository-wide metadata. All agents and documentation should reference this file instead of hard-coding values.",
+  "architecture": {
+    "total_agents": 23,
+    "main_supervisor": 1,
+    "top_level_agents": 5,
+    "engineering_supervisor": 1,
+    "engineering_specialists": 16,
+    "_comment_counts": "These counts are validated by tests/validate_consistency.py. Update automatically when agents are added/removed.",
+    "agent_categories": {
+      "supervisor": [
+        "supervisor_agent"
+      ],
+      "top_level": [
+        "requirements_agent",
+        "architecture_agent",
+        "deployment_agent",
+        "optimization_agent",
+        "prompt_engineering_agent"
+      ],
+      "engineering_supervisor": [
+        "engineering_supervisor_agent"
+      ],
+      "engineering_specialists": [
+        "streamlit_ui_agent",
+        "claude_code_agent",
+        "claude_workspaces_agent",
+        "anthropic_agents_sdk_agent",
+        "mcp_services_agent",
+        "langchain_agent",
+        "knowledge_engineering_agent",
+        "data_engineering_agent",
+        "aws_bedrock_agentcore_agent",
+        "aws_bedrock_strands_agent",
+        "aws_infrastructure_agent",
+        "aws_security_networking_agent",
+        "claude_projects_agent",
+        "testing_qa_agent",
+        "github_copilot_agent",
+        "cursor_ide_agent"
+      ]
+    }
+  },
+  "prompts": {
+    "total_user_prompts": 68,
+    "categories": {
+      "self_improvement": 27,
+      "requirements": 4,
+      "architecture": 6,
+      "engineering": 19,
+      "deployment": 3,
+      "prompt_engineering": 5,
+      "proposals": 4
+    },
+    "_comment": "Counts updated automatically by validation scripts"
+  },
+  "knowledge_base": {
+    "files": 3,
+    "schemas": 3,
+    "format": "JSON with JSON Schema validation"
+  },
+  "documentation": {
+    "main_readme": "README.md",
+    "architecture": "ARCHITECTURE.md",
+    "contributing": "CONTRIBUTING.md",
+    "guides_directory": "docs/"
+  },
+  "tech_stack": {
+    "primary_language": "Python",
+    "ui_framework": "Streamlit",
+    "llm_providers": [
+      "Anthropic Claude",
+      "AWS Bedrock"
+    ],
+    "orchestration": [
+      "LangChain",
+      "MCP",
+      "Strands SDK",
+      "AgentCore"
+    ],
+    "platforms": [
+      "Cursor IDE",
+      "Claude Projects",
+      "GitHub Copilot",
+      "AWS Bedrock"
+    ]
+  },
+  "maintenance": {
+    "versioning_approach": "centralized",
+    "validation_scripts": [
+      "tests/validate_consistency.py",
+      "tests/validate_knowledge_base.py"
+    ],
+    "update_frequency": "Updated automatically by CI/CD and validation scripts"
+  }
+}
