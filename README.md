@@ -185,7 +185,7 @@ Every architecture evaluated against **6 pillars** + **GenAI Lens**:
 
 **Claude Projects** (10 min):
 ```
-1. Create project at claude.ai/projects
+1. Create project at https://claude.ai/projects (requires Anthropic account)
 2. Upload knowledge_base/*.json
 3. Custom Instructions: supervisor_agent.system.prompt.md
 ```
