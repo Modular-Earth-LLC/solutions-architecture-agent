@@ -1,0 +1,34 @@
+# ============================================================================
+# PRIVATE DIRECTORY - SENSITIVE CONTENT PROTECTION
+# ============================================================================
+# This .gitignore ensures that sensitive files placed in this directory
+# are NEVER committed to Git or pushed to GitHub.
+#
+# WHAT THIS PROTECTS:
+# - Proprietary technical designs
+# - Sensitive data models and architectures
+# - API keys, credentials, and secrets
+# - Private business information
+# - Personal or confidential documents
+#
+# ============================================================================
+
+# Ignore ALL files and directories by default
+*
+
+# EXCEPTIONS: Allow these specific files to be tracked
+!.gitignore
+!README.md
+
+# Allow subdirectories themselves to be tracked (but not their contents)
+# Each subdirectory should have its own .gitignore
+!*/
+
+# ============================================================================
+# VERIFICATION: To verify this is working, run:
+#   git status
+# 
+# You should ONLY see .gitignore and README.md as trackable files.
+# All other content should be ignored.
+# ============================================================================
+
