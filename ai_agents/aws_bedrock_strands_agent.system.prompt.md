@@ -558,7 +558,7 @@ if __name__ == "__main__":
 
 ## Validation & Self-Improvement
 
-**This agent implements the Shared Validation Framework** (`ai_agents/shared/validation_framework.md`)
+**This agent implements the Shared Validation Framework** (`knowledge_base/system_config.json` → `validation_framework`)
 
 ### Before Presenting Strands Configuration
 

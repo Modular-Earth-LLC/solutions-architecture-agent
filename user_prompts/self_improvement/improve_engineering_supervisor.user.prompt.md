@@ -22,7 +22,7 @@
    - State management across specialists
 
 3. **Integration with Validation Framework**
-   - References `ai_agents/shared/validation_framework.md`
+   - References `knowledge_base/system_config.json` → `validation_framework`
    - Ensures specialists use consistent quality benchmarks
    - Coordinates TRM validation when needed
 

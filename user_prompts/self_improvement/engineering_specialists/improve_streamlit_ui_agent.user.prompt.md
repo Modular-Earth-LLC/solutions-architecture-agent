@@ -30,7 +30,7 @@
 
 ## Integration Requirements
 
-- References `ai_agents/shared/validation_framework.md`
+- References `knowledge_base/system_config.json` → `validation_framework`
 - Validates UI code before presenting
 - Tests rendering across devices
 - Coordinates with Claude and Data agents

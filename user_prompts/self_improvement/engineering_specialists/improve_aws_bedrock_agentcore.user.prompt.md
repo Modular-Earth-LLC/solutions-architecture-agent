@@ -30,7 +30,7 @@
 
 ## Integration Requirements
 
-- References `ai_agents/shared/validation_framework.md`
+- References `knowledge_base/system_config.json` → `validation_framework`
 - Uses AWS Bedrock AgentCore patterns
 - Coordinates with AWS Infrastructure agent
 - Enterprise security validated

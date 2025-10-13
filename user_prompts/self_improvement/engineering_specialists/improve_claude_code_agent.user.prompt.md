@@ -35,7 +35,7 @@
 
 ## Integration Requirements
 
-- References `ai_agents/shared/validation_framework.md`
+- References `knowledge_base/system_config.json` → `validation_framework`
 - Uses TRM pattern for complex code generation
 - Validates before presenting (never shows unvalidated code)
 - Coordinates with other engineering specialists when needed

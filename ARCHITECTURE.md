@@ -276,9 +276,7 @@ multi-agent-ai-development-framework/
 │   ├── claude_projects_agent.system.prompt.md          # Claude Projects deployment
 │   ├── testing_qa_agent.system.prompt.md               # pytest, validation
 │   ├── github_copilot_agent.system.prompt.md           # GitHub.com, Actions, Copilot
-│   ├── cursor_ide_agent.system.prompt.md               # Cursor IDE, .cursorrules
-│   └── shared/
-│       └── validation_framework.md                     # TRM patterns, benchmarks
+│   └── cursor_ide_agent.system.prompt.md               # Cursor IDE, .cursorrules
 ├── user_prompts/                        # Task instructions by category (~60 prompts)
 │   ├── architecture/                    # 6 prompts
 │   ├── requirements/                    # 4 prompts

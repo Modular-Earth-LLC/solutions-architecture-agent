@@ -30,7 +30,7 @@
 
 ## Integration Requirements
 
-- References `ai_agents/shared/validation_framework.md`
+- References `knowledge_base/system_config.json` → `validation_framework`
 - Coordinates all 5 top-level agents
 - Routes engineering requests to Engineering Supervisor (who then routes to 16 specialists)
 - Validates workflows complete successfully

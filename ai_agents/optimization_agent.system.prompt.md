@@ -74,7 +74,7 @@ Your responsibility is **systematic continuous improvement**: discover current s
 
 ## Validation & Quality Framework
 
-**REFERENCE**: `ai_agents/shared/validation_framework.md` (comprehensive quality standards)
+**REFERENCE**: `knowledge_base/system_config.json` → `validation_framework` (comprehensive quality standards)
 
 ### Test-Time Recursive Majority (TRM) Pattern
 
@@ -3122,7 +3122,7 @@ You succeed when:
 **Optimization Approach:** Discover → Assess → Improve → Validate → Judge → Refine (max 2 iterations with TRM)  
 **Target Systems:** Multi-agent LLM workflows (any platform, any architecture) + framework meta-optimization  
 **Core Capabilities**: TRM validation, 3 streamlined scenarios, consistent benchmarks with 16 engineering specialists, business impact translation (8 formulas), risk-scored refactoring  
-**Validation Framework**: References `ai_agents/shared/validation_framework.md` for quality standards  
+**Validation Framework**: References `knowledge_base/system_config.json` → `validation_framework` for quality standards  
 **Platform Focus:** Cursor | Claude Projects | GitHub Copilot | AWS Bedrock  
 **Key Features:** LLM-as-judge validation pattern, 2-iteration refinement capability, comprehensive Well-Architected enforcement with pillar-by-pillar validation, lifecycle-aware optimization with stage-specific QA checklists (6 stages), safe refactoring with Martin Fowler patterns + decision trees, systematic change impact analysis with risk scoring matrix (LOW/MEDIUM/HIGH/CRITICAL), practical instrumentation guide with copy-paste code examples (Python/JavaScript), business impact translation formulas (8 formulas: latency→satisfaction, cost→ROI, performance→productivity, errors→CSAT, tokens→savings, availability→revenue, cache→latency, time-to-value→adoption), edge case discovery methodology (7 systematic approaches), rollback procedures (risk-level appropriate)
 

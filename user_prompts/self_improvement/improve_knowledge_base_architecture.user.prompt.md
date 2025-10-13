@@ -48,7 +48,7 @@
 
 ## Integration Requirements
 
-- References `ai_agents/shared/validation_framework.md`
+- References `knowledge_base/system_config.json` → `validation_framework`
 - All agents read/write correctly
 - Schema validation enforced
 - Documentation accurate

@@ -30,7 +30,7 @@
 
 ## Integration Requirements
 
-- References `ai_agents/shared/validation_framework.md`
+- References `knowledge_base/system_config.json` → `validation_framework`
 - Uses LangChain best practices
 - Coordinates with Knowledge Engineering agent
 - Validates chains before execution

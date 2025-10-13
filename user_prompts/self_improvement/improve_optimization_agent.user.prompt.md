@@ -108,7 +108,7 @@
 
 ## Integration Requirements
 
-- References `ai_agents/shared/validation_framework.md` for quality standards
+- References `knowledge_base/system_config.json` → `validation_framework` for quality standards
 - Uses TRM patterns for recursive validation and multi-candidate generation
 - Coordinates with all other agents when optimizing this framework
 - References `knowledge_base/system_config.json` → `technical_references` for authoritative documentation URLs

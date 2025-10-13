@@ -88,7 +88,7 @@ This repository includes validation tools that MUST be leveraged:
 - **`tests/validate_consistency.py`**: Python validation script
 - **`tests/validate_knowledge_base.py`**: JSON schema validation
 - **`tests/workflow_validation_checklist.md`**: Manual validation checklist
-- **`ai_agents/shared/validation_framework.md`**: Quality standards framework
+- **`knowledge_base/system_config.json` → `validation_framework`**: Quality standards framework
 - **Knowledge base schemas**: Define expected structure for JSON files
 
 ## Tasks and Process
@@ -560,7 +560,7 @@ violations = check_naming_conventions(all_files, naming_rules)
 
 ```python
 # All agents should reference shared validation framework
-shared_framework = "ai_agents/shared/validation_framework.md"
+shared_framework = "knowledge_base/system_config.json → validation_framework"
 
 for agent_file in agent_prompts:
     if not references_framework(agent_file, shared_framework):

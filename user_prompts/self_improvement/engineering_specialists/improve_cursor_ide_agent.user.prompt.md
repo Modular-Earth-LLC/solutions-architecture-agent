@@ -30,7 +30,7 @@
 
 ## Integration Requirements
 
-- References `ai_agents/shared/validation_framework.md`
+- References `knowledge_base/system_config.json` → `validation_framework`
 - Coordinates with all other agents
 - Uses Cursor best practices
 - Validates configurations

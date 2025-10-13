@@ -30,7 +30,7 @@
 
 ## Integration Requirements
 
-- References `ai_agents/shared/validation_framework.md`
+- References `knowledge_base/system_config.json` → `validation_framework`
 - Follows MCP specification strictly
 - Coordinates with Claude Code and SDK agents
 - Validates server implementations

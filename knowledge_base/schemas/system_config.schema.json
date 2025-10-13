@@ -261,6 +261,115 @@
         "generative_ai_lens": {"type": "object"},
         "assessment_scoring": {"type": "object"}
       }
+    },
+    "technical_references": {
+      "type": "object",
+      "description": "Centralized technical documentation, research papers, frameworks, and design patterns",
+      "properties": {
+        "_description": {"type": "string"},
+        "_usage": {"type": "string"},
+        "_last_updated": {"type": "string"},
+        "anthropic_claude": {"type": "object"},
+        "model_context_protocol": {"type": "object"},
+        "aws_bedrock": {"type": "object"},
+        "aws_bedrock_agentcore": {"type": "object"},
+        "aws_bedrock_strands": {"type": "object"},
+        "aws_general": {"type": "object"},
+        "langchain": {"type": "object"},
+        "streamlit": {"type": "object"},
+        "github": {"type": "object"},
+        "cursor_ide": {"type": "object"},
+        "data_tools": {"type": "object"},
+        "testing": {"type": "object"},
+        "research_papers": {"type": "object"},
+        "design_patterns": {"type": "object"},
+        "validation_framework": {"type": "object"}
+      }
+    },
+    "self_improvement_framework": {
+      "type": "object",
+      "description": "Shared framework for all agent self-improvement prompts",
+      "properties": {
+        "_description": {"type": "string"},
+        "_usage": {"type": "string"},
+        "_last_updated": {"type": "string"},
+        "purpose": {"type": "string"},
+        "applicable_agents": {"type": "object"},
+        "recursion_prevention": {"type": "object"},
+        "core_principles": {"type": "object"},
+        "standard_methodology": {"type": "object"},
+        "quality_benchmarks": {"type": "object"},
+        "success_criteria": {"type": "object"},
+        "validation_requirements": {"type": "object"},
+        "common_focus_areas": {"type": "object"}
+      }
+    },
+    "validation_framework": {
+      "type": "object",
+      "description": "Shared validation and self-improvement patterns for all engineering agents",
+      "properties": {
+        "_description": {"type": "string"},
+        "_applies_to": {"type": "string"},
+        "_last_updated": {"type": "string"},
+        "overview": {
+          "type": "object",
+          "properties": {
+            "purpose": {"type": "string"},
+            "implements": {
+              "type": "array",
+              "items": {"type": "string"}
+            }
+          }
+        },
+        "validation_workflow": {
+          "type": "object",
+          "properties": {
+            "step_1_generate": {"type": "string"},
+            "step_2_validate": {"type": "string"},
+            "step_3_improve": {"type": "string"},
+            "step_4_present": {"type": "string"},
+            "threshold": {"type": "number"},
+            "threshold_description": {"type": "string"}
+          }
+        },
+        "quality_benchmarks": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "type": "object",
+              "properties": {
+                "minimum": {"type": "number"},
+                "target": {"type": "number"},
+                "metric": {"type": "string"},
+                "description": {"type": "string"},
+                "critical": {"type": "integer"},
+                "high": {"type": "integer"},
+                "medium": {"type": "integer"},
+                "response_time_ms": {"type": "integer"},
+                "memory_mb": {"type": "integer"}
+              }
+            }
+          }
+        },
+        "trm_pattern": {
+          "type": "object",
+          "properties": {
+            "name": {"type": "string"},
+            "description": {"type": "string"},
+            "steps": {
+              "type": "array",
+              "items": {"type": "string"}
+            },
+            "num_candidates": {"type": "integer"},
+            "excellence_threshold": {"type": "number"},
+            "max_iterations": {"type": "integer"}
+          }
+        },
+        "anthropic_patterns": {"type": "object"},
+        "aws_bedrock_integration": {"type": "object"},
+        "implementation_requirements": {"type": "object"},
+        "integration_points": {"type": "object"}
+      }
     }
   }
 }

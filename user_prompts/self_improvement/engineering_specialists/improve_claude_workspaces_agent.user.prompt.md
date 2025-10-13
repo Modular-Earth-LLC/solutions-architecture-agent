@@ -30,7 +30,7 @@
 
 ## Integration Requirements
 
-- References `ai_agents/shared/validation_framework.md`
+- References `knowledge_base/system_config.json` → `validation_framework`
 - Coordinates with all other Claude specialists
 - Uses Anthropic multi-agent research patterns
 - Validates workflows before execution

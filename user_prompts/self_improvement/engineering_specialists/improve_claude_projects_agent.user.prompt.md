@@ -30,7 +30,7 @@
 
 ## Integration Requirements
 
-- References `ai_agents/shared/validation_framework.md`
+- References `knowledge_base/system_config.json` → `validation_framework`
 - Coordinates with Claude specialists
 - Uses Claude Projects best practices
 - Validates deployments

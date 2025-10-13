@@ -30,7 +30,7 @@
 
 ## Integration Requirements
 
-- References `ai_agents/shared/validation_framework.md`
+- References `knowledge_base/system_config.json` → `validation_framework`
 - Coordinates with LangChain and Data agents
 - Uses RAG best practices
 - Validates retrieval quality

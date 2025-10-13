@@ -294,10 +294,9 @@ multi-agent-ai-development-framework/
 │   ├── supervisor_agent.system.prompt.md (main entry point)
 │   ├── [5 top-level domain agents]
 │   ├── engineering_supervisor_agent.system.prompt.md
-│   ├── [16 specialist agents]
-│   └── shared/validation_framework.md (TRM patterns)
+│   └── [16 specialist agents]
 ├── knowledge_base/               # Shared state across agents
-│   ├── system_config.json (150+ tech refs, Well-Architected defs)
+│   ├── system_config.json (150+ tech refs, Well-Architected defs, validation framework)
 │   ├── user_requirements.json
 │   ├── design_decisions.json
 │   └── schemas/ (JSON schemas for validation)

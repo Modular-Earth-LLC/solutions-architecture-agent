@@ -30,7 +30,7 @@
 
 ## Integration Requirements
 
-- References `ai_agents/shared/validation_framework.md`
+- References `knowledge_base/system_config.json` → `validation_framework`
 - Uses SDK patterns from Anthropic documentation
 - Coordinates with other Claude specialists
 - Never uses eval() or unsafe code patterns
