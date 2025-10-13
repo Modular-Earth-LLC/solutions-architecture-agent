@@ -282,6 +282,7 @@ Shared Knowledge Base:
 - `ARCHITECTURE.md` - System architecture
 - `knowledge_base/README.md` - Knowledge base guide
 - `templates/` - Requirements, architecture, checklists
+- `private/README.md` - Security guidelines for sensitive data
 
 ---
 
@@ -304,7 +305,10 @@ multi-agent-ai-development-framework/
 ├── docs/                         # Documentation
 ├── templates/                    # Reusable templates
 ├── tests/                        # Validation tests (auto-update metadata)
-└── outputs/                      # Generated systems go here
+├── outputs/                      # Generated systems go here
+└── private/                      # Sensitive data (NEVER committed to Git)
+    ├── README.md (security guidelines)
+    └── sensitive-ai-agent-outputs/ (protected AI outputs)
 
 See .repo-metadata.json for current agent/prompt counts
 ```

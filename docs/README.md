@@ -37,6 +37,7 @@
 - **[../knowledge_base/README.md](../knowledge_base/README.md)** - Knowledge base schemas and usage
 - **[../user_prompts/self_improvement/README.md](../user_prompts/self_improvement/README.md)** - Self-improvement prompts
 - **[../outputs/README.md](../outputs/README.md)** - Output directory structure and organization
+- **[../private/README.md](../private/README.md)** - Security guidelines for sensitive data (NEVER committed)
 - **[../templates/](../templates/)** - Reusable templates
 
 ---

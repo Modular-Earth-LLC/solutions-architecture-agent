@@ -90,12 +90,28 @@ cd multi-agent-ai-development-framework
 
 ---
 
+## Security & Sensitive Data
+
+**Protecting sensitive information:**
+
+If you're working with proprietary designs, sensitive data, or confidential information:
+
+1. Use the `private/` directory for any sensitive files
+2. Read `private/README.md` for comprehensive security guidelines
+3. Instruct AI agents to save sensitive outputs to `private/sensitive-ai-agent-outputs/`
+4. Verify with `git status` that sensitive files are never staged for commit
+
+**The `private/` directory is automatically excluded from Git** but provides local workspace for development with sensitive content.
+
+---
+
 ## Next Steps
 
 **Learn more**:
 - `docs/workflow_guide.md` - Detailed workflows
 - `docs/engineering-agents-guide.md` - All 16 specialists
 - `docs/human-ai-collaboration.md` - Your role vs agent role
+- `private/README.md` - Security guidelines for sensitive data
 
 **Get help**:
 - GitHub Issues: Bug reports, feature requests

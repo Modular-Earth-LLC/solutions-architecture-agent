@@ -58,6 +58,11 @@ We are committed to providing a welcoming and inclusive environment for all cont
    ```bash
    git checkout -b feature/your-improvement
    ```
+3. **Review security guidelines** for sensitive data:
+   ```bash
+   # Read private/README.md for handling sensitive content
+   # Use private/ directory for any proprietary designs or data
+   ```
 4. **Deploy to Cursor** (for testing):
    ```bash
    # Follow docs/deployment-guide.md
@@ -397,6 +402,7 @@ git commit -m "test(agents): add end-to-end workflow validation"
 - [ ] No merge conflicts with main
 - [ ] Version headers updated where applicable
 - [ ] Changes validated in Cursor or Claude
+- [ ] No sensitive data accidentally committed (verify with `git status`)
 
 ### PR Description Template
 
@@ -722,6 +728,12 @@ Use the specialized improvement prompts in `user_prompts/self_improvement/`:
 - Include severity assessment (Critical/High/Medium/Low)
 - Provide remediation guidance
 - Reference OWASP LLM Top 10 or similar standards
+
+**Sensitive Data Protection:**
+- Use `private/` directory for any sensitive development content
+- Review `private/README.md` for comprehensive security guidelines
+- Never commit API keys, credentials, or proprietary designs to version control
+- Instruct AI agents to place sensitive outputs in `private/sensitive-ai-agent-outputs/`
 
 ---
 

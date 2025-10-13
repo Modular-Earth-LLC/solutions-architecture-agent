@@ -5,6 +5,8 @@
 **Created:** Automatically by agents during execution  
 **Location:** Configurable in `knowledge_base/system_config.json` → `output_directory` (defaults to `outputs/`)
 
+⚠️ **For Sensitive Data:** If your outputs contain proprietary designs, confidential information, or sensitive data, use the `private/` directory instead. See `private/README.md` for security guidelines. The `private/` directory is automatically excluded from Git commits.
+
 ---
 
 ## Directory Structure
@@ -162,6 +164,18 @@ Edit `knowledge_base/system_config.json`:
 - `use_project_subdirectories`: Organize by project name (default: `true`)
 - `timestamp_files`: Add timestamps to filenames (default: `false`)
 
+### Directing AI Agents to Use Private Directory
+
+**For sensitive outputs**, explicitly instruct AI agents:
+
+```
+"Generate the architecture document and save it to private/sensitive-ai-agent-outputs/"
+"Place all outputs in the private folder since they contain proprietary designs"
+"Create the prototype in private/my-project/ instead of outputs/"
+```
+
+The `private/` directory structure mirrors `outputs/` but is excluded from Git.
+
 ---
 
 ## Use Cases
@@ -249,12 +263,27 @@ Edit `knowledge_base/system_config.json`:
 - ✅ Use meaningful commit messages
 - ✅ Tag major milestones
 - ✅ Branch for experimentation
+- ⚠️ **NEVER commit sensitive data** - use `private/` directory instead
 
 ### Organization
 - Keep related artifacts together: `outputs/prototypes/[project]/`
 - Separate by phase: requirements/ vs. architecture/ vs. prototypes/
 - Include README.md in each project subdirectory
 - Reference knowledge base from outputs (bidirectional)
+
+### Security & Sensitive Data
+- **Public outputs** → `outputs/` directory (version controlled, can be shared)
+- **Sensitive outputs** → `private/` directory (excluded from Git, local only)
+- **AI-generated sensitive content** → `private/sensitive-ai-agent-outputs/`
+- Always verify with `git status` before committing
+- See `private/README.md` for comprehensive security guidelines
+
+**When to use `private/` instead of `outputs/`:**
+- Proprietary technical designs for unreleased products
+- Architecture documents containing internal system details
+- Data models with sensitive business logic
+- Prototypes using real API keys or credentials
+- Any content containing confidential information
 
 ---
 
