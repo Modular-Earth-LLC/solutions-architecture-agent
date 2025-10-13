@@ -378,7 +378,7 @@ if __name__ == "__main__":
     
     # Create custom tools
     db_tool = DatabaseTool("app.db")
-    api_tool = APITool("weather", "https://api.weather.com")
+    api_tool = APITool("weather", "https://api.weather.com")  # Example API URL
     
     # Configure agent with tools
     tools = [

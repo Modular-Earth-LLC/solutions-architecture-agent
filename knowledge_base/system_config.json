@@ -193,8 +193,9 @@
     "aws_bedrock_strands": {
       "announcement": "https://aws.amazon.com/blogs/opensource/introducing-strands-agents-an-open-source-ai-agents-sdk/",
       "documentation": "https://strandsagents.com/latest/",
-      "github": "https://github.com/awslabs/strands",
-      "technical_deep_dive": "https://aws.amazon.com/blogs/machine-learning/strands-agents-sdk-a-technical-deep-dive-into-agent-architectures-and-observability/"
+      "github": "(Repository not yet publicly available - check AWS announcements)",
+      "technical_deep_dive": "https://aws.amazon.com/blogs/machine-learning/strands-agents-sdk-a-technical-deep-dive-into-agent-architectures-and-observability/",
+      "_note": "Strands SDK announced but GitHub repo not yet published as of 2025-10-13"
     },
     
     "aws_general": {

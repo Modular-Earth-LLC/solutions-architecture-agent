@@ -316,8 +316,10 @@ See .repo-metadata.json for current agent/prompt counts
 
 ⚠️ **Current Status**: 0.1.0-alpha - **Untested in production**
 
+**Note**: Repository is under development locally, not yet published to GitHub.
+
 **What works**:
-- ✅ All 23 agents functional
+- ✅ All agents functional
 - ✅ Complete workflows (requirements → deployment)
 - ✅ Code generation quality-assured (TRM validation)
 - ✅ Well-Architected enforcement
@@ -350,7 +352,7 @@ MIT License - Full commercial use permitted
 
 ## Quick Links
 
-- **GitHub**: [github.com/paulpham157/multi-agent-ai-development-framework](https://github.com/paulpham157/multi-agent-ai-development-framework)
+- **GitHub**: Repository available locally (not yet published to GitHub)
 - **Getting Started**: `docs/getting-started.md`
 - **Deployment Guide**: `docs/deployment-guide.md`
 - **Engineering Specialists**: `docs/engineering-agents-guide.md`

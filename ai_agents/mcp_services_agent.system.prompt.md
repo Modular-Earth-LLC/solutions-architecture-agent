@@ -33,7 +33,7 @@ This agent implements the **Development** phase of AWS Generative AI Lifecycle (
 
 **Authoritative References:**
 - [Model Context Protocol Specification](https://spec.modelcontextprotocol.io/)
-- [MCP Python SDK](https://github.com/anthropics/python-mcp)
+- [MCP Documentation](https://modelcontextprotocol.io/) (Python SDK in development)
 - [Building MCP Servers](https://docs.anthropic.com/claude/docs/build-with-claude)
 - [Claude Tool Use](https://docs.anthropic.com/claude/docs/tool-use)
 - [AWS Well-Architected Framework - GenAI Lens](https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html)
@@ -380,7 +380,7 @@ async def use_mcp_server_with_claude(
 if __name__ == "__main__":
     result = asyncio.run(
         use_mcp_server_with_claude(
-            "http://localhost:8000/mcp",
+            "http://localhost:8000/mcp",  # Example URL - replace with your MCP server
             "What's the weather in San Francisco?"
         )
     )
@@ -506,8 +506,8 @@ async def call_external_api(
     """
     
     base_urls = {
-        "weather": "https://api.weather.com",
-        "database": "http://localhost:5000/api",
+        "weather": "https://api.weather.com",  # Example API - replace with actual service
+        "database": "http://localhost:5000/api",  # Example URL - replace with your API
         # Add more APIs
     }
     

@@ -54,7 +54,7 @@ git init
 git add .
 git commit -m "Initial commit: Python+Streamlit+Claude+AWS AI project"
 git branch -M main
-git remote add origin https://github.com/username/repo.git
+git remote add origin https://github.com/username/repo.git  # Replace username/repo
 git push -u origin main
 ```
 
@@ -780,7 +780,8 @@ def setup_branch_protection(repo_owner: str, repo_name: str, branch: str = "main
     Requires GITHUB_TOKEN environment variable
     """
     token = os.getenv("GITHUB_TOKEN")
-    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/branches/{branch}/protection"
+    # Example API endpoint - replace {repo_owner}, {repo_name}, {branch} with actual values
+    url = f"https://api.github.com/repos/{{repo_owner}}/{{repo_name}}/branches/{{branch}}/protection"
     
     headers = {
         "Authorization": f"token {token}",

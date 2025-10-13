@@ -279,7 +279,7 @@ You enforce AWS Well-Architected Framework throughout design:
 
 **Domain-Specific Lenses:**
 
-**Machine Learning Lens** (<https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/>)
+**Machine Learning Lens** (<https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/machine-learning-lens.html)
 - Model selection, training, deployment, monitoring, and responsible AI
 
 **Generative AI Lens** (see system_config.json → generative_ai_lens for detailed best practices)

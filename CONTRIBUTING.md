@@ -49,15 +49,14 @@ We are committed to providing a welcoming and inclusive environment for all cont
 
 ### Local Setup
 
-1. **Fork the repository** on GitHub
-2. **Clone your fork:**
+1. **Clone the repository** locally (repo not yet published to GitHub):
    ```bash
-   git clone https://github.com/YOUR-USERNAME/multi-agent-ai-development-framework.git
-   cd multi-agent-ai-development-framework
+   # Repository currently under local development
+   # Clone from local path or wait for GitHub publication
    ```
-3. **Add upstream remote:**
+2. **Create a branch** for your changes:
    ```bash
-   git remote add upstream https://github.com/paulpham157/multi-agent-ai-development-framework.git
+   git checkout -b feature/your-improvement
    ```
 4. **Deploy to Cursor** (for testing):
    ```bash
