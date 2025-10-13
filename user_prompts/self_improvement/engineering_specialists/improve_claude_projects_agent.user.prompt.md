@@ -1,6 +1,6 @@
 ﻿# Improve Claude Projects Deployment Agent
 
-**Target**: `ai_agents/claude_projects_deployment_agent.system.prompt.md`  
+**Target**: `ai_agents/claude_projects_agent.system.prompt.md`  
 **Specialty**: Claude Projects platform, artifacts, project knowledge, deployment
 
 **Framework**: See `knowledge_base/system_config.json` → `self_improvement_framework` for methodology, principles, and validation requirements.
@@ -49,4 +49,3 @@ Beyond standard criteria (see system_config.json), ensure:
 
 ---
 
-**Version**: 0.1 | **Updated**: 2025-10-12 | **Status**: Alpha - Untested, undergoing initial validation

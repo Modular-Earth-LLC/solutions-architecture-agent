@@ -1,6 +1,7 @@
 # System Architecture
 
-**Version**: 0.1.0-alpha | **Status**: Alpha - Undergoing initial testing
+**Status**: Alpha - Undergoing initial testing  
+**Version**: See `.repo-metadata.json`
 
 ⚠️ **ALPHA RELEASE**: Architecture untested in production. Undergoing validation. Breaking changes expected before v1.0.
 
@@ -74,7 +75,9 @@ Tech Stack Focus: Python, Streamlit, Anthropic Claude, AWS Bedrock, LangChain
 
 **Execution Environment**: Cursor IDE • Claude Projects • GitHub Copilot (VS Code)
 **Purpose**: AI engineering assistance for developers  
-**Components**: 23 total agents (1 Main Supervisor + 5 Top-Level Domain Agents + 1 Engineering Supervisor + 16 Engineering Specialists) + User prompts
+**Components**: Multi-tiered agent system (see `.repo-metadata.json` for current counts)
+- 1 Main Supervisor + 5 Top-Level Domain Agents + 1 Engineering Supervisor + 16 Engineering Specialists
+- User prompts across multiple categories
 
 **Platform Options:**
 
@@ -253,7 +256,7 @@ multi-agent-ai-development-framework/
 │   ├── deployment_agent.system.prompt.md
 │   ├── optimization_agent.system.prompt.md
 │   ├── prompt_engineering_agent.system.prompt.md
-│   ├── engineering_supervisor_agent.system.prompt.md    # Engineering orchestrator (16 specialists)
+│   ├── engineering_supervisor_agent.system.prompt.md    # Engineering orchestrator
 │   ├── streamlit_ui_agent.system.prompt.md             # Streamlit UI specialist
 │   ├── claude_code_agent.system.prompt.md              # Claude autonomous coding
 │   ├── claude_workspaces_agent.system.prompt.md        # Claude multi-agent orchestration

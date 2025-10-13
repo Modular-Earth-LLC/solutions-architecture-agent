@@ -1,6 +1,6 @@
 ﻿# Improve LangChain Orchestration Agent
 
-**Target**: `ai_agents/langchain_orchestration_agent.system.prompt.md`  
+**Target**: `ai_agents/langchain_agent.system.prompt.md`  
 **Specialty**: LangChain workflows, LCEL, RAG patterns, tool integration
 
 **Framework**: See `knowledge_base/system_config.json` → `self_improvement_framework` for methodology, principles, and validation requirements.
@@ -49,4 +49,3 @@ Beyond standard criteria (see system_config.json), ensure:
 
 ---
 
-**Version**: 0.1 | **Updated**: 2025-10-12 | **Status**: Alpha - Untested, undergoing initial validation

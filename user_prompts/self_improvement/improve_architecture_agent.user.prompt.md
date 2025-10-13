@@ -61,13 +61,12 @@ Beyond standard criteria (see system_config.json), ensure:
 
 ---
 
-## System Context (v2.0)
+## System Context
 
-**Must understand 23-agent architecture:**
+**Must understand multi-agent architecture:** (See `.repo-metadata.json` for counts)
 - Main Supervisor, 5 top-level agents, Engineering Supervisor, 16 specialists
 
 **Tech stack focus**: Python, Streamlit, Anthropic Claude, AWS Bedrock, MCP, LangChain
 
 ---
 
-**Version**: 0.1 | **Updated**: 2025-10-12 | **Status**: Alpha - Untested, undergoing initial validation

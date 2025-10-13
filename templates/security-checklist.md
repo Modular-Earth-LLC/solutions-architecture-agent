@@ -65,4 +65,3 @@ Essential security validation for AI systems.
 
 ---
 
-**Version**: 0.1.0-alpha | **Updated**: 2025-10-12

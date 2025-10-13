@@ -1,7 +1,7 @@
 ﻿# Improve AI Engineering Assistant - System-Wide Optimization
 
 **Target**: Entire AI Engineering Assistant framework (all agents, prompts, knowledge base, documentation)  
-**Scope**: System-wide improvements across 23 agents
+**Scope**: System-wide improvements across all agents (see `.repo-metadata.json` for current count)
 
 **Framework**: See `knowledge_base/system_config.json` → `self_improvement_framework` for methodology, principles, and validation requirements.
 
@@ -20,11 +20,13 @@
 
 ### Components to Analyze
 
-**Agent System** (`ai_agents/` - 23 agents):
-- Main Supervisor, 5 top-level agents, Engineering Supervisor, 16 specialists
+**Agent System** (`ai_agents/`):
+- Main Supervisor, 5 top-level agents, Engineering Supervisor, 16 engineering specialists
+- See `.repo-metadata.json` for complete agent list and current counts
 
-**User Prompts** (`user_prompts/` - ~60 prompts):
+**User Prompts** (`user_prompts/`):
 - requirements/, architecture/, engineering/, deployment/, self_improvement/, prompt_engineering/, proposals/
+- See `.repo-metadata.json` for current counts by category
 
 **Knowledge Base** (`knowledge_base/`):
 - system_config.json, user_requirements.json, design_decisions.json, schemas/
@@ -66,7 +68,7 @@ After optimization, verify these work end-to-end:
 
 Beyond standard criteria (see system_config.json), ensure:
 
-✅ All 23 agents optimized for coherence  
+✅ All agents optimized for coherence  
 ✅ System-wide quality improved 10%+ across assessment dimensions  
 ✅ User time to first result ≤15 minutes  
 ✅ No regressions in any workflows  
@@ -75,9 +77,9 @@ Beyond standard criteria (see system_config.json), ensure:
 
 ---
 
-## Framework Context (v2.0)
+## Framework Context
 
-**23-Agent Architecture:**
+**Agent Architecture:** (See `.repo-metadata.json` for counts)
 - Main Supervisor (1)
 - Top-Level Agents (5): Requirements, Architecture, Deployment, Optimization, Prompt Engineering
 - Engineering Supervisor (1): Coordinates 16 specialists
@@ -93,4 +95,3 @@ Beyond standard criteria (see system_config.json), ensure:
 
 ---
 
-**Version**: 0.1 | **Updated**: 2025-10-12 | **Status**: Alpha - Untested, undergoing initial validation

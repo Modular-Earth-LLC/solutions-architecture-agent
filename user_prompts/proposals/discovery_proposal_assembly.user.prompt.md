@@ -330,7 +330,6 @@ Discovery proposal is successful when:
 ---
 
 **Version:** 0.1  
-**Last Updated:** 2025-10-03  
 **Purpose:** Assembly-only discovery proposal from knowledge base  
 **Typical Duration:** 2-6 weeks  
 **Investment Range:** $5K-$25K

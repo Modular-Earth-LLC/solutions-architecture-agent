@@ -532,6 +532,5 @@ Requirements extraction is successful when:
 ---
 
 **Version:** 0.1  
-**Last Updated:** 2025-10-03  
 **Input:** Unstructured text (notes, emails, transcripts)  
 **Output:** Structured user_requirements.json

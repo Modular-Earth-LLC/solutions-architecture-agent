@@ -86,10 +86,10 @@ The agent will systematically improve the entire framework
 **Focus:** Design patterns, cost estimation, tech stack selection, multi-shot orchestration  
 **When to use:** After architecture decisions, cost estimation accuracy issues
 
-#### `improve_engineering_agent.user.prompt.md`
-**Target:** `ai_agents/engineering_agent.system.prompt.md`  
-**Focus:** Code generation, prototype quality, implementation patterns  
-**When to use:** After code quality issues, new framework updates
+#### `improve_engineering_supervisor.user.prompt.md`
+**Target:** `ai_agents/engineering_supervisor_agent.system.prompt.md`  
+**Focus:** Engineering orchestration, routing to specialists, workflow coordination  
+**When to use:** After routing issues, specialist coordination problems
 
 #### `improve_deployment_agent.user.prompt.md`
 **Target:** `ai_agents/deployment_agent.system.prompt.md`  
@@ -253,5 +253,4 @@ When adding new self-improvement prompts:
 ---
 
 **Version:** 1.0  
-**Last Updated:** 2025-10-11  
 **Maintained By:** Multi-Agent AI Development Framework Core Team

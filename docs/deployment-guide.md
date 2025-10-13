@@ -85,4 +85,3 @@ After building a system with this framework:
 
 ---
 
-**Version**: 0.1.0-alpha | **Updated**: 2025-10-12

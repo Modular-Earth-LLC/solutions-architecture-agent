@@ -131,9 +131,9 @@ Beyond standard criteria (see system_config.json → self_improvement_framework)
 
 ---
 
-## Framework Context (v2.0)
+## Framework Context
 
-**23-Agent Architecture:**
+**Agent Architecture:** (See `.repo-metadata.json` for current counts)
 - Main Supervisor (1)
 - Top-Level Agents (5): Requirements, Architecture, Deployment, Optimization, Prompt Engineering
 - Engineering Supervisor (1): Coordinates 16 specialists
@@ -167,4 +167,3 @@ Beyond standard criteria (see system_config.json → self_improvement_framework)
 
 ---
 
-**Version**: 0.1 | **Updated**: 2025-10-12 | **Agent-Agnostic**: Works with Optimization or Prompt Engineering agents

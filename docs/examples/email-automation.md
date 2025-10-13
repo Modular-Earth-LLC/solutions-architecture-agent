@@ -113,6 +113,5 @@ Built Response Agent to draft replies:
 ---
 
 **Version:** 0.1  
-**Last Updated:** 2025-10-08  
 **Full walkthrough:** Use this repository's workflow to build similar systems
 

@@ -277,7 +277,6 @@ Issues found:
 ```markdown
 ❌ Before:
 "Build with 23 specialized agents and 60+ prompts..."
-Version: 0.1.0-alpha | Updated: 2025-10-12
 
 ✅ After:
 "Build with specialized agents (see `.repo-metadata.json` for current count)..."
@@ -531,7 +530,6 @@ The framework includes 23 specialized agents
 **What to remove from files**:
 ```markdown
 ❌ Remove these footer sections:
-**Version**: 0.1 | **Updated**: 2025-10-12 | **Status**: Alpha
 
 ✅ Replace with:
 [No version footer - see `.repo-metadata.json` for repository version]
@@ -623,8 +621,6 @@ All documentation improvements must meet:
 # Multi-Agent AI Development Framework
 
 Build AI systems with 23 specialized agents and 60+ prompts.
-
-**Version**: 0.1.0-alpha | **Updated**: 2025-10-12
 
 The system has 16 engineering specialists...
 ```

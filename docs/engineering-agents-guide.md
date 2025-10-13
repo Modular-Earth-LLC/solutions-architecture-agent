@@ -34,7 +34,7 @@ Request anything → Supervisor identifies which specialist(s) → Coordinates m
 - Model Context Protocol servers, tool/resource/prompt providers
 - Use for: MCP server development, tool integration
 
-**Claude Projects Deployment Agent** - `ai_agents/claude_projects_deployment_agent.system.prompt.md`
+**Claude Projects Agent** - `ai_agents/claude_projects_agent.system.prompt.md`
 - Claude Projects platform deployment
 - Use for: Deploy to Claude Projects, configure artifacts
 
@@ -64,7 +64,7 @@ Request anything → Supervisor identifies which specialist(s) → Coordinates m
 
 ### Orchestration (1 agent)
 
-**LangChain Orchestration Agent** - `ai_agents/langchain_orchestration_agent.system.prompt.md`
+**LangChain Agent** - `ai_agents/langchain_agent.system.prompt.md`
 - LCEL chains, RAG patterns, tool integration
 - Use for: LangChain workflows, complex chains
 
@@ -107,4 +107,3 @@ Request anything → Supervisor identifies which specialist(s) → Coordinates m
 
 ---
 
-**Version**: 0.1.0-alpha | **Updated**: 2025-10-12

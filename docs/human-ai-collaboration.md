@@ -138,4 +138,3 @@ A: YOU. Agents augment, you approve what gets deployed.
 
 ---
 
-**Version**: 0.1.0-alpha | **Updated**: 2025-10-12 | **Status**: Alpha

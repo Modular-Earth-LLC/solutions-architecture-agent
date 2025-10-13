@@ -1139,7 +1139,6 @@ Pitch deck is successful when:
 ---
 
 **Version:** 0.1  
-**Last Updated:** 2025-10-03  
 **Target Audience:** Clients, Investors, External Stakeholders  
 **Presentation Time:** 20-30 minutes  
 **Format:** Markdown → Google Slides / PowerPoint

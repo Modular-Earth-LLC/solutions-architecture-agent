@@ -1,8 +1,9 @@
 # Multi-Agent AI Development Framework
 
-**Build production AI systems 3-5x faster** with 23 specialized agents that handle requirements, architecture, coding, and deployment automatically.
+**Build production AI systems 3-5x faster** with specialized agents that handle requirements, architecture, coding, and deployment automatically.
 
-**Version**: 0.1.0-alpha | **Status**: ⚠️ Alpha - Untested in production. Use at your own risk.
+**Status**: ⚠️ Alpha - Untested in production. Use at your own risk.  
+**Version**: See `.repo-metadata.json` for current version and agent counts.
 
 ---
 
@@ -48,7 +49,7 @@ cd multi-agent-ai-development-framework
 - Architecture: 2 weeks → should be 4 hours
 - Prototypes: 2 months → should be 1 week
 
-**The Solution**: 23 specialized agents automate 70% of repetitive work
+**The Solution**: Specialized agents automate 70% of repetitive work
 
 | Task | Traditional | With Framework | Savings |
 |------|------------|----------------|---------|
@@ -60,7 +61,9 @@ cd multi-agent-ai-development-framework
 
 ---
 
-## The 23 Specialized Agents
+## The Specialized Agents
+
+<!-- Current count: See .repo-metadata.json -->
 
 **Main Supervisor** → Routes your requests
 

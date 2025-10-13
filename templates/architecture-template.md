@@ -97,5 +97,3 @@ Output template for Architecture Agent.
 
 ---
 
-**Version**: 0.1.0-alpha | **Updated**: 2025-10-12
-
