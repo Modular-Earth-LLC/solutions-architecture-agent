@@ -9,7 +9,7 @@
     "recommended_approach": "",
     "total_investment": "",
     "expected_timeline": "",
-    "confidence_level": "",
+    "confidence_level": "MEDIUM",
     "key_risks": [],
     "key_benefits": [],
     "go_no_go_recommendation": "",
@@ -112,7 +112,7 @@
   "architecture_design": {
     "decision_date": "",
     "last_updated": "",
-    "diagram_format": "",
+    "diagram_format": "mermaid",
     "diagram_code": "",
     "diagram_description": "",
     "key_components": [
@@ -203,7 +203,7 @@
     "decision_date": "",
     "last_updated": "",
     "methodology": "",
-    "confidence_level": "",
+    "confidence_level": "MEDIUM",
     "total_engineering_hours": 0,
     "hours_by_role": {},
     "hours_by_phase": {
@@ -229,7 +229,7 @@
       ],
       "critical_path": []
     },
-    "complexity_rating": "",
+    "complexity_rating": "MEDIUM",
     "complexity_factors": [],
     "risk_buffers": {
       "optimism_bias_adjustment_percent": 20,
@@ -419,9 +419,9 @@
       {
         "risk_id": "",
         "risk": "",
-        "impact": "",
-        "probability": "",
-        "severity": "",
+        "impact": "medium",
+        "probability": "medium",
+        "severity": "medium",
         "mitigation_strategy": "",
         "contingency_plan": "",
         "owner": "",
@@ -434,9 +434,9 @@
       {
         "risk_id": "",
         "risk": "",
-        "impact": "",
-        "probability": "",
-        "severity": "",
+        "impact": "medium",
+        "probability": "medium",
+        "severity": "medium",
         "mitigation_strategy": "",
         "contingency_plan": "",
         "owner": ""
@@ -449,7 +449,7 @@
         "mitigation": ""
       }
     ],
-    "overall_risk_rating": "",
+    "overall_risk_rating": "medium",
     "risk_management_approach": "",
     "_comment_overall_risk_rating": "low, medium, high, critical"
   },

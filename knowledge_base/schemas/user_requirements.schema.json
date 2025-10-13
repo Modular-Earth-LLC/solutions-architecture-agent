@@ -71,8 +71,15 @@
           }
         },
         "success_metrics": {
-          "type": "array",
-          "items": {"type": "string"}
+          "type": "object",
+          "description": "KPIs and metrics to measure success",
+          "properties": {
+            "kpis": {"type": "array", "items": {"type": "string"}},
+            "measurement_approach": {"type": "string"},
+            "baseline_values": {"type": "object"},
+            "target_values": {"type": "object"},
+            "timeframe": {"type": "string"}
+          }
         }
       }
     },
@@ -138,13 +145,35 @@
       "properties": {
         "in_scope": {"type": "array", "items": {"type": "string"}},
         "out_of_scope": {"type": "array", "items": {"type": "string"}},
-        "phased_approach": {"type": "array", "items": {"type": "object"}}
+        "assumptions": {"type": "array", "items": {"type": "string"}},
+        "constraints": {"type": "array", "items": {"type": "string"}},
+        "deliverable_format": {"type": "string"},
+        "level_of_effort_estimate": {"type": "string"},
+        "timeline_estimate_weeks": {"type": "number", "minimum": 0},
+        "phased_approach": {
+          "type": "object",
+          "description": "Phased delivery approach with MVP and enhancements",
+          "properties": {
+            "phase_1_mvp": {"type": "array", "items": {"type": "string"}},
+            "phase_2_enhancements": {"type": "array", "items": {"type": "string"}},
+            "phase_3_scale": {"type": "array", "items": {"type": "string"}}
+          }
+        }
       }
     },
     "financial": {
       "type": "object",
       "properties": {
-        "expected_roi": {"type": "string"},
+        "expected_roi": {
+          "type": "object",
+          "description": "Detailed ROI projections",
+          "properties": {
+            "roi_percentage": {"type": "string"},
+            "payback_period_months": {"type": "number", "minimum": 0},
+            "net_present_value": {"type": "string"},
+            "internal_rate_of_return": {"type": "string"}
+          }
+        },
         "budget_available": {"type": "string"},
         "cost_sensitivity": {
           "type": "string",
@@ -153,24 +182,48 @@
       }
     },
     "risks": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": ["business", "technical", "operational", "financial"]
-          },
-          "description": {"type": "string"},
-          "impact": {
-            "type": "string",
-            "enum": ["critical", "high", "medium", "low"]
-          },
-          "probability": {
-            "type": "string",
-            "enum": ["high", "medium", "low"]
-          },
-          "mitigation": {"type": "string"}
+      "type": "object",
+      "description": "Categorized risks with business and technical separation",
+      "properties": {
+        "business_risks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "risk": {"type": "string"},
+              "impact": {
+                "type": "string",
+                "enum": ["critical", "high", "medium", "low"]
+              },
+              "probability": {
+                "type": "string",
+                "enum": ["high", "medium", "low"]
+              },
+              "mitigation": {"type": "string"}
+            }
+          }
+        },
+        "technical_risks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "risk": {"type": "string"},
+              "impact": {
+                "type": "string",
+                "enum": ["critical", "high", "medium", "low"]
+              },
+              "probability": {
+                "type": "string",
+                "enum": ["high", "medium", "low"]
+              },
+              "mitigation": {"type": "string"}
+            }
+          }
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {"type": "string"}
         }
       }
     },

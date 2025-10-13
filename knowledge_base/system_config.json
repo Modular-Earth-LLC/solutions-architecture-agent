@@ -8,7 +8,7 @@
   
   "project": {
     "name": "",
-    "type": "",
+    "type": "genai_assistant",
     "organization": "",
     "description": "",
     "_comment_type": "Options: web_app, mobile_app, api, desktop_app, data_pipeline, ml_model, genai_assistant, automation_system",
@@ -16,8 +16,8 @@
   },
   
   "platform": {
-    "target": "",
-    "deployment": "",
+    "target": "cursor",
+    "deployment": "cloud",
     "region": "",
     "multi_cloud": false,
     "_comment_target": "Options: cursor, claude_projects, aws_bedrock, azure_openai, google_vertex, custom",
@@ -41,7 +41,7 @@
         "role": "",
         "name": "",
         "expertise": "",
-        "involvement_level": "",
+        "involvement_level": "primary",
         "_comment_role": "Product Manager, Domain Expert, Business Analyst, Technical Lead, Data Scientist",
         "_comment_involvement_level": "primary, secondary, consultant, reviewer"
       }
@@ -50,7 +50,7 @@
       {
         "persona": "",
         "count": 0,
-        "technical_level": "",
+        "technical_level": "intermediate",
         "primary_needs": [],
         "_comment_technical_level": "novice, intermediate, expert"
       }
@@ -73,7 +73,7 @@
     },
     "timeline": {
       "deadline": "",
-      "flexibility": "",
+      "flexibility": "moderate",
       "milestones": [],
       "business_drivers": "",
       "_comment_deadline": "ISO 8601 format: YYYY-MM-DD",
@@ -100,14 +100,14 @@
       "_comment_existing_infrastructure": "Systems that must be used or integrated with",
       "_comment_technology_restrictions": "Technologies that cannot be used due to policy or licensing"
     },
-    "strategic_priority": "",
+      "strategic_priority": "medium",
     "_comment_strategic_priority": "critical (top priority, resources guaranteed), high (important, resources likely), medium (standard priority), low (nice to have)"
   },
   
   "team": {
     "current_size": 0,
     "available_capacity_percent": 0,
-    "experience_level": "",
+    "experience_level": "mid-level",
     "skills": [],
     "gaps": [],
     "hiring_budget": "",
@@ -118,7 +118,7 @@
   },
   
   "preferences": {
-    "development_methodology": "",
+    "development_methodology": "agile",
     "code_quality_standards": "",
     "documentation_requirements": "",
     "testing_requirements": "",
@@ -129,9 +129,9 @@
   },
   
   "risk_tolerance": {
-    "innovation_vs_stability": "",
-    "cost_vs_speed": "",
-    "build_vs_buy": "",
+    "innovation_vs_stability": "balanced",
+    "cost_vs_speed": "balanced",
+    "build_vs_buy": "balanced",
     "_comment_innovation_vs_stability": "innovative (cutting-edge tech acceptable), balanced (proven but modern), conservative (battle-tested only)",
     "_comment_cost_vs_speed": "optimize_cost (slower but cheaper), balanced (reasonable trade-off), optimize_speed (faster delivery priority)",
     "_comment_build_vs_buy": "prefer_build (custom solutions), balanced (case by case), prefer_buy (SaaS/managed services)"

@@ -38,7 +38,17 @@
         "backend_technologies": {"type": "array", "items": {"type": "string"}},
         "frontend_technologies": {"type": "array", "items": {"type": "string"}},
         "infrastructure": {"type": "array", "items": {"type": "string"}},
-        "integration_approach": {"type": "string"},
+        "integration_approach": {
+          "type": "object",
+          "description": "Integration strategy with external systems",
+          "properties": {
+            "external_systems": {"type": "array", "items": {"type": "string"}},
+            "authentication_strategy": {"type": "string"},
+            "api_versioning": {"type": "string"},
+            "error_handling_strategy": {"type": "string"},
+            "rate_limiting": {"type": "string"}
+          }
+        },
         "alternatives_considered": {"type": "array", "items": {"type": "object"}}
       }
     },
@@ -49,13 +59,24 @@
         "diagram_content": {"type": "string"},
         "components": {"type": "array", "items": {"type": "object"}},
         "data_flows": {"type": "array", "items": {"type": "object"}},
-        "security_boundaries": {"type": "array", "items": {"type": "string"}},
+        "security_boundaries": {
+          "type": "object",
+          "description": "Security zones and boundaries",
+          "properties": {
+            "public_facing": {"type": "array", "items": {"type": "string"}},
+            "internal_only": {"type": "array", "items": {"type": "string"}},
+            "data_encryption": {"type": "array", "items": {"type": "string"}},
+            "compliance_zones": {"type": "array", "items": {"type": "string"}}
+          }
+        },
         "integration_points": {"type": "array", "items": {"type": "string"}}
       }
     },
     "team_composition": {
       "type": "object",
       "properties": {
+        "decision_date": {"type": "string", "format": "date"},
+        "last_updated": {"type": "string", "format": "date"},
         "roles": {
           "type": "array",
           "items": {
@@ -65,11 +86,27 @@
               "skills_required": {"type": "array", "items": {"type": "string"}},
               "team_size": {"type": "integer", "minimum": 0},
               "allocation_percent": {"type": "number", "minimum": 0, "maximum": 100},
-              "cost_per_role": {"type": "string"}
+              "cost_per_role": {"type": "string"},
+              "experience_level": {
+                "type": "string",
+                "enum": ["junior", "mid_level", "senior", "expert"]
+              }
             }
           }
         },
-        "hiring_needs": {"type": "array", "items": {"type": "object"}},
+        "total_team_size": {"type": "integer", "minimum": 0},
+        "total_ftes": {"type": "number", "minimum": 0},
+        "hiring_needs": {
+          "type": "object",
+          "description": "Hiring requirements for the project",
+          "properties": {
+            "new_hires_required": {"type": "array", "items": {"type": "string"}},
+            "contractors_needed": {"type": "array", "items": {"type": "string"}},
+            "hiring_timeline": {"type": "string"},
+            "recruitment_cost": {"type": "number", "minimum": 0}
+          }
+        },
+        "training_needed": {"type": "array", "items": {"type": "string"}},
         "timeline": {"type": "string"}
       }
     },
@@ -143,27 +180,88 @@
     "model_evaluation": {
       "type": "object",
       "properties": {
-        "evaluation_criteria": {"type": "object"},
-        "benchmark_results": {"type": "array", "items": {"type": "object"}},
+        "models_evaluated": {"type": "array", "items": {"type": "object"}},
+        "evaluation_criteria": {"type": "array", "items": {"type": "object"}},
+        "evaluation_methodology": {"type": "string"},
+        "benchmark_results": {"type": "object", "description": "Benchmark test results organized by model"},
+        "recommended_model": {"type": "string"},
+        "model_selection_rationale": {"type": "string"},
+        "fallback_model": {"type": "string"},
         "selected_models": {"type": "array", "items": {"type": "object"}}
       }
     },
     "risks_and_mitigation": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "risk": {"type": "string"},
-          "impact": {
-            "type": "string",
-            "enum": ["critical", "high", "medium", "low"]
-          },
-          "probability": {
-            "type": "string",
-            "enum": ["high", "medium", "low"]
-          },
-          "mitigation_strategy": {"type": "string"}
-        }
+      "type": "object",
+      "description": "Categorized risks with technical, business, and dependencies separation",
+      "properties": {
+        "decision_date": {"type": "string", "format": "date"},
+        "last_updated": {"type": "string", "format": "date"},
+        "technical_risks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "risk_id": {"type": "string"},
+              "risk": {"type": "string"},
+              "impact": {
+                "type": "string",
+                "enum": ["critical", "high", "medium", "low"]
+              },
+              "probability": {
+                "type": "string",
+                "enum": ["high", "medium", "low"]
+              },
+              "severity": {
+                "type": "string",
+                "enum": ["critical", "high", "medium", "low"]
+              },
+              "mitigation_strategy": {"type": "string"},
+              "contingency_plan": {"type": "string"},
+              "owner": {"type": "string"}
+            }
+          }
+        },
+        "business_risks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "risk_id": {"type": "string"},
+              "risk": {"type": "string"},
+              "impact": {
+                "type": "string",
+                "enum": ["critical", "high", "medium", "low"]
+              },
+              "probability": {
+                "type": "string",
+                "enum": ["high", "medium", "low"]
+              },
+              "severity": {
+                "type": "string",
+                "enum": ["critical", "high", "medium", "low"]
+              },
+              "mitigation_strategy": {"type": "string"},
+              "contingency_plan": {"type": "string"},
+              "owner": {"type": "string"}
+            }
+          }
+        },
+        "dependencies_risks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "dependency": {"type": "string"},
+              "risk": {"type": "string"},
+              "mitigation": {"type": "string"}
+            }
+          }
+        },
+        "overall_risk_rating": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "critical"]
+        },
+        "risk_management_approach": {"type": "string"}
       }
     },
     "well_architected_assessment": {
