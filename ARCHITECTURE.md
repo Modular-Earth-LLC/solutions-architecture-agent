@@ -20,10 +20,13 @@ Supervisor Agent (Orchestrator)
      ↓
      ├─→ Requirements Agent           → Discovery, requirements
      ├─→ Architecture Agent            → Design, tech stack, estimates
-     ├─→ Engineering Supervisor Agent  → Engineering orchestration (Two-Layer)
+     ├─→ Engineering Supervisor Agent  → Engineering orchestration (Two-Layer - 16 specialists)
      │   ├─→ Streamlit UI Agent              → Streamlit interfaces
-     │   ├─→ Claude Integration Agent        → Claude SDK
-     │   ├─→ LangChain Agent                 → Workflow orchestration
+     │   ├─→ Claude Code Agent                → Autonomous coding, subagents
+     │   ├─→ Claude Workspaces Agent          → Multi-agent orchestration
+     │   ├─→ Anthropic SDK Agent              → Formal Agents SDK
+     │   ├─→ MCP Services Agent               → Model Context Protocol
+     │   ├─→ LangChain Agent                  → Workflow orchestration, LCEL
      │   ├─→ Knowledge Engineering Agent     → Vector DBs, RAG
      │   ├─→ Data Engineering Agent          → SQLite, pandas
      │   ├─→ AWS Bedrock AgentCore Agent     → AgentCore (Gateway/Identity/Runtime/Memory)
