@@ -1,8 +1,8 @@
 ﻿# Getting Started
 
-**Version**: 0.1.0-alpha | **Status**: Alpha - First-time use guide
-
 Get productive in 15 minutes.
+
+<!-- Version in .repo-metadata.json -->
 
 ---
 
@@ -18,7 +18,7 @@ Get productive in 15 minutes.
 
 **1. Clone**:
 ```bash
-git clone https://github.com/your-org/multi-agent-ai-development-framework
+git clone https://github.com/paulpham157/multi-agent-ai-development-framework
 cd multi-agent-ai-development-framework
 ```
 
@@ -53,11 +53,11 @@ cd multi-agent-ai-development-framework
 
 ## Understanding the System
 
-**23 specialized agents**:
+**Specialized agent system** (see `.repo-metadata.json` for counts):
 - **1 Main Supervisor**: Routes your requests
 - **5 Top-Level Domain Agents**: Requirements, Architecture, Deployment, Optimization, Prompt Engineering
 - **1 Engineering Supervisor**: Second-tier orchestrator coordinating 16 technology specialists
-- **16 Engineering Specialists**: One technology each (Streamlit, Claude Code, AWS Bedrock, etc.)
+- **16 Engineering Specialists**: Each focused on one technology (Streamlit, Claude Code, AWS Bedrock, etc.)
 
 **How it works**:
 1. You make request

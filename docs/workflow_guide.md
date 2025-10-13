@@ -1,8 +1,8 @@
 ﻿# Workflow Guide
 
-**Version**: 0.1.0-alpha | **Status**: Alpha
-
 Complete development lifecycle: Requirements → Architecture → Engineering → Deployment
+
+<!-- Version in .repo-metadata.json -->
 
 ---
 

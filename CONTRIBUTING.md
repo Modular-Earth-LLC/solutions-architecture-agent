@@ -94,7 +94,7 @@ We are committed to providing a welcoming and inclusive environment for all cont
 
 - Place in appropriate category (`user_prompts/[category]/`)
 - Use naming convention: `[task_name].user.prompt.md`
-- Include version header and metadata
+- Do NOT include version/date metadata (centralized in `.repo-metadata.json`)
 - Reference relevant knowledge base files
 - Test with target agent
 

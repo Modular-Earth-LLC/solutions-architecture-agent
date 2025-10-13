@@ -23,7 +23,7 @@
 
 ```bash
 # 1. Clone
-git clone https://github.com/your-org/multi-agent-ai-development-framework
+git clone https://github.com/paulpham157/multi-agent-ai-development-framework
 cd multi-agent-ai-development-framework
 
 # 2. Deploy (Cursor → Settings → Chat → Custom Modes)
@@ -289,7 +289,8 @@ Shared Knowledge Base:
 
 ```
 multi-agent-ai-development-framework/
-├── ai_agents/                    # 23 agent system prompts
+├── .repo-metadata.json           # Single source of truth (version, counts)
+├── ai_agents/                    # Agent system prompts
 │   ├── supervisor_agent.system.prompt.md (main entry point)
 │   ├── [5 top-level domain agents]
 │   ├── engineering_supervisor_agent.system.prompt.md
@@ -300,11 +301,13 @@ multi-agent-ai-development-framework/
 │   ├── user_requirements.json
 │   ├── design_decisions.json
 │   └── schemas/ (JSON schemas for validation)
-├── user_prompts/                 # Task-specific instructions (~60)
+├── user_prompts/                 # Task-specific instructions
 ├── docs/                         # Documentation
 ├── templates/                    # Reusable templates
-├── tests/                        # Validation tests
+├── tests/                        # Validation tests (auto-update metadata)
 └── outputs/                      # Generated systems go here
+
+See .repo-metadata.json for current agent/prompt counts
 ```
 
 ---
@@ -324,7 +327,7 @@ multi-agent-ai-development-framework/
 - ⚠️ No production validation yet
 - ⚠️ Breaking changes expected before v1.0
 - ⚠️ Some edge cases untested
-- ⚠️ Documentation still evolving
+- ⚠️ Documentation evolving (run `user_prompts/self_improvement/improve_all_documentation.user.prompt.md` for latest)
 
 **Use at your own risk**. Report issues on GitHub. Production-ready in v1.0.
 
@@ -347,7 +350,7 @@ MIT License - Full commercial use permitted
 
 ## Quick Links
 
-- **GitHub**: [github.com/your-org/multi-agent-ai-development-framework](https://github.com/your-org/multi-agent-ai-development-framework)
+- **GitHub**: [github.com/paulpham157/multi-agent-ai-development-framework](https://github.com/paulpham157/multi-agent-ai-development-framework)
 - **Getting Started**: `docs/getting-started.md`
 - **Deployment Guide**: `docs/deployment-guide.md`
 - **Engineering Specialists**: `docs/engineering-agents-guide.md`
@@ -355,8 +358,8 @@ MIT License - Full commercial use permitted
 
 ---
 
-**Version**: 0.1.0-alpha | **Last Updated**: 2025-10-12 | **Status**: Alpha - Begin testing
-
 **Built with**: Python • Streamlit • Anthropic Claude • AWS Bedrock • MCP • LangChain
 
 🚀 **Start building**: Install Supervisor Agent in Cursor and say "Build a chatbot"
+
+<!-- Version and status in .repo-metadata.json -->
