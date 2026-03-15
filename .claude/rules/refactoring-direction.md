@@ -1,16 +1,24 @@
 # Refactoring Direction
 
-This repo is being refactored from a 23-agent multi-agent system into a **single specialized agent with skills**.
+This repo is being refactored from a 23-agent multi-agent system into a **single AI Solutions Architecture Agent with 9 skills**, packaged as a Claude Code plugin.
 
-When making changes, move toward this target architecture:
+## Target Architecture
 
-1. **Single system prompt** — consolidate supervisor + domain agents into one solutions architecture agent
-2. **Skills** — each current agent prompt maps to a skill in `.claude/skills/`
-3. **Reference files** — knowledge base files become on-demand references, not always-loaded context
-4. **User prompts** — become skill invocation templates or slash commands
+1. **Single agent** — CLAUDE.md defines identity, skills handle domain workflows
+2. **9 skills** at plugin root (`skills/`), following the Agent Skills open standard
+3. **Plugin structure** — `.claude-plugin/plugin.json` manifest, skills/, agents/, hooks/ at root
+4. **Knowledge base** — 10 specialized JSON files with engagement-centered topology
+5. **Templates** — output document templates referenced by skills
+6. **Dynamic references** — skills use WebSearch/WebFetch for latest technology knowledge
 
-Target platforms:
-- **Claude Code CLI** (local, primary) — system prompt + skills
-- **Anthropic Cloud Platform** (SaaS, future) — API-accessible agent service
+## Scope Boundary
 
-Do not expand the multi-agent architecture. New capabilities should be added as skills, not new agents.
+This agent designs solutions. It does NOT implement, deploy, or write production code. A future AI Engineering Agent handles that.
+
+## What NOT to Do
+
+- Do not expand the legacy multi-agent architecture
+- Do not create technology-specific skills (no `/build-streamlit`, `/aws-infra`)
+- Do not put skills in `.claude/skills/` — they go in `skills/` (plugin root)
+- Do not embed static vendor knowledge — use WebSearch for dynamic references
+- Do not reference external filesystems or private repos
