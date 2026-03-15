@@ -45,6 +45,10 @@ This repo is being consolidated from 23 agents into **1 agent + N skills**. See 
 
 Python 3.12+ | Streamlit | Anthropic Claude | AWS Bedrock | MCP | LangChain | JSON Schema
 
+## GitHub Integration
+
+Use the `gh` CLI (GitHub CLI) for all GitHub operations — issues, PRs, releases, repo management. Do not use the GitHub MCP plugin. The `gh` CLI is already authenticated and permitted in project settings.
+
 ## Quality Standards
 
 - AWS Well-Architected compliance (6 pillars + GenAI Lens)
