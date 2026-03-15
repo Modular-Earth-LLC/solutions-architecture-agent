@@ -1,0 +1,46 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Validate: Consistency",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "tests/validate_consistency.py"
+      ],
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Validate: Knowledge Base",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "tests/validate_knowledge_base.py"
+      ],
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Validate: URLs",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "tests/validate_urls.py"
+      ],
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Validate: All",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Validate: Consistency",
+        "Validate: Knowledge Base",
+        "Validate: URLs"
+      ],
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
+}

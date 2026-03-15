@@ -76,7 +76,7 @@ Claude automatically loads `CLAUDE.md` and `.claude/` configuration (rules, sett
 → Requirements Agent asks questions
 
 **Design architecture**:
-"Design architecture for [system]"  
+"Design architecture for [system]"
 → Architecture Agent creates design + estimates
 
 **Build prototype**:
@@ -109,6 +109,7 @@ If you're working with proprietary designs, sensitive data, or confidential info
 **Learn more**:
 - `docs/workflow_guide.md` - Detailed workflows
 - `docs/engineering-agents-guide.md` - All 16 specialists
+- `docs/github-copilot-optimization.md` - Optimize VS Code + Copilot setup
 - `docs/human-ai-collaboration.md` - Your role vs agent role
 - `private/README.md` - Security guidelines for sensitive data
 

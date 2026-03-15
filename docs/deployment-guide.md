@@ -57,6 +57,7 @@ GitHub Copilot is configured for CI/CD automation and git management, not as the
 1. `.github/copilot-instructions.md` is pre-configured
 2. Use `@workspace` in VS Code for CI/CD tasks
 3. Copilot manages GitHub Actions, PR automation, and code reviews
+4. Apply `docs/github-copilot-optimization.md` for workspace and personal setup
 
 ---
 

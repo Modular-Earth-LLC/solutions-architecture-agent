@@ -161,11 +161,11 @@ Every architecture evaluated against **6 pillars** + **GenAI Lens**:
 
 ## Who Should Use This
 
-✅ **Junior Engineers**: Learn from generated code, ship without years of experience  
-✅ **Senior Engineers**: Eliminate boilerplate, focus on complex decisions, 3-5x faster  
-✅ **Consultants**: Professional proposals in hours, accurate estimates  
-✅ **Managers**: Standardize processes, 5x faster onboarding  
-✅ **Architects**: Systematic Well-Architected designs, evidence-based recommendations  
+✅ **Junior Engineers**: Learn from generated code, ship without years of experience
+✅ **Senior Engineers**: Eliminate boilerplate, focus on complex decisions, 3-5x faster
+✅ **Consultants**: Professional proposals in hours, accurate estimates
+✅ **Managers**: Standardize processes, 5x faster onboarding
+✅ **Architects**: Systematic Well-Architected designs, evidence-based recommendations
 ✅ **CTOs**: De-risk AI investments, scale without proportional hiring
 
 ---
@@ -190,6 +190,7 @@ Every architecture evaluated against **6 pillars** + **GenAI Lens**:
 ```
 1. .github/copilot-instructions.md is pre-configured
 2. Use @workspace in VS Code for CI/CD tasks
+3. Apply docs/github-copilot-optimization.md for optimized local setup
 ```
 
 **Full guide**: `docs/deployment-guide.md`
@@ -202,7 +203,7 @@ Every architecture evaluated against **6 pillars** + **GenAI Lens**:
 
 **16 Engineering Specialists** cover:
 - 5 Anthropic Claude specialists
-- 2 AWS Bedrock specialists  
+- 2 AWS Bedrock specialists
 - 9 Other specialists (UI, orchestration, data, AWS infra/security, testing, platforms)
 
 **Centralized Docs**: 150+ technical URLs in `knowledge_base/system_config.json` → `technical_references`
@@ -242,7 +243,7 @@ Shared Knowledge Base:
 
 **Agents do** (you review):
 - ✅ Generate code/docs/configs
-- ✅ Analyze systems  
+- ✅ Analyze systems
 - ✅ Recommend improvements
 - ✅ Validate quality
 
@@ -268,6 +269,7 @@ Shared Knowledge Base:
 - `README.md` - This file (overview + quick start)
 - `docs/getting-started.md` - First project walkthrough (15 min)
 - `docs/deployment-guide.md` - Platform deployment
+- `docs/github-copilot-optimization.md` - Copilot workspace and local setup
 - `docs/human-ai-collaboration.md` - Your role vs agent role
 
 **Reference**:
@@ -333,9 +335,9 @@ See .repo-metadata.json for current agent/prompt counts
 
 ## Getting Help
 
-**Documentation**: Start with `docs/getting-started.md`  
-**Issues**: GitHub Issues for bugs/features  
-**Discussions**: GitHub Discussions for questions  
+**Documentation**: Start with `docs/getting-started.md`
+**Issues**: GitHub Issues for bugs/features
+**Discussions**: GitHub Discussions for questions
 **Contributing**: See `CONTRIBUTING.md`
 
 ---
