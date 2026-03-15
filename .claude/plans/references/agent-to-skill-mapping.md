@@ -43,7 +43,7 @@ This file maps the current 23 agent prompts to their target skill equivalents fo
 | `claude_projects_agent` | `/build-claude-project` | User-invocable |
 | `testing_qa_agent` | `/testing` | User-invocable |
 | `github_copilot_agent` | `/build-copilot` | User-invocable |
-| `cursor_ide_agent` | `/build-cursor` | User-invocable |
+| `cursor_ide_agent` | `/build-ide-tooling` | User-invocable |
 
 ## Priority Order for Migration
 

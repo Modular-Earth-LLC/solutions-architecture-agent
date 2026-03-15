@@ -1,31 +1,35 @@
-﻿# Deployment Guide
+# Deployment Guide
 
-**Version**: 0.1.0-alpha | **Status**: Alpha
+**Version**: See `.repo-metadata.json` | **Status**: Alpha
 
-Deploy this framework to: Cursor IDE • Claude Projects • GitHub Copilot
+Deploy this framework to: Claude Code CLI • Claude Projects • GitHub Copilot
 
 ---
 
-## Quick Start (Cursor IDE - Recommended)
+## Quick Start (Claude Code CLI - Recommended)
 
-**5 minutes to running**:
+**2 minutes to running**:
 
-1. Open Cursor → Settings → Chat → Custom Modes
-2. Create mode: "Supervisor Agent"
-3. Paste `supervisor_agent.system.prompt.md`
-4. Enable "All tools"
-5. Save & test: "Build a chatbot"
+```bash
+git clone https://github.com/Modular-Earth-LLC/solutions-architecture-agent.git
+cd solutions-architecture-agent
+claude
+```
 
-**Done!** Supervisor routes to specialized agents automatically.
+**Done!** Claude Code automatically loads:
+- `CLAUDE.md` — agent identity and core context
+- `.claude/rules/` — scoped instructions loaded contextually
+- `.claude/settings.json` — project permissions and hooks
+- `.claude/skills/` — slash-command workflows (as they're added)
 
-### Optional: Install All Agents
+### Using Skills
 
-Repeat for each agent in `ai_agents/`:
-- Requirements, Architecture, Engineering Supervisor
-- Deployment, Optimization, Prompt Engineering
-- 16 engineering specialists (optional)
-
-**Tip**: Start with Supervisor only. Add specialists as needed.
+Once skills are migrated from agent prompts, invoke them with:
+```
+/requirements    — Run a requirements discovery workshop
+/architecture    — Design system architecture + cost estimates
+/deployment      — Generate deployment guides
+```
 
 ---
 
@@ -46,16 +50,13 @@ Repeat for each agent in `ai_agents/`:
 
 ---
 
-## GitHub Copilot (VS Code)
+## GitHub Copilot (CI/CD and Git Management)
 
-**15 minutes**:
+GitHub Copilot is configured for CI/CD automation and git management, not as the primary development assistant.
 
-1. Create `.github/copilot-instructions.md`
-2. Paste `supervisor_agent.system.prompt.md`
-3. Configure workspace in VS Code
-4. Test: "@workspace build chatbot"
-
-**Note**: Copilot integration experimental
+1. `.github/copilot-instructions.md` is pre-configured
+2. Use `@workspace` in VS Code for CI/CD tasks
+3. Copilot manages GitHub Actions, PR automation, and code reviews
 
 ---
 
@@ -63,9 +64,9 @@ Repeat for each agent in `ai_agents/`:
 
 After building a system with this framework:
 
-### To Cursor
-- Copy generated code to new project
-- Install as custom mode (if agent-based)
+### To Claude Code CLI
+- Copy generated code to a new project directory
+- Add a `CLAUDE.md` with project-specific context
 
 ### To Claude Projects
 - Upload generated code as project knowledge
@@ -79,9 +80,8 @@ After building a system with this framework:
 
 ## Troubleshooting
 
-**"Agent not responding"**: Check tools enabled  
-**"Can't find file"**: Ensure workspace root correct  
-**"Out of memory"**: Install individual agents, not all 23
+**"Agent not responding"**: Check Claude Code CLI is running and `CLAUDE.md` exists
+**"Can't find file"**: Ensure you're in the repo root directory
+**"Out of context"**: Use `.claude/rules/` with path scoping to reduce always-loaded content
 
 ---
-

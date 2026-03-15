@@ -13,7 +13,7 @@ A clear description of the bug.
 Which agent or prompt is involved? (e.g., `architecture_agent`, `user_prompts/architecture/...`)
 
 ## Steps to Reproduce
-1. Platform used (Cursor IDE / Claude Projects / Claude Code CLI)
+1. Platform used (Claude Code CLI / Claude Projects / GitHub Copilot)
 2. What you asked the agent
 3. What happened vs. what you expected
 

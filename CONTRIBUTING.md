@@ -42,8 +42,9 @@ We are committed to providing a welcoming and inclusive environment for all cont
 
 ### Prerequisites
 
-- **Cursor IDE** or **VS Code** with GitHub Copilot (for testing)
+- **Claude Code CLI** (primary development assistant)
 - **Git** for version control
+- **GitHub Copilot** (optional, for CI/CD and git management)
 - **Basic understanding** of prompt engineering and AI systems
 - **Familiarity** with markdown and JSON formats
 
@@ -63,9 +64,10 @@ We are committed to providing a welcoming and inclusive environment for all cont
    # Read private/README.md for handling sensitive content
    # Use private/ directory for any proprietary designs or data
    ```
-4. **Deploy to Cursor** (for testing):
+4. **Start Claude Code** (for testing):
    ```bash
-   # Follow docs/deployment-guide.md
+   claude
+   # Claude loads CLAUDE.md and .claude/ automatically
    ```
 
 ---
@@ -85,8 +87,8 @@ We are committed to providing a welcoming and inclusive environment for all cont
 
 **Example workflow:**
 ```bash
-# In Cursor, load Optimization Agent or Prompt Engineering Agent
-# Reference the improvement prompt
+# In Claude Code CLI, reference the improvement prompt:
+# "Use user_prompts/self_improvement/improve_optimization_agent.user.prompt.md"
 # Make improvements
 # Test all affected workflows
 # Submit PR with test results
@@ -162,7 +164,7 @@ We are committed to providing a welcoming and inclusive environment for all cont
 
 - Search existing issues first
 - Create detailed bug report with reproduction steps
-- Include system environment (Cursor version, OS, etc.)
+- Include system environment (Claude Code CLI version, OS, etc.)
 - Submit fix with test demonstrating resolution
 
 ---
@@ -199,7 +201,7 @@ We use [Conventional Commits](https://www.conventionalcommits.org/) for clear ch
 # Examples:
 git commit -m "feat(requirements-agent): add industry-specific discovery templates"
 git commit -m "fix(knowledge-base): correct JSON schema validation errors"
-git commit -m "docs(getting-started): clarify Cursor setup steps"
+git commit -m "docs(getting-started): clarify Claude Code CLI setup steps"
 git commit -m "refactor(optimization-agent): extract instrumentation guide"
 git commit -m "test(agents): add end-to-end workflow validation"
 ```
@@ -401,7 +403,7 @@ git commit -m "test(agents): add end-to-end workflow validation"
 - [ ] Commit messages follow conventional commits
 - [ ] No merge conflicts with main
 - [ ] Version headers updated where applicable
-- [ ] Changes validated in Cursor or Claude
+- [ ] Changes validated in Claude Code CLI
 - [ ] No sensitive data accidentally committed (verify with `git status`)
 
 ### PR Description Template
@@ -496,7 +498,7 @@ Relates to #[issue number]
 
 ## Environment
 
-- Platform: [Cursor IDE / Claude Projects / GitHub Copilot]
+- Platform: [Claude Code CLI / Claude Projects / GitHub Copilot]
 - OS: [Windows / macOS / Linux]
 - Version: [Agent version if applicable]
 
@@ -566,9 +568,9 @@ All contributors will be recognized in:
 ### Recommended Tools
 
 **Required:**
-- Cursor IDE or VS Code with GitHub Copilot
+- Claude Code CLI (primary)
 - Git
-- Markdown editor
+- GitHub Copilot (optional, for CI/CD)
 
 **Optional but Helpful:**
 - JSON schema validator (ajv-cli): `npm install -g ajv-cli`
@@ -622,7 +624,7 @@ All contributors will be recognized in:
 **Type:** [Type]  
 **Domain:** [Domain]  
 **Process:** [Key process]  
-**Execution Platform:** Cursor IDE • Claude Projects • GitHub Copilot
+**Execution Platform:** Claude Code CLI • Claude Projects • GitHub Copilot
 
 <role>
 [Role description]

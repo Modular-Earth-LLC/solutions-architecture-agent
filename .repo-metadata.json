@@ -84,9 +84,10 @@
       "AgentCore"
     ],
     "platforms": [
-      "Cursor IDE",
+      "Claude Code CLI",
       "Claude Projects",
       "GitHub Copilot",
+      "Anthropic Cloud Platform",
       "AWS Bedrock"
     ]
   },

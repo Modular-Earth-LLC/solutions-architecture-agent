@@ -7,7 +7,7 @@
 
 ## Testing
 <!-- How was this tested? -->
-- [ ] Agent prompts validated in Cursor IDE / Claude Code CLI
+- [ ] Agent prompts validated in Claude Code CLI
 - [ ] Knowledge base schemas pass validation
 - [ ] Documentation updated if applicable
 

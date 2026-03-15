@@ -8,13 +8,13 @@ Get productive in 15 minutes.
 
 ## Prerequisites
 
-- Cursor IDE (recommended) OR Claude Projects OR GitHub Copilot
+- Claude Code CLI (recommended) OR Claude Projects OR GitHub Copilot
 - Git (to clone repository)
 - Basic understanding of AI/LLMs
 
 ---
 
-## 5-Minute Setup
+## 2-Minute Setup
 
 **1. Clone**:
 ```bash
@@ -22,15 +22,14 @@ git clone https://github.com/Modular-Earth-LLC/solutions-architecture-agent.git
 cd solutions-architecture-agent
 ```
 
-**2. Deploy to Cursor** (recommended):
-- Open Cursor → Settings → Chat → Custom Modes
-- Create "Supervisor Agent" mode
-- Paste `supervisor_agent.system.prompt.md`
-- Enable "All tools" → Save
+**2. Start Claude Code**:
+```bash
+claude
+```
+
+Claude automatically loads `CLAUDE.md` and `.claude/` configuration (rules, settings, hooks).
 
 **3. Test**:
-- Open AI Pane (Ctrl+Shift+L)
-- Select "Supervisor Agent"
 - Type: "Build a customer support chatbot"
 - Watch it work!
 

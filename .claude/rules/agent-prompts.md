@@ -13,4 +13,4 @@ When editing agent system prompts:
 - Do not remove quality gates (TRM validation, Well-Architected checks)
 - Update `.repo-metadata.json` if adding or removing agents
 - Each agent prompt should be self-contained — it must work as a standalone system prompt
-- Test prompts in Claude Code CLI or Cursor IDE before committing
+- Test prompts in Claude Code CLI before committing

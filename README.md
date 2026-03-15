@@ -10,8 +10,8 @@
 
 ## What You Can Build
 
-**15 minutes**: Custom GPTs, Claude assistants, Cursor IDE modes  
-**2 hours**: Complete architecture + cost estimates  
+**15 minutes**: Claude Code skills, Claude assistants, custom GPTs
+**2 hours**: Complete architecture + cost estimates
 **2-5 days**: Working prototypes with tests
 
 **Complete lifecycle**: Requirements → Architecture → Code → Deployment
@@ -20,24 +20,19 @@
 
 ## Quick Start (5 Minutes)
 
-### Install in Cursor IDE
+### Install with Claude Code CLI
 
 ```bash
 # 1. Clone
 git clone https://github.com/Modular-Earth-LLC/solutions-architecture-agent.git
 cd solutions-architecture-agent
 
-# 2. Deploy (Cursor → Settings → Chat → Custom Modes)
-#    Create "Supervisor Agent"
-#    Paste: supervisor_agent.system.prompt.md
-#    Enable: "All tools" → Save
-
-# 3. Use
-#    Open AI Pane (Ctrl+Shift+L)
+# 2. Start Claude Code
+#    Claude automatically loads CLAUDE.md and .claude/ configuration
 #    Try: "Build a Streamlit chatbot with Claude"
 ```
 
-**Done!** Supervisor routes to specialized agents who generate code for you to review.
+**Done!** Claude Code loads the agent context from `CLAUDE.md` and `.claude/rules/` automatically.
 
 **Other platforms**: See `docs/getting-started.md` for Claude Projects and GitHub Copilot setup.
 
@@ -80,7 +75,7 @@ cd solutions-architecture-agent
 **Engineering Specialists** (16):
 - **Anthropic Claude** (5): Code, Workspaces, SDK, MCP, Projects
 - **AWS Bedrock** (2): AgentCore, Strands
-- **Other** (9): Streamlit, LangChain, data, AWS infra/security, testing, GitHub, Cursor
+- **Other** (9): Streamlit, LangChain, data, AWS infra/security, testing, GitHub, IDE tooling
 
 **See**: `docs/engineering-agents-guide.md` for complete specialist reference
 
@@ -177,11 +172,11 @@ Every architecture evaluated against **6 pillars** + **GenAI Lens**:
 
 ## Installation & Platforms
 
-**Cursor IDE** (Recommended - 5 min):
+**Claude Code CLI** (Recommended - 2 min):
 ```
-1. Settings → Chat → Custom Modes
-2. Create "Supervisor Agent", paste supervisor_agent.system.prompt.md
-3. Enable "All tools" → Save
+1. Clone this repo
+2. Run `claude` in the project directory
+3. Claude loads CLAUDE.md + .claude/ automatically
 ```
 
 **Claude Projects** (10 min):
@@ -191,11 +186,10 @@ Every architecture evaluated against **6 pillars** + **GenAI Lens**:
 3. Custom Instructions: supervisor_agent.system.prompt.md
 ```
 
-**GitHub Copilot** (15 min):
+**GitHub Copilot** (for CI/CD and git management):
 ```
-1. Create .github/copilot-instructions.md
-2. Paste supervisor_agent.system.prompt.md
-3. Use @workspace in VS Code
+1. .github/copilot-instructions.md is pre-configured
+2. Use @workspace in VS Code for CI/CD tasks
 ```
 
 **Full guide**: `docs/deployment-guide.md`
@@ -364,6 +358,6 @@ MIT License - Full commercial use permitted
 
 **Built with**: Python • Streamlit • Anthropic Claude • AWS Bedrock • MCP • LangChain
 
-🚀 **Start building**: Install Supervisor Agent in Cursor and say "Build a chatbot"
+🚀 **Start building**: Run `claude` in this repo and say "Build a chatbot"
 
 <!-- Version and status in .repo-metadata.json -->
