@@ -2,6 +2,8 @@
 
 # Claude Code - local-only files
 .claude/settings.local.json
+.claude/plans/references/*
+!.claude/plans/references/.gitkeep
 
 # User-Generated Outputs (exclude project outputs but keep structure)
 outputs/requirements/*/
