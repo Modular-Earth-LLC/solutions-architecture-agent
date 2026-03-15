@@ -1,4 +1,7 @@
-# AI Engineering Assistant - Git Ignore Configuration
+# Solutions Architecture Agent - Git Ignore Configuration
+
+# Claude Code - local-only files
+.claude/settings.local.json
 
 # User-Generated Outputs (exclude project outputs but keep structure)
 outputs/requirements/*/
