@@ -1088,33 +1088,42 @@ DELETE (109) + MERGE (14) = **123 files, 42,515 lines removed**.
 
 ---
 
-## Uncertain Dispositions
+## Uncertain Dispositions (ALL RESOLVED)
 
-| File | Uncertainty | Recommendation |
-|------|------------|----------------|
-| `.claude/rules/refactoring-direction.md` | DELETE now or after Phase 4? | **DELETE in Phase 4** -- still useful during Phases 2-3 |
-| `outputs/` directory structure | DELETE entire directory or keep empty? | **DELETE all contents**; skills write to outputs/ dynamically |
-| `.github/CODEOWNERS` | Paths reference deleted directories | **REFACTOR** -- update paths to skills/, agents/, hooks/ |
-| `docs/executive_overview.md` | Could merge into README or keep separate | **REFACTOR** -- useful for business audiences |
-| `docs/human-ai-collaboration.md` | Overlaps with CLAUDE.md scope boundary | **REFACTOR** -- valuable human review expectations content |
+All 5 items resolved during Phase 1 human review:
+
+| File | Decision | When | Rationale |
+|------|----------|------|-----------|
+| `.claude/rules/refactoring-direction.md` | Keep until Phase 4, then DELETE | Phase 4 | Still useful as context for new sessions during Phases 2-3 |
+| `outputs/` directory | DELETE all contents in Phase 4 | Phase 4 | Skills create subdirectories dynamically; old test results have no reuse value |
+| `.github/CODEOWNERS` | REFACTOR paths in Phase 4 | Phase 4 | Mechanical update: ai_agents/ -> skills/, agents/, hooks/ |
+| `docs/executive_overview.md` | Keep separate, REFACTOR in Phase 8 | Phase 8 | Different audience than README; update messaging for SA plugin value prop |
+| `docs/human-ai-collaboration.md` | Absorb into CLAUDE.md + docs in Phase 5/8 | Phase 5/8 | Content distributed to agent identity (CLAUDE.md) and user docs (getting-started) |
 
 ---
 
 ## Gap Analysis
 
-Patterns each skill needs but no agent fully provided:
+Patterns each skill needs but no agent fully provided. Gaps marked FILLED were addressed by real-world reference materials added during Phase 1.
 
-| Target Skill | Gap | Mitigation |
-|---|---|---|
-| /data-model | **Neurosymbolic AI architecture** -- ontology + LLM integration patterns not deeply covered | Use WebSearch at invocation for latest research; reference SCHEMA_DESIGN.md which already has forward-looking topology |
-| /integration-plan | **Strangler fig pattern** for migration -- mentioned in master plan but not deeply covered in any agent | Extract from industry best practices via WebSearch; well-documented pattern |
-| /integration-plan | **Legacy system bridging** patterns (COBOL, mainframe, etc.) | Dynamic via WebSearch -- these are client-specific and evolve |
-| /project-plan | **Migration-specific timelines** (data migration phases, parallel running, cutover) | Build from /integration-plan output + industry practices |
-| /review | **Exemplar-level quality rubric** -- agents have scoring dimensions but no exemplar samples | Create in Phase 6 as reference document for /review skill |
-| /security-review | **Privacy-by-design patterns** (GDPR Article 25, data minimization) | Extend from existing compliance mapping with WebSearch |
-| /proposal | **Competitive analysis section** -- proposals reference it but no structured methodology | Add as optional section using WebSearch for market research |
-| All skills | **Multi-session state management** -- how KB persists across separate conversations | Design in Phase 3 (technical design) -- KB files on disk handle this |
-| All skills | **Error recovery** -- what happens when a skill fails mid-execution | Design in Phase 3 -- checkpoint/resume patterns |
+| Target Skill | Gap | Status | Mitigation |
+|---|---|---|---|
+| /data-model | **Neurosymbolic AI architecture** -- ontology + LLM integration | Open | WebSearch at invocation; SCHEMA_DESIGN.md has forward-looking topology |
+| /data-model | **Standalone data model exemplar** | **FILLED** | Florence Healthcare MongoDB topology, replica set architecture, healthcare data classification taxonomy added to references/ |
+| /security-review | **Standalone threat model exemplar** | **FILLED** | Florence Healthcare access governance workflow, JIT access automation, audit trail architecture, DPA structure added to references/ |
+| /security-review | **Privacy-by-design patterns** (GDPR Art 25) | **PARTIALLY FILLED** | Florence DPA covers GDPR/HIPAA/CCPA with annexes; extend with WebSearch |
+| /requirements | **Requirements elicitation methodology depth** | **FILLED** | 6 AGADA requirements templates added covering RAD process, IEEE 830, PM gathering, system requirements, prioritized scope, and Maguire-Bevan academic methodology |
+| /integration-plan | **Strangler fig pattern** for migration | Open | WebSearch; well-documented industry pattern |
+| /integration-plan | **Legacy system bridging** (COBOL, mainframe) | Open | Dynamic via WebSearch -- client-specific and evolving |
+| /integration-plan | **Jira-to-infrastructure automation exemplar** | **FILLED** | Florence Healthcare Jira->Atlantis->Terraform->AWS pipeline added to references/ |
+| /project-plan | **Migration-specific timelines** | Open | Build from /integration-plan output + industry practices |
+| /review | **Exemplar-level quality rubric** | Open | Create in Phase 6 as reference document for /review skill |
+| /proposal | **Competitive analysis section** | Open | Add as optional section using WebSearch for market research |
+| All skills | **Multi-session state management** | Open | Design in Phase 3 -- KB files on disk handle this |
+| All skills | **Error recovery** | Open | Design in Phase 3 -- checkpoint/resume patterns |
+| All skills | **Pre-sales lifecycle integration** | **FILLED** | Complete pre-sales process with SA agent augmentation map written to references/pre-sales-lifecycle.md |
+
+**Summary**: 6 of 13 gaps FILLED by real-world reference materials. 7 remaining gaps have clear mitigations (WebSearch, Phase 3 design, Phase 6 creation).
 
 ---
 

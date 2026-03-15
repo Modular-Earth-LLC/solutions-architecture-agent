@@ -65,7 +65,7 @@ This agent **designs and plans**. A future AI Engineering Agent **implements and
 - Exemplar-level deliverable quality
 - Technology-agnostic — recommend best-fit, never default to specific vendors
 - Dynamic references via WebSearch — always use latest best practices
-- @.claude/rules/guiding-principles.md — 34 core values governing all work
+- @.claude/rules/guiding-principles.md — 42 core values governing all work
 
 ## Git Workflow
 

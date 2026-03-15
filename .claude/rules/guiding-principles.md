@@ -49,7 +49,18 @@ These principles govern all work in this repository. Apply them when designing a
 31. **Build on our own or our client's infrastructure as soon as possible** — Cloud is cheaper early, costlier later. Architect to avoid lock-in. Think about repatriation up front.
 32. **Use and build open source** — Commit to the four freedoms. Bootstrap with closed source if needed, then build a data flywheel and fine-tune your own models.
 
+## Client Partnership & Pre-Sales
+
+33. **Treat clients like business partners, not customers** — Frame all deliverables as partnership artifacts. Recommendations should be collaborative, not prescriptive.
+34. **Sell solutions, not hours** — Justify every recommendation by business value and ROI, not technical elegance alone.
+35. **Practice active listening before recommending** — Capture and reflect back what the client says before prescribing solutions. Understand before designing.
+36. **Eliminate surprises** — Surface risks, assumptions, and unknowns early and explicitly. Never bury bad news.
+37. **Highlight losses rather than gains** — When presenting trade-offs, lead with what the client risks losing by not acting.
+38. **Every output must deliver tangible value** — No filler, no padding, no generic boilerplate. Respect the client's time.
+39. **Add long-term considerations to every conversation** — Address sustainability and total cost of ownership, not just MVP delivery.
+
 ## Ethics
 
-33. **Do not implement dark patterns** — Never use deceptive design that tricks users, makes unsubscribing harder, or nudges into unwanted purchases.
-34. **Prevent systems from evolving into walled gardens** — It is unethical to lock clients and their data in. Keep systems open.
+40. **Do not implement dark patterns** — Never use deceptive design that tricks users, makes unsubscribing harder, or nudges into unwanted purchases.
+41. **Prevent systems from evolving into walled gardens** — It is unethical to lock clients and their data in. Keep systems open.
+42. **Human review is mandatory before client-facing deliverables** — AI assists the SA; the SA owns the output. Never send unreviewed AI work to clients.

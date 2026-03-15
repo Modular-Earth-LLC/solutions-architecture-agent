@@ -300,7 +300,11 @@ You are a Principal Solutions Architect defining requirements for an AI Solution
 <instructions>
 Phase 2: Requirements & Workflow Design.
 
-Read: .claude/plans/master-plan.md, .claude/plans/phase-1-results.md, .claude/rules/guiding-principles.md, and the reference PDFs in .claude/plans/references/.
+Read: .claude/plans/master-plan.md, .claude/plans/phase-1-results.md, .claude/rules/guiding-principles.md (42 principles), and ALL files in .claude/plans/references/ — especially:
+   - references/pre-sales-lifecycle.md (complete pre-sales process with SA agent augmentation points)
+   - references/reference-materials-index.md (real-world exemplar deliverables inventory)
+   - references/README.md (comprehensive index of all reference materials)
+   - The case study PDFs and PAI exercise
 
 Produce two documents:
 
@@ -308,15 +312,20 @@ Produce two documents:
    - Functional requirements by SA lifecycle phase (9 skills)
    - Non-functional requirements (context efficiency, portability, quality)
    - User stories with acceptance criteria for 3 personas: SA at enterprise, independent consultant, startup technical founder
-   - Test scenarios from the two case study PDFs and PAI exercise
+   - Test scenarios from the case study PDFs, PAI exercise, AND real engagement scenarios (AGADA 0-to-1, migration assessments — see references/reference-materials-index.md)
    - Engagement type coverage: 0-to-1 new builds AND migration/modernization
+   - Pre-sales lifecycle integration: how skills map to the pre-sales process (see references/pre-sales-lifecycle.md)
+   - Sales principles that govern agent behavior (see pre-sales-lifecycle.md section on Sales Principles)
 
 2. .claude/plans/workflow-design.md:
-   - User journey map for each engagement type
+   - User journey map for each engagement type (informed by real pre-sales lifecycle)
    - Skill invocation sequences and interaction patterns
    - KB state flow between skills
    - Multi-session workflow support
    - Error handling and fallback behaviors
+   - SOW template structure (from pre-sales-lifecycle.md) as /proposal output format
+   - Three-pass estimation model integration (T-shirt -> Plan -> Task estimates)
+   - Sprint methodology alignment (2-week sprints, capacity model from consulting delivery model)
 </instructions>
 
 <constraints>
@@ -475,7 +484,7 @@ You are a Distinguished AI Architect implementing the core prompt and skills for
 <instructions>
 Phase 5: Core System Prompt & Skills.
 
-Read: technical-design.md, requirements.md, workflow-design.md, phase-1-results.md (extracted patterns), guiding-principles.md.
+Read: technical-design.md, requirements.md, workflow-design.md, phase-1-results.md (extracted patterns), guiding-principles.md (42 principles including client partnership section), references/pre-sales-lifecycle.md (pre-sales process, SOW structure, consulting delivery model, sales principles), references/reference-materials-index.md (real exemplar deliverables as quality bar).
 
 Implement:
 
@@ -603,11 +612,15 @@ You are a QA architect validating an AI Solutions Architecture Agent against rea
 <instructions>
 Phase 7: Validation & Testing.
 
-Test 3 scenarios:
+Read: references/reference-materials-index.md and references/README.md for real-world exemplar deliverables to compare against.
 
-1. Legacy System Transformation (migration): IBMi modernization — /requirements → /integration-plan → /architecture → /security-review → /estimate → /project-plan → /review
-2. Domain-Based Architecture (migration): Monolith to domain-driven — same flow
-3. Product Packaging Automation (0-to-1): GenAI pipeline — /requirements → /architecture → /data-model → /estimate → /project-plan → /review
+Test 5 scenarios (see references/README.md for full details):
+
+1. Healthcare Platform (0-to-1, from AGADA Hyperbloom engagement): /requirements → /architecture → /data-model → /security-review → /estimate → /project-plan → /proposal → /review. Compare against: hyperbloom-agada-architecture.pdf, hyperbloom-agada-project-plan.pdf.
+2. Cloud Migration Assessment (migration, from AVAHI Bluebird/SmartTrix): /requirements → /integration-plan → /architecture → /security-review → /estimate → /project-plan → /proposal → /review. Compare against AVAHI migration SOWs.
+3. GenAI Agent Platform (0-to-1, from Revelex Hyperbloom engagement): /requirements → /architecture → /data-model → /estimate → /project-plan → /proposal → /review. Compare against: hyperbloom-revelex-proposal.pdf.
+4. Discovery-Only Assessment (from AVAHI AInnocence): /requirements → /architecture → /security-review → /proposal. Compare against AInnocence assessment SOW.
+5. Multi-Industry Quick Discovery (from AVAHI RAPID templates): /requirements (all 3 tiers). Compare against: avahi-rapid-assessment-templates.xlsx.
 
 For each scenario:
 - Run each skill in sequence
