@@ -18,8 +18,8 @@ Get productive in 15 minutes.
 
 **1. Clone**:
 ```bash
-git clone https://github.com/paulpham157/multi-agent-ai-development-framework
-cd multi-agent-ai-development-framework
+git clone https://github.com/Modular-Earth-LLC/solutions-architecture-agent.git
+cd solutions-architecture-agent
 ```
 
 **2. Deploy to Cursor** (recommended):

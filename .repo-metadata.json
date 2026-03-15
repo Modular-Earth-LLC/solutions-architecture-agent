@@ -1,8 +1,9 @@
 {
   "$schema": "./knowledge_base/schemas/.repo-metadata.schema.json",
-  "version": "0.1.0-alpha",
-  "last_updated": "2025-10-12",
-  "status": "Alpha - Untested in production, undergoing initial validation",
+  "version": "0.2.0-alpha",
+  "last_updated": "2026-03-15",
+  "status": "Alpha - Standalone repository, undergoing active development",
+  "repository": "https://github.com/Modular-Earth-LLC/solutions-architecture-agent",
   "_comment": "Single source of truth for repository-wide metadata. All agents and documentation should reference this file instead of hard-coding values.",
   "architecture": {
     "total_agents": 23,

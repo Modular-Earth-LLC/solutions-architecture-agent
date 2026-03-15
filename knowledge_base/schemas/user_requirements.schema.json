@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/paulpham157/multi-agent-ai-development-framework/schemas/user_requirements.schema.json",
+  "$id": "https://github.com/Modular-Earth-LLC/solutions-architecture-agent/schemas/user_requirements.schema.json",
   "title": "User Requirements",
   "description": "Schema for business requirements and technical specifications gathered during discovery",
   "type": "object",

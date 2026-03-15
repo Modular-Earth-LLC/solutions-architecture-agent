@@ -1,0 +1,1 @@
+This is the Solutions Architecture Agent repository by Modular Earth LLC. It contains AI agent system prompts, knowledge base files, and user prompts for the solutions architecture lifecycle. See CLAUDE.md at the repo root for full project context, conventions, and structure.

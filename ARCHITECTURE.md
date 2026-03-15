@@ -251,7 +251,7 @@ Deployment Agent deploys update
 ## File Organization
 
 ```
-multi-agent-ai-development-framework/
+solutions-architecture-agent/
 ├── supervisor_agent.system.prompt.md    # Main supervisor (entry point)
 ├── REFACTORING_COMPLETE.md             # Quick status reference
 ├── ai_agents/                           # Specialized agents (23 total)

@@ -174,7 +174,7 @@ We are committed to providing a welcoming and inclusive environment for all cont
 ```bash
 # Create feature branch from main
 git checkout main
-git pull upstream main
+git pull origin main
 git checkout -b feature/your-feature-name
 
 # Or for bug fixes

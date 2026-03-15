@@ -1,0 +1,15 @@
+# Solutions Architecture Agent - Code Owners
+# These owners will be requested for review when PRs touch these paths.
+
+# Default owner for everything
+* @paulpham157
+
+# Core agent prompts require owner review
+/ai_agents/ @paulpham157
+/supervisor_agent.system.prompt.md @paulpham157
+
+# Knowledge base and schemas
+/knowledge_base/ @paulpham157
+
+# Configuration and metadata
+/.repo-metadata.json @paulpham157

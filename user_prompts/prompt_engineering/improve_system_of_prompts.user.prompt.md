@@ -357,7 +357,7 @@ You WILL leverage these tools efficiently:
 
 ## Global Context
 
-This tool is part of the [Multi-Agent AI Development Framework](https://github.com/paulpham157/multi-agent-ai-development-framework), providing best-in-class prompt engineering tools to the global AI community. Success is measured by community adoption through GitHub stars, forks, and engagement with the open-source community.
+This tool is part of the [Solutions Architecture Agent](https://github.com/Modular-Earth-LLC/solutions-architecture-agent), providing best-in-class prompt engineering tools to the global AI community. Success is measured by community adoption through GitHub stars, forks, and engagement with the open-source community.
 
 ---
 

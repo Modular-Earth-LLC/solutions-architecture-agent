@@ -1,9 +1,10 @@
-# Multi-Agent AI Development Framework
+# Solutions Architecture Agent
 
 **Build production AI systems 3-5x faster** with specialized agents that handle requirements, architecture, coding, and deployment automatically.
 
-**Status**: ⚠️ Alpha - Untested in production. Use at your own risk.  
+**Status**: ⚠️ Alpha - Untested in production. Use at your own risk.
 **Version**: See `.repo-metadata.json` for current version and agent counts.
+**Repository**: [Modular-Earth-LLC/solutions-architecture-agent](https://github.com/Modular-Earth-LLC/solutions-architecture-agent)
 
 ---
 
@@ -23,8 +24,8 @@
 
 ```bash
 # 1. Clone
-git clone https://github.com/paulpham157/multi-agent-ai-development-framework
-cd multi-agent-ai-development-framework
+git clone https://github.com/Modular-Earth-LLC/solutions-architecture-agent.git
+cd solutions-architecture-agent
 
 # 2. Deploy (Cursor → Settings → Chat → Custom Modes)
 #    Create "Supervisor Agent"
@@ -289,7 +290,7 @@ Shared Knowledge Base:
 ## Repository Structure
 
 ```
-multi-agent-ai-development-framework/
+solutions-architecture-agent/
 ├── .repo-metadata.json           # Single source of truth (version, counts)
 ├── ai_agents/                    # Agent system prompts
 │   ├── supervisor_agent.system.prompt.md (main entry point)
@@ -319,8 +320,6 @@ See .repo-metadata.json for current agent/prompt counts
 
 ⚠️ **Current Status**: 0.1.0-alpha - **Untested in production**
 
-**Note**: Repository is under development locally, not yet published to GitHub.
-
 **What works**:
 - ✅ All agents functional
 - ✅ Complete workflows (requirements → deployment)
@@ -334,7 +333,7 @@ See .repo-metadata.json for current agent/prompt counts
 - ⚠️ Some edge cases untested
 - ⚠️ Documentation evolving (run `user_prompts/self_improvement/improve_all_documentation.user.prompt.md` for latest)
 
-**Use at your own risk**. Report issues on GitHub. Production-ready in v1.0.
+**Use at your own risk**. [Report issues on GitHub](https://github.com/Modular-Earth-LLC/solutions-architecture-agent/issues). Production-ready in v1.0.
 
 ---
 
@@ -355,7 +354,7 @@ MIT License - Full commercial use permitted
 
 ## Quick Links
 
-- **GitHub**: Repository available locally (not yet published to GitHub)
+- **GitHub**: [Modular-Earth-LLC/solutions-architecture-agent](https://github.com/Modular-Earth-LLC/solutions-architecture-agent)
 - **Getting Started**: `docs/getting-started.md`
 - **Deployment Guide**: `docs/deployment-guide.md`
 - **Engineering Specialists**: `docs/engineering-agents-guide.md`

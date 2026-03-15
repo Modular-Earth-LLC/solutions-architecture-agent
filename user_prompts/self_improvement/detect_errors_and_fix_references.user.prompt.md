@@ -1097,7 +1097,7 @@ validation_history = {
 
 ## Global Context
 
-This validation workflow is part of the [Multi-Agent AI Development Framework](https://github.com/paulpham157/multi-agent-ai-development-framework). By maintaining repository integrity through systematic validation, we ensure the framework remains reliable and trustworthy for the global AI community.
+This validation workflow is part of the [Solutions Architecture Agent](https://github.com/Modular-Earth-LLC/solutions-architecture-agent). By maintaining repository integrity through systematic validation, we ensure the framework remains reliable and trustworthy for the global AI community.
 
 **Success Metrics**:
 - Repository health score >90
