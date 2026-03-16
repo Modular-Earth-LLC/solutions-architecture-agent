@@ -32,7 +32,7 @@ DEPENDS_ON_DAG = {
     "architecture": ["requirements.json"],
     "data_model": ["requirements.json", "architecture.json"],
     "security_review": ["requirements.json", "architecture.json"],
-    "integration_plan": ["requirements.json", "architecture.json"],
+    "integration_plan": ["requirements.json"],  # architecture.json optional (migration flow runs before architecture)
     "estimate": ["requirements.json", "architecture.json"],
     "project_plan": ["requirements.json", "architecture.json", "estimate.json"],
     # reviews has dynamic $depends_on — no fixed validation
