@@ -22,12 +22,26 @@ You are a distinguished engineer and principal AI/LLM solutions architect. Your 
 
 Read and deeply analyze: `.claude/plans/references/solution-architect-case-study-and-interview.md`
 
-Focus on **Use Case 1: Legacy System Transformation** — modernizing IBMi (AS/400) green screen applications with new UI/UX while addressing IAM, HCD, and change management.
+Paul has selected **Use Case 1: Legacy System Transformation (SELECTED)** — modernizing IBMi (AS/400) green screen applications with new UI/UX while addressing Legacy System Integration, IAM Strategy, HCD Design Principles, Technology Stack, and Change Management.
+
+**Use Case 2: Transitioning to a Domain-Based Architecture (NOT SELECTED)** is retained in the reference file as organizational context. It reveals CVS Health's broader technology direction — domain-based architecture, Domain-Driven Design, legacy service layer consolidation, cloud migration patterns, and multi-platform strategy. Use it to inform architectural decisions but do not solve it.
 
 ### Interview Format
 
 - 15-20 minute presentation + Q&A from a panel of architects
-- Must address: high-level solution flow, diagrams, multiple solution options with pros/cons, thought process articulation, and all 5 key considerations (Legacy Integration, IAM, HCD, Tech Stack, Change Management)
+- 6 interview expectations (per the assignment):
+  1. **High-Level Solution Flow** — present an overview of key components and how they interrelate
+  2. **Clarification and Questions** — ask questions at the beginning to clarify requirements and constraints
+  3. **Diagram Development** — create and discuss visual representations of the architecture
+  4. **Multiple Solution Options** — explore multiple options with pros/cons (feasibility, scalability, maintainability, business alignment)
+  5. **Thought Process Articulation** — explain rationale behind design choices, integration strategies, and how they address key considerations
+  6. **Focus on Key Considerations** — address all 5 key considerations from Use Case 1
+- 5 key considerations to address:
+  1. **Legacy System Integration** — seamless integration with existing green screen applications, minimizing disruption to current operations
+  2. **IAM Strategy** — robust Identity and Access Management with compliance to industry standards
+  3. **HCD Design Principles** — Human-Centered Design throughout, with user feedback and iterative design
+  4. **Technology Stack** — balancing modern technologies with legacy system constraints
+  5. **Change Management** — managing user transition, adoption, and minimizing resistance
 
 ### Target Audience
 
@@ -82,19 +96,17 @@ Only reference Paul's previous work where highly relevant to CVS Health and this
 
 ### Paul's Key Considerations Answers
 
-Incorporate, challenge, and improve upon Paul's initial answers to the assignment's key considerations. These represent his instincts — the plans should validate, deepen, and augment them with research:
+Incorporate, challenge, and improve upon Paul's initial answers to the assignment's 5 key considerations. These represent his instincts — the plans should validate, deepen, and augment them with research:
 
-1. **Legacy Integration**: Bring in SMEs and real users for UX/UI collaboration. Partner with legacy system maintainers. The interface swap needs API, networking, and security components the legacy system lacks. Consider local-first apps targeting laptops and mobile.
+1. **Legacy System Integration**: Bring in SMEs and real users for UX/UI collaboration. Partner with legacy system maintainers. The interface swap needs API, networking, and security components the legacy system lacks. Consider local-first apps targeting laptops and mobile. To minimize disruption: fork the backend to avoid downtime, implement multi-stage environments (local dev, QA, UAT, prod, DR), phased rollout (small UAT group → percentage-based production rollout → full swap), maintain legacy with DR plan for rollback. Communication and collaboration are key.
 
-2. **Disruption Minimization**: Fork the backend to avoid downtime. Implement multi-stage environments (local dev, QA, UAT, prod, DR). Phased rollout: small UAT group → percentage-based production rollout → full swap. Maintain legacy with DR plan for rollback. Communication and collaboration are key.
+2. **IAM Strategy**: Follow standard frameworks and vendor guidance. Use AWS/Microsoft Well-Architected security reviews. Leverage NIST and MITRE guidance. Penetration testing and e2e testing are the most effective security hardening steps. Use platform-specific IAM audit tools.
 
-3. **IAM Strategy**: Follow standard frameworks and vendor guidance. Use AWS/Microsoft Well-Architected security reviews. Leverage NIST and MITRE guidance. Penetration testing and e2e testing are the most effective security hardening steps. Use platform-specific IAM audit tools.
+3. **HCD Design Principles**: Paul studied HCI in college. Research the latest HCD best practices as of March 2026. Study the CVS brand to inform visual design. Ensure accessibility. Research what CVS Health and their technology partners say about HCD specifically.
 
-4. **HCD Principles**: Paul studied HCI in college. Research the latest HCD best practices as of March 2026. Study the CVS brand to inform visual design. Ensure accessibility. Research what CVS Health and their technology partners say about HCD specifically.
+4. **Technology Stack**: Prefer AI-native managed services from next-gen cloud platforms (see Paul's recent projects above). Balance technical debt, implementation speed, platform constraints, preferred vendor tooling, and peer preferences. Argue for future-proofing with proven, reliable tools.
 
-5. **Technology Stack**: Prefer AI-native managed services from next-gen cloud platforms (see Paul's recent projects above). Balance technical debt, implementation speed, platform constraints, preferred vendor tooling, and peer preferences. Argue for future-proofing with proven, reliable tools.
-
-6. **Change Management**: Extensive communication. Receptive to feedback and pivots. Announce migration ahead of design. Identify all stakeholder personas and design change management specifically for them. Play into emotions, psychology, behavioral neuroscience, and organizational politics.
+5. **Change Management**: Extensive communication. Receptive to feedback and pivots. Announce migration ahead of design. Identify all stakeholder personas and design change management specifically for them. Play into emotions, psychology, behavioral neuroscience, and organizational politics.
 
 ### Agent Capabilities
 
@@ -141,6 +153,7 @@ Write each phase as a standalone planning prompt file to `.claude/plans/`. Each 
    - Healthcare UX best practices, WCAG accessibility standards, CVS brand guidelines
    - Identity and Access Management in healthcare: HIPAA requirements, modern IAM platforms
    - Industry frameworks: TOGAF, AWS Well-Architected, NIST, Zero Trust
+   - Use Case 2 (not selected, but retained for context): extract insights about CVS's domain-based architecture direction, legacy service layer challenges, integration patterns, and multi-cloud strategy preferences
 2. Compile a **requirements analysis document** capturing:
    - Functional requirements (what the system must do)
    - Non-functional requirements (performance, security, accessibility, compliance)
@@ -274,14 +287,14 @@ Write each phase as a standalone planning prompt file to `.claude/plans/`. Each 
 1. Run `/estimate` to produce:
    - LOE breakdown by phase (using three-point estimation)
    - Cost model (development + operational + AI-specific)
-   - Team composition — **lean** (the assignment says lean, do not over-staff)
+   - Team composition — keep lean and realistic, do not over-staff
    - Confidence scoring per estimate component
 2. Run `/project-plan` to produce:
    - Phased delivery roadmap with sprint plans
    - Decision gates between phases
    - Risk register (technical, resource, timeline)
    - Critical path analysis
-   - Communication and change management plan (this is key consideration #5)
+   - Communication and change management plan (per key consideration: Change Management)
    - Milestone definitions with measurable success criteria
 3. Integrate change management throughout the project plan:
    - Training program for users transitioning from green screen
@@ -320,12 +333,18 @@ Write each phase as a standalone planning prompt file to `.claude/plans/`. Each 
    - Formatted in Markdown that exports cleanly to Microsoft Word
    - All diagrams in Mermaid format (renderable in Word via export tools)
    - NOT over-engineered — this is a 15-20 minute presentation, not a 200-page specification
-4. Invent and apply **3 SA review personas** for final validation:
+4. Validate against the assignment's **Expectations and Tips** (the panel expects these):
+   - A clear understanding of the challenges posed by legacy systems and how to address them
+   - A comprehensive IAM strategy that includes user authentication, authorization, and role management
+   - A commitment to HCD principles, including user research, prototyping, and usability testing
+   - A well-defined technology stack that leverages modern frameworks while ensuring compatibility with legacy systems
+   - A change management plan that includes training, support, and communication strategies to facilitate user transition
+5. Invent and apply **3 SA review personas** for final validation:
    - **Enterprise Architect** (like the hiring manager): evaluates strategic alignment, scalability, business value
    - **Security Architect**: evaluates IAM, compliance, threat model rigor
    - **UX/HCD Specialist**: evaluates user-centeredness, accessibility, change management
    - Each persona reviews, provides feedback, and the document is iterated upon
-5. Produce the final consolidated Markdown document ready for Word export
+6. Produce the final consolidated Markdown document ready for Word export
 
 **Output**: `outputs/cvs-legacy-transformation/solution-architecture-document.md` + review results
 
@@ -344,7 +363,7 @@ Write each phase as a standalone planning prompt file to `.claude/plans/`. Each 
 1. Create a **presentation script** (15-20 minutes):
    - Opening: 2-minute hook — problem statement, why this matters to CVS
    - Solution overview: 3-minute high-level flow with key diagram
-   - Deep dives: 8-minute tour of architecture, IAM, UX, and migration approach — hitting all 5 key considerations
+   - Deep dives: 8-minute tour of architecture, IAM, UX, and migration approach — hitting all 5 key considerations (Legacy System Integration, IAM Strategy, HCD Design Principles, Technology Stack, Change Management)
    - Options analysis: 3-minute comparison of approaches with recommendation
    - Close: 2-minute team, timeline, and next steps
    - Timing markers throughout

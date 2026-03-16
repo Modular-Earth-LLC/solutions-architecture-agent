@@ -4,10 +4,27 @@
   "title": "Engagement Envelope",
   "description": "Top-level engagement metadata, lifecycle tracking, and cross-references between skill outputs. Written by any skill that starts an engagement.",
   "type": "object",
-  "required": ["engagement_id", "title", "engagement_type", "status", "created_date", "lifecycle_state"],
+  "required": [
+    "engagement_id",
+    "title",
+    "engagement_type",
+    "status",
+    "created_date",
+    "lifecycle_state"
+  ],
   "additionalProperties": false,
   "properties": {
-    "$schema": { "type": "string", "description": "JSON Schema reference" },
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference"
+    },
+    "$depends_on": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Upstream KB file dependencies"
+    },
     "engagement_id": {
       "type": "string",
       "pattern": "^eng-\\d{4}-\\d{3,}$",
@@ -20,12 +37,26 @@
     },
     "engagement_type": {
       "type": "string",
-      "enum": ["greenfield", "migration", "modernization", "augmentation", "assessment"],
+      "enum": [
+        "greenfield",
+        "migration",
+        "modernization",
+        "augmentation",
+        "assessment"
+      ],
       "description": "greenfield = 0-to-1 new build. migration = move from legacy. modernization = upgrade existing. augmentation = add AI to existing. assessment = review only."
     },
     "status": {
       "type": "string",
-      "enum": ["draft", "in_progress", "in_review", "approved", "on_hold", "completed", "cancelled"],
+      "enum": [
+        "draft",
+        "in_progress",
+        "in_review",
+        "approved",
+        "on_hold",
+        "completed",
+        "cancelled"
+      ],
       "description": "Overall engagement status (broader than domain file status)"
     },
     "created_date": {
@@ -45,15 +76,31 @@
     },
     "client": {
       "type": "object",
-      "required": ["name"],
+      "required": [
+        "name"
+      ],
       "description": "Client information for this engagement",
       "properties": {
-        "name": { "type": "string", "description": "Client company name" },
-        "industry": { "type": "string", "description": "Client industry vertical" },
-        "contact": { "type": "string", "description": "Primary client contact" },
+        "name": {
+          "type": "string",
+          "description": "Client company name"
+        },
+        "industry": {
+          "type": "string",
+          "description": "Client industry vertical"
+        },
+        "contact": {
+          "type": "string",
+          "description": "Primary client contact"
+        },
         "size": {
           "type": "string",
-          "enum": ["startup", "smb", "mid_market", "enterprise"],
+          "enum": [
+            "startup",
+            "smb",
+            "mid_market",
+            "enterprise"
+          ],
           "description": "Client company size category"
         }
       }
@@ -61,15 +108,32 @@
     "lifecycle_state": {
       "type": "object",
       "description": "Status of each skill domain. Skills update their own entry.",
-      "required": ["requirements", "architecture"],
+      "required": [
+        "requirements",
+        "architecture"
+      ],
       "properties": {
-        "requirements": { "$ref": "#/$defs/lifecycle_entry" },
-        "architecture": { "$ref": "#/$defs/lifecycle_entry" },
-        "data_model": { "$ref": "#/$defs/lifecycle_entry" },
-        "security_review": { "$ref": "#/$defs/lifecycle_entry" },
-        "integration_plan": { "$ref": "#/$defs/lifecycle_entry" },
-        "estimate": { "$ref": "#/$defs/lifecycle_entry" },
-        "project_plan": { "$ref": "#/$defs/lifecycle_entry" }
+        "requirements": {
+          "$ref": "#/$defs/lifecycle_entry"
+        },
+        "architecture": {
+          "$ref": "#/$defs/lifecycle_entry"
+        },
+        "data_model": {
+          "$ref": "#/$defs/lifecycle_entry"
+        },
+        "security_review": {
+          "$ref": "#/$defs/lifecycle_entry"
+        },
+        "integration_plan": {
+          "$ref": "#/$defs/lifecycle_entry"
+        },
+        "estimate": {
+          "$ref": "#/$defs/lifecycle_entry"
+        },
+        "project_plan": {
+          "$ref": "#/$defs/lifecycle_entry"
+        }
       },
       "additionalProperties": false
     },
@@ -77,59 +141,110 @@
       "type": "object",
       "description": "Aggregated review status from /review skill",
       "properties": {
-        "total_reviews": { "type": "integer", "minimum": 0, "description": "Number of reviews conducted" },
+        "total_reviews": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of reviews conducted"
+        },
         "latest_overall_score": {
-          "type": ["number", "null"],
+          "type": [
+            "number",
+            "null"
+          ],
           "minimum": 0,
           "maximum": 10,
           "description": "Most recent review score (null if no reviews)"
         },
-        "blocking_findings": { "type": "integer", "minimum": 0, "description": "Count of unresolved blocking findings" }
+        "blocking_findings": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Count of unresolved blocking findings"
+        }
       }
     },
     "tags": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Free-form tags for engagement categorization"
     },
     "_migration": {
       "type": "object",
       "description": "Legacy migration tracking (temporary, remove after full migration)",
       "properties": {
-        "legacy_requirements_file": { "type": "string" },
-        "legacy_decisions_file": { "type": "string" },
-        "migration_complete": { "type": "boolean" }
+        "legacy_requirements_file": {
+          "type": "string"
+        },
+        "legacy_decisions_file": {
+          "type": "string"
+        },
+        "migration_complete": {
+          "type": "boolean"
+        }
       }
     },
     "_metadata": {
       "type": "object",
       "description": "Skill-specific metadata (author, date, validation_status, version, plus skill-specific fields)",
       "properties": {
-        "author": { "type": "string" },
-        "date": { "type": "string", "format": "date" },
-        "validation_status": { "type": "string" },
-        "version": { "type": "string", "pattern": "^\\d+\\.\\d+$" }
+        "author": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "validation_status": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+$"
+        }
       }
     }
   },
   "$defs": {
     "lifecycle_entry": {
       "type": "object",
-      "required": ["status", "version", "file"],
+      "required": [
+        "status",
+        "version",
+        "file"
+      ],
       "properties": {
         "status": {
           "type": "string",
-          "enum": ["not_started", "in_progress", "draft", "complete", "approved"],
+          "enum": [
+            "not_started",
+            "in_progress",
+            "draft",
+            "complete",
+            "approved"
+          ],
           "description": "Domain status (5-value enum including not_started)"
         },
         "version": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "pattern": "^\\d+\\.\\d+$",
           "description": "Current version of the domain file (null when not_started)"
         },
-        "file": { "type": "string", "description": "Filename of the domain KB file" },
-        "last_updated": { "type": "string", "format": "date" },
-        "reviewed": { "type": "boolean", "default": false }
+        "file": {
+          "type": "string",
+          "description": "Filename of the domain KB file"
+        },
+        "last_updated": {
+          "type": "string",
+          "format": "date"
+        },
+        "reviewed": {
+          "type": "boolean",
+          "default": false
+        }
       }
     }
   }
