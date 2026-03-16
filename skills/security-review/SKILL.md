@@ -137,6 +137,8 @@ Assess risk for the proposed architecture changes:
 
 ## 5. OUTPUT SPECIFICATION
 
+Every KB file includes standard envelope fields: `engagement_id` (links to engagement.json), `version` (MAJOR.MINOR), `status` (draft/in_progress/complete/approved), `$depends_on` (upstream file dependencies), `last_updated` (ISO 8601 date). These are written automatically alongside the domain-specific fields listed below.
+
 Write to `knowledge_base/security_review.json`:
 - `security_requirements`: 5-dimension decomposition from Step 1
 - `threat_model`: STRIDE threats with IDs, severity, mitigations, residual risk

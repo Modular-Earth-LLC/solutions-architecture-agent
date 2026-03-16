@@ -160,8 +160,8 @@ Write to `outputs/{engagement_id}/`:
 This skill writes to `outputs/` NOT to `knowledge_base/`. Proposals are engagement-specific deliverables, not KB state.
 
 Update `knowledge_base/engagement.json`:
-- Update engagement status to reflect proposal assembly complete
-- Set `last_updated`
+- Update top-level `status` field and `last_updated`
+- Do NOT set `lifecycle_state.proposal` — that key does not exist in the engagement schema (`additionalProperties: false` would reject it)
 
 ## 6. DYNAMIC REFERENCES
 

@@ -122,17 +122,21 @@ Verify against quality targets:
 
 ## 5. OUTPUT SPECIFICATION
 
-Write to `knowledge_base/reviews.json`:
-- `target_file`: Which KB file was reviewed
-- `target_version`: Version of the file that was reviewed
-- `iterations`: Array of iteration results with per-dimension scores
-- `overall_score`: Final averaged score
-- `pass_fail`: PASS / CONDITIONAL PASS / FAIL
-- `findings`: Categorized list (P0/P1/P2/P3) with severity, description, recommendation
-- `improvement_plan`: Prioritized actions with effort and impact
-- `wa_pillar_review`: Per-pillar scores and findings (if architecture review)
-- `blockers`: Any issues that must be resolved before client delivery
-- `_metadata`: `{ "author": "sa-agent", "date": "<today>", "validation_status": "complete", "version": "1.0" }`
+Every KB file includes standard envelope fields: `engagement_id` (links to engagement.json), `version` (MAJOR.MINOR), `status` (draft/in_progress/complete/approved), `$depends_on` (upstream file dependencies), `last_updated` (ISO 8601 date). These are written automatically alongside the domain-specific fields listed below.
+
+Write to `knowledge_base/reviews.json` — append a new entry to the `reviews[]` array with:
+  - `review_id`: Unique review ID (`R-NNN` format)
+  - `target_file`: Which KB file was reviewed
+  - `target_version`: Version of the file that was reviewed
+  - `iterations`: Array of iteration results with per-dimension scores
+  - `scores`: Per-dimension and overall scores. Each dimension is `{"score": <0-10>, "max": 10, "notes": "<optional>"}` per the `score_entry` schema definition. Dimensions: `completeness`, `technical_soundness`, `well_architected`, `clarity`, `feasibility`, `overall`.
+  - `pass_fail`: `PASS` / `CONDITIONAL PASS` / `FAIL`
+  - `findings`: Categorized list (P0/P1/P2/P3) with severity, description, recommendation
+  - `improvement_plan`: Prioritized actions with effort and impact
+  - `wa_pillar_review`: Per-pillar scores and findings (if architecture review)
+  - `blockers`: Any issues that must be resolved before client delivery
+
+Top-level fields in `reviews.json`: `engagement_id`, `reviews[]` (array of review entries above), `aggregate_stats`, `_metadata`.
 
 Update `knowledge_base/engagement.json`:
 - Update `review_summary` with latest score and pass/fail

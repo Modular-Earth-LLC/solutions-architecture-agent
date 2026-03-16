@@ -142,6 +142,8 @@ For every service connection:
 
 ## 5. OUTPUT SPECIFICATION
 
+Every KB file includes standard envelope fields: `engagement_id` (links to engagement.json), `version` (MAJOR.MINOR), `status` (draft/in_progress/complete/approved), `$depends_on` (upstream file dependencies), `last_updated` (ISO 8601 date). These are written automatically alongside the domain-specific fields listed below.
+
 Write to `knowledge_base/integration_plan.json`:
 - `integration_inventory`: Cataloged integration points with metadata
 - `api_contracts`: Per-integration contract definitions

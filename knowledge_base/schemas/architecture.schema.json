@@ -49,7 +49,7 @@
 
     "tech_stack": {
       "type": "object",
-      "required": ["llm", "backend", "infrastructure"],
+      "required": ["backend", "infrastructure"],
       "description": "Per-layer selection with rationale, alternatives, trade-offs",
       "properties": {
         "llm": {

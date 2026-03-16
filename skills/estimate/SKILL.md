@@ -138,13 +138,15 @@ Document which pass this estimate represents.
 
 ## 5. OUTPUT SPECIFICATION
 
+Every KB file includes standard envelope fields: `engagement_id` (links to engagement.json), `version` (MAJOR.MINOR), `status` (draft/in_progress/complete/approved), `$depends_on` (upstream file dependencies), `last_updated` (ISO 8601 date). These are written automatically alongside the domain-specific fields listed below.
+
 Write to `knowledge_base/estimate.json`:
 - `complexity_assessment`: 10-point checklist with score and buffer
 - `loe_breakdown`: Per-phase effort with hours, points, and confidence
 - `cost_model`: 5-category cost breakdown with assumptions
 - `team_composition`: Roles, seniority, allocation, hiring timeline
-- `estimation_method`: Primary method used, cross-validation results
-- `confidence_summary`: Overall confidence level with uncertainty sources
+- `methodology`: Primary estimation method used (enum: `bottom_up`, `t_shirt`, `three_point`, `historical`), cross-validation results
+- `confidence_level`: Overall confidence level (enum: `high`, `medium`, `low`) with uncertainty sources
 - `three_pass_context`: Which pass, accuracy target, caveats
 - `optimization_strategies`: Cost reduction opportunities
 - `_metadata`: `{ "author": "sa-agent", "date": "<today>", "validation_status": "complete", "version": "1.0" }`

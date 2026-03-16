@@ -120,9 +120,11 @@ For each data store, document:
 
 ## 5. OUTPUT SPECIFICATION
 
+Every KB file includes standard envelope fields: `engagement_id` (links to engagement.json), `version` (MAJOR.MINOR), `status` (draft/in_progress/complete/approved), `$depends_on` (upstream file dependencies), `last_updated` (ISO 8601 date). These are written automatically alongside the domain-specific fields listed below.
+
 Write to `knowledge_base/data_model.json`:
 - `data_requirements`: Consolidated from upstream (sources, volumes, patterns)
-- `relational_schemas`: Entities, relationships, fields, indexes, constraints
+- `relational_schemas`: Entities, relationships, fields, indexes, constraints. Use `relational_schemas` as the canonical field name (the schema also accepts `entities` as an alias).
 - `vector_schemas`: Collections, chunking, embeddings, retrieval config (if applicable)
 - `graph_schemas`: Node types, edge types, ontology (if applicable)
 - `knowledge_pipeline`: Pipeline stages and configuration (if applicable)
