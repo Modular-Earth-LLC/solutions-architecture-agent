@@ -1,285 +1,76 @@
-# Solutions Architecture Agent
+# AI Solutions Architecture Agent
 
-**Build production AI systems 3-5x faster** with specialized agents that handle requirements, architecture, coding, and deployment automatically.
+A Claude Code plugin covering the **solutions architecture lifecycle**: requirements discovery, system design, data modeling, security review, integration planning, estimation, project planning, and proposal assembly.
 
-**Status**: ⚠️ Alpha - Untested in production. Use at your own risk.
-**Version**: See `.repo-metadata.json` for current version and agent counts.
-**Repository**: [Modular-Earth-LLC/solutions-architecture-agent](https://github.com/Modular-Earth-LLC/solutions-architecture-agent)
+**Designs solutions — does NOT implement or deploy.**
 
----
-
-## What You Can Build
-
-**15 minutes**: Claude Code skills, Claude assistants, custom GPTs
-**2 hours**: Complete architecture + cost estimates
-**2-5 days**: Working prototypes with tests
-
-**Complete lifecycle**: Requirements → Architecture → Code → Deployment
+**Version**: 1.0.0 | **License**: MIT | **Owner**: [Modular Earth LLC](https://github.com/Modular-Earth-LLC)
 
 ---
 
-## Quick Start (5 Minutes)
-
-### Install with Claude Code CLI
+## Quick Start
 
 ```bash
-# 1. Clone
+# Clone
 git clone https://github.com/Modular-Earth-LLC/solutions-architecture-agent.git
 cd solutions-architecture-agent
 
-# 2. Start Claude Code
-#    Claude automatically loads CLAUDE.md and .claude/ configuration
-#    Try: "Build a Streamlit chatbot with Claude"
+# Install as Claude Code plugin
+claude mcp add-from-claude-plugin .
+
+# Or load directly
+claude --plugin-dir .
+
+# Run your first skill
+# Type: /requirements
+# Or: "I need to design a system for [your project]"
 ```
 
-**Done!** Claude Code loads the agent context from `CLAUDE.md` and `.claude/rules/` automatically.
-
-**Other platforms**: See `docs/getting-started.md` for Claude Projects and GitHub Copilot setup.
+Claude loads `CLAUDE.md` and `.claude/rules/` automatically. Skills appear as `solutions-architecture-agent:<skill-name>`.
 
 ---
 
-## Why This Exists
+## Skills
 
-**The Problem**: Every AI project starts from scratch
-- Requirements: 2 days → should be 2 hours
-- Architecture: 2 weeks → should be 4 hours
-- Prototypes: 2 months → should be 1 week
-
-**The Solution**: Specialized agents automate 70% of repetitive work
-
-| Task | Traditional | With Framework | Savings |
-|------|------------|----------------|---------|
-| Requirements | 2 days | 2 hours | 90% |
-| Architecture | 2 weeks | 4 hours | 97% |
-| Prototype | 2 months | 1 week | 87% |
-
-**Result**: 3-5x faster delivery, 60% less rework, consistent quality
+| Skill | Command | Purpose | KB Output |
+|-------|---------|---------|-----------|
+| Requirements Discovery | `/requirements` | Progressive discovery (quick/standard/comprehensive), AI suitability | `requirements.json` |
+| Solution Architecture | `/architecture` | System design, tech stack, diagrams, WA scoring | `architecture.json` |
+| Estimation | `/estimate` | LOE, cost, team composition, confidence scoring | `estimate.json` |
+| Technical Project Plan | `/project-plan` | Phased roadmap, sprints, milestones, dependencies | `project_plan.json` |
+| Proposal Assembly | `/proposal` | SOW assembly from KB (4 proposal types) | `outputs/` |
+| Data Modeling | `/data-model` | ER, vector, graph, ontology, governance | `data_model.json` |
+| Security & Privacy Review | `/security-review` | STRIDE, compliance, defense-in-depth, AI security | `security_review.json` |
+| Integration Planning | `/integration-plan` | APIs, migration, legacy bridging, data flows | `integration_plan.json` |
+| Deliverable Review | `/review` | LLM-as-judge, 3 iterations, 5 dimensions | `reviews.json` |
 
 ---
 
-## The Specialized Agents
+## Engagement Flows
 
-<!-- Current count: See .repo-metadata.json -->
+| Flow | Sequence | When |
+|------|----------|------|
+| **Greenfield** | req → arch → dm → sr → est → ppl → pro → rv | Complete 0-to-1 engagement |
+| **Migration** | req → ip → arch → dm → sr → est → ppl → pro → rv | Migration/modernization |
+| **Streamlined** | req → arch → est → pro | Small projects, time-constrained |
+| **Assessment** | req → arch → [sr] → pro | Discovery-only, pre-commitment |
+| **Quick Qualify** | req (quick tier) | Pipeline qualification |
 
-**Main Supervisor** → Routes your requests
-
-**Top-Level Domain Agents** (5):
-- **Requirements**: Discovers what you need (15-90 min workshops)
-- **Architecture**: Designs system + estimates costs (AWS Well-Architected)
-- **Deployment**: Creates platform-specific deployment guides
-- **Optimization**: Analyzes and improves existing systems
-- **Prompt Engineering**: Creates production-quality prompts
-
-**Engineering Supervisor** (1): Coordinates 16 technology specialists
-
-**Engineering Specialists** (16):
-- **Anthropic Claude** (5): Code, Workspaces, SDK, MCP, Projects
-- **AWS Bedrock** (2): AgentCore, Strands
-- **Other** (9): Streamlit, LangChain, data, AWS infra/security, testing, GitHub, IDE tooling
-
-**See**: `docs/engineering-agents-guide.md` for complete specialist reference
+Natural language also works — describe your project and the agent classifies intent and routes to the right skill.
 
 ---
 
-## Quick Examples
+## Knowledge Base
 
-### Example 1: Build Streamlit+Claude App (2 Hours)
+Skills communicate through a shared **knowledge base** (`knowledge_base/`) using the blackboard pattern:
 
-```
-You: "Build a document summarization app with Streamlit and Claude"
+- **10 JSON files** — each skill owns one, writes only to it
+- **11 JSON schemas** — validate structure at `knowledge_base/schemas/`
+- **`$depends_on`** — each file declares upstream dependencies
+- **`engagement.json`** — tracks lifecycle state across all domain files
+- **`system_config.json`** — read-only reference data (Well-Architected definitions, technical references)
 
-Engineering Supervisor routes to specialists:
-→ Streamlit UI Agent: Chat interface + file upload
-→ Claude Code Agent: Claude SDK integration + streaming
-→ Testing Agent: pytest suite with mocks
-
-Output:
-✅ streamlit_app.py, claude_client.py, tests/
-✅ requirements.txt, README.md, .env.example
-✅ 80% test coverage, production-ready
-
-YOU: Review → Run locally → Deploy
-```
-
-**Result**: Working prototype same day
-
----
-
-### Example 2: Optimize Existing System (2-3 Hours)
-
-```
-You: "Optimize my Claude chatbot at outputs/my-chatbot/"
-
-Optimization Agent:
-→ Discovers system structure
-→ Assesses Well-Architected compliance (score: 6.2/10)
-→ Proposes improvements (reduce tokens 30%, add caching)
-→ Implements (with your approval)
-→ Validates improvements
-
-Result:
-✅ Monthly cost: $120 → $78 (-35%)
-✅ Response time: 3.2s → 2.4s (-25%)
-✅ Well-Architected: 6.2 → 8.1 (+30%)
-```
-
-**Result**: Measurable improvements backed by data
-
-**More examples**: See `docs/workflow_guide.md` and `docs/examples/`
-
----
-
-## Key Features
-
-### AWS Well-Architected Enforcement
-Every architecture evaluated against **6 pillars** + **GenAI Lens**:
-- Operational Excellence • Security • Reliability
-- Performance • Cost • Sustainability
-- Model Selection • Prompt Engineering • RAG • Multi-Agent • Responsible AI
-
-### TRM Validation Framework
-**Test-Time Recursive Majority** ensures quality:
-- Generate → Validate → Improve → Re-validate
-- Only present outputs meeting quality benchmarks
-- Code coverage ≥80%, type hints ≥90%, 0 critical security issues
-
-### Self-Improvement System
-17 improvement prompts for continuous enhancement
-- System-wide optimization
-- Individual agent improvements
-- 2-3 iterations per session (practical recursion prevention)
-
-### Centralized Knowledge
-`knowledge_base/system_config.json` contains:
-- 150+ technical documentation URLs
-- AWS Well-Architected definitions
-- Research papers (TRM, MetaGPT)
-- Design patterns
-- Quality benchmarks
-
----
-
-## Who Should Use This
-
-✅ **Junior Engineers**: Learn from generated code, ship without years of experience
-✅ **Senior Engineers**: Eliminate boilerplate, focus on complex decisions, 3-5x faster
-✅ **Consultants**: Professional proposals in hours, accurate estimates
-✅ **Managers**: Standardize processes, 5x faster onboarding
-✅ **Architects**: Systematic Well-Architected designs, evidence-based recommendations
-✅ **CTOs**: De-risk AI investments, scale without proportional hiring
-
----
-
-## Installation & Platforms
-
-**Claude Code CLI** (Recommended - 2 min):
-```
-1. Clone this repo
-2. Run `claude` in the project directory
-3. Claude loads CLAUDE.md + .claude/ automatically
-```
-
-**Claude Projects** (10 min):
-```
-1. Create project at https://claude.ai/projects (requires Anthropic account)
-2. Upload knowledge_base/*.json
-3. Custom Instructions: supervisor_agent.system.prompt.md
-```
-
-**GitHub Copilot** (for CI/CD and git management):
-```
-1. .github/copilot-instructions.md is pre-configured
-2. Use @workspace in VS Code for CI/CD tasks
-3. Apply docs/github-copilot-optimization.md for optimized local setup
-```
-
-**Full guide**: `docs/deployment-guide.md`
-
----
-
-## Tech Stack
-
-**Core**: Python 3.12+ • Streamlit • Anthropic Claude • AWS Bedrock • MCP • LangChain
-
-**16 Engineering Specialists** cover:
-- 5 Anthropic Claude specialists
-- 2 AWS Bedrock specialists
-- 9 Other specialists (UI, orchestration, data, AWS infra/security, testing, platforms)
-
-**Centralized Docs**: 150+ technical URLs in `knowledge_base/system_config.json` → `technical_references`
-
----
-
-## Architecture
-
-**Two-layer supervisor-worker pattern**:
-
-```
-                 Supervisor Agent
-                        ↓
-        ┌───────────────┼───────────────┐
-        ↓               ↓               ↓
-  Requirements    Architecture    Engineering Supervisor
-        ↓               ↓               ↓
-        │               │        ┌──────┼──────┐
-        │               │        ↓      ↓      ↓
-        │               │   Streamlit Claude  AWS
-        │               │      UI    Code   Bedrock
-        │               │        +14 more specialists
-        │               ↓
-        └───────→ Deployment + Optimization
-
-Shared Knowledge Base:
-├─ system_config.json (platform constraints, tech refs)
-├─ user_requirements.json (business requirements)
-└─ design_decisions.json (architecture, costs, plans)
-```
-
-**See**: `ARCHITECTURE.md` for complete details
-
----
-
-## Human-AI Collaboration
-
-**Agents do** (you review):
-- ✅ Generate code/docs/configs
-- ✅ Analyze systems
-- ✅ Recommend improvements
-- ✅ Validate quality
-
-**YOU do** (always):
-- ✅ Review all outputs
-- ✅ Approve architectures
-- ✅ Execute deployments
-- ✅ Make critical decisions
-
-**Agents NEVER**:
-- ❌ Commit code automatically
-- ❌ Deploy to production
-- ❌ Make business decisions
-- ❌ Spend money without approval
-
-**See**: `docs/human-ai-collaboration.md` for complete guide
-
----
-
-## Documentation
-
-**Essential** (start here):
-- `README.md` - This file (overview + quick start)
-- `docs/getting-started.md` - First project walkthrough (15 min)
-- `docs/deployment-guide.md` - Platform deployment
-- `docs/github-copilot-optimization.md` - Copilot workspace and local setup
-- `docs/human-ai-collaboration.md` - Your role vs agent role
-
-**Reference**:
-- `docs/workflow_guide.md` - Complete workflows
-- `docs/engineering-agents-guide.md` - All 16 specialists
-- `docs/executive_overview.md` - Business value
-- `ARCHITECTURE.md` - System architecture
-- `knowledge_base/README.md` - Knowledge base guide
-- `templates/` - Requirements, architecture, checklists
-- `private/README.md` - Security guidelines for sensitive data
+Validate anytime: `python tests/validate_knowledge_base.py`
 
 ---
 
@@ -287,79 +78,81 @@ Shared Knowledge Base:
 
 ```
 solutions-architecture-agent/
-├── .repo-metadata.json           # Single source of truth (version, counts)
-├── ai_agents/                    # Agent system prompts
-│   ├── supervisor_agent.system.prompt.md (main entry point)
-│   ├── [5 top-level domain agents]
-│   ├── engineering_supervisor_agent.system.prompt.md
-│   └── [16 specialist agents]
-├── knowledge_base/               # Shared state across agents
-│   ├── system_config.json (150+ tech refs, Well-Architected defs, validation framework)
-│   ├── user_requirements.json
-│   ├── design_decisions.json
-│   └── schemas/ (JSON schemas for validation)
-├── user_prompts/                 # Task-specific instructions
-├── docs/                         # Documentation
-├── templates/                    # Reusable templates
-├── tests/                        # Validation tests (auto-update metadata)
-├── outputs/                      # Generated systems go here
-└── private/                      # Sensitive data (NEVER committed to Git)
-    ├── README.md (security guidelines)
-    └── sensitive-ai-agent-outputs/ (protected AI outputs)
-
-See .repo-metadata.json for current agent/prompt counts
+├── .claude-plugin/plugin.json     # Plugin manifest
+├── CLAUDE.md                      # Agent identity + dispatch rules
+├── skills/                        # 9 SA lifecycle skills
+│   ├── requirements/SKILL.md
+│   ├── architecture/SKILL.md
+│   ├── estimate/SKILL.md
+│   ├── project-plan/SKILL.md
+│   ├── proposal/SKILL.md
+│   ├── data-model/SKILL.md
+│   ├── security-review/SKILL.md
+│   ├── integration-plan/SKILL.md
+│   └── review/SKILL.md
+├── agents/                        # 2 sub-agents (parallel execution)
+│   ├── parallel-wa-reviewer.md
+│   └── stride-analyzer.md
+├── knowledge_base/                # Shared state (blackboard pattern)
+│   ├── schemas/                   # 11 JSON schemas
+│   ├── system_config.json         # Read-only reference
+│   └── engagement.json            # Lifecycle state tracker
+├── hooks/hooks.json               # Pre-commit validation hooks
+├── templates/                     # Output templates
+├── tests/                         # Validation scripts
+├── docs/                          # Documentation
+├── .claude/rules/                 # Guiding principles, KB rules, security
+├── .repo-metadata.json            # Single source of truth (version, counts)
+└── outputs/                       # Generated deliverables
 ```
 
 ---
 
-## Alpha Status & Limitations
+## Documentation
 
-⚠️ **Current Status**: 0.1.0-alpha - **Untested in production**
-
-**What works**:
-- ✅ All agents functional
-- ✅ Complete workflows (requirements → deployment)
-- ✅ Code generation quality-assured (TRM validation)
-- ✅ Well-Architected enforcement
-- ✅ Self-improvement system
-
-**Known limitations**:
-- ⚠️ No production validation yet
-- ⚠️ Breaking changes expected before v1.0
-- ⚠️ Some edge cases untested
-- ⚠️ Documentation evolving (run `user_prompts/self_improvement/improve_all_documentation.user.prompt.md` for latest)
-
-**Use at your own risk**. [Report issues on GitHub](https://github.com/Modular-Earth-LLC/solutions-architecture-agent/issues). Production-ready in v1.0.
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** — System design with Mermaid diagrams
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** — How to add skills, PR process
+- **[docs/getting-started.md](docs/getting-started.md)** — First project walkthrough
+- **[docs/workflow_guide.md](docs/workflow_guide.md)** — Engagement lifecycle details
+- **[docs/executive_overview.md](docs/executive_overview.md)** — Business value and ROI
+- **[docs/human-ai-collaboration.md](docs/human-ai-collaboration.md)** — Human-in-the-loop design
 
 ---
 
-## Getting Help
+## Who Should Use This
 
-**Documentation**: Start with `docs/getting-started.md`
-**Issues**: GitHub Issues for bugs/features
-**Discussions**: GitHub Discussions for questions
-**Contributing**: See `CONTRIBUTING.md`
+- **Solutions Architects** — Systematic Well-Architected designs, consistent deliverables
+- **Consultants** — Professional proposals in hours, accurate estimates
+- **Enterprise Architects** — Standardized assessment frameworks across engagements
+- **Technical Pre-Sales** — Rapid qualification and scoping
+- **Engineering Managers** — Evidence-based project planning and estimation
 
 ---
+
+## Quality Standards
+
+- **Well-Architected compliance** — AWS 6 pillars + GenAI Lens, Azure WAF, GCP WAF on every architecture
+- **Technology-agnostic** — recommends best-fit via web search, never defaults to specific vendors
+- **Confidence scoring** — COMPLETE/PARTIAL/INCOMPLETE (requirements), HIGH/MEDIUM/LOW (estimates), 0-10 (WA pillars)
+- **Human checkpoints** — after every skill: summarize, list deliverables, suggest next skill
+- **Scope boundary** — designs solutions only; implementation is out of scope (future Engineering Agent)
+
+---
+
+## Status
+
+**v1.0.0** — Validated end-to-end in Phase 7 against a healthcare IBMi modernization case study (migration flow, HIPAA compliance, 500+ users).
+
+- 11/11 schema validations PASS
+- 5/5 consistency checks PASS
+- 4 deliverable reviews >= 7.5/10
+
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add new skills, sub-agents, and submit PRs.
 
 ## License
 
-MIT License - Full commercial use permitted
-
----
-
-## Quick Links
-
-- **GitHub**: [Modular-Earth-LLC/solutions-architecture-agent](https://github.com/Modular-Earth-LLC/solutions-architecture-agent)
-- **Getting Started**: `docs/getting-started.md`
-- **Deployment Guide**: `docs/deployment-guide.md`
-- **Engineering Specialists**: `docs/engineering-agents-guide.md`
-- **Workflows**: `docs/workflow_guide.md`
-
----
-
-**Built with**: Python • Streamlit • Anthropic Claude • AWS Bedrock • MCP • LangChain
-
-🚀 **Start building**: Run `claude` in this repo and say "Build a chatbot"
-
-<!-- Version and status in .repo-metadata.json -->
+MIT License — see [LICENSE](LICENSE).
