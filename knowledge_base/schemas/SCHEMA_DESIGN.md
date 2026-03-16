@@ -1,8 +1,8 @@
 # Knowledge Base Schema Design for 9-Skill SA Agent
 
-**Version:** 0.3.0-alpha
-**Date:** 2026-03-15
-**Status:** Design proposal -- not yet implemented
+**Version:** 1.0.0
+**Date:** 2026-03-16
+**Status:** Implemented — historical design context preserved
 
 ---
 

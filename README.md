@@ -2,11 +2,13 @@
 
 [![QA Validation](https://github.com/Modular-Earth-LLC/solutions-architecture-agent/actions/workflows/validate-knowledge-base.yml/badge.svg)](https://github.com/Modular-Earth-LLC/solutions-architecture-agent/actions/workflows/validate-knowledge-base.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-A Claude Code plugin covering the **solutions architecture lifecycle**: requirements discovery, system design, data modeling, security review, integration planning, estimation, project planning, and proposal assembly.
+**Turn a project idea into a complete, Well-Architected solution design — requirements, architecture, security review, cost estimate, project plan, and client-ready proposal — in a single Claude Code session.**
 
-**Designs solutions — does NOT implement or deploy.**
+A Claude Code plugin covering the **solutions architecture lifecycle**: requirements discovery, system design, data modeling, security review, integration planning, estimation, project planning, and proposal assembly. Designs solutions — does NOT implement or deploy.
 
-**Version**: 1.0.0 | **Owner**: [Modular Earth LLC](https://github.com/Modular-Earth-LLC) | **Validated**: 9-skill end-to-end against a HIPAA-compliant healthcare IBMi migration (500+ users). [See example outputs](examples/healthcare-ibmi-migration/)
+**Who this is for**: Solutions Architects, Consultants, Enterprise Architects, Technical Pre-Sales, and Engineering Managers who need consistent, high-quality deliverables.
+
+**Version**: 1.0.0 | **Owner**: [Modular Earth LLC](https://github.com/Modular-Earth-LLC) | **Validated**: 9-skill end-to-end against a HIPAA-compliant healthcare IBMi migration (500+ users). [See example outputs](examples/healthcare-ibmi-migration/) | [Changelog](CHANGELOG.md)
 
 ---
 
