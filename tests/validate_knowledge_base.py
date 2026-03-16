@@ -2,161 +2,165 @@
 """
 Validate Knowledge Base JSON Files Against Schemas
 
-This script validates all knowledge base JSON files against their JSON schemas
-to ensure data integrity and catch errors early.
+Auto-discovers all .schema.json files in knowledge_base/schemas/ and validates
+corresponding KB files against them. Uses Draft 2020-12 JSON Schema.
 
 Usage:
     python tests/validate_knowledge_base.py
     python tests/validate_knowledge_base.py --file system_config
+    python tests/validate_knowledge_base.py --verbose
 """
 
+import argparse
 import json
 import sys
 from pathlib import Path
-from typing import Dict, Tuple
 
 try:
-    import jsonschema
-    from jsonschema import validate, ValidationError
+    from jsonschema import Draft202012Validator, ValidationError
 except ImportError:
-    print("[ERROR] jsonschema library not installed")
-    print("Install with: pip install jsonschema")
+    print("[ERROR] jsonschema library not installed or version too old")
+    print("Install with: pip install 'jsonschema>=4.17'")
     sys.exit(1)
 
 
-def load_json_file(file_path: Path) -> Dict:
-    """Load JSON file and return data."""
-    try:
-        with open(file_path, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except json.JSONDecodeError as e:
-        print(f"[ERROR] Invalid JSON in {file_path}: {e}")
-        return None
-    except FileNotFoundError:
-        print(f"[ERROR] File not found: {file_path}")
-        return None
+REPO_ROOT = Path(__file__).parent.parent
+SCHEMA_DIR = REPO_ROOT / "knowledge_base" / "schemas"
+KB_DIR = REPO_ROOT / "knowledge_base"
 
 
-def validate_json_file(data_file: Path, schema_file: Path) -> Tuple[bool, str]:
-    """Validate JSON data against schema."""
-    
+def discover_schemas():
+    """Auto-discover all .schema.json files and map to their data files."""
+    mappings = []
+    for schema_file in sorted(SCHEMA_DIR.glob("*.schema.json")):
+        stem = schema_file.stem  # e.g., "system_config.schema"
+        name = stem.replace(".schema", "")  # e.g., "system_config"
+
+        # Special case: .repo-metadata.schema.json -> .repo-metadata.json in repo root
+        if name == ".repo-metadata":
+            data_file = REPO_ROOT / ".repo-metadata.json"
+        else:
+            data_file = KB_DIR / f"{name}.json"
+
+        mappings.append({
+            "name": name,
+            "schema_file": schema_file,
+            "data_file": data_file,
+        })
+
+    return mappings
+
+
+def validate_file(data_file, schema_file, verbose=False):
+    """Validate a JSON data file against its schema using Draft202012Validator."""
     # Load schema
-    schema = load_json_file(schema_file)
-    if schema is None:
-        return False, f"Failed to load schema: {schema_file}"
-    
-    # Load data
-    data = load_json_file(data_file)
-    if data is None:
-        return False, f"Failed to load data file: {data_file}"
-    
-    # Validate
     try:
-        validate(instance=data, schema=schema)
-        return True, "Valid"
-    except ValidationError as e:
-        return False, f"Validation error: {e.message}\nPath: {' -> '.join(str(p) for p in e.path)}"
-    except Exception as e:
-        return False, f"Unexpected error: {str(e)}"
+        with open(schema_file, "r", encoding="utf-8") as f:
+            schema = json.load(f)
+    except (json.JSONDecodeError, FileNotFoundError) as e:
+        return "FAIL", f"Failed to load schema: {e}"
+
+    # Load data
+    try:
+        with open(data_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except json.JSONDecodeError as e:
+        return "FAIL", f"Invalid JSON: {e}"
+    except FileNotFoundError:
+        return "FAIL", f"Data file not found: {data_file}"
+
+    # Validate with Draft 2020-12
+    validator = Draft202012Validator(schema)
+    errors = list(validator.iter_errors(data))
+
+    if not errors:
+        return "PASS", "Valid"
+
+    # Format errors
+    messages = []
+    for err in errors:
+        path = " -> ".join(str(p) for p in err.absolute_path) or "(root)"
+        if verbose:
+            messages.append(f"  Path: {path}\n  Error: {err.message}")
+        else:
+            messages.append(f"  [{path}] {err.message}")
+
+    return "FAIL", "\n".join(messages)
 
 
 def main():
-    """Main validation function."""
-    
-    # Define files to validate
-    validations = [
-        {
-            "name": "System Configuration",
-            "data": Path("knowledge_base/system_config.json"),
-            "schema": Path("knowledge_base/schemas/system_config.schema.json")
-        },
-        {
-            "name": "User Requirements",
-            "data": Path("knowledge_base/user_requirements.json"),
-            "schema": Path("knowledge_base/schemas/user_requirements.schema.json")
-        },
-        {
-            "name": "Design Decisions",
-            "data": Path("knowledge_base/design_decisions.json"),
-            "schema": Path("knowledge_base/schemas/design_decisions.schema.json")
-        }
-    ]
-    
-    print("=" * 60)
-    print("Knowledge Base Validation")
-    print("=" * 60)
-    print()
-    
-    # Check if running from project root
-    if not Path("knowledge_base").exists():
-        print("[ERROR] Please run from project root directory")
-        print("        Current directory should contain 'knowledge_base/' folder")
+    parser = argparse.ArgumentParser(description="Validate KB files against schemas")
+    parser.add_argument("--file", help="Validate single file (e.g., --file system_config)")
+    parser.add_argument("--verbose", action="store_true", help="Show detailed JSON paths")
+    args = parser.parse_args()
+
+    # Check we're in the right place
+    if not SCHEMA_DIR.exists():
+        print("[ERROR] Cannot find knowledge_base/schemas/ directory")
+        print("Run from the project root directory.")
         sys.exit(1)
-    
-    all_valid = True
+
+    mappings = discover_schemas()
+
+    # Filter if --file specified
+    if args.file:
+        mappings = [m for m in mappings if m["name"] == args.file]
+        if not mappings:
+            print(f"[ERROR] No schema found for '{args.file}'")
+            print(f"Available: {', '.join(m['name'] for m in discover_schemas())}")
+            sys.exit(1)
+
+    print("=" * 60)
+    print("Knowledge Base Validation (Draft 2020-12)")
+    print("=" * 60)
+    print()
+
     results = []
-    
-    # Validate each file
-    for item in validations:
-        name = item["name"]
-        data_file = item["data"]
-        schema_file = item["schema"]
-        
-        print(f"Validating {name}...")
-        print(f"  Data: {data_file}")
-        print(f"  Schema: {schema_file}")
-        
-        # Check if data file exists
+
+    for mapping in mappings:
+        name = mapping["name"]
+        schema_file = mapping["schema_file"]
+        data_file = mapping["data_file"]
+
+        print(f"  {name}:")
+
+        # Check if data file exists — SKIP gracefully if not
         if not data_file.exists():
-            print(f"  [SKIP] Data file not found (may not exist yet)")
+            print(f"    [SKIP] {data_file.name} does not exist (created at runtime)")
+            results.append(("SKIP", name))
             print()
-            results.append({"name": name, "status": "SKIP", "message": "File not found"})
             continue
-        
-        # Check if schema exists
-        if not schema_file.exists():
-            print(f"  [FAIL] Schema file not found: {schema_file}")
-            print()
-            results.append({"name": name, "status": "FAIL", "message": "Schema not found"})
-            all_valid = False
-            continue
-        
-        # Validate
-        is_valid, message = validate_json_file(data_file, schema_file)
-        
-        if is_valid:
-            print(f"  [PASS] {message}")
-            results.append({"name": name, "status": "PASS", "message": message})
+
+        status, message = validate_file(data_file, schema_file, args.verbose)
+        if status == "PASS":
+            print(f"    [PASS] {message}")
         else:
-            print(f"  [FAIL] {message}")
-            results.append({"name": name, "status": "FAIL", "message": message})
-            all_valid = False
-        
+            print(f"    [FAIL]")
+            for line in message.split("\n"):
+                print(f"    {line}")
+
+        results.append((status, name))
         print()
-    
+
     # Summary
+    passed = sum(1 for s, _ in results if s == "PASS")
+    failed = sum(1 for s, _ in results if s == "FAIL")
+    skipped = sum(1 for s, _ in results if s == "SKIP")
+
     print("=" * 60)
-    print("Validation Summary")
+    print(f"Results: {passed} PASS, {failed} FAIL, {skipped} SKIP")
     print("=" * 60)
-    print()
-    
-    passed = sum(1 for r in results if r["status"] == "PASS")
-    failed = sum(1 for r in results if r["status"] == "FAIL")
-    skipped = sum(1 for r in results if r["status"] == "SKIP")
-    
-    print(f"Total: {len(results)} files")
-    print(f"[PASS] Passed: {passed}")
-    print(f"[FAIL] Failed: {failed}")
-    print(f"[SKIP] Skipped: {skipped}")
-    print()
-    
-    if all_valid:
-        print("[SUCCESS] All knowledge base files are valid!")
-        return 0
+
+    if failed > 0:
+        print("\nFailed files:")
+        for status, name in results:
+            if status == "FAIL":
+                print(f"  - {name}")
+        sys.exit(1)
     else:
-        print("[WARNING] Some validations failed. Please fix errors above.")
-        return 1
+        print("\nAll validated files passed.")
+        sys.exit(0)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
