@@ -1,60 +1,45 @@
-# Knowledge Base Validation Workflow
-# 
-# This workflow validates JSON files in knowledge_base/ against their schemas
-# to ensure data integrity and catch errors early.
-#
-# Status: READY TO ENABLE
-# To enable: Uncomment the 'on:' section below
-#
-# Note: Currently disabled. KB domain files are generated during skill execution.
-# Enable when you want to enforce schema validation on commits.
+name: QA Validation
 
-# Uncomment to enable:
-# on:
-#   push:
-#     branches: [ main, develop ]
-#     paths:
-#       - 'knowledge_base/*.json'
-#       - 'knowledge_base/schemas/*.json'
-#   pull_request:
-#     branches: [ main ]
-#     paths:
-#       - 'knowledge_base/*.json'
-#       - 'knowledge_base/schemas/*.json'
-
-# Manually triggerable
 on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'knowledge_base/schemas/**'
+      - 'skills/**'
+      - 'agents/**'
+      - '.claude-plugin/**'
+      - 'tests/**'
+      - 'CLAUDE.md'
+      - '.repo-metadata.json'
   workflow_dispatch:
 
 jobs:
   validate:
     runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install jsonschema
-    
-    - name: Validate knowledge base JSON files
-      run: |
-        python tests/validate_knowledge_base.py
-    
-    - name: Report results
-      if: always()
-      run: |
-        echo "Validation complete. Check output above for results."
 
-# Future enhancements:
-# - Add markdown linting
-# - Add link checking
-# - Add security scanning
-# - Add prompt engineering validation
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install jsonschema
+
+      - name: Schema validation
+        run: python tests/validate_knowledge_base.py
+
+      - name: Consistency validation
+        run: python tests/validate_consistency.py
+
+      - name: Plugin structure validation
+        run: python tests/test_plugin_structure.py
+
+      - name: Engagement flow validation
+        run: python tests/test_engagement_flow.py
+
+      - name: Skill independence validation
+        run: python tests/test_skill_independence.py
