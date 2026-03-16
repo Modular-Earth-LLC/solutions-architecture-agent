@@ -54,11 +54,30 @@
 
 ---
 
-## Commit 7: Second Case Study — Streamlined Greenfield
-*(pending)*
+## Commit 7: CONTRIBUTING.md Overhaul
+- Rewrote as single source of truth: project structure, AI-first conventions, complete skill guide
+- Deduplicated: tests/README.md, docs/getting-started.md, copilot-instructions.md now reference CONTRIBUTING.md
 
-## Commit 8: Release Preparation
-*(pending)*
+## Commit 8: QA Cycle 1 — Stakeholder Reviews
+- 4 personas: CTO, Distinguished Architect, Marketplace Reviewer, SA Consultant
+- Added examples/healthcare-ibmi-migration/ (10 KB files + proposal)
+- Documented LLM-as-judge limitation and structural-only testing in DESIGN_RATIONALE.md
+- Updated system_config.json version to 1.0.0
+
+## Commit 9: QA Cycle 2 — UX/Developer Experience
+- 4 personas: First-Time User, AI Coding Assistant, Director of Engineering, Daily Practitioner
+- Added badges, "Re-running Skills" workflow, example links, canonical SKILL.md reference
+- Renamed "Open Questions" to "Product Backlog"
+
+## Commit 10: QA Cycle 3 — Final Polish
+- Fixed broken link (DESIGN_RATIONALE.md archive path)
+- Fixed badge label, setup-python version, .repo-metadata.json language and scripts
+- Added CODE_OF_CONDUCT.md
+
+## Commit 11: Release Preparation
+- Cleaned KB test data (2 PASS, 0 FAIL, 9 SKIP)
+- Updated NEXT_STEPS.md with post-release roadmap
+- Created Copilot LLM-as-judge review prompt
 
 ---
 
@@ -66,7 +85,7 @@
 
 | Check | Status |
 |-------|--------|
-| `python tests/validate_knowledge_base.py` | 11 PASS, 0 FAIL (with Phase 7 data); 2 PASS, 0 FAIL, 9 SKIP after cleanup |
+| `python tests/validate_knowledge_base.py` | 2 PASS, 0 FAIL, 9 SKIP (clean state) |
 | `python tests/validate_consistency.py` | 5 PASS, 0 FAIL |
 | `python tests/test_plugin_structure.py` | 7 PASS, 0 FAIL |
 | `python tests/test_engagement_flow.py` | 5 PASS, 0 FAIL |
@@ -77,6 +96,8 @@
 | All skills pass independence test | Verified |
 | DESIGN_RATIONALE.md captures archived content | Verified |
 | Sub-agent runtime test | PASS — both return structured output |
-| Second case study (greenfield) | Pending |
+| Examples directory with sample engagement | Verified (10 files + proposal) |
+| 3 QA cycles completed | 12 personas, 30+ fixes |
+| CODE_OF_CONDUCT.md | Created |
 | Git tag v1.0.0 | Awaiting human approval |
 | GitHub release | Awaiting human approval |

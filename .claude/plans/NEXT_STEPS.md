@@ -1,53 +1,44 @@
-# NEXT STEPS — Phase 9 Roadmap
+# NEXT STEPS — Post-Phase 9
 
 **Date**: 2026-03-16
-**Status**: Phase 8 complete. Phase 9 ready to plan.
+**Status**: Phase 9 complete. Ready for v1.0.0 release (awaiting human approval).
 
-## Phase 8: Documentation, Packaging & Plugin Testing — COMPLETE
-
-**Result**: All 17 files updated across 7 commits. Documentation fully rewritten for v1.0.0 plugin architecture.
+## Phase 9: QA Automation & Release Readiness — COMPLETE
 
 ### What Was Done
-1. **Metadata alignment** — `.repo-metadata.json` version "1.0.0", schemas 11, status updated
-2. **README.md rewrite** — 158 lines (was 365), accurate quick-start, skill table, repo structure
-3. **ARCHITECTURE.md rewrite** — 291 lines (was 392), 5 Mermaid diagrams, design decisions
-4. **CONTRIBUTING.md rewrite** — 241 lines (was 815), practical skill creation guide with envelope fields + schema alignment rules
-5. **docs/ overhaul** — 5 files rewritten/updated, all dead links removed
-6. **GitHub config** — tests/README, copilot-instructions, PR template, skill_request issue template, architecture template IaC section
-7. **Plans updated** — NEXT_STEPS and phase-8-context reflect completion
+1. **Design rationale** — extracted 141-requirement traceability, research citations, personas, sales principles from archived requirements
+2. **3 new test scripts** — plugin structure (7 checks), engagement flow (5 checks), skill independence (6 checks)
+3. **Skill independence** — replaced hard STOP directives in 7 skills with advisory language + $ARGUMENTS alternative
+4. **Time estimates** — removed all unsubstantiated duration claims from docs
+5. **CI/CD workflow** — rewrote with programmatic triggers, 5 named test steps, no commented-out code
+6. **Sub-agent runtime testing** — both sub-agents return structured output matching schema expectations
+7. **CONTRIBUTING.md overhaul** — single source of truth, AI-first conventions, cross-doc deduplication
+8. **3 QA cycles** — 12 stakeholder personas reviewed the codebase; 30+ issues fixed across code, docs, and packaging
+9. **Examples directory** — complete healthcare IBMi migration case study (10 KB files + proposal)
+10. **Release prep** — CODE_OF_CONDUCT.md, badges, clean KB state, all tests pass
 
-### Key Metrics
-- Net documentation reduction: ~2,700 → ~1,700 lines
-- 0 references to old 23-agent architecture remaining
-- `.repo-metadata.json` version = `plugin.json` version = "1.0.0"
-- `python tests/validate_knowledge_base.py` — 11 PASS, 0 FAIL (with test data)
-- `python tests/validate_consistency.py` — 5 PASS, 0 FAIL
+### Validation Results (Clean State)
+- `validate_knowledge_base.py`: 2 PASS, 0 FAIL, 9 SKIP
+- `validate_consistency.py`: 5 PASS, 0 FAIL
+- `test_plugin_structure.py`: 7 PASS, 0 FAIL
+- `test_engagement_flow.py`: 5 PASS, 0 FAIL
+- `test_skill_independence.py`: 6 PASS, 0 FAIL
 
-### Deferred to Phase 9
-- **Plugin installation testing** (`claude --plugin-dir .`) — requires interactive Claude Code session
-- **Sub-agent runtime testing** — parallel-wa-reviewer and stride-analyzer Agent tool invocation
-- **Skill smoke testing** — invoke skills via plugin prefix
+## Post-Release Roadmap
 
-## Phase 9: QA Automation & Release Readiness
+### Near-Term (v1.1.0)
+- **Plugin installation testing** — `claude --plugin-dir .` end-to-end
+- **Second case study** — greenfield AI project (different domain from healthcare)
+- **system_config.json cleanup** — decompose stale 779-line file into focused configs
+- **Behavioral tests** — parameterized integration test feeding synthetic $ARGUMENTS
 
-**Goal**: Automate QA, test plugin installation, finalize for release.
+### Medium-Term (v1.2.0)
+- **Marketplace submission** — add `categories`, engine version to plugin.json per Anthropic spec
+- **Review calibration** — compare LLM-as-judge scores against human expert assessments
+- **Multi-engagement management** — engagement archival workflow, namespace support
+- **Proposal templates** — sample output per proposal type (discovery, implementation, internal, pitch)
 
-### What Happens
-1. **Plugin installation testing** — `claude --plugin-dir .` → verify all 9 skills discoverable as `solutions-architecture-agent:skill-name`
-2. **Sub-agent runtime testing** — invoke parallel-wa-reviewer and stride-analyzer via Agent tool
-3. **Test infrastructure** — `tests/test_plugin_structure.py` (plugin packaging), `tests/test_engagement_flow.py` (E2E lifecycle)
-4. **`/qa` skill** — single command to run all validation
-5. **Second case study** — validate genericity with a greenfield AI project (different domain from Phase 7's healthcare IBMi)
-6. **Self-review dogfooding** — run `/review` on the agent's own architecture docs
-7. **Release** — tag v1.0.0, create GitHub release, test install from GitHub URL
-
-### Phase 8 Findings That Inform Phase 9
-- Documentation is now accurate — Phase 9 can focus purely on testing and automation
-- Plugin install and sub-agent runtime testing were deferred from Phase 8 Part A (need interactive session)
-- All schema validation and consistency checks are already solid — extend, don't rewrite
-- Review score thresholds (>= 7.5 PASS, 5.0-7.4 CONDITIONAL, < 5.0 FAIL) should be codified in test scripts
-
-## Immediate Next Action
-
-1. **Plan Phase 9** — enter plan mode, design test automation and release plan
-2. **Execute Phase 9** — QA automation, plugin testing, release
+### Long-Term (v2.0.0)
+- **Engineering Agent** — consumes SA Agent outputs, generates implementation artifacts
+- **Engagement dashboard** — readiness checks, confidence visualization
+- **Fine-tuned review model** — calibrated against human SA reviewer corpus
