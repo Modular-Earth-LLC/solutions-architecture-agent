@@ -1,77 +1,75 @@
-# NEXT STEPS — Phases 7-9 Roadmap
+# NEXT STEPS — Phases 8-9 Roadmap
 
-**Date**: 2026-03-15
-**Status**: Phase 6 complete. Phase 7 plan in progress.
+**Date**: 2026-03-16
+**Status**: Phase 7 complete. Phase 8 ready to plan.
 
-## Phase 7: Integration Testing & Optimization
+## Phase 7: Integration Testing & Optimization — COMPLETE
 
-**Goal**: Validate the SA agent end-to-end against the Legacy System Transformation case study (IBMi/AS/400 green screen modernization), fix every bug/gap discovered, and use findings to improve the agent for all use cases.
+**Result**: All exit criteria met. See `phase-7-results.md` for full details.
 
-### What Happens
-1. Run the full greenfield engagement flow against Use Case 1: `/requirements` -> `/architecture` -> `/data-model` -> `/security-review` -> `/integration-plan` -> `/estimate` -> `/project-plan` -> `/proposal` -> `/review`
-2. Validate every KB output against schemas (`validate_knowledge_base.py`)
-3. Validate cross-file consistency (`validate_consistency.py`)
-4. Run `/review` on each deliverable — target >= 7.5 on all 5 dimensions
-5. Fix every bug, schema gap, and skill deficiency discovered
-6. Re-run until all deliverables pass quality bar
-7. Test error paths: missing prerequisites, draft files, scope violations
-8. Record all issues and fixes in `phase-7-results.md`
+- 11/11 KB schema validations PASS, 5/5 consistency checks PASS
+- 4 reviews all PASS (scores: 8.4, 8.1, 8.1, 7.9; avg 8.125)
+- 2 issues found and fixed (both generic): `$depends_on` consistency, integration_plan DAG ordering
+- All Phase 6 deferred issues (A1-A6) resolved
+- Error paths verified (D1-D4)
+- Case study: IBMi/AS/400 healthcare modernization (migration flow, HIPAA, 500+ users)
 
-### Key Considerations
-- The legacy modernization case exercises every skill (legacy integration, IAM, HCD, tech stack, change management)
-- Fixes should improve the agent generically, not over-fit to one domain (technology-agnostic principle)
-- All deferred issues from Phase 6 review (listed in `phase-6-results.md`) must be addressed
-- SKILL.md Section 5 output reconciliation with schema field names happens here
+### Key Learnings for Downstream Phases
+1. **Skills work end-to-end** — all 9 skills produce schema-valid output in correct flow order
+2. **Sub-agents not yet tested at runtime** — parallel-wa-reviewer and stride-analyzer output formats validated via schema, but Agent tool invocation deferred
+3. **Plugin not yet tested as installed plugin** — skills executed manually; need `claude --plugin-dir .` validation
+4. **WebSearch not exercised** — technology recommendations from training data only; real engagements should verify
+5. **Proposal output is substantial** (972 lines) — quality is high but needs human review before any client delivery
+6. **KB files get large** — security_review ~300 lines, architecture ~200 lines; selective section loading (already in proposal SKILL.md) should be a pattern
 
 ## Phase 8: Documentation, Packaging & Plans Cleanup
 
-**Goal**: Make the plugin crystal clear for users, marketplace-ready, and clean up all development artifacts.
+**Goal**: Make the plugin installable, documented, and clean. Archive development artifacts.
 
 ### What Happens
-1. **Deep research** on Claude Code plugin packaging (plugin vs .claude/ separation of concerns)
-2. **Documentation overhaul**: Rewrite README.md, ARCHITECTURE.md, CONTRIBUTING.md, docs/getting-started.md
-3. **Redundancy reduction**: Eliminate repetition across all documentation, clear separation of concerns with references to source of truth
-4. **Plans cleanup**: Extract useful info from `.claude/plans/` into core docs, archive/delete old plans, keep interview-related files
-5. **Plugin packaging**: Verify `.claude-plugin/plugin.json`, test local install, test GitHub install
-6. **Documentation quality**: Elegant, minimalistic, AI-first, GitHub best practices
-7. **Iterative QA**: Fix all issues before moving to Phase 9
+1. **Plugin installation testing**: `claude --plugin-dir .` — verify all 9 skills discoverable as `solutions-architecture-agent:skill-name`
+2. **Sub-agent runtime testing**: Invoke parallel-wa-reviewer and stride-analyzer via Agent tool
+3. **Documentation overhaul**: Rewrite README.md, ARCHITECTURE.md, CONTRIBUTING.md, docs/getting-started.md
+4. **Plans cleanup**: Archive old development plans, keep interview references and results files
+5. **Plugin manifest verification**: `.claude-plugin/plugin.json` matches .repo-metadata.json
+6. **GitHub configuration**: PR template, issue templates, CODEOWNERS
+7. **Phase 6 deferred doc issues**: Fix tests/README.md references, add IaC section to architecture template
 
-### Files to Keep in `.claude/plans/references/`
-- `solution-architect-case-study-and-interview.md` (active interview prep)
-- `solution-architect-case-study-and-interview.pdf` (source document)
-- `solutions-architecture-first-assignment-planning-prompt.md` (active interview prep)
+### Phase 7 Findings That Inform Phase 8
+- Envelope fields note (A1) should be documented in CONTRIBUTING.md for skill authors
+- Schema-to-SKILL.md alignment rules should be in CONTRIBUTING.md
+- Integration_plan can run before architecture in migration flow — document in engagement lifecycle docs
+- KB test data from Phase 7 can serve as example outputs in documentation
+
+### Exit Criteria
+- [ ] Plugin loads via `claude --plugin-dir .`
+- [ ] All 9 skills invocable with plugin prefix
+- [ ] Sub-agents tested at runtime
+- [ ] README under 200 lines, clear quick-start
+- [ ] ARCHITECTURE.md with Mermaid diagrams
+- [ ] CONTRIBUTING.md sufficient to add a 10th skill
+- [ ] All documentation free of external filesystem references
+- [ ] .repo-metadata.json version matches plugin.json
 
 ## Phase 9: QA Automation & Release Readiness
 
-**Goal**: Create repeatable QA infrastructure, finalize for Windows CLI use + future marketplace deployment.
+**Goal**: Automate QA, finalize for release.
 
 ### What Happens
-1. **Test infrastructure**: Unit tests, E2E integration tests, stored in `tests/` with highest coding standards
-2. **Claude command**: Single `/qa` command to run full system validation
-3. **Final QA pass**: Run all automated + manual checks
-4. **Local readiness**: Verify on Windows with Claude Code CLI
-5. **Marketplace readiness**: Format for Anthropic submission
-6. **Self-review**: Run `/review` on the agent's own outputs (dogfooding)
-7. **Release**: Tag v1.0.0, create GitHub release
+1. **Test infrastructure**: `tests/test_plugin_structure.py` (plugin packaging), `tests/test_engagement_flow.py` (E2E lifecycle)
+2. **`/qa` skill**: Single command to run all validation
+3. **Second case study**: Validate genericity with a greenfield AI project
+4. **Self-review dogfooding**: Run `/review` on the agent's own architecture docs
+5. **Release**: Tag v1.0.0, create GitHub release, test install from GitHub URL
 
-### Test Infrastructure
-- `tests/validate_knowledge_base.py` — Schema validation (exists)
-- `tests/validate_consistency.py` — Cross-file consistency (exists)
-- `tests/test_skill_outputs.py` — Skill output validation against schemas (new)
-- `tests/test_engagement_flow.py` — E2E engagement lifecycle (new)
-- `tests/test_plugin_structure.py` — Plugin packaging validation (new)
-- `/qa` command — Runs all of the above in sequence
+### Phase 7 Findings That Inform Phase 9
+- Phase 7's manual validation process should be automated into test scripts
+- The $depends_on DAG check and schema validation are already solid — extend, don't rewrite
+- Review score thresholds (>= 7.5 PASS, 5.0-7.4 CONDITIONAL, < 5.0 FAIL) should be codified
+- A second case study (greenfield, different domain) would prove genericity
 
-## Immediate Next Actions (for Paul)
+## Immediate Next Action
 
-1. **Review Phase 7 plan** (being created now in plan mode)
-2. **Approve or adjust** the plan before execution begins
-3. **Run Phase 7** — execute the plan, iterating until quality bar met
-4. **Phases 8-9** follow sequentially, each with its own plan-then-execute cycle
-
-## Cross-Phase Alignment
-
-- Phase 7 discovers issues -> Phase 8 documents the fixes -> Phase 9 automates the checks
-- All three phases share the QA principle: fix everything before moving on
-- Testing infrastructure built in Phase 9 codifies what was manually validated in Phase 7
-- Documentation in Phase 8 captures what was learned in Phase 7
+1. **Plan Phase 8** — enter plan mode, design detailed implementation plan
+2. **Execute Phase 8** — documentation, packaging, plugin testing
+3. **Plan + Execute Phase 9** — QA automation and release
