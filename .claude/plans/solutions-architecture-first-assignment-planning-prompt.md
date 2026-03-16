@@ -185,8 +185,10 @@ The final deliverable is a Markdown file that must:
 1. **Render correctly on GitHub.com** — GitHub uses GitHub Flavored Markdown (GFM), a superset of CommonMark. Research current GFM capabilities via `WebSearch` before writing.
 2. **Support future Word export** — use standard GFM syntax that pandoc handles cleanly. Avoid raw HTML except `<details>` for collapsible sections.
 3. **Render Mermaid diagrams natively** — GitHub renders ` ```mermaid ` code blocks as diagrams. Use this for all architecture diagrams.
-4. **Use GFM features**: tables, task lists, footnotes, alerts (`> [!NOTE]`, `> [!WARNING]`), fenced code blocks.
-5. **Avoid**: inline HTML tables (use GFM tables), raw `<img>` tags (use `![alt](url)`), LaTeX math (spell out equations in text or use code blocks).
+4. **Use GFM features**: tables, task lists, footnotes, fenced code blocks.
+5. **For callouts**: use `> **Note:** ...` instead of `> [!NOTE]` — the alert syntax renders on GitHub but pandoc exports it as plain blockquote, losing the styling. Bold-prefixed blockquotes work in both.
+6. **Avoid**: `<details>`/`<summary>` (stripped by pandoc), inline HTML tables (use GFM pipe tables), raw `<img>` tags (use `![alt](url)`), LaTeX math (spell out equations or use code blocks).
+7. **Document size**: keep the final deliverable under 300 KB for reliable GitHub rendering. GitHub truncates README rendering at 512 KB; blob view handles ~1 MB but degrades.
 
 ---
 
