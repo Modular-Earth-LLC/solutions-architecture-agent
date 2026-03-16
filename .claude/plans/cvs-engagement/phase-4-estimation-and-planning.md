@@ -14,6 +14,8 @@ Produce comprehensive estimation, team composition, and phased project plan for 
 
 This phase addresses the **Change Management** key consideration by embedding it within the project plan rather than treating it as a separate workstream. It also includes cloud infrastructure cost modeling with verified GCP pricing.
 
+**Interview depth target**: Change Management may be the focus of one 45-minute interview (likely paired with HCD). Cost estimates with cited authoritative sources gain importance for deep questioning — interviewers may probe specific cost assumptions and confidence levels.
+
 ## Input Dependencies
 
 - `knowledge_base/architecture.json` — Phase 2 architecture (what to estimate)
@@ -39,6 +41,14 @@ Adapt this plan based on findings, corrections, and insights from prior phases. 
 - Phase 1's training needs — what does change management require?
 - Phase 0's change management research (Cluster 6)
 - Any assumption corrections from prior phases
+
+**Phase 1 Insights for Estimation & Planning**:
+- Change management costs must include: F-key mapping laminated cards, training sandbox environment, champion network setup, monthly NPS surveys, dual-UI maintenance during transition
+- 5 personas with mapped change resistance levels: Claims Processor (HIGH), Clinical Pharmacist (MODERATE), Benefits Analyst (LOW), IT Admin (LOW), New Hire (NONE)
+- Member Eligibility Lookup recommended as first strangler fig migration target — lowest risk
+- Claims Adjudication is highest risk migration — requires extensive performance validation
+- Green screen escape hatch adds temporary dual-UI development cost — budget accordingly
+- Onboarding time target: 42 days → 10 days (SC-001) — training program must be costed
 
 ## Context Files
 

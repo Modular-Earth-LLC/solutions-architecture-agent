@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-This engagement produces a **Solution Architecture Document** for CVS Health's Legacy System Transformation initiative — modernizing IBMi (AS/400) green screen applications with new UI/UX. The document is a take-home assignment for the **Principal Architect, Solution Engineering and Automation** role. It will be presented to a hiring panel in a 15-20 minute presentation followed by Q&A.
+This engagement produces a **Solution Architecture Document** for CVS Health's Legacy System Transformation initiative — modernizing IBMi (AS/400) green screen applications with new UI/UX. The document is a take-home assignment for the **Principal Architect, Solution Engineering and Automation** role. It will be sent to the hiring manager before the interview stage as pre-interview reading. The interview itself consists of **three separate 45-minute interviews**, each with a different interviewer drilling into different components of the solution.
 
 The deliverable must address 5 key considerations: Legacy System Integration, IAM Strategy, HCD Design Principles, Technology Stack, and Change Management. It must also demonstrate dual competency: principal architect leadership AND thought leadership over the GenAI data science team Paul would manage.
 
@@ -63,13 +63,13 @@ graph TD
 | Phase | Title | Skills | Complexity | Dependencies | Key Output |
 |-------|-------|--------|-----------|--------------|------------|
 | **0** | Research & Requirements | `/requirements`, `/review` | Large | None | Research findings + `requirements.json` | **COMPLETE** (8.3/10 review score, 54 sources, 13 FRs) |
-| **1** | UX & Workflow Design | None (design doc) | Medium | Phase 0 | UX design document |
+| **1** | UX & Workflow Design | None (design doc) | Medium | Phase 0 | UX design document | **COMPLETE** (8.3/10 self-review, 5 personas, 6 design principles, 2 wireframes, 7 assumptions) |
 | **2** | Solution Architecture | `/integration-plan`, `/architecture`, `/data-model`, `/review` | Very Large | Phases 0, 1 | `integration_plan.json` + `architecture.json` + `data_model.json` |
 | **3** | Security & IAM | `/security-review`, `/review` | Large | Phase 2 | `security_review.json` + IAM strategy |
 | **4** | Estimation & Planning | `/estimate`, `/project-plan`, `/review` | Large | Phases 2, 3 | `estimate.json` + `project_plan.json` |
 | **5** | AI Methodology | None (documentation) | Medium | Phases 0-4 | AI methodology section + citations |
 | **6** | Deliverable Assembly | `/review` (+ optional `/proposal`) | Very Large | All prior phases | Final `solution-architecture-document.md` |
-| **7** | Interview Prep | None (preparation) | Large | Phase 6 | Presentation script + Q&A + study guide |
+| **7** | Interview Prep | None (preparation) | Large | Phase 6 | 3 interview prep guides + Q&A bank + study guide + cheat sheets |
 
 ---
 
@@ -262,7 +262,7 @@ When Paul says "let's execute Phase N":
 2. **GCP as CVS's primary cloud**: CVS JD emphasizes GCP (7+ years preferred). Paul's cloud narrative is AWS-primary. Must research GCP equivalents deeply and frame AWS experience as transferable. GCP is selected because CVS uses it, not as a default vendor preference (per CLAUDE.md: "Technology-agnostic: recommend best-fit via WebSearch, never default to specific vendors").
 3. **Healthcare compliance**: HIPAA is the baseline. CVS operates in pharmacy benefits (PBM), which also touches HITECH, state privacy laws, and DEA regulations for controlled substances.
 4. **Single Markdown deliverable**: Final output is one GFM-compatible Markdown document that exports cleanly to Word. Target < 300 KB.
-5. **Panel interview format**: 15-20 minute presentation + Q&A. Panel members each drill on individual key considerations.
+5. **Three 45-minute interviews**: The interview consists of three separate 45-minute sessions, each with a different interviewer drilling into different components. The solution architecture document is sent to the hiring manager before the interview stage. Supporting materials (KB files, research, design documents) are comprehensive; the final document sent to the hiring manager is concise and well-scoped. Each key consideration section must provide sufficient depth to sustain a full 45-minute focused interview.
 6. **Dual competency**: Paul must demonstrate both principal architect capability AND thought leadership for managing GenAI data scientists.
 7. **Honesty-first**: Paul's direct experience is cited with confidence. Researched knowledge is explicitly labeled. Assumptions are numbered and flagged for confirmation.
 8. **AI-assisted, human-owned**: The deliverable is Paul's work, assisted by AI tooling. Paul reviews and owns every section.
@@ -299,11 +299,16 @@ knowledge_base/                             ← KB artifacts produced by skills
 └── system_config.json                      ← READ-ONLY reference
 
 outputs/cvs-legacy-transformation/          ← Final deliverable
-└── solution-architecture-document.md       ← Phase 6
+└── solution-architecture-document.md       ← Phase 6 (sent to hiring manager pre-interview)
 
 private/interview-prep/                     ← Phase 7 (gitignored)
-├── presentation-script.md
-├── study-guide.md
-├── qa-bank.md
-└── cheat-sheet.md
+├── interview-1-prep.md                     ← Interview-specific prep guide
+├── interview-2-prep.md                     ← Interview-specific prep guide
+├── interview-3-prep.md                     ← Interview-specific prep guide
+├── cross-interview-study-guide.md          ← Technology deep dives organized by interview
+├── qa-bank.md                              ← 125+ questions organized by likely interview grouping
+├── master-cheat-sheet.md                   ← Master quick reference
+├── interview-1-cheat-sheet.md              ← Interview-specific cheat sheet
+├── interview-2-cheat-sheet.md              ← Interview-specific cheat sheet
+└── interview-3-cheat-sheet.md              ← Interview-specific cheat sheet
 ```

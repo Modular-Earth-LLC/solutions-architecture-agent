@@ -2,7 +2,7 @@
 
 Use ultrathink for this phase. Engage extended reasoning before every major output.
 
-Perform deep web research using WebSearch before making any technical claims. Cite all sources with URLs. Cross-validate across multiple sources. IAM is one of the 5 key considerations with a dedicated panel driller — this section must be exceptionally thorough.
+Perform deep web research using WebSearch before making any technical claims. Cite all sources with URLs. Cross-validate across multiple sources. IAM may be the focus of one full 45-minute interview — this section must be exceptionally thorough, with sufficient depth to sustain 45 minutes of focused questioning from a security/IAM specialist.
 
 ## Objective
 
@@ -35,6 +35,13 @@ Adapt this plan based on findings, corrections, and insights from prior phases. 
 - Phase 2's GenAI pipeline architecture — what AI-specific security controls are needed?
 - Phase 1's accessibility requirements — auth flows must be accessible
 - Any assumption corrections from prior phases
+
+**Phase 1 Insights for Security & IAM**:
+- WCAG 2.2 AA 3.3.8 (Accessible Authentication): login flow must not require cognitive function tests (CAPTCHAs)
+- IT Administrator persona (Raj Patel) needs unified IAM dashboard showing both IBMi + cloud user profiles during transition
+- CVS has 120+ accessibility professionals — accessible auth flows are table stakes, not differentiators
+- DUR alert overrides require reason selection for audit trail — this feeds into HIPAA compliance logging
+- GenAI PA recommendations require access control: who can see AI-generated content, who can override
 
 ## Context Files
 
@@ -150,7 +157,7 @@ The security review should cover:
 ### Step 4: Write IAM Strategy Document
 Write to: `outputs/cvs-legacy-transformation/iam-strategy.md`
 
-This is the deepest section because IAM has a dedicated panel driller. Structure:
+This is the deepest section because IAM may be the focus of one full 45-minute interview. The IAM strategy document must sustain 45 minutes of focused questioning from a security/IAM specialist. Structure:
 
 ```markdown
 # IAM Strategy — CVS Legacy Transformation
@@ -250,6 +257,7 @@ Target >= 7.5/10 across all dimensions. Iterate if below threshold.
 - AI-specific security controls must reference OWASP Top 10 for LLMs
 - GCP security services must be accurately described
 - Zero trust model must be contextually appropriate (not generic)
+- IAM strategy document provides sufficient depth for a 45-minute interview
 
 ## Exit Criteria
 
@@ -287,7 +295,7 @@ After execution completes, save context for future phases:
 
 Paul: review the following before proceeding to Phase 4:
 - Security review: `knowledge_base/security_review.json`
-  - Is the STRIDE threat model thorough enough for a panel driller?
+  - Is the STRIDE threat model thorough enough for a 45-minute focused interview?
   - Are the compliance mappings accurate?
 - IAM strategy: `outputs/cvs-legacy-transformation/iam-strategy.md`
   - Does this section stand up to deep questioning from an IAM specialist?

@@ -18,6 +18,12 @@ The document must:
 - Demonstrate dual competency (architect + GenAI team leader)
 - Sound like Paul (collaborative, empirical, warm, solution-focused)
 - Be < 300 KB total file size
+- **Serve as pre-interview reading** for the hiring manager and interviewers — sent before the interview stage
+- **Each key consideration section must be self-contained** so an interviewer assigned to one topic can read only that section and have full context
+- **Cross-references between sections** so an IAM interviewer understands how IAM connects to architecture, HCD, etc.
+- **Executive summary must work as a standalone overview** for the hiring manager to assign interviewers to topics
+- **Each key consideration section must provide sufficient depth** for a 45-minute focused interview
+- Consider adding a **Reading Guide** at the top mapping sections to interview topics
 
 ## Input Dependencies
 
@@ -189,7 +195,7 @@ The document structure maps to the 5 key considerations plus supporting sections
 ---
 
 ## 5. Identity and Access Management Strategy
-[KEY CONSIDERATION 2 — panel driller topic]
+[KEY CONSIDERATION 2 — potential 45-minute interview topic]
 ### 5.1 IAM Architecture Overview
 [Identity flow diagram — Mermaid]
 ### 5.2 Authentication Strategy
@@ -344,7 +350,9 @@ After reviews and iterations:
 - Minimum score: >= 7.5/10 from each persona across all 5 dimensions (completeness, technical soundness, well-architected, clarity, feasibility)
 - Document renders correctly as GFM
 - File size < 300 KB
-- All 5 key considerations have dedicated sections
+- All 5 key considerations have dedicated sections with sufficient depth for 45-minute interviews
+- Each key consideration section is self-contained with cross-references to related sections
+- Executive summary works standalone for the hiring manager to assign interviewers
 - Mermaid diagrams render correctly (syntax validation)
 - Voice is consistently Paul's across all sections
 - Dual competency thread is visible in sections 4, 5, 6, 8, and 9
@@ -379,6 +387,13 @@ After execution completes, save context for future phases:
    - Review scores and feedback for Phase 7 (weaknesses to prepare for)
    - Any areas that were flagged during review that Paul should be prepared to defend
    - Voice and framing decisions that affect how Paul presents
+
+**Phase 1 Insights for Assembly**:
+- HCD section is a strength area — 6 design principles with cited cognitive science theories provide depth for the 45-minute interview
+- Wireframe descriptions for Claims Adjudication Dashboard and PA Workflow show concrete thinking, not just abstract principles
+- CVS brand alignment should reference their existing accessibility annotation kit methodology
+- Design principles section should be positioned prominently — Paul's Cognitive Science degree is a genuine differentiator
+- UX design document is comprehensive (65KB) — assembly should distill key elements, not reproduce in full
 
 3. **Update master-plan.md** if any structural changes to the engagement
 

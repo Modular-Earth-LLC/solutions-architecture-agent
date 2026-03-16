@@ -131,7 +131,7 @@ architecture practice and GenAI team leadership.
 - Human checkpoints after every phase ensured alignment
 
 ### Why This Matters for CVS Health
-This methodology demonstrates:
+This methodology demonstrates (framed as interview answers, not presentation bullets — each point should work as a standalone response in any of the three 45-minute interviews):
 1. **Architecture leadership**: I own and direct the AI, ensuring every
    recommendation reflects sound architectural judgment
 2. **GenAI team capability**: I can design, evaluate, and manage AI
@@ -177,7 +177,7 @@ Following [researched citation standard], AI-assisted content is attributed as:
 ### Step 5: Write Portfolio Summary
 Write to: `outputs/cvs-legacy-transformation/portfolio-narrative.md`
 
-This is a brief narrative connecting this engagement to Paul's broader architecture practice. It positions Paul for the interview:
+This is a brief narrative connecting this engagement to Paul's broader architecture practice. It positions Paul across all 3 interview contexts (architecture, HCD/change management, security/IAM) — not a single presentation:
 
 ```markdown
 # Portfolio Context
@@ -254,6 +254,11 @@ After execution completes, save context for future phases:
    - Voice and tone guidelines refined through this phase for Phase 6
    - Dual competency framing for Phase 7 (interview prep needs this narrative)
    - Specific things Paul said during methodology review that affect interview prep
+
+**Phase 1 Insights for AI Methodology**:
+- The GenAI PA recommendation panel wireframe is a strong "show, don't tell" example of human-AI collaboration
+- AI-assisted UX design (research synthesis, persona drafting, journey maps) demonstrates exactly the workflow Paul would bring to the GenAI DS team
+- CVS uses generative agent simulations for UX decisions (2.9M consented responses) — mention this as alignment with evidence-based AI approach
 
 3. **Update master-plan.md** if any structural changes to the engagement
 

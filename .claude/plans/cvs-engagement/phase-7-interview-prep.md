@@ -8,11 +8,15 @@ Perform web research using WebSearch for any technology or pattern in the soluti
 
 ## Objective
 
-Prepare Paul for the CVS Health Principal Architect interview. The interview is a 15-20 minute presentation of the solution architecture document, followed by panel Q&A where individual members drill on specific key considerations. This phase produces:
-1. Presentation script (15-20 minute talk track)
-2. Study guide (technology deep dives for every system in the architecture)
-3. Q&A bank (125+ questions across all key considerations)
-4. Cheat sheet (one-page quick reference)
+Prepare Paul for the CVS Health Principal Architect interview. The interview consists of **three separate 45-minute interviews**, each with a different interviewer drilling into different components of the solution. The solution architecture document is sent to the hiring manager before the interview stage — interviewers will have read it (or sections of it) before speaking with Paul.
+
+This phase produces:
+1. **3 Interview Prep Guides** — one per interview, each with topic overview, 40+ Q&A pairs, opening strategy, cheat sheet, and questions for the interviewer
+2. **Cross-Interview Study Guide** — technology deep dives organized by likely interview grouping
+3. **Q&A Bank** — 125+ questions reorganized by likely interview grouping (not just by topic)
+4. **3 Interview-Specific Cheat Sheets + 1 Master** — quick references for 30 minutes before each interview
+
+**Important**: Interview-specific guides cannot be fully finalized until Paul knows who the 3 interviewers are and what they focus on. This phase produces comprehensive materials + templates that can be quickly customized once interviewer assignments are known.
 
 Everything produced must be something Paul can confidently say based on his actual experience + the research conducted in this engagement. Nothing should require Paul to claim expertise he doesn't have.
 
@@ -35,6 +39,13 @@ Read ALL completed phase context summaries before executing. This phase has the 
 - Note review feedback that suggests potential weaknesses
 - Understand which decisions Paul made vs. which were AI-suggested
 - Map every technology and pattern to Paul's ability to discuss it
+
+**Phase 1 Insights for Interview Prep**:
+- HCD interview is Paul's strongest of the three — prepare detailed answers for: "How does your Cognitive Science background inform your design approach?" and "How do you handle resistance from expert users faster on the old system?"
+- Six design principles with cited theories (Hick's Law, Fitts's Law, Dreyfus model, Johnson-Laird, Reason's taxonomy, Miller's Law) provide deep interview content
+- Command palette as bridge pattern is a concrete, defensible design decision with industry examples
+- CVS's 120+ accessibility professionals mean the interviewer likely has deep accessibility knowledge — don't oversimplify WCAG discussion
+- The GenAI PA wireframe demonstrates dual competency — use it in the architecture interview too
 
 ## Context Files
 
@@ -98,70 +109,59 @@ Run research clusters to fill Paul's knowledge gaps. Focus on:
 - CVS-specific context for contextual answers
 - Presentation best practices for the interview format
 
-### Step 4: Write Presentation Script
-Write to: `private/interview-prep/presentation-script.md`
+### Step 4: Write Interview Prep Guides
+Write 3 interview prep guides to: `private/interview-prep/interview-{1,2,3}-prep.md`
 
-Structure for a 15-20 minute presentation:
+Since the specific interviewers and their focus areas are not yet known, create guides for three likely interview groupings based on the 5 key considerations:
 
+**Interview A: Architecture & Legacy Integration** (likely a senior architect or tech lead)
+- Key Considerations: Legacy System Integration (#1) + Technology Stack (#4)
+- Depth areas: Strangler fig pattern, IBMi integration, GCP services, 3-option analysis
+- GenAI pipeline architecture (dual competency)
+- Duration: 45 minutes — plan for 5-10 min overview + 35 min deep Q&A
+
+**Interview B: HCD & Change Management** (likely a UX leader or org change specialist)
+- Key Considerations: HCD Design Principles (#3) + Change Management (#5)
+- Depth areas: Cognitive Science grounding, personas, journey maps, ADKAR, training
+- Paul's differentiator interview — lean into Cognitive Science BA
+- Duration: 45 minutes — plan for 5-10 min overview + 35 min deep Q&A
+
+**Interview C: Security, IAM & Compliance** (likely a security/IAM specialist)
+- Key Consideration: IAM Strategy (#2) + Security Architecture
+- Depth areas: Zero trust, SMART on FHIR, RBAC/ABAC, HIPAA, AI security controls
+- Paul's highest-risk interview — prepare honestly for gaps
+- Duration: 45 minutes — plan for 5-10 min overview + 35 min deep Q&A
+
+Each guide includes:
 ```markdown
-# Presentation Script — CVS Legacy Transformation
+# Interview [A/B/C] Prep Guide — [Topic]
 
-## Timing Guide
-- Opening (2 min): Context setting + approach overview
-- Architecture (5 min): High-level flow + recommended option
-- Key Considerations Deep Dive (8 min): 5 considerations, 90 sec each
-- AI/Innovation Angle (2 min): Dual competency demonstration
-- Close (2 min): Summary + questions transition
+## Interview Strategy
+- Opening approach (how to set the frame in first 2 minutes)
+- Key themes to weave throughout
+- Strengths to lead with
+- Gaps to prepare for honestly
+- Questions to ask the interviewer (shows engagement + fills knowledge gaps)
 
-## Slide-by-Slide Talk Track
+## Topic Overview (5-10 min talk track)
+[What to say if asked "walk me through your approach to [topic]"]
+[Key diagrams to reference from the document]
 
-### Opening [2 minutes]
-[What to say, key phrases, energy level]
-[Hook: start with the user problem, not the technology]
+## Q&A Pairs (40+ questions)
+### Warm-up (10 questions)
+### Technical Depth (15 questions)
+### Edge Cases & Challenges (10 questions)
+### Curveballs & Honesty Tests (5+ questions)
 
-### Architecture Overview [5 minutes]
-[Walk through the system context diagram]
-[Present 3 options briefly, recommend Option B]
-[Key talking points for each diagram]
-[Transition to deep dive]
+## Cheat Sheet
+[Key numbers, patterns, service names, framework citations]
 
-### Key Consideration 1: Legacy Integration [90 seconds]
-[Strangler fig approach — crisp explanation]
-[Key phrase: "..."]
-
-### Key Consideration 2: IAM Strategy [90 seconds]
-[Zero trust + phased migration — confident delivery]
-[Key phrase: "..."]
-
-### Key Consideration 3: HCD Principles [90 seconds]
-[Cognitive Science angle — Paul's differentiator]
-[Key phrase: "..."]
-
-### Key Consideration 4: Technology Stack [90 seconds]
-[GCP-native, justified choices]
-[Key phrase: "..."]
-
-### Key Consideration 5: Change Management [90 seconds]
-[ADKAR integration, coaching philosophy]
-[Key phrase: "..."]
-
-### AI/Innovation [2 minutes]
-[GenAI pipeline, AI-assisted methodology]
-[Key phrase: "..."]
-
-### Close [2 minutes]
-[Summary, confidence, questions invitation]
-[Closing phrase: "..."]
-
-## Delivery Notes
-- Pace: conversational, not rushed
-- Diagrams: reference but don't read from them
-- Questions: welcome them, they show engagement
-- If you don't know: "That's a great question — here's how I'd approach finding the answer..."
+## Honesty Map for This Interview
+[What Paul can claim vs. what is researched vs. what is a gap]
 ```
 
-### Step 5: Write Study Guide
-Write to: `private/interview-prep/study-guide.md`
+### Step 5: Write Cross-Interview Study Guide
+Write to: `private/interview-prep/cross-interview-study-guide.md`
 
 For every technology and pattern in the solution, provide:
 
@@ -289,10 +289,11 @@ Write to: `private/interview-prep/qa-bank.md`
 [Leadership, conflict, ambiguity, failure, collaboration]
 ```
 
-### Step 7: Write Cheat Sheet
-Write to: `private/interview-prep/cheat-sheet.md`
+### Step 7: Write Cheat Sheets
+Write master cheat sheet to: `private/interview-prep/master-cheat-sheet.md`
+Write interview-specific cheat sheets to: `private/interview-prep/interview-{1,2,3}-cheat-sheet.md`
 
-One-page quick reference for 30 minutes before the interview:
+Master cheat sheet covers the full solution. Interview-specific cheat sheets focus on the topics for that interview — what to review in the 30 minutes before each session:
 
 ```markdown
 # Interview Cheat Sheet — CVS Legacy Transformation
@@ -354,7 +355,7 @@ on that?"
   - [ ] Every Q&A answer is something Paul can confidently deliver
   - [ ] All experience anchors verified against career-data.json
   - [ ] Gap areas ([GAP]) have honest answers with positive framing
-  - [ ] Presentation fits in 15-20 minutes when read at conversational pace
+  - [ ] Each interview prep guide covers sufficient depth for a 45-minute focused interview
   - [ ] Study guide covers every technology and pattern in the solution
   - [ ] Q&A bank has 125+ questions across all categories
   - [ ] Cheat sheet fits on one rendered page
@@ -363,13 +364,15 @@ on that?"
 ## Exit Criteria
 
 This is the final phase. Exit criteria = engagement complete:
-- [ ] `private/interview-prep/presentation-script.md` complete
-- [ ] `private/interview-prep/study-guide.md` complete
-- [ ] `private/interview-prep/qa-bank.md` with 125+ questions
-- [ ] `private/interview-prep/cheat-sheet.md` complete (one page)
+- [ ] `private/interview-prep/interview-{1,2,3}-prep.md` — 3 interview prep guides complete (40+ Q&A each)
+- [ ] `private/interview-prep/cross-interview-study-guide.md` complete
+- [ ] `private/interview-prep/qa-bank.md` with 125+ questions organized by likely interview grouping
+- [ ] `private/interview-prep/master-cheat-sheet.md` complete
+- [ ] `private/interview-prep/interview-{1,2,3}-cheat-sheet.md` — 3 interview-specific cheat sheets
 - [ ] All files in `private/interview-prep/` (gitignored)
 - [ ] Every answer verified against career-data.json
 - [ ] Gap areas honestly labeled with positive framing
+- [ ] Each interview prep guide provides sufficient depth for 45 minutes of focused questioning
 
 ## Context Handoff
 
@@ -388,19 +391,19 @@ Note: Do NOT commit `private/interview-prep/` — it is gitignored.
 ## Human Checkpoint
 
 Paul: final review of the engagement:
-- Presentation script: `private/interview-prep/presentation-script.md`
-  - Practice the presentation out loud — does it flow naturally?
-  - Does it fit in 15-20 minutes at conversational pace?
-  - Are you comfortable with every claim and framing?
-- Study guide: `private/interview-prep/study-guide.md`
-  - Are the gap areas ([GAP]) accurately identified?
-  - Focus study time on [GAP] items
-- Q&A bank: `private/interview-prep/qa-bank.md`
-  - Practice the hardball and curveball questions
+- Interview prep guides: `private/interview-prep/interview-{1,2,3}-prep.md`
+  - Review each guide — does the opening strategy feel natural?
+  - Are the Q&A pairs sufficient for 45 minutes of deep questioning?
   - Are the honesty notes helpful for navigating tricky questions?
-- Cheat sheet: `private/interview-prep/cheat-sheet.md`
-  - Does it capture the essence in one page?
-  - Are your questions for the panel good?
-- Overall: do you feel prepared to present and defend this solution?
+  - Once interviewers are assigned, customize guides for specific people
+- Cross-interview study guide: `private/interview-prep/cross-interview-study-guide.md`
+  - Are the gap areas ([GAP]) accurately identified?
+  - Focus study time on [GAP] items, especially for the security/IAM interview
+- Q&A bank: `private/interview-prep/qa-bank.md`
+  - Practice the hardball and curveball questions across all 3 interviews
+- Cheat sheets: `private/interview-prep/master-cheat-sheet.md` + interview-specific
+  - Review interview-specific cheat sheets 30 min before each session
+  - Are your questions for each interviewer good?
+- Overall: do you feel prepared for three 45-minute deep dives?
 
-**The engagement is complete when Paul feels confident presenting the deliverable.**
+**The engagement is complete when Paul feels confident sustaining 45 minutes of focused questioning on each key topic area.**

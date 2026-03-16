@@ -8,6 +8,8 @@ Perform deep web research using WebSearch before making any design claims. Cite 
 
 Design the user experience and business workflow layer for CVS Health's Legacy System Transformation. This phase produces a UX design document that addresses the **Human-Centered Design (HCD)** key consideration and informs the technical architecture in Phase 2. It leverages Paul's Cognitive Science background as a genuine differentiator.
 
+**Interview depth target**: HCD is one of the 3 interview deep-dive topics — a dedicated 45-minute interview will focus on HCD and Change Management. The UX design document must sustain 45 minutes of HCD-focused questioning from a UX leader or organizational change specialist.
+
 **Produces**:
 1. A comprehensive UX design document with personas, journey maps, wireframe descriptions, and design principles
 2. Workflow mapping from green screen to modern UI patterns
@@ -83,10 +85,23 @@ Read Phase 0 outputs, Paul's brand files, and the assignment. Focus on:
 - Phase 0's HCD research findings
 
 ### Step 2: Execute Web Research
-Run all 5 research clusters. Focus on patterns that bridge green screen efficiency with modern usability.
+Run research across 3 tiers, prioritized by Paul's knowledge gaps:
+
+_Tier 1 — Must research (Paul doesn't know):_
+- Green Screen → Modern UI Patterns: 5250 terminal interaction mapping (F-keys, screen codes, keyboard-only nav) to web UI equivalents. 4 queries.
+- CVS Health Brand/Design Language: CVS Health App UI, digital accessibility commitments, any public design system references. 4 queries.
+
+_Tier 2 — Research to ground (Paul knows principles, needs pharmacy-specific application):_
+- Pharmacy UX Best Practices: Pharmacy workflow patterns, clinical pharmacist UI, power-user keyboard patterns for PBM. 3 queries.
+- Progressive Disclosure + Power User Patterns: Enterprise command palette patterns, green-screen-to-web power user migration. 2 queries.
+
+_Tier 3 — Light verification (Paul has direct knowledge):_
+- Accessibility: WCAG 2.2 updates (not 2.1), Section 508 healthcare-specific, ONC SED mandates. 2 queries.
+
+Total: ~15 queries (focused on gaps, not fundamentals Paul already knows).
 
 ### Step 3: Define User Personas
-Create 4-6 personas based on Phase 0 requirements and PBM domain research:
+Create 5 personas mapped to PBM workflows from Phase 0 research (reduced from "4-6" to a focused set that covers all PBM workflow types):
 - **Claims Processor** — high-volume, speed-critical, keyboard-centric user
 - **Pharmacist** — clinical decision-maker, needs quick data access
 - **Benefits Analyst** — analytical, report-oriented, needs data visualization
@@ -200,6 +215,7 @@ For 2-3 key screens, write detailed wireframe descriptions (textual, not graphic
   - [ ] Transition design bridges to Change Management (Phase 4)
   - [ ] Paul's voice is collaborative, solution-focused, empirical, and warm
   - [ ] Document score self-assessment >= 7.5/10
+  - [ ] UX design document provides sufficient depth for a 45-minute HCD-focused interview
 
 ## Exit Criteria
 

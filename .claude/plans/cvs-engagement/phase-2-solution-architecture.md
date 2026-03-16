@@ -15,6 +15,8 @@ Design the complete solution architecture for CVS Health's Legacy System Transfo
 
 This phase addresses two key considerations: **Legacy System Integration** and **Technology Stack**. It also incorporates the **GenAI/ML pipeline layer** (dual competency thread) showing how the modernized system supports the data science team's workflows.
 
+**Interview depth target**: Legacy Integration and Technology Stack are potential 45-minute interview topics. The three-option analysis with trade-off rationale is critical — an architecture interviewer will drill deeply into why Option B was recommended over A and C. The architecture must provide sufficient depth for a 45-minute technical interview.
+
 ## Input Dependencies
 
 - `knowledge_base/requirements.json` — Phase 0 requirements
@@ -34,6 +36,15 @@ Adapt this plan based on findings, corrections, and insights from prior phases. 
 - Phase 1's UX patterns — what does the architecture need to support?
 - Phase 1's performance requirements per persona (e.g., claims processor < 200ms)
 - Any assumption corrections from Phase 0 or 1
+
+**Phase 1 Insights for Architecture**:
+- Command palette requires WebSocket or SSE for real-time fuzzy search across screen codes, member IDs, and actions
+- Split-pane views need parallel API loading — member info and claim details must load in parallel, not sequentially
+- Performance budget: 200ms UI render + 300ms API response = 500ms total for claims adjudication (A-0-010)
+- myPBM on Azure and new internal UI on GCP creates multi-cloud UX consistency challenge
+- GenAI recommendation panel for PA workflows requires Vertex AI inference endpoint with <2s response time
+- 5 personas defined: Claims Processor, Clinical Pharmacist, Benefits Analyst, IT Administrator, New Hire/Trainee
+- Member Eligibility Lookup is the recommended first strangler fig candidate (low risk, high visibility, simple API surface)
 
 ## Context Files
 
@@ -221,6 +232,8 @@ Target >= 7.5/10 across all dimensions. Iterate if below threshold.
 - GenAI/ML pipeline layer must be present in recommended architecture
 - GCP services must be accurately described (verify against current GCP docs)
 - Well-Architected scoring must be justified per pillar
+- Architecture provides sufficient depth for a 45-minute technical interview
+- Three-option trade-off analysis must withstand deep architectural questioning
 
 ## Exit Criteria
 
