@@ -120,6 +120,26 @@ Output template aligned with `/architecture` skill output fields and `architectu
 
 ---
 
+## Infrastructure as Code
+
+### IaC Strategy
+- **Tool**: [Terraform / CDK / Pulumi / CloudFormation / Bicep / none]
+- **Repository Strategy**: [monorepo / separate repo / embedded in app repo]
+- **State Management**: [remote backend / local / managed service]
+
+### Module Structure
+| Module | Resources | Environment Parity |
+|--------|-----------|--------------------|
+| [Module name] | [Resources managed] | [dev/staging/prod differences] |
+
+### Deployment Pipeline
+- **CI/CD Tool**: [GitHub Actions / GitLab CI / Jenkins / etc.]
+- **Environments**: [dev → staging → prod]
+- **Approval Gates**: [manual / automated / policy-based]
+- **Rollback Strategy**: [automatic / manual / blue-green switch]
+
+---
+
 ## Alternatives Considered
 
 | Name | Summary | Why Rejected |

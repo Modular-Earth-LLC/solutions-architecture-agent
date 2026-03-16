@@ -1,218 +1,69 @@
 # Testing Framework
 
-**Purpose:** Automated and manual testing for the AI Engineering Assistant framework  
-**Status:** Foundational testing implemented, ready for expansion  
-**Usage:** Pre-release validation, regression prevention, quality assurance
+Automated validation for the AI Solutions Architecture Agent plugin.
 
 ---
 
-## Available Tests
+## Validation Scripts
 
-### 1. Knowledge Base Validation (Automated)
+### Knowledge Base Validation
 
-**Script:** `validate_knowledge_base.py`
-
-**Purpose:** Validate JSON files against their schemas to catch errors early
-
-**Usage:**
 ```bash
-# From project root
 python tests/validate_knowledge_base.py
-
-# With specific file
-python tests/validate_knowledge_base.py --file system_config
 ```
 
-**What it validates:**
+Validates all KB JSON files against their schemas in `knowledge_base/schemas/`:
+
 - JSON syntax correctness
 - Schema compliance (structure, types, required fields)
+- Envelope fields (`$schema`, `$depends_on`, `engagement_id`, `version`, `status`)
 - Enum value validity
-- Data type validation (strings, numbers, booleans, arrays, objects)
 
-**Files validated:**
-- `knowledge_base/system_config.json` → `schemas/system_config.schema.json`
-- `knowledge_base/user_requirements.json` → `schemas/user_requirements.schema.json`
-- `knowledge_base/design_decisions.json` → `schemas/design_decisions.schema.json`
+**Files validated**: `.repo-metadata.json`, `system_config.json`, `engagement.json`, and all 8 domain KB files (when present).
 
----
+**Expected output** (clean state): `2 PASS, 0 FAIL, 9 SKIP` (only `.repo-metadata` and `system_config` exist without an active engagement).
 
-### 2. Workflow Validation (Manual)
+### Consistency Validation
 
-**Checklist:** `workflow_validation_checklist.md`
+```bash
+python tests/validate_consistency.py
+```
 
-**Purpose:** Comprehensive manual testing of critical agent workflows
+Checks cross-file consistency:
 
-**Usage:**
-1. Open `workflow_validation_checklist.md`
-2. Execute each workflow test scenario
-3. Mark checkboxes as you validate
-4. Document any issues found
-5. Fill out testing summary at end
+1. **Metadata sync** — skill/sub-agent counts in `.repo-metadata.json` match actual `skills/` and `agents/` directories
+2. **Schema completeness** — every KB file has a corresponding schema
+3. **`$depends_on` chains** — DAG integrity, no missing dependencies
+4. **Engagement ID consistency** — all KB files share the same `engagement_id`
+5. **ID uniqueness** — no duplicate IDs across KB files
 
-**Workflows tested:**
-1. Complete Lifecycle (Requirements → Architecture → Engineering → Deployment)
-2. Prompt Engineering (standalone)
-3. System Optimization
-4. Knowledge Base Operations
-5. Supervisor Routing
-
-**Also validates:**
-- Cross-references (knowledge base, documentation)
-- Example consistency (financial operations)
-- Terminology usage (optimize vs improve vs enhance)
-- Version headers
-- Security integration
+**Expected output** (clean state): `5 PASS, 0 FAIL`
 
 ---
 
 ## Running Tests
 
-### Pre-Commit Validation
+### Before Committing
 
-**Before committing changes:**
-
-1. **JSON Schema Validation:**
-   ```bash
-   python tests/validate_knowledge_base.py
-   ```
-
-2. **Affected Workflow Testing:**
-   - If you changed an agent, test its workflows
-   - If you changed knowledge base, test all agents
-   - If you changed documentation, validate links
-
-3. **Example Testing:**
-   - Validate financial operations example still works
-   - Test with financial operations scenario end-to-end
-
-### Pre-Release Validation
-
-**Before creating a release:**
-
-1. **Run all automated tests:**
-   ```bash
-   python tests/validate_knowledge_base.py
-   ```
-
-2. **Complete manual checklist:**
-   - Execute all 5 workflows in `workflow_validation_checklist.md`
-   - Validate all cross-references
-   - Check example consistency
-   - Verify version headers updated
-
-3. **Security validation:**
-   - Review `templates/security-checklist.md` integration
-   - Verify security guidance present in Architecture, Engineering, Deployment agents
-
-4. **Documentation validation:**
-   - Check all internal links work
-   - Verify code examples run correctly
-   - Ensure version numbers updated
-
----
-
-## Continuous Integration
-
-### GitHub Actions
-
-**Workflow:** `.github/workflows/validate-knowledge-base.yml`
-
-**Status:** Ready to enable (currently manual-trigger only)
-
-**To enable automatic validation:**
-1. Edit `.github/workflows/validate-knowledge-base.yml`
-2. Uncomment the `on:` section for push/PR triggers
-3. Commit and push
-4. Validation will run on every commit to main or PR
-
-**What it does:**
-- Validates JSON files against schemas
-- Runs on Python 3.11
-- Reports errors clearly
-- Fails PR if validation fails
-
-**Manual trigger:**
 ```bash
-# In GitHub: Actions tab → Validate Knowledge Base → Run workflow
+# Always run both
+python tests/validate_knowledge_base.py
+python tests/validate_consistency.py
 ```
 
-**Future enhancements:**
-- Markdown linting
-- Link checking
-- Security scanning
-- Prompt engineering validation
-- End-to-end workflow testing
+### After Skill Changes
 
----
+1. Run both validation scripts
+2. Install plugin: `claude --plugin-dir .`
+3. Invoke the changed skill and verify output validates
+4. Check `engagement.json` was updated correctly
 
-## Test Development
+### Pre-Release
 
-### Adding New Tests
-
-**For automated tests:**
-1. Create Python script in `tests/` directory
-2. Use clear naming: `test_[feature].py`
-3. Include docstring explaining purpose
-4. Make executable: `chmod +x tests/test_[feature].py`
-5. Add to GitHub Actions workflow if appropriate
-6. Document in this README
-
-**For manual tests:**
-1. Add to `workflow_validation_checklist.md`
-2. Include clear test scenario
-3. Define expected results
-4. Add success criteria
-
-### Test Coverage Goals
-
-**Current:**
-- ✅ JSON schema validation (automated)
-- ✅ Workflow validation (manual checklist)
-- ✅ Cross-reference validation (manual checklist)
-
-**Planned:**
-- ⏳ Automated workflow testing (agent invocation simulation)
-- ⏳ Link checking (automated)
-- ⏳ Prompt engineering quality tests
-- ⏳ Performance benchmarking
-- ⏳ Security testing (prompt injection, input validation)
-
----
-
-## Testing Best Practices
-
-### For Agent Changes
-
-**Minimum testing required:**
-1. Load agent in Cursor (ensure no syntax errors)
-2. Test basic functionality (agent responds correctly)
-3. Test knowledge base operations (reads/writes work)
-4. Test relevant workflows (see workflow_validation_checklist.md)
-5. Verify no regressions (existing examples still work)
-
-**Test documentation:**
-- Document what you tested in PR description
-- Include test results (PASS/FAIL)
-- Note any edge cases discovered
-- Mention validation methods used
-
-### For Knowledge Base Changes
-
-**Validation steps:**
-1. Run `python tests/validate_knowledge_base.py`
-2. Fix any schema validation errors
-3. Test with agents that read the file
-4. Ensure backward compatibility (no breaking changes)
-5. Update schema if structure changed
-
-### For Documentation Changes
-
-**Quality checks:**
-1. Preview markdown rendering
-2. Validate all links (internal and external)
-3. Test code examples run correctly
-4. Check for typos and clarity
-5. Ensure cross-references accurate
+1. Run both validation scripts — 0 FAIL
+2. Verify plugin loads: `claude --plugin-dir .`
+3. Test at least 2 skills end-to-end
+4. Check all documentation links resolve
 
 ---
 
@@ -220,51 +71,38 @@ python tests/validate_knowledge_base.py --file system_config
 
 ### Setup
 
-**Install testing dependencies:**
-```bash
-pip install jsonschema pytest
-npm install -g markdownlint-cli markdown-link-check
-```
-
-**Project structure requirements:**
-- Run tests from project root
-- Ensure `knowledge_base/` and `knowledge_base/schemas/` exist
-- All required JSON files present
-
-### Troubleshooting
-
-**"jsonschema library not installed":**
 ```bash
 pip install jsonschema
 ```
 
-**"Path not found" errors:**
-- Ensure running from project root
-- Check file paths in test scripts
-- Verify knowledge_base/ directory exists
+Run all tests from the project root directory.
 
-**Schema validation fails:**
-- Check JSON syntax (valid JSON?)
-- Review error message for specific field
-- Ensure enums match schema definitions
-- Validate required fields present
+### Troubleshooting
 
----
-
-## Contribution
-
-**Want to improve testing?**
-- Add new automated tests
-- Enhance validation coverage
-- Improve error messages
-- Add performance benchmarks
-- Create testing utilities
-
-See **[CONTRIBUTING.md](../CONTRIBUTING.md)** for guidelines.
+| Error | Fix |
+|-------|-----|
+| `jsonschema library not installed` | `pip install jsonschema` |
+| `Path not found` | Run from project root |
+| Schema validation fails | Check JSON syntax, review error message for specific field |
 
 ---
 
-**Version:** 1.0  
-**Test Coverage:** Foundational (JSON validation + manual checklists)  
-**CI/CD:** GitHub Actions ready to enable  
-**Maintained By:** AI Engineering Assistant Core Team
+## CI/CD
+
+**GitHub Actions workflow**: `.github/workflows/validate-knowledge-base.yml`
+
+Currently manual-trigger only. To enable on push/PR:
+1. Edit the workflow file
+2. Uncomment the `on: push/pull_request` triggers
+3. Commit and push
+
+---
+
+## Adding New Tests
+
+1. Create `tests/test_<feature>.py`
+2. Use clear naming and include a docstring
+3. Add to GitHub Actions workflow if appropriate
+4. Document in this README
+
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for the full testing guide.

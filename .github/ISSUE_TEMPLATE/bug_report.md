@@ -9,8 +9,8 @@ assignees: paulpham157
 ## Description
 A clear description of the bug.
 
-## Agent/Prompt Affected
-Which agent or prompt is involved? (e.g., `architecture_agent`, `user_prompts/architecture/...`)
+## Skill/Agent Affected
+Which skill or sub-agent is involved? (e.g., `/architecture`, `parallel-wa-reviewer`)
 
 ## Steps to Reproduce
 1. Platform used (Claude Code CLI / Claude Projects / GitHub Copilot)

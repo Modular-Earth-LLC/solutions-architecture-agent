@@ -7,11 +7,14 @@
 
 ## Testing
 <!-- How was this tested? -->
-- [ ] Agent prompts validated in Claude Code CLI
-- [ ] Knowledge base schemas pass validation
+- [ ] `python tests/validate_knowledge_base.py` — 0 FAIL
+- [ ] `python tests/validate_consistency.py` — 0 FAIL
+- [ ] Skill tested via `claude --plugin-dir .` (if skill changed)
 - [ ] Documentation updated if applicable
 
 ## Checklist
 - [ ] No secrets or credentials committed
-- [ ] `.repo-metadata.json` updated if agents/prompts added or removed
-- [ ] Relevant documentation updated
+- [ ] `.repo-metadata.json` updated if skills/agents/schemas added or removed
+- [ ] SKILL.md follows 6-section structure (if new/modified skill)
+- [ ] Schema alignment verified (field names match between SKILL.md and schema)
+- [ ] Envelope fields present in Section 5 output rules (if new skill)
