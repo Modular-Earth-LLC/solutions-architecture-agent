@@ -1,8 +1,8 @@
 {
   "$schema": "./knowledge_base/schemas/.repo-metadata.schema.json",
-  "version": "1.0.0-alpha",
-  "last_updated": "2026-03-15",
-  "status": "Alpha - Claude Code plugin, undergoing active development",
+  "version": "1.0.0",
+  "last_updated": "2026-03-16",
+  "status": "v1.0.0 — Claude Code plugin, validated end-to-end (Phase 7)",
   "repository": "https://github.com/Modular-Earth-LLC/solutions-architecture-agent",
   "_comment": "Single source of truth for repository-wide metadata. All skills and documentation should reference this file instead of hard-coding values.",
   "architecture": {
@@ -28,7 +28,7 @@
   },
   "knowledge_base": {
     "files": 10,
-    "schemas": 10,
+    "schemas": 11,
     "format": "JSON with JSON Schema validation"
   },
   "documentation": {
