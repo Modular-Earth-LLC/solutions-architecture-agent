@@ -34,10 +34,10 @@ A Claude Code plugin with **9 specialized skills** covering the full SA lifecycl
 
 ## Business Value
 
-**Faster Time to Deliverable**:
-- Requirements: days → 1-2 hours
-- Architecture: weeks → 4-8 hours
-- Full engagement (req → proposal): months → 1-2 weeks
+**Accelerated Delivery**:
+- Structured skill workflows replace ad-hoc, manual processes
+- Each skill produces validated, schema-compliant output in a single session
+- Full engagement flows chain skills with automatic prerequisite validation
 
 **Consistent Quality**:
 - AWS Well-Architected scoring on every architecture (6 pillars + GenAI Lens)

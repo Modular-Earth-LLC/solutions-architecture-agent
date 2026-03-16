@@ -6,17 +6,17 @@ How skills connect through the engagement lifecycle.
 
 ## Quick Reference
 
-| Phase | Skill | Input | Output | Time |
-|-------|-------|-------|--------|------|
-| Requirements | `/requirements` | Client conversation | `requirements.json` | 15-60 min |
-| Architecture | `/architecture` | `requirements.json` | `architecture.json` | 30-60 min |
-| Data Modeling | `/data-model` | `architecture.json` | `data_model.json` | 20-40 min |
-| Security Review | `/security-review` | `architecture.json` | `security_review.json` | 20-40 min |
-| Integration Plan | `/integration-plan` | `requirements.json` + `architecture.json` | `integration_plan.json` | 20-40 min |
-| Estimation | `/estimate` | All upstream KB files | `estimate.json` | 15-30 min |
-| Project Plan | `/project-plan` | `requirements.json` + `architecture.json` + `estimate.json` | `project_plan.json` | 15-30 min |
-| Proposal | `/proposal` | All upstream KB files | `outputs/*.md` | 10-20 min |
-| Review | `/review` | All upstream KB files | `reviews.json` | 10-20 min |
+| Phase | Skill | Input | Output |
+|-------|-------|-------|--------|
+| Requirements | `/requirements` | Client conversation | `requirements.json` |
+| Architecture | `/architecture` | `requirements.json` | `architecture.json` |
+| Data Modeling | `/data-model` | `architecture.json` | `data_model.json` |
+| Security Review | `/security-review` | `architecture.json` | `security_review.json` |
+| Integration Plan | `/integration-plan` | `requirements.json` + `architecture.json` | `integration_plan.json` |
+| Estimation | `/estimate` | All upstream KB files | `estimate.json` |
+| Project Plan | `/project-plan` | `requirements.json` + `architecture.json` + `estimate.json` | `project_plan.json` |
+| Proposal | `/proposal` | All upstream KB files | `outputs/*.md` |
+| Review | `/review` | All upstream KB files | `reviews.json` |
 
 ---
 
