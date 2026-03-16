@@ -46,6 +46,10 @@ When proposing changes:
 - Never modify `system_config.json`
 - Validate after changes: `python tests/validate_knowledge_base.py`
 
+### Excluded from indexing (`.claude/plans/archive/**`)
+- Completed planning artifacts from prior, unrelated projects
+- Do NOT reference, suggest edits to, or include context from these files
+
 ### Security-sensitive paths (`private/**`, `**/.env*`, `**/*credential*`)
 - Never output or commit secrets, tokens, credentials, or PII
 

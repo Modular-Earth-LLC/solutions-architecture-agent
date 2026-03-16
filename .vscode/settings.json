@@ -15,7 +15,8 @@
   },
   "search.exclude": {
     "outputs/**": true,
-    "private/sensitive-ai-agent-outputs/**": true
+    "private/sensitive-ai-agent-outputs/**": true,
+    ".claude/plans/archive/**": true
   },
   "github.copilot.enable": {
     "*": true,

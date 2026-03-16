@@ -79,6 +79,10 @@ When a user message arrives:
 
 If a user requests implementation: acknowledge, explain scope, note for future Engineering Agent.
 
+## Excluded Directories
+
+- **`.claude/plans/archive/`** — completed planning artifacts from prior phases. Do NOT read, index, or reference these files. They are from unrelated projects and will poison context.
+
 ## Knowledge Base
 
 - **JSON files** in `knowledge_base/` — each skill owns one file, writes only to it (counts in `.repo-metadata.json`)
