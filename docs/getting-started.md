@@ -82,14 +82,14 @@ You don't need to run every skill — the agent checks prerequisites and tells y
 
 ## Validation
 
-Run validation scripts to check KB file integrity:
+Run the 5 validation scripts to check file integrity. See [tests/README.md](../tests/README.md) for details and expected output.
 
 ```bash
-# Schema validation
 python tests/validate_knowledge_base.py
-
-# Metadata consistency, $depends_on chains, ID uniqueness
 python tests/validate_consistency.py
+python tests/test_plugin_structure.py
+python tests/test_engagement_flow.py
+python tests/test_skill_independence.py
 ```
 
 ---

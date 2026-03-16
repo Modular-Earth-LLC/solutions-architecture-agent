@@ -4,7 +4,7 @@ Automated validation for the AI Solutions Architecture Agent plugin.
 
 ---
 
-## Validation Scripts
+## Validation Scripts (5 Total)
 
 ### Knowledge Base Validation
 
@@ -39,6 +39,57 @@ Checks cross-file consistency:
 
 **Expected output** (clean state): `5 PASS, 0 FAIL`
 
+### Plugin Structure Validation
+
+```bash
+python tests/test_plugin_structure.py
+```
+
+Validates plugin packaging:
+
+- `plugin.json` exists, valid JSON, required fields, version matches `.repo-metadata.json`
+- Every `skills/*/SKILL.md` has YAML frontmatter (`name`, `description`, `allowed-tools`)
+- Agent files have required frontmatter (`name`, `description`, `tools`, `model`, `maxTurns`)
+- Required directories exist
+- No forbidden patterns (`context: fork`, `$ARGUMENTS.0` dot syntax, `Task` in allowed-tools)
+- No SKILL.md exceeds 500 lines
+- `.repo-metadata.json` `skill_names`/`sub_agent_names` match filesystem
+
+**Expected output**: `7 PASS, 0 FAIL`
+
+### Engagement Flow Validation
+
+```bash
+python tests/test_engagement_flow.py
+```
+
+Validates engagement lifecycle logic:
+
+- Canonical flow DAG validity (5 flows, predecessors appear earlier)
+- `engagement.schema.json` lifecycle_state covers all domain KB files
+- Status enum consistency between schema and SKILL.md references
+- ARCHITECTURE.md KB ownership table matches authoritative DEPENDS_ON_DAG
+- Skills with `$depends_on` have prerequisite-checking language
+
+**Expected output**: `5 PASS, 0 FAIL`
+
+### Skill Independence Validation
+
+```bash
+python tests/test_skill_independence.py
+```
+
+Validates each skill can run independently (marketplace requirement):
+
+- No SKILL.md references another SKILL.md by path
+- Every STOP directive also provides an alternative path (`$ARGUMENTS`)
+- Each SKILL.md contains its own role, workflow, and output sections
+- No SKILL.md hardcodes repo name or local filesystem paths
+- `allowed-tools` is a specific list, not "all"
+- Each SKILL.md documents `$ARGUMENTS` for standalone invocation
+
+**Expected output**: `6 PASS, 0 FAIL`
+
 ---
 
 ## Running Tests
@@ -46,24 +97,16 @@ Checks cross-file consistency:
 ### Before Committing
 
 ```bash
-# Always run both
 python tests/validate_knowledge_base.py
 python tests/validate_consistency.py
+python tests/test_plugin_structure.py
+python tests/test_engagement_flow.py
+python tests/test_skill_independence.py
 ```
 
 ### After Skill Changes
 
-1. Run both validation scripts
-2. Install plugin: `claude --plugin-dir .`
-3. Invoke the changed skill and verify output validates
-4. Check `engagement.json` was updated correctly
-
-### Pre-Release
-
-1. Run both validation scripts — 0 FAIL
-2. Verify plugin loads: `claude --plugin-dir .`
-3. Test at least 2 skills end-to-end
-4. Check all documentation links resolve
+See [CONTRIBUTING.md § Manual Skill Testing](../CONTRIBUTING.md#manual-skill-testing) for the complete testing workflow after modifying skills.
 
 ---
 
@@ -89,20 +132,14 @@ Run all tests from the project root directory.
 
 ## CI/CD
 
-**GitHub Actions workflow**: `.github/workflows/validate-knowledge-base.yml`
-
-Currently manual-trigger only. To enable on push/PR:
-1. Edit the workflow file
-2. Uncomment the `on: push/pull_request` triggers
-3. Commit and push
+GitHub Actions runs all 5 validation scripts on PRs. See `.github/workflows/validate-knowledge-base.yml` and [CONTRIBUTING.md § CI/CD](../CONTRIBUTING.md#cicd).
 
 ---
 
 ## Adding New Tests
 
-1. Create `tests/test_<feature>.py`
-2. Use clear naming and include a docstring
-3. Add to GitHub Actions workflow if appropriate
-4. Document in this README
+1. Create `tests/test_<feature>.py` following existing output conventions (PASS/FAIL summary, `sys.exit(1)` on failure)
+2. Add to `.github/workflows/validate-knowledge-base.yml` as a named step
+3. Document in this README
 
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for the full testing guide.
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for the full contributing guide.

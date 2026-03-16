@@ -1,73 +1,135 @@
-# Contributing to the Solutions Architecture Agent
+# Contributing
 
-Thank you for your interest in contributing. This guide focuses on the most common contribution: **adding a new skill**.
+This is the single source of truth for contributing to the Solutions Architecture Agent. Both human engineers and AI coding assistants (Claude Code, GitHub Copilot) should follow these conventions.
 
 ---
 
 ## Prerequisites
 
-- **Claude Code CLI** — primary development and testing tool
+- **Claude Code CLI** — [install guide](https://docs.anthropic.com/en/docs/claude-code/overview)
 - **Git** — version control
-- **Python 3.10+** — for running validation scripts (`pip install jsonschema`)
+- **Python 3.10+** — for validation scripts (`pip install jsonschema`)
 - Familiarity with the [ARCHITECTURE.md](ARCHITECTURE.md) design
+
+---
+
+## Project Structure
+
+```
+solutions-architecture-agent/
+├── .claude-plugin/plugin.json    # Plugin manifest (name, version, description)
+├── skills/                       # 9 SA lifecycle skills (each: <name>/SKILL.md)
+├── agents/                       # 2 sub-agents for parallel execution
+├── hooks/hooks.json              # Pre-commit validation hooks
+├── knowledge_base/               # Blackboard KB (JSON files, 11 schemas)
+│   ├── schemas/                  # JSON Schema Draft 2020-12 definitions
+│   └── system_config.json        # READ-ONLY reference configuration
+├── tests/                        # 5 validation scripts (stdlib + jsonschema)
+├── docs/                         # User documentation
+├── .claude/rules/                # Governing rules (loaded automatically)
+├── CLAUDE.md                     # Agent identity and dispatch rules (<100 lines)
+├── ARCHITECTURE.md               # System design with Mermaid diagrams
+├── DESIGN_RATIONALE.md           # Historical context and research citations
+├── .repo-metadata.json           # Single source of truth for version/counts
+└── .github/workflows/            # CI/CD (runs on PR, manual dispatch)
+```
+
+**Key files**:
+- `.repo-metadata.json` — version, skill/agent counts, skill names. All other files reference this instead of hardcoding.
+- `CLAUDE.md` — loaded first by Claude Code. Defines agent identity, skill table, engagement flows, dispatch rules.
+- `.claude/rules/` — scoped rules automatically loaded. `guiding-principles.md` contains 42 technology principles governing all output.
+
+---
+
+## Development Conventions
+
+### AI-First Development
+
+The primary contributors to this repo are AI coding assistants. All conventions are:
+- **Explicit** — no implicit assumptions; everything is declared in files
+- **Programmatic** — machine-parseable structures (JSON schemas, YAML frontmatter)
+- **Verifiable** — 5 automated test scripts validate structure and consistency
+- **No commented-out code** — either active or deleted; never disabled-by-comment
+
+### Single Source of Truth
+
+| Data | Source | Rule |
+|------|--------|------|
+| Version, counts | `.repo-metadata.json` | Never hardcode in docs or skills |
+| Agent behavior | `CLAUDE.md` + `.claude/rules/` | Loaded automatically by Claude Code |
+| Skill behavior | `skills/*/SKILL.md` | Self-contained; no cross-skill imports |
+| KB structure | `knowledge_base/schemas/` | Draft 2020-12 JSON Schema |
+| Contributing guide | This file (`CONTRIBUTING.md`) | Other docs reference, not repeat |
+
+### Commit Messages
+
+Follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+feat(skills): add <skill-name> skill for <purpose>
+fix(knowledge-base): correct <file> schema validation
+docs(contributing): update skill creation guide
+test(qa): add plugin structure validation
+```
 
 ---
 
 ## How to Add a New Skill
 
-This is the step-by-step guide for adding a 10th (or Nth) skill to the plugin.
-
 ### Step 1: Create the SKILL.md
 
-Create `skills/<skill-name>/SKILL.md`. Every SKILL.md follows this structure:
+Create `skills/<skill-name>/SKILL.md` with YAML frontmatter and 6 sections:
 
 ```markdown
 ---
 name: <skill-name>
-description: One-line description shown in skill discovery
+description: "One-line description shown in skill discovery"
+argument-hint: "[what arguments this skill accepts]"
+allowed-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch
 ---
 
-# Section 1: Agent Identity
-- Role, domain expertise, behavioral constraints
+## 1. ROLE & CONTEXT
+Role, domain expertise, behavioral constraints
 
-# Section 2: Workflow
-- Step-by-step execution procedure
-- When to use WebSearch vs training knowledge
-- Human checkpoint instructions
+## 2. PREREQUISITES
+Upstream KB files to check. Use advisory language:
+"If missing → suggest running /upstream-skill first, OR accept context directly via $ARGUMENTS"
 
-# Section 3: Quality Criteria
-- Minimum quality bar for outputs
-- Review dimensions and thresholds
+## 3. CONTEXT LOADING
+Which KB files and sections to read
 
-# Section 4: Context Loading
-- `$depends_on`: list of upstream KB files this skill reads
-- Which KB files to load and which sections to use
+## 4. WORKFLOW
+Step-by-step execution procedure
 
-# Section 5: Output Rules
-- JSON structure specification
-- Field-by-field output format
-- MUST include envelope fields paragraph (see below)
+## 5. OUTPUT RULES
+JSON structure specification with envelope fields (see Step 2)
 
-# Section 6: Error Handling
-- What to do when upstream data is missing
-- How to handle ambiguous requirements
+## 6. HUMAN CHECKPOINT
+Summary, deliverables, next skill suggestion
 ```
+
+**Rules**:
+- Keep under 500 lines; move reference tables to `${CLAUDE_SKILL_DIR}/` files
+- No cross-skill imports at runtime — each skill is self-contained
+- Use `ultrathink` directive (in body, not frontmatter) only for deep reasoning skills
+- Use bracket syntax `$ARGUMENTS[0]` (not dot syntax `$ARGUMENTS.0`)
+- Prerequisites must be advisory, not blocking — always offer `$ARGUMENTS` as alternative
+- `allowed-tools` follows least privilege — only tools the skill needs
 
 ### Step 2: Envelope Fields (Required)
 
-Every SKILL.md Section 5 (Output Rules) **must** include a paragraph specifying these envelope fields that wrap every KB output:
+Every SKILL.md Section 5 **must** specify these envelope fields:
 
 ```
 Every output file MUST include these envelope fields:
 - "$schema": relative path to the schema file
-- "$depends_on": array of upstream KB file names this output depends on
+- "$depends_on": array of upstream KB file names
 - "engagement_id": from engagement.json (e.g., "eng-2026-001")
 - "version": MAJOR.MINOR version string
-- "created_at" / "updated_at": ISO 8601 timestamps
 - "status": one of "draft", "in_progress", "complete", "approved"
 ```
 
-Without these envelope fields, `validate_knowledge_base.py` and `validate_consistency.py` will fail.
+Without these, `validate_knowledge_base.py` and `validate_consistency.py` will fail.
 
 ### Step 3: Create the JSON Schema
 
@@ -90,73 +152,33 @@ Create `knowledge_base/schemas/<skill_name>.schema.json`:
 }
 ```
 
-**Schema alignment rule**: Every field name in the SKILL.md Section 5 output specification must exactly match a property in the schema. Mismatches between SKILL.md and schema are the most common issue class found during testing.
+Refer to `knowledge_base/schemas/SCHEMA_DESIGN.md` for the full design guide.
 
-Refer to `knowledge_base/schemas/SCHEMA_DESIGN.md` for the full design guide and conventions.
+### Step 4: Register the Skill
 
-### Step 4: Register in CLAUDE.md
+1. Add to the skill table in `CLAUDE.md`
+2. Add to engagement flows in `CLAUDE.md` if the skill participates
+3. Update `.repo-metadata.json`:
+   - Increment `architecture.skills`
+   - Add to `architecture.skill_names`
+   - Increment `knowledge_base.schemas`
+   - Update `knowledge_base.files`
 
-Add your skill to the skill table in `CLAUDE.md`:
-
-```markdown
-| Your Skill Name | `/your-skill` | Brief purpose | `your_skill.json` |
-```
-
-If the skill participates in engagement flows, add it to the canonical flows table.
-
-### Step 5: Update Agent Identity
-
-If the skill invokes sub-agents, create `agents/<sub-agent-name>.md` following the pattern in `agents/parallel-wa-reviewer.md`.
-
-### Step 6: Update Metadata
-
-In `.repo-metadata.json`:
-- Increment `architecture.skills` count
-- Add skill name to `architecture.skill_names` array
-- Increment `knowledge_base.schemas` if you added a schema
-- Update `knowledge_base.files` if you added a KB file
-
-### Step 7: Validate
+### Step 5: Validate
 
 ```bash
-# Schema validation — your new schema should appear
-python tests/validate_knowledge_base.py
-
-# Consistency — skill count, schema count, $depends_on chains
-python tests/validate_consistency.py
+python tests/validate_knowledge_base.py    # Your schema should appear
+python tests/validate_consistency.py       # Skill count, $depends_on chains
+python tests/test_plugin_structure.py      # Frontmatter, naming, forbidden patterns
+python tests/test_engagement_flow.py       # DAG validity if added to flows
+python tests/test_skill_independence.py    # Advisory prereqs, $ARGUMENTS, no cross-imports
 ```
 
-Both must pass with 0 FAIL before submitting a PR.
+All must pass with 0 FAIL.
 
----
+### Schema Alignment Rules
 
-## How to Add a Sub-Agent
-
-Sub-agents are for **parallel execution only** — scoring or analysis that benefits from running multiple instances concurrently via the Agent tool.
-
-1. Create `agents/<sub-agent-name>.md` with a focused prompt
-2. Add the agent name to `.repo-metadata.json` → `architecture.sub_agent_names`
-3. Increment `architecture.sub_agents` count
-4. Reference the sub-agent from the parent SKILL.md workflow section
-
-Sub-agents receive a focused prompt + relevant KB context and return structured JSON. They do not maintain state or invoke other skills.
-
----
-
-## Knowledge Base Rules
-
-- Each skill **owns exactly one** KB file and writes only to it
-- `system_config.json` is **read-only** — never modify it
-- `engagement.json` is the **lifecycle tracker** — skills update their domain's status there
-- Files declare dependencies via `$depends_on` — used for prerequisite validation
-- All KB files must validate against their schema in `knowledge_base/schemas/`
-- Version KB files with MAJOR.MINOR — increment MINOR for additive changes, MAJOR for breaking changes
-
----
-
-## Schema Alignment Rules
-
-These rules prevent the most common issue class found during Phase 7 testing:
+The most common issue class found during testing. Prevent it by following these rules:
 
 1. **Field names must match exactly** between SKILL.md Section 5 and the JSON schema `properties`
 2. **Required fields in schema** must appear in SKILL.md output specification
@@ -168,32 +190,65 @@ When in doubt, write the schema first, then write the SKILL.md output rules to m
 
 ---
 
+## How to Add a Sub-Agent
+
+Sub-agents are for **parallel execution only** — e.g., scoring 6 WA pillars or analyzing 6 STRIDE categories concurrently.
+
+1. Create `agents/<sub-agent-name>.md` with YAML frontmatter:
+   ```yaml
+   ---
+   name: <sub-agent-name>
+   description: "One-line description"
+   tools: Read, Glob, Grep, WebSearch, WebFetch
+   model: sonnet
+   maxTurns: 5
+   ---
+   ```
+2. Update `.repo-metadata.json`: add to `sub_agent_names`, increment `sub_agents`
+3. Reference the sub-agent from the parent SKILL.md workflow section
+
+Sub-agents receive a focused prompt + relevant KB context and return structured output. They do not maintain state or invoke other skills.
+
+---
+
+## Knowledge Base Rules
+
+- Each skill **owns exactly one** KB file and writes only to it
+- `system_config.json` is **read-only** — never modify it
+- `engagement.json` is the **lifecycle tracker** — skills update their domain's status
+- Files declare dependencies via `$depends_on` — used for prerequisite validation
+- All KB files validate against their schema in `knowledge_base/schemas/`
+- Version with MAJOR.MINOR — increment MINOR for additive, MAJOR for breaking changes
+- `knowledge_base/*.json` (except `system_config.json`) are gitignored — they contain engagement data
+
+---
+
 ## Testing
 
 ### Automated Validation
 
-```bash
-# Validate all KB files against schemas
-python tests/validate_knowledge_base.py
+5 test scripts, all runnable from the project root:
 
-# Check metadata consistency, $depends_on chains, ID uniqueness
-python tests/validate_consistency.py
+```bash
+python tests/validate_knowledge_base.py    # Schema compliance (Draft 2020-12)
+python tests/validate_consistency.py       # Metadata sync, DAG integrity, ID uniqueness
+python tests/test_plugin_structure.py      # Plugin packaging, frontmatter, forbidden patterns
+python tests/test_engagement_flow.py       # Canonical flow DAG, lifecycle coverage
+python tests/test_skill_independence.py    # Advisory prereqs, standalone invocation
 ```
+
+See [tests/README.md](tests/README.md) for expected output, troubleshooting, and test environment setup.
 
 ### Manual Skill Testing
 
 1. Install plugin: `claude --plugin-dir .`
-2. Invoke your skill via slash command or natural language
-3. Verify the output file validates: `python tests/validate_knowledge_base.py --file <your_file>`
+2. Invoke your skill via slash command
+3. Verify output validates: `python tests/validate_knowledge_base.py --file <name>`
 4. Check `engagement.json` was updated with correct lifecycle_state
 
-### What to Test
+### CI/CD
 
-- Skill produces valid JSON matching its schema
-- Envelope fields are present and correct
-- `$depends_on` chain is accurate
-- Upstream prerequisite checking works (try invoking without prerequisites)
-- Human checkpoint fires at end of skill execution
+GitHub Actions runs all 5 test scripts on PRs touching skills, schemas, agents, plugin config, or tests. See `.github/workflows/validate-knowledge-base.yml`. Trigger manually via `workflow_dispatch`.
 
 ---
 
@@ -210,29 +265,20 @@ git push -u origin feature/<skill-name>
 
 ### PR Checklist
 
-- [ ] SKILL.md follows the 6-section structure
-- [ ] Schema created and validates
+- [ ] SKILL.md follows the 6-section structure with advisory prerequisites
+- [ ] Schema created and validates (Draft 2020-12)
 - [ ] Envelope fields paragraph in Section 5
 - [ ] CLAUDE.md skill table updated
 - [ ] `.repo-metadata.json` counts updated
-- [ ] `python tests/validate_knowledge_base.py` — 0 FAIL
-- [ ] `python tests/validate_consistency.py` — 0 FAIL
-- [ ] No secrets or credentials committed
+- [ ] All 5 test scripts pass with 0 FAIL
+- [ ] No secrets, credentials, or PII committed
 - [ ] Documentation updated if adding to engagement flows
-
-### Conventional Commits
-
-```bash
-feat(skills): add <skill-name> skill for <purpose>
-fix(knowledge-base): correct <file> schema validation
-docs(contributing): update skill creation guide
-```
 
 ---
 
 ## Code of Conduct
 
-We are committed to providing a welcoming and inclusive environment for all contributors. Be respectful, constructive, and focused on what is best for the project. See the full [Contributor Covenant](https://www.contributor-covenant.org/) for details.
+We are committed to providing a welcoming and inclusive environment. Be respectful, constructive, and focused on what is best for the project. See the [Contributor Covenant](https://www.contributor-covenant.org/).
 
 ---
 

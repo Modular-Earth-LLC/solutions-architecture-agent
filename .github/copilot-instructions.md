@@ -38,9 +38,9 @@ When proposing changes:
 ## File-Specific Guidance
 
 ### Skill files (`skills/*/SKILL.md`)
-- Follow the 6-section structure (Identity, Workflow, Quality, Context, Output, Error Handling)
-- Include envelope fields paragraph in Section 5
-- Ensure schema alignment (field names match exactly)
+- Follow the [6-section structure](../CONTRIBUTING.md#step-1-create-the-skillmd) in CONTRIBUTING.md
+- Include [envelope fields](../CONTRIBUTING.md#step-2-envelope-fields-required) in Section 5
+- Follow [schema alignment rules](../CONTRIBUTING.md#schema-alignment-rules) (field names match exactly)
 
 ### Knowledge base (`knowledge_base/**/*.json`)
 - Never modify `system_config.json`
@@ -49,11 +49,6 @@ When proposing changes:
 ### Security-sensitive paths (`private/**`, `**/.env*`, `**/*credential*`)
 - Never output or commit secrets, tokens, credentials, or PII
 
-## Validation Commands
+## Validation
 
-```bash
-python tests/validate_knowledge_base.py
-python tests/validate_consistency.py
-```
-
-Run after changing skills, schemas, or knowledge base files.
+Run all 5 test scripts after changing skills, schemas, or KB files. See [CONTRIBUTING.md § Testing](../CONTRIBUTING.md#testing) and [tests/README.md](../tests/README.md) for details.
