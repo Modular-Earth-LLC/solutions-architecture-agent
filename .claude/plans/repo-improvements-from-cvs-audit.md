@@ -325,3 +325,235 @@ The repo's documentation is scattered across multiple locations with overlapping
    └── (future: getting-started.md, engagement-guide.md)
    ```
 6. **Consider moving `sa-best-practices-research-2026.md`** to `docs/` since it's general SA knowledge, not engagement-specific reference material.
+
+---
+
+## Agent Capability Improvements for Engagement Execution
+
+These improvements go beyond process fixes — they extend the SA Agent's capabilities so it can contribute more to engagements like the CVS assignment. Organized from highest-leverage to lowest.
+
+### New Skills
+
+#### `/plan-engagement` — Engagement Planning Skill
+
+The single highest-leverage addition. During the CVS engagement, writing 8 phase plans required a 4000-word meta-prompt and produced 130KB of plan files that then needed auditing. This skill would replace that entire workflow.
+
+**What it does**:
+- Input: engagement type, client context, assignment brief, user's career data path
+- Reads the canonical flow from CLAUDE.md for the engagement type
+- Generates a master plan + N phase plan files with structured frontmatter
+- Pre-populates: skill invocations, engagement.json management, KB validation, quality gates, context handoff, human checkpoints
+- Validates dependency ordering and phase numbering
+- Outputs a complete `.claude/plans/{engagement}/` directory
+
+**KB output**: `engagement.json` (creates with initial lifecycle state)
+
+**Why it matters**: Turns a multi-hour planning session into a single skill invocation + human review. Every plan includes lifecycle management and validation by construction.
+
+#### `/ux-design` — UX and Human-Centered Design Skill
+
+Phase 1 of the CVS engagement was the only phase with no skill invocation — it was pure manual document writing. But UX design for legacy modernization is a repeatable pattern. This skill would formalize it.
+
+**What it does**:
+- Input: requirements.json (personas, workflows), engagement context
+- Web-researches the target domain's UX patterns (healthcare, fintech, etc.)
+- Generates: user personas, current-state workflow analysis, future-state UX patterns, journey maps, accessibility strategy, transition design
+- Applies cognitive science / HCD principles from guiding-principles.md (principles 1-8)
+- Produces wireframe descriptions (textual, not graphical)
+
+**KB output**: `ux_design.json` (new schema needed)
+
+**Where it fits in canonical flows**: Between `/requirements` and `/architecture`. Add to Migration and Greenfield flows where the engagement involves UI transformation.
+
+#### `/change-management` — Change Management Planning Skill
+
+Change management was embedded in the `/project-plan` skill for the CVS engagement, but it deserves its own skill. It's a key consideration that a panel member will drill on, and it recurs across enterprise modernization engagements.
+
+**What it does**:
+- Input: architecture.json, project_plan.json, ux_design.json (if exists)
+- Web-researches applicable change management frameworks (ADKAR, Kotter, etc.)
+- Generates: stakeholder analysis, communication plan, training program design, champion network structure, adoption KPIs, resistance mitigation strategies
+- Maps user personas to training needs and adoption risk levels
+
+**KB output**: `change_management.json` (new schema needed)
+
+**Where it fits in canonical flows**: After `/project-plan`, before `/proposal`. Optional for assessment-only engagements.
+
+#### `/research` — Structured Web Research Skill
+
+Phase 0 of the CVS engagement required 9 research clusters with 36+ WebSearch queries. This pattern recurs — every engagement starts with domain research, especially in unfamiliar industries. A dedicated skill would standardize and accelerate it.
+
+**What it does**:
+- Input: research topic clusters (list of areas + why each matters)
+- Executes WebSearch queries in parallel clusters
+- Synthesizes findings with source citations and confidence ratings (HIGH/MEDIUM/LOW)
+- Flags contradictions between sources
+- Identifies areas where research was thin
+- Produces a structured findings document with bibliography
+
+**KB output**: None (produces `outputs/{engagement}/research-findings.md`)
+
+**Why it matters**: Research quality directly determines architecture quality. Paul rated himself 1/5 on IBMi — without rigorous, cited research, the entire engagement would rest on hallucinations. This skill makes research systematic and auditable.
+
+### New Commands and Automation
+
+#### `/honesty-map` — Experience-to-Assignment Mapping Command
+
+The CVS engagement required mapping Paul's career-data.json to the 5 key considerations, producing confidence ratings (1-5) for each area. This is a recurring need whenever the SA Agent produces work that Paul must present as his own.
+
+**What it does**:
+- Reads career-data.json (companies, projects, skills)
+- Reads the engagement requirements or assignment brief
+- Produces a structured mapping: for each assignment area, Paul's direct experience, confidence rating, evidence source
+- Flags areas where claims need the "researched for this engagement" framing
+- Flags areas where Paul can speak from genuine experience
+
+**Output**: `outputs/{engagement}/honesty-map.md`
+
+**Why it matters**: Every subsequent phase references this map for honesty consistency. Without it, the agent might accidentally attribute experience Paul doesn't have, or undersell genuine expertise.
+
+#### `/validate-document` — Document Quality Validation Command
+
+Phase 6 (Assembly) required manual checks: GFM formatting, file size < 300KB, Mermaid syntax validation, cross-reference consistency, voice consistency, assumption register reconciliation. These checks could be automated.
+
+**What it does**:
+- Validates GFM syntax (no broken tables, no orphaned links)
+- Validates Mermaid diagram blocks (syntax check)
+- Checks file size against target
+- Scans for cross-reference consistency (Section X references exist)
+- Scans for assumption numbering consistency (no gaps, no duplicates)
+- Reports voice consistency metrics (first person usage, tone markers)
+
+**Output**: Validation report with pass/fail per check
+
+#### `/phase-handoff` — Context Handoff Automation Command
+
+Automates the post-phase context handoff that every phase plan specifies:
+1. Generates context summary from KB file metadata, git diff, and engagement.json state
+2. Writes `context/phase-N-context.md` using the standard template
+3. Scans remaining phase plans for references to this phase's outputs
+4. Reports which future plans need manual updates
+5. Commits all context files
+
+**Why it matters**: Context handoff is the most error-prone step. If the summary is incomplete, the next session starts with gaps. Automating the mechanical parts (artifact listing, assumption tracking, KB state) lets the human focus on the judgment calls (insights, pivots, feedback).
+
+### Knowledge and Data Improvements
+
+#### Domain Knowledge Packs
+
+The SA Agent is domain-agnostic by design (guiding principle: "Technology-agnostic: recommend best-fit via WebSearch"). But every engagement starts with the same domain research overhead. Pre-built knowledge packs would provide a baseline that WebSearch then extends.
+
+**Structure**: `knowledge_base/domains/{industry}.json`
+
+**Priority domains** (based on exemplar materials and CVS engagement):
+- **Healthcare/Pharmacy**: HIPAA technical safeguards, PBM systems, clinical data flows, pharmacy workflow patterns, DEA controlled substance regulations
+- **Financial Services**: PCI DSS, SOX compliance, real-time transaction patterns, fraud detection architectures
+- **Legacy Modernization**: IBMi/AS/400 integration patterns, mainframe middleware vendors (Rocket, Profound Logic, Fresche), strangler fig implementation guides, green screen workflow analysis methods
+
+**Each pack includes**:
+- Regulatory/compliance checklist with regulation section citations
+- Common architecture patterns for the domain
+- Key vendors and their capabilities (with verification dates)
+- Domain terminology glossary
+- Common integration points and data flows
+
+**How skills use them**: When `/requirements` or `/architecture` detects a domain (from client_context.industry in engagement.json), it loads the relevant domain pack as baseline context before web research. Research then validates and extends rather than starting from zero.
+
+#### Cloud Provider Comparison Matrix
+
+The CVS engagement required mapping AWS experience to GCP services. Every multi-cloud or cloud-migration engagement has this need.
+
+**Structure**: `knowledge_base/cloud_comparison.json`
+
+**Content**:
+- Service-by-service mapping: AWS → GCP → Azure (e.g., Lambda → Cloud Functions → Azure Functions)
+- Category groupings: compute, storage, database, AI/ML, identity, networking, security, observability
+- Key differentiators per service (not just "equivalent" — what's actually different)
+- Pricing model differences
+- Verification date for each mapping
+
+**How skills use them**: When `/architecture` selects a cloud platform, it can reference accurate service mappings. When Paul presents an AWS-primary background to a GCP-primary employer, the comparison matrix provides credible framing.
+
+#### Modernization Pattern Library
+
+The CVS engagement used strangler fig, anti-corruption layer, parallel run, and change data capture patterns. These patterns recur across modernization engagements.
+
+**Structure**: `knowledge_base/patterns/modernization.json`
+
+**Content per pattern**:
+- Name, description, when to use, when NOT to use
+- Implementation steps
+- Risk profile (what can go wrong)
+- GCP/AWS/Azure service recommendations
+- Real-world case study references
+- Decision criteria vs. alternative patterns
+
+**Patterns to include**: Strangler fig, anti-corruption layer, parallel run, feature toggles, branch by abstraction, event interception, change data capture, database-per-service, saga pattern, CQRS
+
+#### Regulatory Compliance Checklists
+
+Phase 3 (Security & IAM) required mapping HIPAA, HITECH, PCI DSS, and DEA regulations to architecture controls. This mapping is largely static and shouldn't require fresh web research every time.
+
+**Structure**: `knowledge_base/compliance/{regulation}.json`
+
+**Content per regulation**:
+- Regulation sections with plain-language requirements
+- Technical safeguard mappings (what architecture controls satisfy each requirement)
+- Common cloud service mappings (which GCP/AWS/Azure services satisfy each control)
+- Audit evidence requirements
+- Verification date
+
+**Priority regulations**: HIPAA (healthcare), SOC 2 Type II (SaaS), PCI DSS (payments), GDPR (EU data), CCPA (California data), GLBA (financial), FedRAMP (government)
+
+### Engineering Augmentation
+
+#### Mermaid Diagram Validation Hook
+
+Every architecture engagement produces multiple Mermaid diagrams. Invalid syntax produces broken renders in the final document. Add a pre-commit or post-write hook that validates Mermaid syntax.
+
+**Implementation**: Hook on Write/Edit of .md files containing ```mermaid blocks. Parse and validate syntax. Report errors before commit.
+
+#### Research Cache
+
+The CVS engagement defined 9 research clusters. If the engagement re-runs (e.g., after Paul's feedback changes scope), all research would be repeated from scratch. A research cache would avoid redundant web searches.
+
+**Implementation**: `outputs/{engagement}/research-cache.json` — stores WebSearch queries, results, timestamps, and confidence ratings. Subsequent research checks the cache first; results older than N days are re-fetched.
+
+**Benefit**: Re-running Phase 0 after scope changes takes 10 minutes instead of 60 because only new or stale research clusters execute.
+
+#### Cost Estimate Verification
+
+Phase 4 requires cloud pricing with cited sources. Currently, the agent web-searches pricing pages and extracts numbers. A more reliable approach would be to use cloud provider pricing APIs or calculators.
+
+**Implementation options**:
+- GCP Pricing Calculator API integration (MCP server or tool)
+- AWS Pricing API integration
+- Azure Retail Prices API integration
+- Store verified price points in `knowledge_base/pricing/{provider}.json` with verification dates
+- Flag any price point older than 30 days as needing re-verification
+
+#### Document Export Pipeline
+
+The CVS deliverable must export from Markdown to Word. Currently this is manual (copy to pandoc or a Word converter). An automated export pipeline would catch formatting issues early.
+
+**Implementation**: `scripts/export_document.py` — takes a Markdown file, runs pandoc with CVS-appropriate styling, produces .docx output. Validates that Mermaid diagrams render, tables are intact, and headers survive conversion.
+
+### Priority Matrix (Capability Improvements)
+
+| Improvement | Impact on CVS-like engagements | Effort | Priority |
+|-------------|-------------------------------|--------|----------|
+| `/plan-engagement` skill | Very High — eliminates meta-planning | High | **P0** |
+| `/research` skill | High — standardizes the most time-consuming phase | Medium | **P0** |
+| `/honesty-map` command | High — critical for any engagement Paul presents | Low | **P0** |
+| Healthcare domain knowledge pack | High — eliminates repeated HIPAA/PBM research | Medium | **P1** |
+| Regulatory compliance checklists | High — eliminates repeated compliance mapping | Medium | **P1** |
+| `/ux-design` skill | Medium — fills Phase 1 gap | Medium | **P1** |
+| Cloud provider comparison matrix | Medium — recurring need for multi-cloud work | Low | **P1** |
+| Modernization pattern library | Medium — recurring patterns across engagements | Low | **P1** |
+| `/validate-document` command | Medium — catches issues before human review | Low | **P1** |
+| `/phase-handoff` command | Medium — reduces manual context work | Medium | **P2** |
+| `/change-management` skill | Medium — separates concern from project-plan | Medium | **P2** |
+| Research cache | Low-Medium — saves time on re-runs only | Low | **P2** |
+| Mermaid validation hook | Low — prevents broken diagrams | Low | **P2** |
+| Cost estimate verification | Low — useful but narrow | Medium | **P3** |
+| Document export pipeline | Low — one-time per engagement | Low | **P3** |
