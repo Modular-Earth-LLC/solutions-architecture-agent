@@ -1,0 +1,710 @@
+{
+  "$schema": "./schemas/project_plan.schema.json",
+  "$depends_on": ["requirements.json", "architecture.json", "estimate.json"],
+  "engagement_id": "eng-2026-001",
+  "version": "1.0",
+  "last_updated": "2026-03-15",
+  "status": "complete",
+  "approach": "agile",
+  "total_duration_weeks": 68,
+  "start_date": "2026-04-06",
+  "target_end_date": "2027-07-18",
+  "phases": [
+    {
+      "id": "P-001",
+      "name": "Legacy Assessment & Knowledge Transfer",
+      "start_week": 1,
+      "end_week": 4,
+      "objectives": [
+        "Catalog all IBMi green screen applications, RPG programs, CL scripts, and DDS files",
+        "Interview SMEs to document undocumented business rules embedded in legacy code",
+        "Map data flows between IBMi subsystems and external healthcare integrations (HL7, X12)",
+        "Establish knowledge transfer sessions with retiring IBMi developers"
+      ],
+      "deliverables": [
+        "Legacy application inventory with complexity scores",
+        "Business rules catalog extracted from RPG/CL source analysis",
+        "Data flow diagrams for all IBMi subsystems",
+        "Knowledge transfer recordings and runbooks"
+      ],
+      "success_criteria": [
+        "100% of active RPG programs cataloged with complexity ratings",
+        "All critical business rules documented and validated by SMEs",
+        "Data lineage traced for patient, claims, and scheduling subsystems"
+      ],
+      "team_allocation": [
+        "Solutions Architect (lead)",
+        "IBMi SME (2)",
+        "Business Analyst (1)",
+        "Healthcare Domain Expert (1)"
+      ],
+      "dependencies": [],
+      "risks": [
+        "Tribal knowledge loss if key IBMi personnel depart before transfer completes",
+        "Undocumented interfaces between RPG programs may be missed in inventory"
+      ]
+    },
+    {
+      "id": "P-002",
+      "name": "Foundation & Infrastructure",
+      "start_week": 3,
+      "end_week": 10,
+      "objectives": [
+        "Provision target cloud/hybrid infrastructure with HIPAA-compliant configurations",
+        "Establish CI/CD pipelines, IaC templates, and container orchestration",
+        "Configure database infrastructure (PostgreSQL/Aurora) with encryption at rest and in transit",
+        "Set up observability stack (logging, metrics, tracing, alerting)"
+      ],
+      "deliverables": [
+        "Infrastructure-as-Code repository (Terraform/Pulumi)",
+        "CI/CD pipeline definitions with security scanning gates",
+        "Database instances provisioned with schema migration tooling",
+        "Monitoring dashboards and alerting rules"
+      ],
+      "success_criteria": [
+        "Infrastructure passes HIPAA configuration audit",
+        "CI/CD pipeline deploys to dev environment in under 15 minutes",
+        "Database failover tested with RPO < 1 minute, RTO < 5 minutes"
+      ],
+      "team_allocation": [
+        "DevOps Engineer (2)",
+        "Cloud Architect (1)",
+        "Security Engineer (1)",
+        "DBA (1)"
+      ],
+      "dependencies": [
+        "P-001 legacy inventory informs infrastructure sizing"
+      ],
+      "risks": [
+        "HIPAA compliance requirements may delay infrastructure approval",
+        "Network connectivity between on-prem IBMi and cloud environment may introduce latency"
+      ]
+    },
+    {
+      "id": "P-003",
+      "name": "IAM & Patient Registration MVP",
+      "start_week": 8,
+      "end_week": 18,
+      "objectives": [
+        "Implement identity and access management with RBAC aligned to healthcare roles",
+        "Migrate patient registration module as first modernized workload",
+        "Establish API gateway with FHIR R4 endpoints for patient demographics",
+        "Validate data migration pipeline with patient master data"
+      ],
+      "deliverables": [
+        "IAM service with SSO, MFA, and role-based access policies",
+        "Patient Registration microservice with FHIR R4 API",
+        "Data migration scripts for patient demographic records",
+        "Integration test suite covering registration workflows"
+      ],
+      "success_criteria": [
+        "IAM supports all 12 legacy user roles with equivalent permissions",
+        "Patient Registration handles 100% of legacy workflows identified in P-001",
+        "Data migration achieves 99.99% accuracy on patient demographic fields",
+        "API response times under 200ms at p95 for registration lookups"
+      ],
+      "team_allocation": [
+        "Backend Engineers (3)",
+        "Security Engineer (1)",
+        "QA Engineer (1)",
+        "IBMi SME (1)"
+      ],
+      "dependencies": [
+        "P-001 business rules catalog",
+        "P-002 infrastructure ready"
+      ],
+      "risks": [
+        "Patient data migration may surface data quality issues in legacy DB2/400 tables",
+        "FHIR R4 mapping from proprietary IBMi data structures may require custom transformers"
+      ]
+    },
+    {
+      "id": "P-004",
+      "name": "Clinical Modules Development",
+      "start_week": 16,
+      "end_week": 40,
+      "objectives": [
+        "Modernize scheduling, order entry, clinical documentation, and pharmacy modules",
+        "Implement HL7 FHIR interfaces for clinical data exchange",
+        "Build clinical decision support integration points",
+        "Develop reporting and analytics layer for clinical data"
+      ],
+      "deliverables": [
+        "Scheduling Service with provider calendar and patient self-scheduling",
+        "Order Entry Service (CPOE) with CDS hooks",
+        "Clinical Documentation Service with structured and unstructured note support",
+        "Pharmacy Module with e-prescribing (NCPDP SCRIPT) integration",
+        "Clinical analytics dashboard"
+      ],
+      "success_criteria": [
+        "All four clinical modules pass functional equivalence testing against legacy screens",
+        "HL7 FHIR interfaces certified against ONC requirements",
+        "Clinical workflows complete in equal or fewer steps than legacy green screen",
+        "E-prescribing passes Surescripts certification testing"
+      ],
+      "team_allocation": [
+        "Backend Engineers (4)",
+        "Frontend Engineers (2)",
+        "QA Engineers (2)",
+        "Clinical SME (1)",
+        "IBMi SME (1)"
+      ],
+      "dependencies": [
+        "P-003 IAM and patient registration must be stable",
+        "P-002 infrastructure scaled for clinical workloads"
+      ],
+      "risks": [
+        "Clinical module complexity may exceed estimates due to undocumented business rules",
+        "HL7 FHIR certification timeline may conflict with development schedule",
+        "Pharmacy module integration with external e-prescribing networks adds third-party dependency"
+      ]
+    },
+    {
+      "id": "P-005",
+      "name": "Parallel Run & Validation",
+      "start_week": 38,
+      "end_week": 52,
+      "objectives": [
+        "Run legacy IBMi and modernized system in parallel with synchronized data",
+        "Validate output equivalence across all migrated modules",
+        "Conduct user acceptance testing with clinical staff",
+        "Perform load testing simulating peak census and end-of-day batch volumes"
+      ],
+      "deliverables": [
+        "Parallel run data synchronization bridge (bidirectional)",
+        "Output comparison reports for all migrated transactions",
+        "UAT sign-off documentation from clinical department heads",
+        "Load test results with capacity planning recommendations"
+      ],
+      "success_criteria": [
+        "99.95% transaction equivalence between legacy and modern systems over 4-week parallel run",
+        "UAT pass rate exceeds 95% across all clinical workflows",
+        "System sustains 2x peak load with p99 latency under 500ms",
+        "Zero critical data discrepancies in patient-facing fields"
+      ],
+      "team_allocation": [
+        "QA Engineers (3)",
+        "Backend Engineers (2)",
+        "DBA (1)",
+        "Clinical Trainers (2)",
+        "IBMi SME (1)"
+      ],
+      "dependencies": [
+        "P-004 all clinical modules feature-complete",
+        "P-003 patient registration stable in production"
+      ],
+      "risks": [
+        "Parallel run may reveal edge cases not captured in business rules catalog",
+        "Staff resistance to new system during UAT may delay sign-off",
+        "Data synchronization bridge may introduce latency affecting real-time workflows"
+      ]
+    },
+    {
+      "id": "P-006",
+      "name": "Cutover & Remaining Modules",
+      "start_week": 50,
+      "end_week": 62,
+      "objectives": [
+        "Execute phased cutover from IBMi to modernized platform by department",
+        "Migrate remaining administrative modules (billing, HR, reporting)",
+        "Decommission legacy green screen terminals per department cutover schedule",
+        "Execute final data migration with reconciliation and audit trail"
+      ],
+      "deliverables": [
+        "Department-by-department cutover runbooks",
+        "Billing and administrative modules in production",
+        "Legacy system decommission certificates per department",
+        "Final data reconciliation report with audit trail"
+      ],
+      "success_criteria": [
+        "Each department cutover completes within designated maintenance window",
+        "Billing module processes claims with zero regression vs. legacy",
+        "All legacy data migrated with full audit trail and chain of custody",
+        "Rollback exercised successfully in pre-production before each department cutover"
+      ],
+      "team_allocation": [
+        "Backend Engineers (3)",
+        "DevOps Engineers (2)",
+        "DBA (1)",
+        "Clinical Trainers (2)",
+        "Project Manager (1)"
+      ],
+      "dependencies": [
+        "P-005 parallel run validation passed",
+        "P-005 UAT sign-off obtained"
+      ],
+      "risks": [
+        "Cutover window may be insufficient for departments with high transaction volumes",
+        "Remaining administrative modules may have undiscovered IBMi dependencies",
+        "Staff availability during cutover weekends may be limited"
+      ]
+    },
+    {
+      "id": "P-007",
+      "name": "Stabilization & Optimization",
+      "start_week": 60,
+      "end_week": 68,
+      "objectives": [
+        "Monitor production system stability with enhanced observability",
+        "Optimize performance based on real-world usage patterns",
+        "Conduct hypercare support with rapid incident response",
+        "Complete knowledge transfer to client operations team"
+      ],
+      "deliverables": [
+        "Production stability report with SLA compliance metrics",
+        "Performance optimization recommendations and implementations",
+        "Operations runbook and incident response playbook",
+        "Knowledge transfer completion certificates for client IT staff"
+      ],
+      "success_criteria": [
+        "System availability exceeds 99.9% over 4-week stabilization window",
+        "Mean time to resolution for P1 incidents under 30 minutes",
+        "Client operations team independently resolves L1/L2 incidents",
+        "All legacy IBMi systems fully decommissioned"
+      ],
+      "team_allocation": [
+        "SRE Engineer (1)",
+        "Backend Engineer (1)",
+        "DevOps Engineer (1)",
+        "Technical Writer (1)"
+      ],
+      "dependencies": [
+        "P-006 all department cutovers complete"
+      ],
+      "risks": [
+        "Post-cutover defects may overwhelm hypercare support capacity",
+        "Client staff may require extended training beyond planned knowledge transfer"
+      ]
+    }
+  ],
+  "decision_gates": [
+    {
+      "id": "DG-001",
+      "name": "MVP Readiness Gate",
+      "phase": "P-003",
+      "week": 18,
+      "criteria": [
+        "Patient Registration MVP passes all functional tests",
+        "IAM roles validated against legacy access control matrix",
+        "Data migration accuracy confirmed at 99.99%",
+        "Security penetration test completed with no critical findings"
+      ],
+      "decision_options": ["Proceed to clinical modules", "Extend MVP phase", "Re-scope clinical modules"],
+      "decider": "Steering Committee"
+    },
+    {
+      "id": "DG-002",
+      "name": "Parallel Run Go/No-Go",
+      "phase": "P-005",
+      "week": 52,
+      "criteria": [
+        "Transaction equivalence exceeds 99.95% threshold",
+        "UAT sign-off from all department heads",
+        "Load test confirms capacity for 2x peak",
+        "No unresolved P1 or P2 defects"
+      ],
+      "decision_options": ["Proceed to cutover", "Extend parallel run 4 weeks", "Halt and remediate"],
+      "decider": "Steering Committee + CISO"
+    },
+    {
+      "id": "DG-003",
+      "name": "Legacy Decommission Gate",
+      "phase": "P-007",
+      "week": 65,
+      "criteria": [
+        "All departments operating on modernized platform for minimum 2 weeks",
+        "No rollbacks executed in production",
+        "Client operations team passed competency assessment",
+        "Data retention and archival requirements met for legacy systems"
+      ],
+      "decision_options": ["Decommission legacy IBMi", "Maintain legacy in read-only mode 90 days", "Delay decommission"],
+      "decider": "CIO + Compliance Officer"
+    }
+  ],
+  "sprints": [
+    {
+      "id": "S-001",
+      "name": "Sprint 1: Legacy Discovery",
+      "phase": "P-001",
+      "start_week": 1,
+      "end_week": 2,
+      "goals": [
+        "Complete RPG program inventory for patient-facing subsystems",
+        "Conduct initial SME interviews for scheduling and registration"
+      ],
+      "capacity_points": 40
+    },
+    {
+      "id": "S-002",
+      "name": "Sprint 2: Deep Dive & Data Mapping",
+      "phase": "P-001",
+      "start_week": 3,
+      "end_week": 4,
+      "goals": [
+        "Complete data flow mapping for HL7 and X12 interfaces",
+        "Document business rules for claims processing and pharmacy modules"
+      ],
+      "capacity_points": 40
+    },
+    {
+      "id": "S-003",
+      "name": "Sprint 3: Infrastructure Bootstrap",
+      "phase": "P-002",
+      "start_week": 3,
+      "end_week": 5,
+      "goals": [
+        "Provision HIPAA-compliant cloud landing zone",
+        "Establish CI/CD pipeline with container registry"
+      ],
+      "capacity_points": 50
+    },
+    {
+      "id": "S-004",
+      "name": "Sprint 4: Infrastructure Hardening",
+      "phase": "P-002",
+      "start_week": 6,
+      "end_week": 8,
+      "goals": [
+        "Complete database provisioning with encryption and backup policies",
+        "Deploy observability stack and configure alerting thresholds"
+      ],
+      "capacity_points": 50
+    },
+    {
+      "id": "S-005",
+      "name": "Sprint 5: IAM Foundation",
+      "phase": "P-003",
+      "start_week": 8,
+      "end_week": 10,
+      "goals": [
+        "Implement core IAM service with OIDC/SAML integration",
+        "Map legacy IBMi user profiles to RBAC roles"
+      ],
+      "capacity_points": 55
+    },
+    {
+      "id": "S-006",
+      "name": "Sprint 6: Patient Registration Core",
+      "phase": "P-003",
+      "start_week": 11,
+      "end_week": 13,
+      "goals": [
+        "Build patient registration API with FHIR R4 Patient resource",
+        "Implement data migration pipeline for patient demographics"
+      ],
+      "capacity_points": 55
+    },
+    {
+      "id": "S-007",
+      "name": "Sprint 7: Registration Completion & Validation",
+      "phase": "P-003",
+      "start_week": 14,
+      "end_week": 16,
+      "goals": [
+        "Complete patient search, merge/unmerge, and duplicate detection",
+        "Run data migration dry run with accuracy validation"
+      ],
+      "capacity_points": 55
+    },
+    {
+      "id": "S-008",
+      "name": "Sprint 8: Scheduling Module",
+      "phase": "P-004",
+      "start_week": 17,
+      "end_week": 20,
+      "goals": [
+        "Build scheduling service with provider calendar management",
+        "Implement patient self-scheduling portal"
+      ],
+      "capacity_points": 65
+    }
+  ],
+  "milestones": [
+    {
+      "id": "M-001",
+      "name": "Legacy Assessment Complete",
+      "target_date": "2026-05-03",
+      "phase": "P-001",
+      "gate_type": "review"
+    },
+    {
+      "id": "M-002",
+      "name": "Infrastructure Ready for Development",
+      "target_date": "2026-06-07",
+      "phase": "P-002",
+      "gate_type": "signoff"
+    },
+    {
+      "id": "M-003",
+      "name": "Patient Registration MVP Live",
+      "target_date": "2026-08-09",
+      "phase": "P-003",
+      "gate_type": "demo"
+    },
+    {
+      "id": "M-004",
+      "name": "MVP Readiness Gate Passed",
+      "target_date": "2026-08-09",
+      "phase": "P-003",
+      "gate_type": "approval"
+    },
+    {
+      "id": "M-005",
+      "name": "All Clinical Modules Feature-Complete",
+      "target_date": "2027-01-03",
+      "phase": "P-004",
+      "gate_type": "demo"
+    },
+    {
+      "id": "M-006",
+      "name": "Parallel Run Validation Passed",
+      "target_date": "2027-03-28",
+      "phase": "P-005",
+      "gate_type": "approval"
+    },
+    {
+      "id": "M-007",
+      "name": "Final Department Cutover Complete",
+      "target_date": "2027-06-20",
+      "phase": "P-006",
+      "gate_type": "signoff"
+    },
+    {
+      "id": "M-008",
+      "name": "Legacy IBMi Decommissioned",
+      "target_date": "2027-07-18",
+      "phase": "P-007",
+      "gate_type": "approval"
+    }
+  ],
+  "critical_path": [
+    "P-001: Legacy Assessment & Knowledge Transfer",
+    "P-002: Foundation & Infrastructure (overlaps P-001)",
+    "P-003: IAM & Patient Registration MVP (blocked by P-001 + P-002)",
+    "P-004: Clinical Modules Development (blocked by P-003)",
+    "P-005: Parallel Run & Validation (blocked by P-004)",
+    "P-006: Cutover & Remaining Modules (blocked by P-005 gate)",
+    "P-007: Stabilization & Optimization (blocked by P-006)"
+  ],
+  "risk_register": [
+    {
+      "id": "R-001",
+      "category": "Knowledge",
+      "description": "Loss of IBMi tribal knowledge due to retiring developers",
+      "probability": "high",
+      "impact": "critical",
+      "mitigation": "Accelerate knowledge transfer in P-001; record all sessions; pair retiring devs with modern engineers",
+      "owner": "Solutions Architect",
+      "status": "active"
+    },
+    {
+      "id": "R-002",
+      "category": "Compliance",
+      "description": "HIPAA compliance gaps during migration transition period",
+      "probability": "medium",
+      "impact": "critical",
+      "mitigation": "Engage compliance officer from week 1; conduct HIPAA gap analysis during P-002; maintain encryption in transit and at rest throughout",
+      "owner": "Security Engineer",
+      "status": "active"
+    },
+    {
+      "id": "R-003",
+      "category": "Data",
+      "description": "Data quality issues in legacy DB2/400 tables surface during migration",
+      "probability": "high",
+      "impact": "high",
+      "mitigation": "Run data profiling in P-001; build data cleansing pipeline; establish data quality thresholds with business stakeholders",
+      "owner": "DBA",
+      "status": "active"
+    },
+    {
+      "id": "R-004",
+      "category": "Integration",
+      "description": "Third-party healthcare system integrations (labs, pharmacies, payers) break during cutover",
+      "probability": "medium",
+      "impact": "high",
+      "mitigation": "Map all external interfaces in P-001; coordinate with third parties in P-004; test integrations during parallel run",
+      "owner": "Integration Lead",
+      "status": "active"
+    },
+    {
+      "id": "R-005",
+      "category": "Organizational",
+      "description": "Clinical staff resistance to new system slows UAT and adoption",
+      "probability": "medium",
+      "impact": "high",
+      "mitigation": "Involve clinical champions from P-003; provide hands-on training starting P-004; ensure new UX reduces clicks vs. green screen",
+      "owner": "Project Manager",
+      "status": "active"
+    },
+    {
+      "id": "R-006",
+      "category": "Technical",
+      "description": "RPG business logic contains undocumented edge cases that cause feature parity gaps",
+      "probability": "high",
+      "impact": "high",
+      "mitigation": "Use automated RPG code analysis tools in P-001; validate all business rules with SMEs; run extensive parallel comparison in P-005",
+      "owner": "Solutions Architect",
+      "status": "active"
+    },
+    {
+      "id": "R-007",
+      "category": "Schedule",
+      "description": "Clinical modules phase (P-004) exceeds planned 24-week duration",
+      "probability": "medium",
+      "impact": "high",
+      "mitigation": "Prioritize modules by clinical impact; use MVP scope for each module; maintain 3-week schedule buffer in parallel run phase",
+      "owner": "Project Manager",
+      "status": "active"
+    }
+  ],
+  "dependencies": {
+    "internal": [
+      {
+        "from": "P-001",
+        "to": "P-002",
+        "type": "start_to_start"
+      },
+      {
+        "from": "P-001",
+        "to": "P-003",
+        "type": "finish_to_start"
+      },
+      {
+        "from": "P-002",
+        "to": "P-003",
+        "type": "finish_to_start"
+      },
+      {
+        "from": "P-003",
+        "to": "P-004",
+        "type": "finish_to_start"
+      },
+      {
+        "from": "P-004",
+        "to": "P-005",
+        "type": "finish_to_start"
+      },
+      {
+        "from": "P-005",
+        "to": "P-006",
+        "type": "finish_to_start"
+      },
+      {
+        "from": "P-006",
+        "to": "P-007",
+        "type": "finish_to_start"
+      }
+    ],
+    "external": [
+      {
+        "dependency": "HIPAA compliance pre-assessment from external auditor",
+        "owner": "Compliance Officer",
+        "needed_by": "2026-05-15",
+        "status": "pending"
+      },
+      {
+        "dependency": "Surescripts e-prescribing certification environment access",
+        "owner": "Pharmacy Integration Vendor",
+        "needed_by": "2026-09-01",
+        "status": "pending"
+      },
+      {
+        "dependency": "HL7 FHIR endpoint credentials from connected lab systems",
+        "owner": "Lab Interface Coordinator",
+        "needed_by": "2026-10-01",
+        "status": "not_started"
+      },
+      {
+        "dependency": "Legacy IBMi source code repository access and documentation",
+        "owner": "Client IT Director",
+        "needed_by": "2026-04-06",
+        "status": "in_progress"
+      }
+    ]
+  },
+  "communication_plan": {
+    "stakeholder_updates": "Bi-weekly steering committee briefing with written status report; weekly technical leads stand-up; monthly board-level executive summary",
+    "demo_schedule": [
+      "Week 4: Legacy assessment findings and migration roadmap presentation",
+      "Week 10: Infrastructure walkthrough and security architecture review",
+      "Week 18: Patient Registration MVP demo to clinical leadership",
+      "Week 28: Scheduling and Order Entry modules demo",
+      "Week 40: Full clinical suite demo and parallel run readiness review",
+      "Week 52: Parallel run results and cutover go/no-go presentation",
+      "Week 62: Post-cutover status and stabilization metrics review",
+      "Week 68: Final project closeout and lessons learned"
+    ],
+    "decision_points": [
+      {
+        "date": "2026-08-09",
+        "decision": "MVP Readiness: proceed to clinical modules or extend MVP",
+        "decider": "Steering Committee"
+      },
+      {
+        "date": "2027-03-28",
+        "decision": "Parallel Run Go/No-Go: proceed to department cutovers",
+        "decider": "Steering Committee + CISO"
+      },
+      {
+        "date": "2027-06-28",
+        "decision": "Legacy Decommission: approve final IBMi shutdown",
+        "decider": "CIO + Compliance Officer"
+      }
+    ]
+  },
+  "_migration_specific": {
+    "legacy_system": "IBM AS/400 (IBMi) with RPG IV/ILE programs, CL scripts, DDS-defined display files, and DB2/400 database; 5250 green screen terminal interface serving 350+ concurrent clinical users",
+    "migration_strategy": "Strangler Fig pattern with module-by-module replacement; legacy IBMi remains operational while modernized services progressively assume workloads; bidirectional data sync bridge maintains consistency during transition",
+    "parallel_run_weeks": 14,
+    "data_migration_phases": [
+      {
+        "phase": 1,
+        "name": "Patient Demographics & Master Data",
+        "target_week": 14,
+        "record_count_estimate": "2.4M patient records",
+        "approach": "ETL with data quality cleansing and deduplication"
+      },
+      {
+        "phase": 2,
+        "name": "Clinical History & Orders",
+        "target_week": 34,
+        "record_count_estimate": "18M clinical records",
+        "approach": "Incremental migration with FHIR resource mapping"
+      },
+      {
+        "phase": 3,
+        "name": "Billing, Claims & Financial Data",
+        "target_week": 55,
+        "record_count_estimate": "12M transaction records",
+        "approach": "Batch migration with reconciliation checkpoints"
+      },
+      {
+        "phase": 4,
+        "name": "Archival & Historical Data",
+        "target_week": 62,
+        "record_count_estimate": "40M archived records",
+        "approach": "Cold storage migration with indexed search capability"
+      }
+    ],
+    "rollback_plan": "Each department cutover has a dedicated rollback runbook. Bidirectional sync bridge remains active for 2 weeks post-cutover per department. Rollback triggers: >5 P1 incidents in 24 hours, data integrity failure, or clinical safety concern. Full rollback to IBMi restores green screen access within 4-hour maintenance window. Legacy IBMi maintained in warm standby until DG-003 legacy decommission gate is passed.",
+    "feature_parity_checklist": [
+      "Patient registration, search, merge/unmerge",
+      "Provider and resource scheduling with recurring appointments",
+      "Computerized provider order entry (CPOE) with clinical decision support",
+      "Clinical documentation (structured notes, templates, free-text)",
+      "Pharmacy dispensing and e-prescribing (NCPDP SCRIPT)",
+      "Lab order and result interfaces (HL7 v2 and FHIR R4)",
+      "Claims submission and remittance processing (X12 837/835)",
+      "Accounts receivable and patient billing statements",
+      "Compliance reporting (CMS, state Medicaid, quality measures)",
+      "User access control with audit logging equivalent to legacy profiles"
+    ]
+  },
+  "_metadata": {
+    "author": "sa-agent",
+    "date": "2026-03-15",
+    "validation_status": "complete",
+    "version": "1.0"
+  }
+}

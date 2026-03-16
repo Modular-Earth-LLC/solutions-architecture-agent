@@ -99,11 +99,12 @@ solutions-architecture-agent/
 │   └── engagement.json            # Lifecycle state tracker
 ├── hooks/hooks.json               # Pre-commit validation hooks
 ├── templates/                     # Output templates
-├── tests/                         # Validation scripts
-├── docs/                          # Documentation
+├── tests/                         # 5 validation scripts
+├── docs/                          # User documentation
+├── examples/                      # Sample engagement outputs (explore these first)
 ├── .claude/rules/                 # Guiding principles, KB rules, security
 ├── .repo-metadata.json            # Single source of truth (version, counts)
-└── outputs/                       # Generated deliverables
+└── outputs/                       # Generated deliverables (gitignored)
 ```
 
 ---

@@ -1,10 +1,10 @@
 {
   "$schema": "./schemas/system_config.schema.json",
-  "title": "AI Architecture Assistant - System Configuration",
-  "description": "Read-only configuration file for platform settings, constraints, stakeholders, and team information. AI engineers update this manually or as human-in-the-loop.",
-  "version": "0.1.0-alpha",
-  "last_updated": "2025-10-12",
-  "status": "Alpha - Untested in production, undergoing initial validation",
+  "title": "AI Solutions Architecture Agent - System Configuration",
+  "description": "Read-only configuration template for engagement-specific settings. Copy and customize per engagement. Skills read this for platform, stakeholder, and constraint context.",
+  "version": "1.0.0",
+  "last_updated": "2026-03-16",
+  "status": "v1.0.0 — Template for engagement customization",
   
   "project": {
     "name": "",

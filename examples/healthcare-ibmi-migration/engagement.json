@@ -1,0 +1,80 @@
+{
+  "$schema": "./schemas/engagement.schema.json",
+  "$depends_on": ["system_config.json"],
+  "engagement_id": "eng-2026-001",
+  "title": "IBMi Green Screen Modernization — Regional Health Partners",
+  "engagement_type": "modernization",
+  "status": "in_review",
+  "created_date": "2026-03-15",
+  "last_updated": "2026-03-15",
+  "version": "1.0",
+  "client": {
+    "name": "Regional Health Partners",
+    "industry": "Healthcare",
+    "contact": "CIO",
+    "size": "enterprise"
+  },
+  "lifecycle_state": {
+    "requirements": {
+      "status": "complete",
+      "version": "1.0",
+      "file": "requirements.json",
+      "last_updated": "2026-03-15",
+      "reviewed": false
+    },
+    "architecture": {
+      "status": "complete",
+      "version": "1.0",
+      "file": "architecture.json",
+      "last_updated": "2026-03-15",
+      "reviewed": false
+    },
+    "data_model": {
+      "status": "complete",
+      "version": "1.0",
+      "file": "data_model.json",
+      "last_updated": "2026-03-15",
+      "reviewed": false
+    },
+    "security_review": {
+      "status": "complete",
+      "version": "1.0",
+      "file": "security_review.json",
+      "last_updated": "2026-03-15",
+      "reviewed": false
+    },
+    "integration_plan": {
+      "status": "complete",
+      "version": "1.0",
+      "file": "integration_plan.json",
+      "last_updated": "2026-03-15",
+      "reviewed": false
+    },
+    "estimate": {
+      "status": "complete",
+      "version": "1.0",
+      "file": "estimate.json",
+      "last_updated": "2026-03-15",
+      "reviewed": false
+    },
+    "project_plan": {
+      "status": "complete",
+      "version": "1.0",
+      "file": "project_plan.json",
+      "last_updated": "2026-03-15",
+      "reviewed": false
+    }
+  },
+  "review_summary": {
+    "total_reviews": 4,
+    "latest_overall_score": 7.9,
+    "blocking_findings": 0
+  },
+  "tags": ["healthcare", "hipaa", "ibmi", "modernization", "legacy", "hcd", "iam"],
+  "_metadata": {
+    "author": "sa-agent",
+    "date": "2026-03-15",
+    "validation_status": "complete",
+    "version": "1.0"
+  }
+}

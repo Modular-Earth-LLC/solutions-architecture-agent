@@ -1,0 +1,507 @@
+{
+  "$schema": "./schemas/requirements.schema.json",
+  "$depends_on": ["system_config.json"],
+  "engagement_id": "eng-2026-001",
+  "version": "1.0",
+  "last_updated": "2026-03-15",
+  "status": "complete",
+
+  "client_context": {
+    "legal_name": "Regional Health Partners",
+    "brand_name": "RHP",
+    "industry": "Healthcare",
+    "company_size": "enterprise",
+    "ai_maturity": "beginner",
+    "ai_history": "No prior AI/ML initiatives. This engagement is a UI modernization and IAM project; AI-assisted data entry identified as a potential future phase only."
+  },
+
+  "problem_statement": {
+    "title": "IBMi Green Screen Modernization for Healthcare Organization",
+    "summary": "Regional Health Partners operates 15+ mission-critical clinical and administrative applications on IBM AS/400 (IBMi) accessed via 5250 green screen terminals. The organization needs modern web-based UIs with human-centered design, robust IAM (SSO, MFA, RBAC), mobile access for clinical staff, and HIPAA-compliant architecture — while preserving existing RPG business logic and DB2/400 data integrity.",
+    "current_state": {
+      "process_description": "All clinical and administrative workflows (patient registration, scheduling, billing, pharmacy, lab orders, clinical documentation) run on IBM AS/400 via 5250 green screen terminals. Staff must memorize function key sequences and terminal navigation. Training takes weeks. No mobile access. No modern authentication (SSO/MFA). 2 RPG developers maintain 15+ applications with limited documentation.",
+      "tools_in_use": ["IBM AS/400 (IBMi)", "RPG IV programs", "DB2/400 database", "5250 terminal emulators", "COBOL batch jobs", "JD Edwards (partial integration)"],
+      "pain_points": [
+        "Cannot recruit staff willing to use green screen terminals — losing candidates to competitors with modern UIs",
+        "Accessibility non-compliance (ADA/Section 508) — green screens fail WCAG standards",
+        "No mobile access for clinical staff working across 3 facilities",
+        "New hire training takes 3-4 weeks just to learn terminal navigation and function keys",
+        "No integration with modern EHR systems or health information exchanges",
+        "Aging RPG developer workforce (both developers within 5 years of retirement)",
+        "HIPAA audit findings on access control — no MFA, no granular RBAC, shared terminal logins",
+        "No audit trail for PHI access — compliance risk growing each year",
+        "Change management risk — clinical staff resistant to change after 15+ years on same system"
+      ],
+      "annual_cost": "Estimated $800K/year in lost productivity, recruitment failures, compliance risk, and maintenance of legacy RPG expertise",
+      "volume": "500+ daily users across 3 facilities, ~50,000 transactions/day, 2M+ patient records in DB2/400"
+    },
+    "desired_state": {
+      "description": "Modern responsive web UI layer with human-centered design principles that wraps existing IBMi business logic via API-first architecture. Role-based access control with SSO and MFA. Mobile-friendly interfaces for clinical staff. Full HIPAA compliance with audit trails. Phased rollout with extensive change management and training.",
+      "target_improvements": [
+        "Modern responsive web UI accessible from any device (desktop, tablet, mobile)",
+        "Role-based access control (RBAC) with SSO (SAML/OIDC) and MFA",
+        "90% reduction in new hire training time (from 3-4 weeks to 2-3 days)",
+        "HIPAA-compliant audit trail for all PHI access",
+        "Mobile-friendly clinical workflows for nursing and physician staff",
+        "API-first architecture enabling future EHR integrations",
+        "ADA/Section 508 accessibility compliance (WCAG 2.1 AA)",
+        "Gradual transition path preserving IBMi business logic and data"
+      ]
+    }
+  },
+
+  "ai_suitability_assessment": {
+    "score": 3,
+    "rationale": "This is primarily a UI modernization and IAM project, not an AI/ML initiative. The core work involves wrapping legacy IBMi applications with modern web UIs and implementing IAM. AI has limited applicability in the current phase — potential future use for AI-assisted data entry, clinical decision support, or natural language search of patient records.",
+    "favorable_factors": [
+      "Large volume of structured data in DB2/400 could benefit from AI-powered search",
+      "Repetitive data entry tasks could be AI-assisted in a future phase",
+      "Clinical documentation could benefit from NLP/summarization"
+    ],
+    "risk_factors": [
+      "HIPAA compliance adds significant complexity to any AI implementation",
+      "Clinical staff have low technology maturity — AI features may overwhelm during initial modernization",
+      "PHI data requires strict guardrails before any AI processing"
+    ],
+    "recommendation": "conditional_fit"
+  },
+
+  "pain_points": [
+    "Recruitment: Cannot attract talent willing to work with green screen terminals",
+    "Accessibility: ADA/Section 508 non-compliance with 5250 terminal interfaces",
+    "Mobility: No mobile access for clinical staff across 3 facilities",
+    "Training: 3-4 week onboarding for terminal navigation alone",
+    "Integration: No connectivity to modern EHR systems or HIEs",
+    "Workforce: RPG developers approaching retirement with limited knowledge transfer",
+    "Compliance: HIPAA audit findings on access control and PHI audit trails",
+    "Security: Shared terminal logins, no MFA, no granular RBAC",
+    "Change management: Clinical staff resistance to technology change"
+  ],
+
+  "success_criteria": [
+    {
+      "id": "SC-001",
+      "metric": "Training time reduction",
+      "description": "New hire training time for system navigation",
+      "baseline": 21,
+      "target": 3,
+      "measurement": "Days from first login to independent use, measured via competency assessment",
+      "timeframe": "Within 3 months of module go-live"
+    },
+    {
+      "id": "SC-002",
+      "metric": "Mobile access adoption",
+      "description": "Clinical staff using mobile interfaces for daily workflows",
+      "baseline": 0,
+      "target": 75,
+      "measurement": "Percentage of clinical staff with 5+ mobile logins per week",
+      "timeframe": "6 months post-launch"
+    },
+    {
+      "id": "SC-003",
+      "metric": "HIPAA audit compliance",
+      "description": "Zero critical findings in HIPAA access control audit",
+      "baseline": 5,
+      "target": 0,
+      "measurement": "Number of critical findings in annual HIPAA audit",
+      "timeframe": "Next scheduled audit post-implementation"
+    },
+    {
+      "id": "SC-004",
+      "metric": "Data migration integrity",
+      "description": "Zero data loss during migration and parallel operation",
+      "baseline": 0,
+      "target": 0,
+      "measurement": "Count of data discrepancies between legacy and modern systems during parallel run",
+      "timeframe": "Throughout migration period"
+    },
+    {
+      "id": "SC-005",
+      "metric": "System availability",
+      "description": "Production system uptime SLA",
+      "baseline": 99.0,
+      "target": 99.9,
+      "measurement": "Monthly uptime percentage excluding scheduled maintenance windows",
+      "timeframe": "Ongoing post-launch"
+    },
+    {
+      "id": "SC-006",
+      "metric": "User satisfaction",
+      "description": "Staff satisfaction with new interfaces vs. legacy green screens",
+      "baseline": 3.2,
+      "target": 8.0,
+      "measurement": "System Usability Scale (SUS) score on 1-10 scale, surveyed quarterly",
+      "timeframe": "6 months post-launch"
+    },
+    {
+      "id": "SC-007",
+      "metric": "Accessibility compliance",
+      "description": "WCAG 2.1 AA conformance across all modernized interfaces",
+      "baseline": 0,
+      "target": 100,
+      "measurement": "Percentage of pages passing automated WCAG 2.1 AA audit (axe-core)",
+      "timeframe": "At each module go-live"
+    }
+  ],
+
+  "stakeholders": [
+    {
+      "name": "CIO",
+      "role": "Chief Information Officer",
+      "type": "decision_maker",
+      "approval_authority": ["budget", "strategic", "technical"],
+      "communication_preference": "Weekly executive summary, monthly steering committee"
+    },
+    {
+      "name": "CMO",
+      "role": "Chief Medical Officer",
+      "type": "decision_maker",
+      "approval_authority": ["clinical_workflows"],
+      "communication_preference": "Bi-weekly clinical impact review"
+    },
+    {
+      "name": "CFO",
+      "role": "Chief Financial Officer",
+      "type": "decision_maker",
+      "approval_authority": ["budget"],
+      "communication_preference": "Monthly cost tracking, quarterly ROI review"
+    },
+    {
+      "name": "Director of Nursing",
+      "role": "Director of Nursing",
+      "type": "contributor",
+      "approval_authority": ["nursing_workflows"],
+      "communication_preference": "Weekly sprint demos, direct input on UI design"
+    },
+    {
+      "name": "IT Director",
+      "role": "IT Director",
+      "type": "contributor",
+      "approval_authority": ["technical"],
+      "communication_preference": "Daily standups, technical review sessions"
+    },
+    {
+      "name": "Clinical staff",
+      "role": "Nurses, physicians, administrative staff",
+      "type": "end_user",
+      "communication_preference": "Training sessions, feedback surveys, change champion network"
+    },
+    {
+      "name": "RPG Developers",
+      "role": "Legacy system maintainers",
+      "type": "contributor",
+      "approval_authority": ["technical"],
+      "communication_preference": "Daily collaboration, knowledge transfer sessions"
+    }
+  ],
+
+  "functional_requirements": [
+    {
+      "id": "FR-001",
+      "title": "Modern web UI for patient registration",
+      "description": "Replace 5250 green screen patient registration with responsive web interface. Must support all existing registration fields and workflows with improved usability.",
+      "priority": "must_have",
+      "complexity": "high",
+      "acceptance_criteria": [
+        "All current registration fields available in web UI",
+        "Form validation with clear error messages",
+        "Auto-complete for returning patients",
+        "WCAG 2.1 AA compliant",
+        "Works on desktop, tablet, and mobile"
+      ],
+      "dependencies": ["FR-007", "FR-008"]
+    },
+    {
+      "id": "FR-002",
+      "title": "Modern web UI for scheduling",
+      "description": "Replace green screen scheduling with visual calendar interface. Support drag-and-drop, multi-facility view, and provider availability.",
+      "priority": "must_have",
+      "complexity": "high",
+      "acceptance_criteria": [
+        "Visual calendar with day/week/month views",
+        "Multi-facility scheduling support",
+        "Provider availability management",
+        "Patient appointment notifications"
+      ],
+      "dependencies": ["FR-007", "FR-008"]
+    },
+    {
+      "id": "FR-003",
+      "title": "Modern web UI for billing",
+      "description": "Replace green screen billing with modern interface. Support claim management, payment processing views, and reporting dashboards.",
+      "priority": "must_have",
+      "complexity": "very_high",
+      "acceptance_criteria": [
+        "All billing codes and workflows supported",
+        "Claim status tracking dashboard",
+        "Payment reconciliation views",
+        "Financial reporting"
+      ],
+      "dependencies": ["FR-007", "FR-008"]
+    },
+    {
+      "id": "FR-004",
+      "title": "Modern web UI for pharmacy",
+      "description": "Replace green screen pharmacy module with modern interface. Support medication management, order verification, and inventory tracking.",
+      "priority": "must_have",
+      "complexity": "high",
+      "acceptance_criteria": [
+        "Medication order entry and verification",
+        "Drug interaction checking integration",
+        "Inventory management dashboard",
+        "Controlled substance tracking"
+      ],
+      "dependencies": ["FR-007", "FR-008"]
+    },
+    {
+      "id": "FR-005",
+      "title": "Modern web UI for lab orders",
+      "description": "Replace green screen lab order system with modern interface. Support order entry, result viewing, and result notification.",
+      "priority": "should_have",
+      "complexity": "medium",
+      "acceptance_criteria": [
+        "Lab order entry with template support",
+        "Result viewing with normal range highlighting",
+        "Abnormal result alerting",
+        "Order tracking and status"
+      ],
+      "dependencies": ["FR-007", "FR-008"]
+    },
+    {
+      "id": "FR-006",
+      "title": "Modern web UI for clinical documentation",
+      "description": "Replace green screen clinical documentation with modern interface. Support structured note entry, templates, and document management.",
+      "priority": "should_have",
+      "complexity": "very_high",
+      "acceptance_criteria": [
+        "Structured clinical note templates",
+        "Voice-to-text ready (future phase)",
+        "Document version history",
+        "Clinical image attachment support"
+      ],
+      "dependencies": ["FR-007", "FR-008"]
+    },
+    {
+      "id": "FR-007",
+      "title": "Identity and Access Management (IAM)",
+      "description": "Implement modern IAM with SSO (SAML 2.0/OIDC), MFA, and RBAC. Replace shared terminal logins with individual user accounts tied to clinical roles.",
+      "priority": "must_have",
+      "complexity": "high",
+      "acceptance_criteria": [
+        "SSO via SAML 2.0 or OIDC",
+        "MFA for all users (TOTP, push notification, or hardware token)",
+        "Role-based access control with clinical role mapping",
+        "Session management with auto-logout for PHI protection",
+        "Audit trail for all authentication events"
+      ]
+    },
+    {
+      "id": "FR-008",
+      "title": "API gateway for IBMi integration",
+      "description": "Build API layer that wraps existing RPG programs and DB2/400 data access. Provides REST APIs consumed by modern web UIs.",
+      "priority": "must_have",
+      "complexity": "very_high",
+      "acceptance_criteria": [
+        "REST API endpoints for all green screen functions",
+        "Data transformation between EBCDIC/DB2 and modern JSON formats",
+        "Connection pooling and caching for IBMi performance",
+        "API versioning for gradual migration",
+        "Rate limiting and circuit breaker patterns"
+      ]
+    },
+    {
+      "id": "FR-009",
+      "title": "Mobile-responsive clinical workflows",
+      "description": "Key clinical workflows (patient lookup, vitals entry, medication administration) accessible from tablets and smartphones.",
+      "priority": "must_have",
+      "complexity": "medium",
+      "acceptance_criteria": [
+        "Touch-optimized interface for tablets",
+        "Critical workflows available on smartphone form factor",
+        "Offline capability for basic patient lookup",
+        "Barcode/QR scanning for patient identification"
+      ],
+      "dependencies": ["FR-007", "FR-008"]
+    },
+    {
+      "id": "FR-010",
+      "title": "PHI audit trail and compliance logging",
+      "description": "Comprehensive audit logging for all PHI access, modifications, and exports. Support HIPAA audit requirements.",
+      "priority": "must_have",
+      "complexity": "medium",
+      "acceptance_criteria": [
+        "Log all PHI access with user, timestamp, record, and action",
+        "Immutable audit log storage",
+        "Audit report generation for HIPAA compliance",
+        "Real-time alerting on suspicious access patterns"
+      ],
+      "dependencies": ["FR-007"]
+    },
+    {
+      "id": "FR-011",
+      "title": "Change management and training portal",
+      "description": "In-app training guides, contextual help, and feedback mechanisms to support clinical staff transition from green screens.",
+      "priority": "should_have",
+      "complexity": "medium",
+      "acceptance_criteria": [
+        "Interactive onboarding tutorials per module",
+        "Contextual help tooltips throughout UI",
+        "Feedback submission mechanism",
+        "Training progress tracking per user"
+      ]
+    },
+    {
+      "id": "FR-012",
+      "title": "Reporting and analytics dashboard",
+      "description": "Executive dashboard for operational metrics, system usage, and KPI tracking. Replaces legacy report generation.",
+      "priority": "nice_to_have",
+      "complexity": "medium",
+      "acceptance_criteria": [
+        "Real-time operational metrics dashboard",
+        "Customizable report builder",
+        "Scheduled report generation and email delivery",
+        "Role-based dashboard views"
+      ],
+      "dependencies": ["FR-008"]
+    }
+  ],
+
+  "non_functional_requirements": {
+    "performance": {
+      "response_time_p95_ms": 2000,
+      "throughput_rps": 100,
+      "concurrent_users": 500
+    },
+    "availability": {
+      "target_percent": 99.9,
+      "planned_maintenance_window": "Sundays 2:00-6:00 AM EST"
+    },
+    "scalability": {
+      "current_volume": "500 concurrent users, 50,000 transactions/day",
+      "projected_growth": "10-15% annual growth in users and transactions",
+      "peak_multiplier": 2.5,
+      "geographic_regions": ["US-East"]
+    },
+    "security": {
+      "authentication": ["SAML 2.0", "OIDC", "MFA (TOTP/Push)"],
+      "authorization_model": "RBAC with clinical role hierarchy",
+      "data_classification": "restricted",
+      "encryption_requirements": ["AES-256 at rest", "TLS 1.2+ in transit", "Field-level encryption for SSN/MRN"],
+      "compliance_frameworks": ["HIPAA", "HITECH", "ADA Section 508"]
+    },
+    "data_residency": {
+      "required_regions": ["US"],
+      "prohibited_regions": [],
+      "data_retention_days": 2555
+    }
+  },
+
+  "data_landscape": {
+    "sources": [
+      {
+        "name": "DB2/400 Patient Database",
+        "type": "database",
+        "format": "EBCDIC/DB2 native",
+        "volume": "2M+ patient records, 500GB+",
+        "pii_present": true,
+        "quality_notes": "Well-structured relational data with 20+ years of history. Some legacy field formats (packed decimal, EBCDIC). Generally high quality due to validation in RPG programs."
+      },
+      {
+        "name": "RPG Program Library",
+        "type": "file",
+        "format": "RPG IV source members",
+        "volume": "15+ applications, hundreds of programs",
+        "pii_present": false,
+        "quality_notes": "Business logic source code. Limited documentation. Knowledge concentrated in 2 developers."
+      },
+      {
+        "name": "COBOL Batch Jobs",
+        "type": "file",
+        "format": "COBOL source",
+        "volume": "Nightly batch processing jobs",
+        "pii_present": false,
+        "quality_notes": "Batch reporting and reconciliation. Must continue running during and after modernization."
+      }
+    ],
+    "integration_points": [
+      {
+        "system": "IBM AS/400 (IBMi)",
+        "direction": "bidirectional",
+        "protocol": "ODBC/JDBC via IBM i Access",
+        "auth_method": "IBMi user profiles"
+      },
+      {
+        "system": "JD Edwards (partial)",
+        "direction": "read",
+        "protocol": "File-based transfer",
+        "auth_method": "Shared service account"
+      },
+      {
+        "system": "Future EHR system",
+        "direction": "bidirectional",
+        "protocol": "HL7 FHIR (planned)",
+        "auth_method": "OAuth 2.0 (planned)"
+      }
+    ]
+  },
+
+  "constraints": {
+    "budget_range": "$500,000 - $1,500,000",
+    "timeline_weeks": 72,
+    "timeline_flexibility": "moderate",
+    "technology_restrictions": [
+      "Must maintain IBMi backend and DB2/400 during and after modernization — no rip-and-replace",
+      "PHI data must remain on-premises or in HIPAA-compliant cloud (BAA required)",
+      "Must support Internet Explorer 11 for legacy workstations (Phase 1 only)",
+      "No open-source databases for PHI storage without security review"
+    ],
+    "team_constraints": "Small internal IT team (5 people, only 2 RPG developers). Will require external consulting team. RPG developers critical for knowledge transfer and API layer design."
+  },
+
+  "scope_boundaries": {
+    "in_scope": [
+      "Modern web UI for top 6 green screen applications (registration, scheduling, billing, pharmacy, lab, clinical docs)",
+      "IAM implementation (SSO, MFA, RBAC) with HIPAA-compliant audit logging",
+      "API gateway layer wrapping IBMi RPG programs and DB2/400 data",
+      "Mobile-responsive design for clinical workflows",
+      "Change management planning and training materials",
+      "HIPAA compliance architecture and audit trail",
+      "Accessibility compliance (WCAG 2.1 AA)"
+    ],
+    "out_of_scope": [
+      "Replacing IBMi backend or migrating off DB2/400",
+      "EHR system selection or implementation (future phase)",
+      "AI/ML features (identified as future phase)",
+      "Hardware procurement (existing infrastructure assumed adequate)",
+      "Rewriting RPG business logic (wrap, don't rewrite)",
+      "COBOL batch job modernization (continue as-is)",
+      "Network infrastructure upgrades (assumed client responsibility)"
+    ],
+    "justification": "Scope focuses on maximum user impact (UI modernization + IAM) while minimizing risk by preserving proven IBMi business logic. Out-of-scope items are deferred to future phases to manage budget and timeline constraints."
+  },
+
+  "assumptions": [
+    "IBMi system has available capacity for API layer connections (connection pooling via IBM i Access ODBC/JDBC)",
+    "Client will provide dedicated RPG developer time (minimum 50%) for knowledge transfer and API collaboration",
+    "Existing DB2/400 data is structurally sound and does not require major data cleansing",
+    "Client will procure and configure identity provider (IdP) for SSO — consulting team provides integration",
+    "Network connectivity between IBMi and modern application servers is adequate",
+    "Client stakeholders are available for bi-weekly sprint demos and feedback",
+    "COBOL batch jobs will continue running unmodified on IBMi during and after modernization",
+    "Client will designate change champions in each clinical department for training rollout",
+    "Budget covers external consulting team but not client internal staff costs"
+  ],
+
+  "_metadata": {
+    "author": "sa-agent",
+    "date": "2026-03-15",
+    "validation_status": "complete",
+    "version": "1.0",
+    "discovery_method": "extraction_from_notes",
+    "discovery_tier": "comprehensive",
+    "discovery_date": "2026-03-15",
+    "discovery_duration_minutes": 90,
+    "participants": ["CIO", "CMO", "CFO", "Director of Nursing", "IT Director"],
+    "completeness": "complete"
+  }
+}

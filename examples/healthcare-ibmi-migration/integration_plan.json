@@ -1,0 +1,556 @@
+{
+  "$schema": "./schemas/integration_plan.schema.json",
+  "$depends_on": ["requirements.json"],
+  "engagement_id": "eng-2026-001",
+  "version": "1.0",
+  "last_updated": "2026-03-15",
+  "status": "complete",
+
+  "integration_inventory": [
+    {
+      "name": "IBMi RPG Programs → API Gateway",
+      "source": "IBM AS/400 RPG IV programs",
+      "target": "API Gateway (REST layer)",
+      "direction": "bidirectional",
+      "data_types": ["Patient records", "Scheduling data", "Billing data", "Pharmacy data", "Lab orders", "Clinical documents"],
+      "volume": "50,000 transactions/day",
+      "latency_requirement_ms": 2000,
+      "criticality": "critical"
+    },
+    {
+      "name": "DB2/400 → Application Database Cache",
+      "source": "DB2/400 (EBCDIC)",
+      "target": "Modern application layer",
+      "direction": "read",
+      "data_types": ["Patient demographics", "Reference data", "Lookup tables"],
+      "volume": "2M+ records, read-heavy",
+      "latency_requirement_ms": 500,
+      "criticality": "critical"
+    },
+    {
+      "name": "Modern Web UI → API Gateway",
+      "source": "Browser/Mobile clients",
+      "target": "API Gateway",
+      "direction": "bidirectional",
+      "data_types": ["UI requests", "Form submissions", "Search queries"],
+      "volume": "500 concurrent users",
+      "latency_requirement_ms": 2000,
+      "criticality": "critical"
+    },
+    {
+      "name": "Identity Provider (IdP) → IAM Service",
+      "source": "External IdP (SAML/OIDC)",
+      "target": "IAM Service",
+      "direction": "bidirectional",
+      "data_types": ["Authentication tokens", "User attributes", "Role mappings"],
+      "volume": "500+ daily authentications",
+      "latency_requirement_ms": 1000,
+      "criticality": "critical"
+    },
+    {
+      "name": "JD Edwards → Billing Module",
+      "source": "JD Edwards (file-based)",
+      "target": "Billing module",
+      "direction": "read",
+      "data_types": ["Financial data", "GL codes"],
+      "volume": "Daily batch transfer",
+      "latency_requirement_ms": null,
+      "criticality": "medium"
+    },
+    {
+      "name": "Audit Logger → SIEM/Compliance Store",
+      "source": "Application audit events",
+      "target": "Centralized audit log store",
+      "direction": "outbound",
+      "data_types": ["PHI access logs", "Authentication events", "Data modification logs"],
+      "volume": "100,000+ events/day",
+      "latency_requirement_ms": 5000,
+      "criticality": "critical"
+    }
+  ],
+
+  "api_contracts": [
+    {
+      "id": "API-001",
+      "name": "Patient Registration API",
+      "direction": "bidirectional",
+      "protocol": "REST",
+      "method": "GET/POST/PUT",
+      "endpoint": "/api/v1/patients",
+      "authentication": "OAuth 2.0 Bearer Token (via IAM service)",
+      "request_schema": {
+        "type": "object",
+        "fields": ["patient_id", "first_name", "last_name", "dob", "ssn_encrypted", "mrn", "insurance_info", "demographics"]
+      },
+      "response_schema": {
+        "type": "object",
+        "fields": ["patient_id", "status", "data", "errors"]
+      },
+      "rate_limit": "100 requests/minute per user",
+      "error_handling": "Circuit breaker with 3 failures/30s threshold, fallback to cached data for reads, retry with exponential backoff for writes",
+      "sla": {
+        "latency_p95_ms": 1500,
+        "availability_percent": 99.9
+      }
+    },
+    {
+      "id": "API-002",
+      "name": "Scheduling API",
+      "direction": "bidirectional",
+      "protocol": "REST",
+      "method": "GET/POST/PUT/DELETE",
+      "endpoint": "/api/v1/scheduling",
+      "authentication": "OAuth 2.0 Bearer Token",
+      "request_schema": {
+        "type": "object",
+        "fields": ["appointment_id", "patient_id", "provider_id", "facility_id", "date_time", "type", "duration_minutes"]
+      },
+      "response_schema": {
+        "type": "object",
+        "fields": ["appointment_id", "status", "conflicts", "data"]
+      },
+      "rate_limit": "200 requests/minute per user",
+      "error_handling": "Optimistic locking for concurrent scheduling, conflict resolution with user notification",
+      "sla": {
+        "latency_p95_ms": 1000,
+        "availability_percent": 99.9
+      }
+    },
+    {
+      "id": "API-003",
+      "name": "Billing API",
+      "direction": "bidirectional",
+      "protocol": "REST",
+      "method": "GET/POST/PUT",
+      "endpoint": "/api/v1/billing",
+      "authentication": "OAuth 2.0 Bearer Token",
+      "request_schema": {
+        "type": "object",
+        "fields": ["claim_id", "patient_id", "service_codes", "diagnosis_codes", "provider_id", "amount"]
+      },
+      "response_schema": {
+        "type": "object",
+        "fields": ["claim_id", "status", "adjudication_result", "data"]
+      },
+      "rate_limit": "50 requests/minute per user",
+      "error_handling": "Transaction rollback on failure, idempotent POST operations, dead letter queue for failed claim submissions",
+      "sla": {
+        "latency_p95_ms": 2000,
+        "availability_percent": 99.9
+      }
+    },
+    {
+      "id": "API-004",
+      "name": "Pharmacy API",
+      "direction": "bidirectional",
+      "protocol": "REST",
+      "method": "GET/POST/PUT",
+      "endpoint": "/api/v1/pharmacy",
+      "authentication": "OAuth 2.0 Bearer Token",
+      "request_schema": {
+        "type": "object",
+        "fields": ["order_id", "patient_id", "medication_id", "dosage", "frequency", "prescriber_id"]
+      },
+      "response_schema": {
+        "type": "object",
+        "fields": ["order_id", "status", "drug_interactions", "data"]
+      },
+      "rate_limit": "100 requests/minute per user",
+      "error_handling": "Strict validation for controlled substances, drug interaction check before order confirmation, audit trail for all pharmacy operations",
+      "sla": {
+        "latency_p95_ms": 1500,
+        "availability_percent": 99.95
+      }
+    },
+    {
+      "id": "API-005",
+      "name": "Lab Orders API",
+      "direction": "bidirectional",
+      "protocol": "REST",
+      "method": "GET/POST/PUT",
+      "endpoint": "/api/v1/lab-orders",
+      "authentication": "OAuth 2.0 Bearer Token",
+      "request_schema": {
+        "type": "object",
+        "fields": ["order_id", "patient_id", "test_codes", "ordering_provider_id", "priority", "specimen_type"]
+      },
+      "response_schema": {
+        "type": "object",
+        "fields": ["order_id", "status", "results", "abnormal_flags", "data"]
+      },
+      "rate_limit": "100 requests/minute per user",
+      "error_handling": "Order validation against test catalog, result notification via WebSocket for real-time updates",
+      "sla": {
+        "latency_p95_ms": 1500,
+        "availability_percent": 99.9
+      }
+    },
+    {
+      "id": "API-006",
+      "name": "Clinical Documentation API",
+      "direction": "bidirectional",
+      "protocol": "REST",
+      "method": "GET/POST/PUT",
+      "endpoint": "/api/v1/clinical-docs",
+      "authentication": "OAuth 2.0 Bearer Token",
+      "request_schema": {
+        "type": "object",
+        "fields": ["document_id", "patient_id", "author_id", "doc_type", "template_id", "content", "attachments"]
+      },
+      "response_schema": {
+        "type": "object",
+        "fields": ["document_id", "status", "version", "data"]
+      },
+      "rate_limit": "50 requests/minute per user",
+      "error_handling": "Document locking for concurrent edits, version conflict resolution, auto-save with draft status",
+      "sla": {
+        "latency_p95_ms": 2000,
+        "availability_percent": 99.9
+      }
+    },
+    {
+      "id": "API-007",
+      "name": "IBMi Data Access Layer (DAL)",
+      "direction": "bidirectional",
+      "protocol": "REST",
+      "method": "Internal service calls",
+      "endpoint": "/internal/v1/ibmi-dal",
+      "authentication": "mTLS with service identity",
+      "request_schema": {
+        "type": "object",
+        "fields": ["program_name", "library", "parameters", "operation_type"]
+      },
+      "response_schema": {
+        "type": "object",
+        "fields": ["result_set", "status", "row_count", "errors"]
+      },
+      "rate_limit": "Connection pool: 50 concurrent connections to IBMi",
+      "error_handling": "Connection pool management, automatic reconnect on IBMi session timeout, circuit breaker at 5 failures/60s, graceful degradation to read-only mode",
+      "sla": {
+        "latency_p95_ms": 500,
+        "availability_percent": 99.95
+      }
+    },
+    {
+      "id": "API-008",
+      "name": "IAM / Authentication API",
+      "direction": "bidirectional",
+      "protocol": "REST",
+      "method": "POST",
+      "endpoint": "/api/v1/auth",
+      "authentication": "SAML 2.0 / OIDC (federated via external IdP)",
+      "request_schema": {
+        "type": "object",
+        "fields": ["grant_type", "assertion", "mfa_token", "refresh_token"]
+      },
+      "response_schema": {
+        "type": "object",
+        "fields": ["access_token", "refresh_token", "expires_in", "user_roles", "session_id"]
+      },
+      "rate_limit": "20 auth attempts/minute per IP (brute-force protection)",
+      "error_handling": "Account lockout after 5 failed attempts, MFA fallback to backup codes, session invalidation on suspicious activity",
+      "sla": {
+        "latency_p95_ms": 1000,
+        "availability_percent": 99.99
+      }
+    },
+    {
+      "id": "API-009",
+      "name": "Audit Logging API",
+      "direction": "outbound",
+      "protocol": "REST",
+      "method": "POST",
+      "endpoint": "/internal/v1/audit",
+      "authentication": "mTLS with service identity",
+      "request_schema": {
+        "type": "object",
+        "fields": ["event_type", "user_id", "resource_type", "resource_id", "action", "timestamp", "source_ip", "phi_accessed"]
+      },
+      "response_schema": {
+        "type": "object",
+        "fields": ["audit_id", "status"]
+      },
+      "rate_limit": "No rate limit (fire-and-forget with async queue)",
+      "error_handling": "Async message queue (never block application flow), dead letter queue for failed writes, guaranteed delivery via persistent queue",
+      "sla": {
+        "latency_p95_ms": 100,
+        "availability_percent": 99.99
+      }
+    }
+  ],
+
+  "data_flow_mappings": [
+    {
+      "id": "DFM-001",
+      "name": "Patient Record: IBMi → Web UI",
+      "source_system": "DB2/400",
+      "target_system": "Modern Web UI",
+      "source_format": "EBCDIC packed decimal, fixed-length fields",
+      "target_format": "JSON (UTF-8)",
+      "field_mappings": [
+        { "source": "PTNUM (packed decimal 10,0)", "target": "patient_id (string)", "transform": "Unpack decimal, zero-pad to 10 digits, prefix 'P-'" },
+        { "source": "PTLNAM (char 30)", "target": "last_name (string)", "transform": "Trim trailing spaces, EBCDIC→UTF-8" },
+        { "source": "PTFNAM (char 20)", "target": "first_name (string)", "transform": "Trim trailing spaces, EBCDIC→UTF-8" },
+        { "source": "PTDOB (numeric 8,0 YYYYMMDD)", "target": "date_of_birth (string ISO 8601)", "transform": "Parse YYYYMMDD → YYYY-MM-DD" },
+        { "source": "PTSSN (char 9, encrypted)", "target": "ssn_last4 (string)", "transform": "Decrypt, extract last 4 digits, re-encrypt at rest" },
+        { "source": "PTMRN (char 12)", "target": "medical_record_number (string)", "transform": "Trim, validate format" }
+      ],
+      "validation_rules": [
+        "Patient ID must be non-null and unique",
+        "DOB must be valid date and not in future",
+        "SSN handled with field-level encryption — never transmitted in plaintext",
+        "MRN format validated against hospital numbering scheme"
+      ]
+    },
+    {
+      "id": "DFM-002",
+      "name": "Scheduling Data: IBMi ↔ Web UI",
+      "source_system": "DB2/400",
+      "target_system": "Modern Web UI",
+      "source_format": "EBCDIC fixed-length",
+      "target_format": "JSON (UTF-8)",
+      "field_mappings": [
+        { "source": "APPTID (packed decimal)", "target": "appointment_id (string)", "transform": "Unpack, prefix 'A-'" },
+        { "source": "APPTDT (numeric 8,0)", "target": "appointment_date (ISO 8601)", "transform": "YYYYMMDD → YYYY-MM-DD" },
+        { "source": "APPTTM (numeric 4,0)", "target": "appointment_time (HH:MM)", "transform": "HHMM → HH:MM" },
+        { "source": "PROVID (char 10)", "target": "provider_id (string)", "transform": "Trim" },
+        { "source": "FACILCD (char 3)", "target": "facility_id (string)", "transform": "Map facility code to facility name via lookup" }
+      ],
+      "validation_rules": [
+        "Appointment date must not be in the past for new bookings",
+        "Provider must be active and credentialed at specified facility",
+        "No double-booking validation (check existing appointments)"
+      ]
+    },
+    {
+      "id": "DFM-003",
+      "name": "Pharmacy Orders: IBMi ↔ Web UI",
+      "source_system": "DB2/400",
+      "target_system": "Modern Web UI",
+      "source_format": "EBCDIC fixed-length",
+      "target_format": "JSON (UTF-8)",
+      "field_mappings": [
+        { "source": "RXORDID (packed decimal)", "target": "order_id (string)", "transform": "Unpack, prefix 'RX-'" },
+        { "source": "RXMEDID (char 11 NDC)", "target": "medication_ndc (string)", "transform": "Validate NDC format" },
+        { "source": "RXDOSE (char 20)", "target": "dosage (string)", "transform": "Trim, normalize units" },
+        { "source": "RXFREQ (char 10)", "target": "frequency (string)", "transform": "Map legacy codes to standard SIG codes" },
+        { "source": "RXCTRL (char 1)", "target": "is_controlled (boolean)", "transform": "Map Y/N to true/false" }
+      ],
+      "validation_rules": [
+        "Controlled substance orders require prescriber DEA verification",
+        "Drug interaction check mandatory before order commit",
+        "Dosage range validation against drug formulary"
+      ]
+    },
+    {
+      "id": "DFM-004",
+      "name": "User Role Mapping: IdP → IAM → Application",
+      "source_system": "External Identity Provider",
+      "target_system": "IAM Service",
+      "source_format": "SAML assertions / OIDC claims",
+      "target_format": "JSON (internal role model)",
+      "field_mappings": [
+        { "source": "NameID / sub", "target": "user_id (string)", "transform": "Normalize to lowercase email" },
+        { "source": "groups[]", "target": "roles[] (string[])", "transform": "Map IdP groups to application roles via role mapping table" },
+        { "source": "department", "target": "department (string)", "transform": "Map to facility/unit" },
+        { "source": "job_title", "target": "clinical_role (string)", "transform": "Map to clinical role enum (physician, nurse, pharmacist, admin, billing)" }
+      ],
+      "validation_rules": [
+        "Every user must have at least one mapped role",
+        "Clinical roles must have corresponding credential verification",
+        "PHI access requires explicit role grant — no default access"
+      ]
+    }
+  ],
+
+  "migration_strategy": {
+    "approach": "strangler_fig",
+    "source_system": "IBM AS/400 (IBMi) with 5250 green screen terminals",
+    "target_system": "Modern web application with API gateway wrapping IBMi backend",
+    "data_migration": {
+      "approach": "No bulk data migration required — IBMi remains the system of record. The modern UI reads/writes through the API gateway to the same DB2/400 data. Reference data (lookup tables, code mappings) cached in modern application layer with TTL-based refresh.",
+      "volume": "2M+ patient records remain in DB2/400. Only reference data and user/role configuration migrated to modern stores.",
+      "downtime_plan": "Zero-downtime migration. Green screens and modern UI operate in parallel. Module-by-module cutover with rollback capability."
+    },
+    "rollback_plan": "Each module has independent rollback: re-enable green screen access for that module, disable modern UI routing. Green screens remain operational throughout migration period. Full rollback to pre-modernization state possible within 4 hours by reverting API gateway routing."
+  },
+
+  "legacy_bridging": [
+    {
+      "legacy_system": "IBM AS/400 RPG IV Programs",
+      "bridge_pattern": "facade",
+      "description": "Facade pattern via the IBMi Data Access Layer (API-007). Provides a simplified REST interface over complex RPG program calls and DB2/400 data access. Translates between EBCDIC/packed decimal IBMi formats and modern JSON/UTF-8. Handles connection pooling, session management, and EBCDIC character set conversion.",
+      "lifespan": "Permanent — IBMi remains the system of record. Facade evolves as RPG programs are gradually refactored or wrapped."
+    },
+    {
+      "legacy_system": "5250 Terminal Interface",
+      "bridge_pattern": "anti_corruption_layer",
+      "description": "Anti-corruption layer isolates the modern UI domain model from legacy 5250 screen-flow conventions. Legacy green screen applications use screen-based navigation with function keys (F3=Exit, F5=Refresh, etc.) and fixed-format data entry. The ACL maps these into modern REST API calls with proper domain objects, preventing legacy UI paradigms from leaking into the modern application.",
+      "lifespan": "Until all green screen modules are replaced (12-18 months), then ACL simplified to direct API calls."
+    },
+    {
+      "legacy_system": "DB2/400 Database",
+      "bridge_pattern": "adapter",
+      "description": "Adapter pattern for DB2/400 data access via IBM i Access ODBC/JDBC drivers. Handles EBCDIC-to-UTF-8 conversion, packed decimal unpacking, fixed-length field trimming, and date format normalization. Connection pooling with automatic reconnect on IBMi session timeout.",
+      "lifespan": "Permanent — DB2/400 remains the data store. Adapter maintained as long as IBMi is in production."
+    },
+    {
+      "legacy_system": "JD Edwards Financial Integration",
+      "bridge_pattern": "adapter",
+      "description": "Adapter pattern for JD Edwards file-based data transfer. Currently uses flat file exports. Adapter reads files, parses fixed-format records, and maps to modern billing data model. Future phase may upgrade to JD Edwards REST API if available.",
+      "lifespan": "Until JD Edwards integration is upgraded to API-based (Phase 2+)."
+    },
+    {
+      "legacy_system": "COBOL Batch Jobs",
+      "bridge_pattern": "facade",
+      "description": "Facade provides monitoring visibility into COBOL batch job execution without modifying the jobs themselves. Batch jobs continue running on IBMi nightly schedule. Facade captures job status, completion time, and error codes for the modern monitoring dashboard.",
+      "lifespan": "Permanent — COBOL batch jobs remain unchanged per scope boundaries."
+    }
+  ],
+
+  "cicd_pipeline": {
+    "stages": [
+      {
+        "stage": 1,
+        "name": "Code Quality",
+        "tools": ["ESLint", "Prettier", "SonarQube"],
+        "description": "Linting, formatting, static analysis for TypeScript/JavaScript frontend and API code"
+      },
+      {
+        "stage": 2,
+        "name": "Testing",
+        "tools": ["Jest", "Playwright", "Postman/Newman"],
+        "description": "Unit tests (>80% coverage), integration tests against IBMi test environment, E2E tests for critical clinical workflows",
+        "coverage_target": "80%"
+      },
+      {
+        "stage": 3,
+        "name": "Security Scanning",
+        "tools": ["Snyk", "OWASP ZAP", "git-secrets"],
+        "description": "SAST, dependency vulnerability scanning, secret detection (critical for PHI/HIPAA compliance)"
+      },
+      {
+        "stage": 4,
+        "name": "Build",
+        "tools": ["Docker", "Container Registry"],
+        "description": "Containerized builds with versioned tags, SBOM generation"
+      },
+      {
+        "stage": 5,
+        "name": "Deploy",
+        "tools": ["Kubernetes/ECS", "Blue-green deployment"],
+        "description": "Immutable deployments to staging → production with blue-green strategy, health check gates"
+      },
+      {
+        "stage": 6,
+        "name": "Monitor",
+        "tools": ["Prometheus", "Grafana", "PagerDuty"],
+        "description": "Post-deploy health checks, rollback triggers on error rate spike, PHI access anomaly detection"
+      }
+    ],
+    "automation": {
+      "dependency_audit": "Weekly automated scan of all dependencies",
+      "branch_cleanup": "Auto-delete merged feature branches after 7 days",
+      "hipaa_compliance_check": "Pre-merge check for PHI exposure in code, configs, and logs"
+    }
+  },
+
+  "phased_approach": {
+    "phase_1": {
+      "name": "Foundation + Patient Registration (MVP)",
+      "scope": [
+        "API gateway foundation and IBMi DAL (API-007)",
+        "IAM service (API-008) with SSO and MFA",
+        "Patient registration module (API-001) — highest visibility, moderate complexity",
+        "Audit logging infrastructure (API-009)",
+        "CI/CD pipeline setup"
+      ],
+      "validation_criteria": [
+        "Patient registration works end-to-end via modern UI",
+        "SSO login with MFA successfully authenticates against IdP",
+        "All PHI access logged in audit trail",
+        "Green screen and modern UI operate in parallel for registration",
+        "HIPAA compliance verified for patient registration workflow"
+      ],
+      "duration_estimate": "8-10 weeks"
+    },
+    "phase_2": {
+      "name": "Full API Integration + Remaining Modules",
+      "scope": [
+        "Scheduling module (API-002)",
+        "Billing module (API-003) with JD Edwards integration",
+        "Pharmacy module (API-004) with drug interaction checking",
+        "Lab orders module (API-005)",
+        "Clinical documentation module (API-006)",
+        "Mobile-responsive interfaces",
+        "Reporting dashboard",
+        "Change management portal"
+      ],
+      "validation_criteria": [
+        "All 6 clinical modules functional in modern UI",
+        "Mobile access validated by nursing staff",
+        "Parallel run: green screen and modern UI producing identical results",
+        "Full HIPAA audit compliance verified",
+        "User satisfaction score ≥ 7.0 in pilot group"
+      ],
+      "duration_estimate": "30-40 weeks"
+    }
+  },
+
+  "service_security": {
+    "service_identities": {
+      "api_gateway": {
+        "identity": "Dedicated service account for API gateway",
+        "permissions": "Route requests, validate tokens, rate limit",
+        "credential_storage": "Secrets vault with auto-rotation"
+      },
+      "ibmi_dal": {
+        "identity": "Dedicated IBMi service profile with restricted library access",
+        "permissions": "Execute specific RPG programs, read/write specific DB2/400 tables",
+        "credential_storage": "Secrets vault with 90-day rotation"
+      },
+      "iam_service": {
+        "identity": "Dedicated service account for identity management",
+        "permissions": "Validate tokens, issue tokens, manage sessions, read user directory",
+        "credential_storage": "Secrets vault with 30-day rotation"
+      },
+      "audit_service": {
+        "identity": "Dedicated write-only service account for audit logging",
+        "permissions": "Append-only write to audit log store",
+        "credential_storage": "Secrets vault with 90-day rotation"
+      }
+    },
+    "inter_service_auth": "Mutual TLS (mTLS) for all internal service-to-service communication",
+    "audit_trail": "Every service call logged: caller identity, target service, action, result, timestamp, correlation ID"
+  },
+
+  "error_handling_patterns": {
+    "circuit_breaker": {
+      "threshold": "5 failures in 60 seconds triggers open state",
+      "half_open_after": "30 seconds",
+      "fallback": "Return cached data for reads, queue writes for retry",
+      "applies_to": ["IBMi DAL (API-007)", "External IdP calls"]
+    },
+    "retry_policy": {
+      "max_retries": 3,
+      "backoff": "Exponential with jitter (1s, 2s, 4s base)",
+      "idempotent_only": true,
+      "applies_to": ["All write operations via IBMi DAL"]
+    },
+    "dead_letter_queue": {
+      "purpose": "Capture failed operations for manual review and replay",
+      "retention_days": 30,
+      "alerting": "PagerDuty alert on DLQ depth > 10 messages",
+      "applies_to": ["Audit log writes", "Billing claim submissions", "Batch reconciliation"]
+    }
+  },
+
+  "_metadata": {
+    "author": "sa-agent",
+    "date": "2026-03-15",
+    "validation_status": "complete",
+    "version": "1.0",
+    "planner": "sa-agent",
+    "planning_date": "2026-03-15"
+  }
+}

@@ -1,0 +1,338 @@
+{
+  "$schema": "./schemas/architecture.schema.json",
+  "$depends_on": ["requirements.json"],
+  "engagement_id": "eng-2026-001",
+  "version": "1.0",
+  "last_updated": "2026-03-15",
+  "status": "complete",
+
+  "executive_summary": {
+    "recommended_approach": "Strangler fig modernization: wrap IBMi RPG programs with REST API layer, build responsive React web UI, implement modern IAM with SSO/MFA — phased module-by-module rollout preserving all existing business logic.",
+    "confidence_level": "high",
+    "go_no_go": "go_with_conditions",
+    "key_benefits": [
+      "90% reduction in training time — modern UIs eliminate terminal navigation learning curve",
+      "HIPAA compliance — SSO, MFA, RBAC, and comprehensive PHI audit trails close current audit findings",
+      "Mobile access — clinical staff can use tablets/phones across all 3 facilities",
+      "Recruitment advantage — modern tech stack attracts talent vs. green screen environment",
+      "API-first architecture enables future EHR integrations and AI capabilities",
+      "Risk mitigation — IBMi business logic preserved, no rewrite risk"
+    ],
+    "key_risks": [
+      "IBMi integration complexity — EBCDIC/packed decimal conversion, connection pool management, RPG program interfaces require specialized expertise",
+      "Change management — clinical staff resistant after 15+ years on same system; phased rollout and training program critical",
+      "RPG developer dependency — only 2 developers, both near retirement; knowledge transfer must be prioritized",
+      "HIPAA compliance scope — PHI data throughout all modules increases security implementation effort",
+      "Legacy JD Edwards integration — file-based transfer is fragile; needs monitoring and error handling"
+    ],
+    "total_investment_range": "$750,000 - $1,200,000"
+  },
+
+  "tech_stack": {
+    "backend": {
+      "language": "TypeScript (Node.js 20 LTS)",
+      "framework": "NestJS",
+      "api_style": "rest"
+    },
+    "frontend": {
+      "framework": "React 18 with Next.js 14 (SSR for performance, accessibility)",
+      "type": "web_app",
+      "rationale": "React ecosystem has largest talent pool, Next.js provides SSR for fast initial load and SEO. Responsive design with Tailwind CSS for mobile support. Strong accessibility tooling (react-aria, axe-core integration)."
+    },
+    "data_stores": {
+      "primary": {
+        "technology": "DB2/400 (existing — system of record)",
+        "hosting": "On-premises IBM AS/400",
+        "purpose": "All patient, clinical, billing, and operational data. Accessed via IBMi Data Access Layer."
+      },
+      "session_cache": {
+        "technology": "Redis",
+        "hosting": "HIPAA-compliant cloud or on-premises",
+        "purpose": "Session management, token caching, API response caching for read-heavy queries."
+      },
+      "audit_store": {
+        "technology": "PostgreSQL (append-only audit schema)",
+        "hosting": "HIPAA-compliant cloud with encryption at rest",
+        "purpose": "Immutable audit log for PHI access events, authentication events, and data modifications. HIPAA compliance requirement."
+      },
+      "user_directory": {
+        "technology": "PostgreSQL",
+        "hosting": "HIPAA-compliant cloud",
+        "purpose": "User accounts, role mappings, session metadata. Synced with external IdP."
+      }
+    },
+    "infrastructure": {
+      "cloud_provider": "AWS (HIPAA BAA available) or Azure (HIPAA BAA available)",
+      "compute": "ECS Fargate (serverless containers) for application tier; IBM AS/400 on-premises for backend",
+      "container_orchestration": "ECS Fargate (managed, no cluster management overhead)",
+      "deployment_strategy": "blue_green",
+      "region": "us-east-1 (or closest to client facilities)",
+      "monitoring": "CloudWatch + Prometheus + Grafana",
+      "logging": "CloudWatch Logs with structured JSON logging, 7-year retention for HIPAA audit logs"
+    }
+  },
+
+  "component_design": [
+    {
+      "id": "C-001",
+      "name": "Web Application (React/Next.js)",
+      "technology": "React 18, Next.js 14, Tailwind CSS",
+      "purpose": "Responsive web UI replacing green screen terminals. Serves all 6 clinical modules plus admin dashboards. WCAG 2.1 AA compliant.",
+      "inputs": ["User interactions", "API responses from C-002"],
+      "outputs": ["API requests to C-002", "UI renders"],
+      "scalability": "Horizontal — CDN for static assets, SSR instances scale with user count",
+      "cost_driver": true
+    },
+    {
+      "id": "C-002",
+      "name": "API Gateway",
+      "technology": "NestJS on Node.js, API Gateway (AWS/Azure)",
+      "purpose": "Central entry point for all client requests. Routes to backend services, enforces authentication, rate limiting, and request validation.",
+      "inputs": ["HTTP requests from C-001", "Auth tokens from C-004"],
+      "outputs": ["Validated requests to C-003/C-005", "API responses to C-001"],
+      "scalability": "Horizontal — auto-scaling behind load balancer",
+      "cost_driver": true
+    },
+    {
+      "id": "C-003",
+      "name": "IBMi Data Access Layer (DAL)",
+      "technology": "Node.js, IBM i Access ODBC/JDBC drivers, node-jt400",
+      "purpose": "Abstraction layer for all IBMi communication. Handles connection pooling, EBCDIC conversion, RPG program calls, and DB2/400 queries. Facade pattern over legacy interfaces.",
+      "inputs": ["Service requests from C-002", "RPG program parameters"],
+      "outputs": ["JSON-formatted data from DB2/400", "RPG program return values"],
+      "scalability": "Limited by IBMi connection pool (50 concurrent). Vertical scaling with caching at C-006.",
+      "cost_driver": false
+    },
+    {
+      "id": "C-004",
+      "name": "IAM / Authentication Service",
+      "technology": "Keycloak (open-source IdP) or AWS Cognito, SAML 2.0, OIDC",
+      "purpose": "Single sign-on, multi-factor authentication, role-based access control, session management. Integrates with client's identity provider. Maps clinical roles to application permissions.",
+      "inputs": ["SAML/OIDC assertions from external IdP", "Auth requests from C-002"],
+      "outputs": ["JWT access tokens", "Role claims", "Session records"],
+      "scalability": "Horizontal — stateless token validation, session state in C-006",
+      "cost_driver": false
+    },
+    {
+      "id": "C-005",
+      "name": "Business Logic Services",
+      "technology": "NestJS microservices (Patient, Scheduling, Billing, Pharmacy, Lab, ClinDoc)",
+      "purpose": "Domain-specific service modules mapping modern API contracts to IBMi backend operations. Each module encapsulates one green screen application's functionality.",
+      "inputs": ["Validated requests from C-002"],
+      "outputs": ["Data requests to C-003", "Responses to C-002"],
+      "scalability": "Horizontal per module — independent scaling based on module traffic",
+      "cost_driver": true
+    },
+    {
+      "id": "C-006",
+      "name": "Cache Layer (Redis)",
+      "technology": "Redis 7, ElastiCache (AWS) or Azure Cache for Redis",
+      "purpose": "Session storage, API response caching for read-heavy queries, token validation cache. Reduces load on IBMi connection pool.",
+      "inputs": ["Cache reads/writes from C-002, C-004, C-005"],
+      "outputs": ["Cached data responses", "Session lookups"],
+      "scalability": "Horizontal — Redis Cluster with read replicas",
+      "cost_driver": false
+    },
+    {
+      "id": "C-007",
+      "name": "Audit Logging Service",
+      "technology": "NestJS service, PostgreSQL (append-only), message queue (SQS/RabbitMQ)",
+      "purpose": "Captures all PHI access events, authentication events, and data modifications. Async write via message queue to avoid blocking application flow. Immutable storage for HIPAA compliance.",
+      "inputs": ["Audit events from all services via message queue"],
+      "outputs": ["Persisted audit records", "Audit reports", "Anomaly alerts"],
+      "scalability": "Horizontal — queue-based ingestion handles burst, PostgreSQL partitioned by date",
+      "cost_driver": false
+    },
+    {
+      "id": "C-008",
+      "name": "Monitoring & Observability",
+      "technology": "Prometheus, Grafana, CloudWatch, PagerDuty",
+      "purpose": "Centralized monitoring of all components. Health checks, performance metrics, error rate tracking, IBMi connectivity monitoring, SLA dashboards.",
+      "inputs": ["Metrics from all components", "Log streams", "Health check responses"],
+      "outputs": ["Dashboards", "Alerts", "Incident notifications"],
+      "scalability": "Vertical — single monitoring stack scales with metric volume",
+      "cost_driver": false
+    }
+  ],
+
+  "data_flows": [
+    {
+      "id": "DF-001",
+      "name": "User → Web UI → API Gateway",
+      "source": "C-001 (Web Application)",
+      "destination": "C-002 (API Gateway)",
+      "protocol": "HTTPS",
+      "data_type": "JSON API requests/responses",
+      "latency_target_ms": 200,
+      "encryption": "TLS 1.2+"
+    },
+    {
+      "id": "DF-002",
+      "name": "API Gateway → Business Logic Services",
+      "source": "C-002 (API Gateway)",
+      "destination": "C-005 (Business Logic Services)",
+      "protocol": "HTTP (internal, mTLS)",
+      "data_type": "JSON service requests",
+      "latency_target_ms": 100,
+      "encryption": "mTLS"
+    },
+    {
+      "id": "DF-003",
+      "name": "Business Logic → IBMi DAL → DB2/400",
+      "source": "C-005 (Business Logic Services)",
+      "destination": "C-003 (IBMi DAL) → DB2/400",
+      "protocol": "ODBC/JDBC",
+      "data_type": "SQL queries, RPG program calls",
+      "latency_target_ms": 500,
+      "encryption": "TLS 1.2 (IBM i Access encrypted connection)"
+    },
+    {
+      "id": "DF-004",
+      "name": "Auth Flow: External IdP → IAM Service",
+      "source": "External Identity Provider",
+      "destination": "C-004 (IAM Service)",
+      "protocol": "HTTPS (SAML/OIDC)",
+      "data_type": "SAML assertions, OIDC tokens",
+      "latency_target_ms": 1000,
+      "encryption": "TLS 1.2+, signed SAML assertions"
+    },
+    {
+      "id": "DF-005",
+      "name": "All Services → Audit Logger",
+      "source": "C-002, C-004, C-005 (all services)",
+      "destination": "C-007 (Audit Logging Service)",
+      "protocol": "Message Queue (SQS/RabbitMQ)",
+      "data_type": "Audit event messages (JSON)",
+      "latency_target_ms": 5000,
+      "encryption": "TLS in transit, AES-256 at rest"
+    },
+    {
+      "id": "DF-006",
+      "name": "All Components → Monitoring",
+      "source": "All components",
+      "destination": "C-008 (Monitoring)",
+      "protocol": "Prometheus scrape / CloudWatch agent",
+      "data_type": "Metrics, logs, traces",
+      "latency_target_ms": 10000,
+      "encryption": "TLS in transit"
+    }
+  ],
+
+  "diagrams": {
+    "system_context": {
+      "format": "mermaid",
+      "code": "graph TB\n    Users[\"Clinical & Admin Staff\\n(500+ users, 3 facilities)\"]\n    IdP[\"External Identity Provider\\n(SAML/OIDC)\"]\n    IBMi[\"IBM AS/400\\n(RPG, DB2/400, COBOL)\"]\n    JDE[\"JD Edwards\\n(Financial)\"]\n    \n    subgraph ModernPlatform[\"Modern Application Platform\"]\n        WebUI[\"Web Application\\n(React/Next.js)\"]\n        APIGw[\"API Gateway\\n(NestJS)\"]\n        IAM[\"IAM Service\\n(Keycloak/Cognito)\"]\n        BizLogic[\"Business Logic\\nServices\"]\n        DAL[\"IBMi Data Access Layer\"]\n        AuditSvc[\"Audit Service\"]\n        Cache[\"Redis Cache\"]\n        Monitor[\"Monitoring\\n(Prometheus/Grafana)\"]\n    end\n    \n    Users -->|HTTPS| WebUI\n    WebUI -->|REST API| APIGw\n    APIGw -->|Auth| IAM\n    IAM <-->|SAML/OIDC| IdP\n    APIGw --> BizLogic\n    BizLogic --> DAL\n    DAL <-->|ODBC/JDBC| IBMi\n    BizLogic --> Cache\n    BizLogic --> AuditSvc\n    APIGw --> AuditSvc\n    JDE -.->|File Transfer| BizLogic\n    Monitor -.-> ModernPlatform"
+    },
+    "deployment_view": {
+      "format": "mermaid",
+      "code": "graph TB\n    subgraph Client[\"Client Network\"]\n        IBMi[\"IBM AS/400\\n(On-Premises)\"]\n        IdP[\"Identity Provider\"]\n    end\n    \n    subgraph Cloud[\"HIPAA-Compliant Cloud (AWS/Azure)\"]\n        subgraph AZ1[\"Availability Zone 1\"]\n            ALB1[\"Application Load Balancer\"]\n            ECS1[\"ECS Fargate\\n(App Containers)\"]\n            Redis1[\"Redis Primary\"]\n        end\n        subgraph AZ2[\"Availability Zone 2\"]\n            ALB2[\"ALB (Failover)\"]\n            ECS2[\"ECS Fargate\\n(App Containers)\"]\n            Redis2[\"Redis Replica\"]\n        end\n        PG[\"PostgreSQL RDS\\n(Audit + Users)\"]\n        SQS[\"SQS\\n(Audit Queue)\"]\n        WAF[\"WAF + Shield\"]\n        CW[\"CloudWatch\"]\n    end\n    \n    Users[\"End Users\"] -->|HTTPS| WAF\n    WAF --> ALB1\n    ALB1 --> ECS1\n    ECS1 <-->|VPN/Direct Connect| IBMi\n    ECS1 --> Redis1\n    ECS1 --> SQS\n    SQS --> PG\n    Redis1 -.-> Redis2\n    ECS1 -.-> ECS2\n    ECS1 <-->|SAML| IdP\n    CW -.-> Cloud"
+    },
+    "data_flow": {
+      "format": "mermaid",
+      "code": "sequenceDiagram\n    participant U as User (Browser)\n    participant W as Web App (React)\n    participant A as API Gateway\n    participant Auth as IAM Service\n    participant BL as Business Logic\n    participant DAL as IBMi DAL\n    participant DB as DB2/400\n    participant Aud as Audit Service\n    \n    U->>W: Navigate to patient registration\n    W->>A: GET /api/v1/patients?search=...\n    A->>Auth: Validate JWT token\n    Auth-->>A: Token valid, roles: [nurse]\n    A->>BL: Forward request with user context\n    BL->>DAL: Query patient by criteria\n    DAL->>DB: ODBC call to RPG program PTLOOKUP\n    DB-->>DAL: EBCDIC result set\n    DAL-->>BL: JSON patient records\n    BL->>Aud: Log PHI access event (async)\n    BL-->>A: Patient list response\n    A-->>W: JSON response\n    W-->>U: Render patient list UI"
+    }
+  },
+
+  "cloud_infrastructure": {
+    "services": {
+      "compute": "ECS Fargate (serverless containers — no EC2 management)",
+      "load_balancer": "Application Load Balancer with WAF",
+      "cache": "ElastiCache for Redis (Multi-AZ)",
+      "database": "RDS PostgreSQL (audit logs, user directory)",
+      "queue": "SQS (audit event queue)",
+      "secrets": "AWS Secrets Manager (credential storage, auto-rotation)",
+      "networking": "VPC with private subnets, VPN/Direct Connect to IBMi on-premises",
+      "cdn": "CloudFront for static assets"
+    },
+    "deployment_pattern": "Blue-green via ECS with CodeDeploy. Zero-downtime deployments with automatic rollback on health check failure.",
+    "disaster_recovery": {
+      "rto_hours": 4,
+      "rpo_hours": 1,
+      "strategy": "Multi-AZ deployment within single region. PostgreSQL RDS with automated backups and point-in-time recovery. Redis replication across AZs. IBMi has its own DR (client-managed)."
+    },
+    "cost_optimization": {
+      "compute": "Fargate Savings Plans for predictable baseline, auto-scaling for peak",
+      "storage": "S3 lifecycle policies for audit log archival (Standard → IA → Glacier after 1 year)",
+      "monitoring": "CloudWatch log retention tiered by importance (7 days debug, 7 years audit)"
+    }
+  },
+
+  "ai_ml_components": {
+    "current_phase": "None — this is a UI modernization engagement. AI/ML identified as future phase only.",
+    "future_considerations": {
+      "ai_assisted_data_entry": "NLP-powered form auto-fill from clinical notes (Phase 3+)",
+      "clinical_decision_support": "Drug interaction checking enhancement with ML models (Phase 3+)",
+      "natural_language_search": "Patient record search via natural language queries (Phase 3+)"
+    }
+  },
+
+  "observability": {
+    "logging": {
+      "format": "Structured JSON (timestamp, level, service, correlation_id, message, context)",
+      "aggregation": "CloudWatch Logs with log group per service",
+      "retention": "7 days for debug logs, 90 days for application logs, 7 years for audit/PHI access logs (HIPAA)",
+      "phi_protection": "PHI fields masked in application logs, full detail only in audit logs"
+    },
+    "metrics": {
+      "infrastructure": "CPU, memory, network (via CloudWatch)",
+      "application": "Request count, latency (P50/P95/P99), error rate, active sessions",
+      "ibmi_specific": "Connection pool utilization, ODBC query latency, RPG program response time",
+      "business": "Active users, transactions per module, PHI access count"
+    },
+    "tracing": {
+      "tool": "AWS X-Ray or OpenTelemetry",
+      "scope": "Request-level tracing from Web UI through API Gateway to IBMi DAL",
+      "correlation": "Correlation ID propagated through all service calls and audit events"
+    }
+  },
+
+  "well_architected_scores": {
+    "operational_excellence": 7.5,
+    "security": 8.5,
+    "reliability": 7.0,
+    "performance_efficiency": 7.0,
+    "cost_optimization": 7.5,
+    "sustainability": 6.5,
+    "overall": 7.3,
+    "notes": {
+      "operational_excellence": "Strong: CI/CD pipeline, structured logging, monitoring. Gap: IBMi-specific runbooks needed, RPG developer knowledge transfer documentation.",
+      "security": "Strong: Zero Trust (SSO, MFA, RBAC), HIPAA compliance, PHI audit trails, encryption everywhere. Gap: Penetration testing plan needed before go-live.",
+      "reliability": "Strong: Multi-AZ deployment, circuit breakers, retry patterns. Gap: IBMi is single point of failure (client-managed DR), connection pool limits constrain burst capacity.",
+      "performance_efficiency": "Strong: Redis caching reduces IBMi load, CDN for static assets. Gap: IBMi ODBC latency may be bottleneck for complex queries; need performance testing with real data volumes.",
+      "cost_optimization": "Strong: Fargate (pay-per-use), caching strategy, storage lifecycle. Gap: IBMi licensing costs not included (client-owned), need to validate Fargate vs EC2 cost crossover point.",
+      "sustainability": "Moderate: Serverless compute is efficient, caching reduces redundant processing. Gap: On-premises IBMi power consumption not addressed, no carbon-aware scheduling."
+    }
+  },
+
+  "alternatives_considered": [
+    {
+      "name": "Full IBMi replacement (rip-and-replace with cloud-native)",
+      "summary": "Replace all IBMi applications with cloud-native microservices and modern database",
+      "why_rejected": "Unacceptable risk for healthcare organization. 15+ years of business logic in RPG programs would need to be rewritten — high defect risk, 3-5x budget, 2-3x timeline. Zero tolerance for data loss with 2M+ patient records. Strangler fig preserves proven logic while modernizing UI."
+    },
+    {
+      "name": "Commercial IBMi screen scraping (e.g., Rocket BlueZone, Fresche Presto)",
+      "summary": "Use commercial tools that auto-generate web UIs from existing green screens",
+      "why_rejected": "Screen scraping produces UIs that mirror green screen workflows — does not achieve HCD goals. No mobile optimization, limited accessibility compliance. Does not address IAM requirements (SSO, MFA, RBAC). Vendor lock-in with ongoing licensing costs. Does not provide API layer for future integrations."
+    },
+    {
+      "name": "Angular instead of React for frontend",
+      "summary": "Use Angular framework for the web application",
+      "why_rejected": "Smaller talent pool in client's region. Angular's opinionated structure is good but React ecosystem has more accessibility tooling (react-aria), component libraries (Radix UI), and SSR maturity (Next.js). Team ramp-up faster with React."
+    },
+    {
+      "name": "Java/Spring Boot instead of Node.js/NestJS for backend",
+      "summary": "Use Java Spring Boot for API gateway and business logic services",
+      "why_rejected": "Viable alternative. Rejected for this engagement because: (1) Node.js has better IBM i Access client libraries (node-jt400), (2) TypeScript across full stack reduces context switching, (3) NestJS provides Spring-like structure with lighter runtime. Java would be preferred if team had strong Java expertise."
+    }
+  ],
+
+  "_metadata": {
+    "author": "sa-agent",
+    "date": "2026-03-15",
+    "validation_status": "complete",
+    "version": "1.0",
+    "architect": "sa-agent",
+    "design_method": "strangler_fig_modernization"
+  }
+}

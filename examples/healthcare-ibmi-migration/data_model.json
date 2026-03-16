@@ -1,0 +1,316 @@
+{
+  "$schema": "./schemas/data_model.schema.json",
+  "$depends_on": ["requirements.json", "architecture.json"],
+  "engagement_id": "eng-2026-001",
+  "version": "1.0",
+  "last_updated": "2026-03-15",
+  "status": "complete",
+
+  "data_requirements": {
+    "sources": [
+      {
+        "name": "IBM DB2/400",
+        "role": "System of record for all clinical, scheduling, billing, and pharmacy data",
+        "access_method": "JDBC via JTOpen / IBM i Access ODBC",
+        "latency_requirement": "< 200ms for transactional reads"
+      },
+      {
+        "name": "PostgreSQL",
+        "role": "Audit trail persistence and user directory / RBAC store",
+        "access_method": "Native PostgreSQL driver (pg / JDBC)",
+        "latency_requirement": "< 100ms for auth lookups, async for audit writes"
+      },
+      {
+        "name": "Redis",
+        "role": "Session cache, frequently-accessed reference data, rate limiting",
+        "access_method": "Redis client (ioredis / Jedis)",
+        "latency_requirement": "< 10ms"
+      }
+    ],
+    "volumes": {
+      "patients": "~250,000 active records; ~1.2M historical",
+      "appointments": "~3,000 per day across all providers",
+      "billing_claims": "~5,000 new claims per day; ~15M historical",
+      "pharmacy_orders": "~2,000 per day",
+      "lab_orders": "~1,500 per day",
+      "clinical_documents": "~4,000 per day (notes, results, correspondence)",
+      "audit_events": "~50,000 per day (all PHI access logged)"
+    },
+    "access_patterns": [
+      "Patient lookup by MRN or last name + DOB (high frequency)",
+      "Appointment schedule by provider + date range",
+      "Claim status inquiry by patient or claim number",
+      "Medication list by patient (active + historical)",
+      "Lab results by patient and date range",
+      "Clinical document retrieval by patient and document type",
+      "Audit log query by user, patient, or date range",
+      "Role-based permission checks on every request"
+    ]
+  },
+
+  "entities": [
+    {
+      "id": "E-001",
+      "name": "Patient",
+      "description": "Core patient demographic and identification record. System of record resides in DB2/400 RPG files; web tier reads via API gateway.",
+      "storage": "DB2/400",
+      "fields": [
+        { "name": "patient_id", "type": "BIGINT", "nullable": false, "primary_key": true, "indexed": true },
+        { "name": "mrn", "type": "VARCHAR(20)", "nullable": false, "indexed": true },
+        { "name": "last_name", "type": "VARCHAR(60)", "nullable": false, "indexed": true },
+        { "name": "first_name", "type": "VARCHAR(60)", "nullable": false },
+        { "name": "date_of_birth", "type": "DATE", "nullable": false, "indexed": true },
+        { "name": "ssn_last_four", "type": "CHAR(4)", "nullable": true },
+        { "name": "gender", "type": "CHAR(1)", "nullable": false, "values": ["M", "F", "U", "O"] },
+        { "name": "primary_phone", "type": "VARCHAR(15)", "nullable": true }
+      ],
+      "relationships": [
+        { "target": "Appointment", "type": "one_to_many", "foreign_key": "patient_id" },
+        { "target": "BillingClaim", "type": "one_to_many", "foreign_key": "patient_id" },
+        { "target": "PharmacyOrder", "type": "one_to_many", "foreign_key": "patient_id" },
+        { "target": "LabOrder", "type": "one_to_many", "foreign_key": "patient_id" },
+        { "target": "ClinicalDocument", "type": "one_to_many", "foreign_key": "patient_id" }
+      ]
+    },
+    {
+      "id": "E-002",
+      "name": "Appointment",
+      "description": "Scheduled and completed patient visits. Source is DB2/400 scheduling files; web UI provides calendar-based CRUD.",
+      "storage": "DB2/400",
+      "fields": [
+        { "name": "appointment_id", "type": "BIGINT", "nullable": false, "primary_key": true, "indexed": true },
+        { "name": "patient_id", "type": "BIGINT", "nullable": false, "indexed": true },
+        { "name": "provider_id", "type": "BIGINT", "nullable": false, "indexed": true },
+        { "name": "appointment_datetime", "type": "TIMESTAMP", "nullable": false, "indexed": true },
+        { "name": "duration_minutes", "type": "SMALLINT", "nullable": false },
+        { "name": "status", "type": "VARCHAR(20)", "nullable": false, "values": ["SCHEDULED", "CHECKED_IN", "IN_PROGRESS", "COMPLETED", "CANCELLED", "NO_SHOW"] },
+        { "name": "visit_type", "type": "VARCHAR(30)", "nullable": false, "values": ["NEW_PATIENT", "FOLLOW_UP", "URGENT", "TELEHEALTH", "PROCEDURE"] },
+        { "name": "location_code", "type": "VARCHAR(10)", "nullable": false }
+      ],
+      "relationships": [
+        { "target": "Patient", "type": "many_to_one", "foreign_key": "patient_id" },
+        { "target": "BillingClaim", "type": "one_to_many", "foreign_key": "appointment_id" },
+        { "target": "ClinicalDocument", "type": "one_to_many", "foreign_key": "appointment_id" }
+      ]
+    },
+    {
+      "id": "E-003",
+      "name": "BillingClaim",
+      "description": "Insurance claims and patient billing records. Originates in DB2/400 billing modules; web UI exposes claim status and submission workflows.",
+      "storage": "DB2/400",
+      "fields": [
+        { "name": "claim_id", "type": "BIGINT", "nullable": false, "primary_key": true, "indexed": true },
+        { "name": "patient_id", "type": "BIGINT", "nullable": false, "indexed": true },
+        { "name": "appointment_id", "type": "BIGINT", "nullable": true, "indexed": true },
+        { "name": "payer_code", "type": "VARCHAR(20)", "nullable": false },
+        { "name": "total_charge", "type": "DECIMAL(10,2)", "nullable": false },
+        { "name": "status", "type": "VARCHAR(20)", "nullable": false, "values": ["DRAFT", "SUBMITTED", "ACCEPTED", "REJECTED", "PAID", "APPEALED", "WRITTEN_OFF"] },
+        { "name": "service_date", "type": "DATE", "nullable": false, "indexed": true },
+        { "name": "icd10_codes", "type": "VARCHAR(200)", "nullable": false }
+      ],
+      "relationships": [
+        { "target": "Patient", "type": "many_to_one", "foreign_key": "patient_id" },
+        { "target": "Appointment", "type": "many_to_one", "foreign_key": "appointment_id" }
+      ]
+    },
+    {
+      "id": "E-004",
+      "name": "PharmacyOrder",
+      "description": "Medication prescriptions and pharmacy dispensing records. DB2/400 is authoritative; web UI supports e-prescribing workflows.",
+      "storage": "DB2/400",
+      "fields": [
+        { "name": "order_id", "type": "BIGINT", "nullable": false, "primary_key": true, "indexed": true },
+        { "name": "patient_id", "type": "BIGINT", "nullable": false, "indexed": true },
+        { "name": "prescriber_id", "type": "BIGINT", "nullable": false, "indexed": true },
+        { "name": "ndc_code", "type": "VARCHAR(11)", "nullable": false },
+        { "name": "drug_name", "type": "VARCHAR(120)", "nullable": false },
+        { "name": "dosage", "type": "VARCHAR(50)", "nullable": false },
+        { "name": "quantity", "type": "INTEGER", "nullable": false },
+        { "name": "status", "type": "VARCHAR(20)", "nullable": false, "values": ["ORDERED", "VERIFIED", "DISPENSED", "CANCELLED", "ON_HOLD"] }
+      ],
+      "relationships": [
+        { "target": "Patient", "type": "many_to_one", "foreign_key": "patient_id" }
+      ]
+    },
+    {
+      "id": "E-005",
+      "name": "LabOrder",
+      "description": "Laboratory test orders and results. DB2/400 integrates with LIS; web UI surfaces order entry and result review.",
+      "storage": "DB2/400",
+      "fields": [
+        { "name": "lab_order_id", "type": "BIGINT", "nullable": false, "primary_key": true, "indexed": true },
+        { "name": "patient_id", "type": "BIGINT", "nullable": false, "indexed": true },
+        { "name": "ordering_provider_id", "type": "BIGINT", "nullable": false, "indexed": true },
+        { "name": "loinc_code", "type": "VARCHAR(10)", "nullable": false },
+        { "name": "test_name", "type": "VARCHAR(120)", "nullable": false },
+        { "name": "status", "type": "VARCHAR(20)", "nullable": false, "values": ["ORDERED", "COLLECTED", "IN_PROGRESS", "RESULTED", "CANCELLED"] },
+        { "name": "result_value", "type": "VARCHAR(100)", "nullable": true },
+        { "name": "abnormal_flag", "type": "CHAR(1)", "nullable": true, "values": ["N", "L", "H", "C"] }
+      ],
+      "relationships": [
+        { "target": "Patient", "type": "many_to_one", "foreign_key": "patient_id" }
+      ]
+    },
+    {
+      "id": "E-006",
+      "name": "ClinicalDocument",
+      "description": "Clinical notes, visit summaries, discharge instructions, and scanned documents. Stored in DB2/400 with CLOB/BLOB support; web UI renders and supports authoring.",
+      "storage": "DB2/400",
+      "fields": [
+        { "name": "document_id", "type": "BIGINT", "nullable": false, "primary_key": true, "indexed": true },
+        { "name": "patient_id", "type": "BIGINT", "nullable": false, "indexed": true },
+        { "name": "appointment_id", "type": "BIGINT", "nullable": true, "indexed": true },
+        { "name": "author_id", "type": "BIGINT", "nullable": false },
+        { "name": "document_type", "type": "VARCHAR(30)", "nullable": false, "values": ["PROGRESS_NOTE", "DISCHARGE_SUMMARY", "CONSULT_NOTE", "LAB_REPORT", "RADIOLOGY_REPORT", "SCANNED"] },
+        { "name": "content", "type": "CLOB", "nullable": false },
+        { "name": "created_at", "type": "TIMESTAMP", "nullable": false, "indexed": true },
+        { "name": "signed_at", "type": "TIMESTAMP", "nullable": true }
+      ],
+      "relationships": [
+        { "target": "Patient", "type": "many_to_one", "foreign_key": "patient_id" },
+        { "target": "Appointment", "type": "many_to_one", "foreign_key": "appointment_id" }
+      ]
+    },
+    {
+      "id": "E-007",
+      "name": "UserAccount",
+      "description": "Web application user directory. Stored in PostgreSQL to decouple web-tier identity from IBMi profiles. Maps to roles for RBAC.",
+      "storage": "PostgreSQL",
+      "fields": [
+        { "name": "user_id", "type": "UUID", "nullable": false, "primary_key": true, "indexed": true },
+        { "name": "username", "type": "VARCHAR(60)", "nullable": false, "indexed": true },
+        { "name": "email", "type": "VARCHAR(120)", "nullable": false, "indexed": true },
+        { "name": "password_hash", "type": "VARCHAR(255)", "nullable": false },
+        { "name": "ibmi_profile", "type": "VARCHAR(10)", "nullable": true },
+        { "name": "is_active", "type": "BOOLEAN", "nullable": false },
+        { "name": "last_login", "type": "TIMESTAMP", "nullable": true },
+        { "name": "mfa_enabled", "type": "BOOLEAN", "nullable": false }
+      ],
+      "relationships": [
+        { "target": "Role", "type": "many_to_many", "join_table": "user_role_assignments" },
+        { "target": "AuditEvent", "type": "one_to_many", "foreign_key": "user_id" }
+      ]
+    },
+    {
+      "id": "E-008",
+      "name": "Role",
+      "description": "RBAC role definitions controlling access to clinical, billing, and administrative functions. Stored in PostgreSQL alongside UserAccount.",
+      "storage": "PostgreSQL",
+      "fields": [
+        { "name": "role_id", "type": "UUID", "nullable": false, "primary_key": true, "indexed": true },
+        { "name": "role_name", "type": "VARCHAR(60)", "nullable": false, "indexed": true },
+        { "name": "description", "type": "VARCHAR(255)", "nullable": true },
+        { "name": "permissions", "type": "JSONB", "nullable": false },
+        { "name": "is_system_role", "type": "BOOLEAN", "nullable": false },
+        { "name": "created_at", "type": "TIMESTAMP", "nullable": false }
+      ],
+      "relationships": [
+        { "target": "UserAccount", "type": "many_to_many", "join_table": "user_role_assignments" }
+      ]
+    },
+    {
+      "id": "E-009",
+      "name": "AuditEvent",
+      "description": "Immutable audit log for all PHI access, authentication events, and configuration changes. Written to PostgreSQL for tamper-resistant storage independent of DB2/400.",
+      "storage": "PostgreSQL",
+      "fields": [
+        { "name": "event_id", "type": "UUID", "nullable": false, "primary_key": true, "indexed": true },
+        { "name": "user_id", "type": "UUID", "nullable": false, "indexed": true },
+        { "name": "event_type", "type": "VARCHAR(40)", "nullable": false, "indexed": true, "values": ["PHI_ACCESS", "PHI_MODIFY", "LOGIN", "LOGOUT", "LOGIN_FAILED", "PERMISSION_CHANGE", "CONFIG_CHANGE", "EXPORT"] },
+        { "name": "resource_type", "type": "VARCHAR(40)", "nullable": false },
+        { "name": "resource_id", "type": "VARCHAR(60)", "nullable": true },
+        { "name": "patient_id_ref", "type": "BIGINT", "nullable": true, "indexed": true },
+        { "name": "ip_address", "type": "VARCHAR(45)", "nullable": false },
+        { "name": "event_timestamp", "type": "TIMESTAMP", "nullable": false, "indexed": true }
+      ],
+      "relationships": [
+        { "target": "UserAccount", "type": "many_to_one", "foreign_key": "user_id" }
+      ]
+    }
+  ],
+
+  "data_governance": {
+    "pii_fields": [
+      "Patient.mrn",
+      "Patient.last_name",
+      "Patient.first_name",
+      "Patient.date_of_birth",
+      "Patient.ssn_last_four",
+      "Patient.primary_phone",
+      "UserAccount.email",
+      "UserAccount.password_hash",
+      "ClinicalDocument.content",
+      "LabOrder.result_value",
+      "PharmacyOrder.drug_name",
+      "PharmacyOrder.dosage",
+      "AuditEvent.patient_id_ref",
+      "AuditEvent.ip_address"
+    ],
+    "retention_policy": "PHI data retained per HIPAA minimum necessary standard: active patient records retained indefinitely while patient relationship exists; inactive records retained 7 years post last encounter (state law minimum); audit logs retained 7 years minimum; billing claims retained 10 years for payer/audit requirements; Redis cache entries TTL 15 minutes for session, 1 hour for reference data.",
+    "encryption": "All PHI encrypted at rest using AES-256 on DB2/400 (column-level encryption for SSN, field-level for clinical content), PostgreSQL TDE with AES-256, Redis configured with TLS and no persistence of PHI beyond session tokens. All data in transit encrypted via TLS 1.2+ between web tier, API gateway, and backend data stores. Key management via hardware security module (HSM) on IBM i LPAR.",
+    "access_control": "Role-based access control (RBAC) enforced at API gateway layer. Clinical roles (physician, nurse, medical assistant) receive PHI access scoped to assigned patient panels. Billing roles access financial data only. Administrative roles manage user accounts without PHI access. Break-the-glass emergency override available with mandatory audit trail and supervisor notification. All PHI access logged to AuditEvent (E-009). DB2/400 object-level authority synchronized with web-tier RBAC via nightly reconciliation job."
+  },
+
+  "validation_rules": {
+    "patient_mrn": {
+      "rule": "MRN must be unique across the system; format validated as alphanumeric up to 20 characters",
+      "enforcement": "DB2/400 unique index + API-layer validation"
+    },
+    "appointment_datetime": {
+      "rule": "Appointment datetime must be in the future for new bookings; cannot overlap for same provider within duration window",
+      "enforcement": "API business logic + DB2/400 stored procedure check"
+    },
+    "claim_total_charge": {
+      "rule": "Total charge must be > 0.00 for submitted claims; ICD-10 codes must be valid format (letter + 2-7 characters)",
+      "enforcement": "API validation layer + DB2/400 trigger"
+    },
+    "pharmacy_ndc": {
+      "rule": "NDC code must conform to FDA 5-4-2 or 5-3-2 format; drug interactions checked against formulary database",
+      "enforcement": "API validation + external drug interaction service call"
+    },
+    "lab_loinc": {
+      "rule": "LOINC code must exist in the current LOINC table; result_value required when status = RESULTED",
+      "enforcement": "API validation + reference table lookup on DB2/400"
+    },
+    "audit_immutability": {
+      "rule": "AuditEvent records are append-only; UPDATE and DELETE operations are denied at the database level",
+      "enforcement": "PostgreSQL row-level security policy + REVOKE UPDATE/DELETE on audit_events table"
+    },
+    "password_complexity": {
+      "rule": "Password must be >= 12 characters, include upper, lower, digit, and special character; checked against breached password list",
+      "enforcement": "API validation at registration/change-password endpoints"
+    },
+    "phi_access_logging": {
+      "rule": "Every read or write to a PHI-containing entity must generate an AuditEvent record within the same transaction boundary",
+      "enforcement": "API middleware interceptor; monitored via daily reconciliation report"
+    }
+  },
+
+  "migration_notes": {
+    "strategy": "Strangler Fig pattern — the modern web UI progressively replaces green screen programs one workflow at a time while DB2/400 remains the system of record throughout. No bulk data migration is required because the IBMi backend is retained.",
+    "db2_400_considerations": [
+      "Existing RPG programs and physical/logical files remain untouched; new web tier accesses data through SQL views and stored procedures layered on top of existing DB2/400 physical files.",
+      "DDS-defined physical files should have SQL aliases or SQL tables created over them to enable standard JDBC access without modifying legacy programs.",
+      "EBCDIC to UTF-8 character encoding handled at the JDBC driver level (CCSID mapping); verify DBCS fields for CJK patient names if applicable.",
+      "DB2/400 journal-based replication can feed a read replica or event stream for the audit subsystem if real-time cross-database sync is needed."
+    ],
+    "postgresql_setup": [
+      "PostgreSQL hosts only the user directory (E-007, E-008) and audit log (E-009). No clinical data is replicated into PostgreSQL.",
+      "Schema managed via versioned migrations (Flyway or Liquibase). Initial DDL creates user_accounts, roles, user_role_assignments, and audit_events tables.",
+      "audit_events table uses BRIN index on event_timestamp for efficient time-range queries on high-volume append-only data."
+    ],
+    "redis_setup": [
+      "Redis stores session tokens (keyed by session ID, TTL 15 min), cached patient demographics (TTL 60 min), and provider schedule snapshots (TTL 5 min).",
+      "No PHI stored in Redis beyond the minimum needed for active session context; all cache entries are encrypted and expire automatically.",
+      "Redis Sentinel or Redis Cluster deployed for high availability; persistence (RDB/AOF) disabled since data is reconstructable from source systems."
+    ],
+    "rollback_plan": "Each green screen program converted to web UI retains the original 5250 access path. Rollback is per-workflow: disable web route and re-enable terminal menu option. No data rollback needed since DB2/400 is the unchanged system of record."
+  },
+
+  "_metadata": {
+    "author": "sa-agent",
+    "date": "2026-03-15",
+    "validation_status": "complete",
+    "version": "1.0"
+  }
+}

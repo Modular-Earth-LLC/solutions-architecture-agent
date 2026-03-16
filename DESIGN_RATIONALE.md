@@ -89,6 +89,14 @@ Three personas drive skill design and user story coverage:
 
 ---
 
+## Known Limitations
+
+**LLM-as-judge circularity**: The `/review` skill uses the same LLM that generated deliverables to evaluate them. This is a known limitation in AI evaluation — the model may be blind to its own systematic biases. Mitigations: (1) the 3-iteration review protocol with adversarial "Tester" persona reduces single-pass blindness, (2) structured scoring rubrics (5 dimensions, 0-10) constrain subjective drift, (3) human review is mandatory before any client-facing deliverable (Guiding Principle 42). Future work: calibrate LLM review scores against human expert assessments to measure correlation and identify systematic gaps.
+
+**Structural tests only**: The automated test suite validates file structure, schema compliance, DAG integrity, and metadata consistency — it does not invoke skills at runtime or validate behavioral output. Runtime validation was performed manually during Phase 7 (healthcare case study) and Phase 9 (sub-agent testing). Future work: parameterized integration tests with synthetic inputs.
+
+---
+
 ## Open Questions
 
 Unresolved product evolution questions from the original requirements analysis:

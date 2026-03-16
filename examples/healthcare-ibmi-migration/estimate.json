@@ -1,0 +1,365 @@
+{
+  "$schema": "./schemas/estimate.schema.json",
+  "$depends_on": ["requirements.json", "architecture.json"],
+  "engagement_id": "eng-2026-001",
+  "version": "1.0",
+  "last_updated": "2026-03-15",
+  "status": "complete",
+  "methodology": "bottom_up",
+  "confidence_level": "medium",
+  "currency": "USD",
+  "complexity_assessment": {
+    "checklist": [
+      { "item": "Legacy system integration complexity", "score": 9, "notes": "IBMi green screen with RPG IV/COBOL programs, embedded business logic spanning 30+ years" },
+      { "item": "Regulatory and compliance requirements", "score": 9, "notes": "HIPAA, HITECH, state health data privacy laws; PHI handling throughout modernization" },
+      { "item": "Data migration volume and sensitivity", "score": 8, "notes": "DB2/400 to modern RDBMS migration with PHI data; referential integrity across decades of records" },
+      { "item": "Number of integration points", "score": 7, "notes": "HL7/FHIR interfaces, claims clearinghouses, pharmacy systems, lab systems, state registries" },
+      { "item": "User base size and change management", "score": 7, "notes": "~200 clinical and administrative staff accustomed to green screen workflows for 15+ years" },
+      { "item": "Technology stack modernization gap", "score": 9, "notes": "5250 terminal UI to modern web; RPG to modern API layer; monolith to service-oriented" },
+      { "item": "Security and identity requirements", "score": 8, "notes": "Role-based access, MFA, audit trails, session management for clinical workflows" },
+      { "item": "Availability and uptime requirements", "score": 8, "notes": "24/7 clinical operations; zero-downtime migration strategy required" },
+      { "item": "Team skillset availability", "score": 7, "notes": "IBMi/RPG specialists increasingly rare; dual-competency resources needed" },
+      { "item": "Business process reengineering scope", "score": 6, "notes": "Some workflows can be modernized as-is; others need redesign for web paradigm" }
+    ],
+    "total_score": 78,
+    "max_score": 100,
+    "recommended_buffer_percent": 20
+  },
+  "complexity_rating": "high",
+  "complexity_factors": [
+    "Legacy RPG IV/COBOL codebase with 30+ years of embedded business logic",
+    "HIPAA/HITECH compliance requirements for all data in transit and at rest",
+    "PHI data migration from DB2/400 requiring field-level encryption and audit trails",
+    "HL7 v2 and FHIR R4 integration with external healthcare systems",
+    "Zero-downtime cutover requirement for 24/7 clinical operations",
+    "Scarce IBMi/RPG talent pool necessitating specialized recruitment",
+    "Change management for 200+ users transitioning from 5250 green screen to web UI",
+    "Dual-run period requiring parallel system operation during validation"
+  ],
+  "team_composition": [
+    {
+      "role": "Solutions Architect",
+      "count": 1,
+      "experience_level": "expert",
+      "allocation_percent": 75,
+      "duration_weeks": 68,
+      "hourly_rate": 225,
+      "total_cost": 91800,
+      "responsibilities": [
+        "Overall system design and architecture governance",
+        "IBMi modernization strategy and pattern selection",
+        "Healthcare integration architecture (HL7/FHIR)",
+        "Well-Architected reviews and compliance alignment",
+        "Technical risk management and mitigation planning"
+      ]
+    },
+    {
+      "role": "Full-Stack Developer",
+      "count": 3,
+      "experience_level": "senior",
+      "allocation_percent": 100,
+      "duration_weeks": 56,
+      "hourly_rate": 165,
+      "total_cost": 554400,
+      "responsibilities": [
+        "Modern web UI development replacing 5250 green screens",
+        "API layer development and service decomposition",
+        "Database migration tooling and data transformation logic",
+        "Unit and integration test development",
+        "Frontend accessibility and responsive design (WCAG 2.1 AA)"
+      ]
+    },
+    {
+      "role": "IBMi/RPG Integration Specialist",
+      "count": 1,
+      "experience_level": "expert",
+      "allocation_percent": 100,
+      "duration_weeks": 48,
+      "hourly_rate": 195,
+      "total_cost": 74880,
+      "responsibilities": [
+        "RPG IV and COBOL program analysis and documentation",
+        "Business logic extraction and service wrapping",
+        "DB2/400 schema analysis and migration mapping",
+        "IBMi program call interfaces and API bridge development",
+        "Dual-run validation and legacy decommission support"
+      ]
+    },
+    {
+      "role": "UX/HCD Designer",
+      "count": 1,
+      "experience_level": "senior",
+      "allocation_percent": 75,
+      "duration_weeks": 36,
+      "hourly_rate": 150,
+      "total_cost": 32400,
+      "responsibilities": [
+        "Clinical workflow analysis and user research",
+        "Green screen to web UI interaction mapping",
+        "Wireframes, prototypes, and design system creation",
+        "Usability testing with clinical and administrative staff",
+        "Accessibility compliance (WCAG 2.1 AA, Section 508)"
+      ]
+    },
+    {
+      "role": "IAM Security Specialist",
+      "count": 1,
+      "experience_level": "senior",
+      "allocation_percent": 50,
+      "duration_weeks": 40,
+      "hourly_rate": 185,
+      "total_cost": 29600,
+      "responsibilities": [
+        "HIPAA security rule compliance architecture",
+        "Identity and access management design (RBAC, MFA)",
+        "PHI encryption strategy (at rest and in transit)",
+        "Audit trail and access logging implementation",
+        "Penetration testing coordination and vulnerability remediation"
+      ]
+    },
+    {
+      "role": "QA Engineer",
+      "count": 1,
+      "experience_level": "senior",
+      "allocation_percent": 100,
+      "duration_weeks": 44,
+      "hourly_rate": 140,
+      "total_cost": 49280,
+      "responsibilities": [
+        "Test strategy and plan development",
+        "Automated regression test suite creation",
+        "Data migration validation and reconciliation testing",
+        "HIPAA compliance and security testing",
+        "User acceptance testing coordination",
+        "Performance and load testing"
+      ]
+    },
+    {
+      "role": "Project Manager",
+      "count": 1,
+      "experience_level": "senior",
+      "allocation_percent": 75,
+      "duration_weeks": 68,
+      "hourly_rate": 160,
+      "total_cost": 65280,
+      "responsibilities": [
+        "Agile ceremony facilitation and sprint planning",
+        "Stakeholder communication and status reporting",
+        "Risk and issue management",
+        "Budget tracking and resource allocation",
+        "Vendor and third-party coordination",
+        "Change management and training coordination"
+      ]
+    },
+    {
+      "role": "DevOps Engineer",
+      "count": 1,
+      "experience_level": "senior",
+      "allocation_percent": 75,
+      "duration_weeks": 52,
+      "hourly_rate": 170,
+      "total_cost": 53040,
+      "responsibilities": [
+        "CI/CD pipeline design and implementation",
+        "Infrastructure as Code (Terraform/Ansible)",
+        "Container orchestration and deployment automation",
+        "Monitoring, logging, and alerting setup",
+        "HIPAA-compliant environment provisioning",
+        "Disaster recovery and backup automation"
+      ]
+    }
+  ],
+  "loe_breakdown": {
+    "total_hours": 8640,
+    "by_phase": [
+      {
+        "phase": "Discovery & Assessment",
+        "hours": 720,
+        "weeks": 6,
+        "parallel": false
+      },
+      {
+        "phase": "Architecture & Design",
+        "hours": 960,
+        "weeks": 8,
+        "parallel": false
+      },
+      {
+        "phase": "Core Development & Migration",
+        "hours": 3360,
+        "weeks": 24,
+        "parallel": true
+      },
+      {
+        "phase": "Integration & Security Hardening",
+        "hours": 1680,
+        "weeks": 12,
+        "parallel": true
+      },
+      {
+        "phase": "Testing & Validation",
+        "hours": 1200,
+        "weeks": 10,
+        "parallel": true
+      },
+      {
+        "phase": "Dual-Run, Cutover & Stabilization",
+        "hours": 720,
+        "weeks": 8,
+        "parallel": false
+      }
+    ],
+    "by_component": [
+      {
+        "component": "Green Screen UI Modernization (5250 → Web)",
+        "hours": 2160,
+        "complexity": "high"
+      },
+      {
+        "component": "RPG/COBOL Business Logic Extraction & API Wrapping",
+        "hours": 1440,
+        "complexity": "very_high"
+      },
+      {
+        "component": "DB2/400 Data Migration to Modern RDBMS",
+        "hours": 1200,
+        "complexity": "high"
+      },
+      {
+        "component": "HL7/FHIR Healthcare Integration Layer",
+        "hours": 960,
+        "complexity": "high"
+      },
+      {
+        "component": "IAM, Encryption & HIPAA Compliance",
+        "hours": 720,
+        "complexity": "high"
+      },
+      {
+        "component": "CI/CD, Infrastructure & Monitoring",
+        "hours": 600,
+        "complexity": "medium"
+      },
+      {
+        "component": "Testing, QA & Validation",
+        "hours": 840,
+        "complexity": "medium"
+      },
+      {
+        "component": "Project Management & Change Management",
+        "hours": 720,
+        "complexity": "medium"
+      }
+    ],
+    "risk_buffer": {
+      "percent": 20,
+      "hours": 1728,
+      "rationale": "High complexity IBMi modernization with HIPAA compliance, scarce RPG talent, and zero-downtime cutover requirement justify a 20% risk buffer. Legacy systems frequently surface undocumented business rules during extraction."
+    }
+  },
+  "cost_model": {
+    "development": {
+      "internal_team": 750680,
+      "contractors": 74880,
+      "training": 25000,
+      "total": 850560
+    },
+    "infrastructure_monthly": {
+      "cloud_compute": 3200,
+      "managed_database": 1800,
+      "container_orchestration": 900,
+      "monitoring_and_logging": 450,
+      "security_services": 600,
+      "backup_and_dr": 550,
+      "total": 7500
+    },
+    "infrastructure_first_year": 90000,
+    "third_party_monthly": {
+      "hl7_fhir_integration_engine": 1200,
+      "identity_provider": 800,
+      "hipaa_compliance_tooling": 500,
+      "total": 2500
+    },
+    "total_first_year": 1000560,
+    "tco_3_year": {
+      "year_1": 1000560,
+      "year_2": 210000,
+      "year_3": 195000,
+      "total": 1405560
+    },
+    "roi": {
+      "annual_savings_estimate": 480000,
+      "payback_period_months": 30,
+      "roi_3_year_percent": 72
+    }
+  },
+  "three_pass_context": {
+    "current_pass": 2,
+    "pass_description": "Post-architecture estimate with component-level detail",
+    "accuracy_target": "+/- 25%",
+    "caveats": [
+      "RPG program complexity will be refined during discovery phase code analysis",
+      "DB2/400 record counts and schema complexity are estimated from initial assessment",
+      "HL7 interface count based on architecture document; additional interfaces may surface",
+      "Hourly rates assume US-based senior talent; offshore mix could reduce cost 15-25%"
+    ],
+    "refinement_triggers": [
+      "Completion of RPG codebase static analysis",
+      "Finalization of HL7/FHIR interface inventory",
+      "DB2/400 schema and data volume audit",
+      "Vendor selection for FHIR integration engine"
+    ]
+  },
+  "optimization_strategies": [
+    {
+      "strategy": "Phased green screen replacement",
+      "potential_savings_percent": 15,
+      "description": "Prioritize highest-traffic screens first; defer low-usage screens to Phase 2, reducing initial scope by ~15%",
+      "risk": "Users on deferred screens continue using 5250 longer, increasing dual-run operational cost"
+    },
+    {
+      "strategy": "RPG service wrapping over full rewrite",
+      "potential_savings_percent": 20,
+      "description": "Wrap stable RPG programs as REST APIs via IBMi Integrated Web Services rather than rewriting in modern language",
+      "risk": "Long-term maintenance debt; retained IBMi dependency for wrapped services"
+    },
+    {
+      "strategy": "Offshore/nearshore blended team model",
+      "potential_savings_percent": 18,
+      "description": "Use nearshore developers for UI modernization work while keeping IBMi specialists and architect onshore",
+      "risk": "Timezone coordination overhead; HIPAA BAA requirements for offshore data access"
+    },
+    {
+      "strategy": "Open-source FHIR server adoption",
+      "potential_savings_percent": 8,
+      "description": "Use HAPI FHIR (open-source) instead of commercial integration engine, reducing third-party licensing",
+      "risk": "Increased DevOps burden for FHIR server management; no vendor SLA"
+    },
+    {
+      "strategy": "Automated test generation from green screen recordings",
+      "potential_savings_percent": 10,
+      "description": "Record existing 5250 session workflows to auto-generate regression test baselines, reducing manual QA effort",
+      "risk": "Recording tooling may not capture all edge cases; manual review still required for PHI-related flows"
+    }
+  ],
+  "assumptions": [
+    "Client provides dedicated IBMi environment access for development and testing within 2 weeks of kickoff",
+    "Existing RPG IV source code is available and version-controlled; no object-only programs without source",
+    "Client IT staff available for 8-10 hours/week for knowledge transfer and legacy system documentation",
+    "HIPAA Business Associate Agreement (BAA) executed before any PHI data access",
+    "Cloud infrastructure provider supports HIPAA-eligible services (AWS GovCloud, Azure Government, or equivalent)",
+    "No more than 50 unique 5250 green screens require modernization in Phase 1",
+    "DB2/400 database contains fewer than 500 tables and 50M total records for initial migration scope",
+    "HL7 v2 interfaces number 8-12; FHIR R4 interfaces number 3-5",
+    "Client accepts 4-week dual-run period with rollback capability before legacy decommission",
+    "All team members pass HIPAA security training before engagement begins",
+    "Rates are based on US market averages for Q1 2026; subject to adjustment for specialized IBMi talent",
+    "Client has existing Active Directory or compatible IdP for SSO integration"
+  ],
+  "_metadata": {
+    "author": "sa-agent",
+    "date": "2026-03-15",
+    "validation_status": "complete",
+    "version": "1.0"
+  }
+}

@@ -1,0 +1,453 @@
+{
+  "$schema": "./schemas/security_review.schema.json",
+  "$depends_on": ["requirements.json", "architecture.json"],
+  "engagement_id": "eng-2026-001",
+  "version": "1.0",
+  "last_updated": "2026-03-15",
+  "status": "complete",
+
+  "security_requirements": {
+    "authentication": {
+      "mechanism": "SSO via SAML 2.0/OIDC with MFA enforcement for all users",
+      "mfa_methods": ["TOTP", "push_notification", "hardware_token"],
+      "session_management": "JWT with 15-minute access token lifetime, 8-hour refresh token, auto-logout after 10 minutes of inactivity for PHI protection",
+      "password_policy": "Managed by external IdP — minimum 12 characters, complexity requirements enforced at IdP, 90-day rotation",
+      "brute_force_protection": "Account lockout after 5 failed attempts, CAPTCHA after 3 failures, exponential backoff"
+    },
+    "secrets_management": {
+      "tool": "AWS Secrets Manager with automatic rotation",
+      "rotation_policy": "90-day rotation for service credentials, 30-day for IBMi connection credentials",
+      "ibmi_credentials": "IBMi service account credentials stored in Secrets Manager, never in code or config files, rotated on 30-day cycle",
+      "tls_certificates": "ACM-managed certificates with auto-renewal for public endpoints, self-managed certificates for IBMi VPN tunnel",
+      "encryption_keys": "AWS KMS customer-managed keys for PHI encryption at rest, separate keys per environment"
+    },
+    "network_isolation": {
+      "vpc_design": "Dedicated VPC with public, private, and data subnets across 2 availability zones",
+      "public_subnet": "ALB and WAF only — no application components directly internet-facing",
+      "private_subnet": "ECS Fargate tasks (API Gateway, Business Logic, IAM Service, Audit Service), Redis cache",
+      "data_subnet": "PostgreSQL RDS (audit logs, user directory), SQS queues",
+      "ibmi_connectivity": "Site-to-site VPN or AWS Direct Connect from private subnet to on-premises IBMi — no public internet traversal",
+      "security_groups": "Least-privilege security groups per component; C-003 (IBMi DAL) can only reach IBMi on ODBC/JDBC ports, C-007 (Audit) can only reach PostgreSQL on port 5432",
+      "nacls": "Stateless network ACLs as defense-in-depth backup to security groups"
+    },
+    "ai_guardrails": {
+      "applicability": "Not applicable for current phase — this is a UI modernization engagement with no AI/ML components",
+      "future_phase_notes": "If AI features are added in Phase 3+, PHI data must never be sent to external AI services without BAA, de-identification, or on-premises model hosting"
+    },
+    "compliance": {
+      "primary_framework": "HIPAA (Health Insurance Portability and Accountability Act)",
+      "additional_frameworks": ["HITECH Act", "ADA Section 508"],
+      "baa_required": true,
+      "baa_status": "Required with cloud provider (AWS or Azure) before any PHI data enters cloud environment",
+      "phi_handling": "PHI encrypted at rest (AES-256) and in transit (TLS 1.2+), field-level encryption for SSN and MRN, access logged to immutable audit store",
+      "data_retention": "7-year retention for audit logs per HIPAA requirement, patient data retained per state medical record retention laws"
+    }
+  },
+
+  "threat_model": {
+    "methodology": "STRIDE",
+    "scope": "End-to-end modernized application platform including React web UI, NestJS API gateway, IBMi Data Access Layer, IAM service, business logic services, cache layer, audit logging, and all data flows between components. Excludes IBMi AS/400 internal security (client-managed) and external IdP infrastructure.",
+    "threats": [
+      {
+        "id": "T-001",
+        "category": "spoofing",
+        "description": "Attacker steals or forges JWT tokens to impersonate legitimate clinical users and access PHI. Expired or stolen tokens could be replayed against the API Gateway to gain unauthorized access to patient records.",
+        "affected_components": ["C-002", "C-004", "C-005"],
+        "severity": "critical",
+        "likelihood": "medium",
+        "risk_score": 8,
+        "mitigation": "Short-lived JWTs (15-minute expiry), refresh token rotation with one-time use enforcement, token binding to client IP and device fingerprint, JWT signature validation at API Gateway (C-002) on every request, token revocation list in Redis (C-006), MFA required for all users via IAM service (C-004).",
+        "residual_risk": "low",
+        "status": "mitigated"
+      },
+      {
+        "id": "T-002",
+        "category": "tampering",
+        "description": "Malicious modification of patient data in transit between the modern web UI and IBMi backend. An attacker with network access could intercept and alter clinical data (medication orders, lab results, billing codes) as it passes through the API Gateway to the IBMi DAL.",
+        "affected_components": ["C-001", "C-002", "C-003", "C-005"],
+        "severity": "critical",
+        "likelihood": "low",
+        "risk_score": 7,
+        "mitigation": "TLS 1.2+ enforced on all external connections (DF-001), mTLS between internal services (DF-002), request signing for write operations to IBMi, input validation at API Gateway (C-002) and Business Logic (C-005) layers, EBCDIC conversion integrity checks in IBMi DAL (C-003), database-level constraints in DB2/400.",
+        "residual_risk": "negligible",
+        "status": "mitigated"
+      },
+      {
+        "id": "T-003",
+        "category": "repudiation",
+        "description": "Clinical users deny accessing or modifying PHI records. Without comprehensive audit trails, the organization cannot prove who accessed what patient data and when, creating HIPAA compliance exposure and inability to investigate potential breaches.",
+        "affected_components": ["C-005", "C-007"],
+        "severity": "high",
+        "likelihood": "medium",
+        "risk_score": 7,
+        "mitigation": "Immutable append-only audit log in PostgreSQL (C-007) capturing user identity, timestamp, patient record ID, action type, and source IP for every PHI access event. Audit events written asynchronously via message queue to prevent bypass. Correlation IDs link audit records across all service calls. 7-year retention with tamper-evident checksums. Audit log access restricted to compliance officers only.",
+        "residual_risk": "low",
+        "status": "mitigated"
+      },
+      {
+        "id": "T-004",
+        "category": "information_disclosure",
+        "description": "Unauthorized exposure of Protected Health Information (PHI) through application logs, error messages, API responses, or cache contents. PHI fields (SSN, MRN, diagnosis, medications) could leak into CloudWatch logs, Redis cache dumps, or verbose API error responses accessible to unauthorized parties.",
+        "affected_components": ["C-001", "C-002", "C-005", "C-006", "C-008"],
+        "severity": "critical",
+        "likelihood": "medium",
+        "risk_score": 9,
+        "mitigation": "PHI field masking in all application logs (only audit logs contain full PHI). Structured logging with explicit allow-list of loggable fields. Redis cache encryption at rest and in transit, TTL-based eviction. API error responses return generic messages without PHI or stack traces. Field-level encryption for SSN and MRN in transit and at rest. CloudWatch log groups with IAM-restricted access. Monitoring dashboard (C-008) displays only aggregated metrics, never individual PHI.",
+        "residual_risk": "low",
+        "status": "mitigated"
+      },
+      {
+        "id": "T-005",
+        "category": "denial_of_service",
+        "description": "IBMi connection pool exhaustion through excessive or malicious API requests. The IBMi DAL (C-003) is limited to 50 concurrent ODBC/JDBC connections. A flood of requests — whether from a DDoS attack, a runaway client-side process, or a legitimate traffic spike — could exhaust the pool and deny access to all clinical users across all 3 facilities.",
+        "affected_components": ["C-002", "C-003", "C-005"],
+        "severity": "high",
+        "likelihood": "medium",
+        "risk_score": 7,
+        "mitigation": "WAF with rate limiting at ALB edge (per-IP and per-user throttling). API Gateway (C-002) enforces per-user and per-module rate limits. Circuit breaker pattern in IBMi DAL (C-003) with configurable connection pool limits and queue-based backpressure. Redis cache (C-006) absorbs read-heavy queries to reduce IBMi load. Health check monitoring (C-008) with auto-alerting when pool utilization exceeds 80%. AWS Shield Standard for DDoS protection at network layer.",
+        "residual_risk": "medium",
+        "status": "mitigated"
+      },
+      {
+        "id": "T-006",
+        "category": "elevation_of_privilege",
+        "description": "A user with a low-privilege role (e.g., front-desk registration clerk) escalates to a clinical role (e.g., physician or pharmacist) by manipulating JWT claims, exploiting RBAC misconfigurations, or bypassing the IAM service. This could grant access to controlled substance records, clinical documentation, or billing functions beyond the user's authorized scope.",
+        "affected_components": ["C-002", "C-004", "C-005"],
+        "severity": "critical",
+        "likelihood": "low",
+        "risk_score": 8,
+        "mitigation": "JWT claims validated server-side on every request at API Gateway (C-002) — never trust client-provided role claims. Role mappings managed exclusively in IdP and IAM service (C-004) by authorized administrators. Principle of least privilege: each business logic module (C-005) enforces its own authorization checks independent of API Gateway. Role hierarchy with explicit deny rules for cross-boundary access. Quarterly access reviews by compliance team. Privileged role changes require dual approval. Anomaly detection alerts in monitoring (C-008) for unusual access patterns.",
+        "residual_risk": "low",
+        "status": "mitigated"
+      },
+      {
+        "id": "T-007",
+        "category": "information_disclosure",
+        "description": "VPN tunnel compromise between cloud environment and on-premises IBMi exposes all DB2/400 patient data in transit. If the site-to-site VPN or Direct Connect link is intercepted, an attacker could observe ODBC/JDBC traffic containing PHI queries and results for 2M+ patient records.",
+        "affected_components": ["C-003"],
+        "severity": "high",
+        "likelihood": "low",
+        "risk_score": 6,
+        "mitigation": "TLS 1.2+ encryption on ODBC/JDBC connections inside VPN tunnel (defense-in-depth, encrypted even if VPN is compromised). IPsec VPN with strong cipher suites (AES-256-GCM). VPN tunnel monitoring with automatic failover. Direct Connect preferred over internet-based VPN where feasible. Network intrusion detection on both cloud and on-premises sides.",
+        "residual_risk": "low",
+        "status": "mitigated"
+      },
+      {
+        "id": "T-008",
+        "category": "tampering",
+        "description": "Audit log tampering to conceal unauthorized PHI access. An insider with database access could modify or delete audit records in the PostgreSQL audit store (C-007), destroying evidence of a breach or HIPAA violation.",
+        "affected_components": ["C-007"],
+        "severity": "high",
+        "likelihood": "low",
+        "risk_score": 6,
+        "mitigation": "Append-only schema in PostgreSQL with no UPDATE or DELETE permissions granted to any application service account. Database triggers reject modification attempts. Tamper-evident checksums (hash chain) on sequential audit records. Separate database credentials for audit write (application) vs. audit read (compliance team). Database activity monitoring alerts on any DDL changes to audit tables. Consider log forwarding to immutable external store (e.g., S3 Object Lock) for highest assurance.",
+        "residual_risk": "negligible",
+        "status": "mitigated"
+      }
+    ]
+  },
+
+  "defense_in_depth": {
+    "layer_1_perimeter": {
+      "name": "Perimeter Security",
+      "controls": [
+        "AWS WAF with OWASP Top 10 managed rule set on Application Load Balancer",
+        "AWS Shield Standard for volumetric DDoS protection",
+        "CloudFront with geo-restriction (US-only access)",
+        "Rate limiting: 100 requests/second per IP, 1000 requests/minute per authenticated user",
+        "TLS 1.2+ enforced on all public endpoints with HSTS headers"
+      ]
+    },
+    "layer_2_network": {
+      "name": "Network Security",
+      "controls": [
+        "VPC with public/private/data subnet tiers — application components never in public subnet",
+        "Security groups: least-privilege, per-component, no 0.0.0.0/0 inbound rules on any non-ALB resource",
+        "Network ACLs as stateless backup to security groups",
+        "Site-to-site VPN (IPsec AES-256-GCM) or Direct Connect for IBMi connectivity",
+        "VPC Flow Logs enabled for network traffic analysis and forensics",
+        "No public IP addresses on any ECS Fargate task or RDS instance"
+      ]
+    },
+    "layer_3_application": {
+      "name": "Application Security",
+      "controls": [
+        "Input validation at API Gateway (C-002) and Business Logic (C-005) layers — reject malformed requests before they reach IBMi",
+        "Parameterized queries for all DB2/400 and PostgreSQL access — no dynamic SQL construction",
+        "Content Security Policy (CSP), X-Frame-Options, X-Content-Type-Options headers on all responses",
+        "Dependency vulnerability scanning in CI/CD pipeline (npm audit, Snyk)",
+        "Static application security testing (SAST) integrated into build pipeline",
+        "API versioning to prevent backward-compatibility security regressions"
+      ]
+    },
+    "layer_4_identity": {
+      "name": "Identity & Access Security",
+      "controls": [
+        "SSO via SAML 2.0/OIDC with external IdP — no local password storage in application",
+        "MFA enforced for all users — TOTP, push notification, or FIDO2 hardware token",
+        "RBAC with clinical role hierarchy mapping (physician > nurse > clerk > read-only)",
+        "Session timeout: 10 minutes inactivity for PHI-accessing sessions, 30 minutes for admin",
+        "JWT with short expiry (15 min access, 8 hr refresh) and rotation",
+        "Privileged access management: admin actions require MFA step-up authentication"
+      ]
+    },
+    "layer_5_data": {
+      "name": "Data Security",
+      "controls": [
+        "Encryption at rest: AES-256 via AWS KMS customer-managed keys for all data stores",
+        "Encryption in transit: TLS 1.2+ for all connections, mTLS between internal services",
+        "Field-level encryption for SSN and MRN using application-layer encryption before storage",
+        "PHI masking in application logs — full PHI only in immutable audit log",
+        "Database backup encryption with separate KMS key",
+        "S3 bucket policies: block public access, enforce encryption, enable versioning for audit log archives",
+        "Data classification labels: PHI (restricted), PII (confidential), operational (internal)"
+      ]
+    }
+  },
+
+  "iam_design": {
+    "identity_provider": {
+      "type": "External IdP (Keycloak or AWS Cognito) with SAML 2.0/OIDC",
+      "integration": "Client-managed IdP federated with application IAM service (C-004)",
+      "provisioning": "SCIM 2.0 for automated user provisioning from HR system"
+    },
+    "roles": [
+      {
+        "role": "physician",
+        "permissions": ["patient:read", "patient:write", "clinical_doc:read", "clinical_doc:write", "lab:read", "lab:order", "pharmacy:read", "pharmacy:order", "scheduling:read", "scheduling:write"],
+        "data_scope": "Assigned patients and department patients",
+        "mfa_required": true
+      },
+      {
+        "role": "nurse",
+        "permissions": ["patient:read", "patient:write", "clinical_doc:read", "clinical_doc:write", "lab:read", "pharmacy:read", "scheduling:read", "scheduling:write"],
+        "data_scope": "Assigned unit patients",
+        "mfa_required": true
+      },
+      {
+        "role": "pharmacist",
+        "permissions": ["patient:read", "pharmacy:read", "pharmacy:write", "pharmacy:dispense", "lab:read"],
+        "data_scope": "All patients (pharmacy scope)",
+        "mfa_required": true
+      },
+      {
+        "role": "billing_clerk",
+        "permissions": ["patient:read", "billing:read", "billing:write", "scheduling:read"],
+        "data_scope": "Financial data, limited clinical data (diagnosis codes only)",
+        "mfa_required": true
+      },
+      {
+        "role": "registration_clerk",
+        "permissions": ["patient:read", "patient:write", "scheduling:read", "scheduling:write"],
+        "data_scope": "Demographics and scheduling only — no clinical data",
+        "mfa_required": true
+      },
+      {
+        "role": "it_admin",
+        "permissions": ["system:config", "user:manage", "audit:read", "monitoring:read"],
+        "data_scope": "System configuration and user management — no direct PHI access",
+        "mfa_required": true,
+        "step_up_auth": "Required for role changes and system configuration"
+      },
+      {
+        "role": "compliance_officer",
+        "permissions": ["audit:read", "audit:export", "report:compliance"],
+        "data_scope": "Audit logs and compliance reports only",
+        "mfa_required": true
+      }
+    ],
+    "service_accounts": [
+      {
+        "name": "api-gateway-svc",
+        "component": "C-002",
+        "permissions": "Route requests, validate tokens, enforce rate limits",
+        "credential_storage": "AWS Secrets Manager",
+        "rotation": "90-day automatic"
+      },
+      {
+        "name": "ibmi-dal-svc",
+        "component": "C-003",
+        "permissions": "ODBC/JDBC connection to DB2/400, RPG program calls",
+        "credential_storage": "AWS Secrets Manager",
+        "rotation": "30-day automatic"
+      },
+      {
+        "name": "audit-writer-svc",
+        "component": "C-007",
+        "permissions": "INSERT-only on audit tables in PostgreSQL — no UPDATE, DELETE, or DDL",
+        "credential_storage": "AWS Secrets Manager",
+        "rotation": "90-day automatic"
+      }
+    ]
+  },
+
+  "ai_security_controls": {
+    "applicability": "Not applicable — this engagement is a UI modernization project with no AI/ML components in the current phase",
+    "future_phase_requirements": "If AI features are introduced in Phase 3+, the following controls must be implemented before any AI component processes PHI: BAA with AI service provider, PHI de-identification pipeline, on-premises or BAA-covered model hosting, prompt injection protection, output filtering for PHI leakage, model access control via IAM, and human-in-the-loop for clinical decision support"
+  },
+
+  "compliance_mapping": [
+    {
+      "framework": "HIPAA",
+      "requirement": "164.312(a)(1) — Access Control: Implement technical policies to allow access only to authorized persons",
+      "status": "compliant",
+      "evidence": "RBAC with clinical role hierarchy, SSO via SAML/OIDC, per-module authorization checks in Business Logic (C-005), least-privilege service accounts",
+      "notes": "Roles mapped to clinical functions; quarterly access reviews planned"
+    },
+    {
+      "framework": "HIPAA",
+      "requirement": "164.312(a)(2)(i) — Unique User Identification: Assign unique identifier to each user",
+      "status": "compliant",
+      "evidence": "Individual user accounts via external IdP, no shared logins, unique user ID in JWT claims propagated through all service calls and audit records",
+      "notes": "Eliminates current shared terminal login practice"
+    },
+    {
+      "framework": "HIPAA",
+      "requirement": "164.312(a)(2)(iii) — Automatic Logoff: Implement procedures to terminate sessions after inactivity",
+      "status": "compliant",
+      "evidence": "10-minute inactivity timeout for PHI-accessing sessions, 30-minute timeout for admin sessions, server-side session invalidation in Redis (C-006)",
+      "notes": "Timeout values configurable per role if clinical workflow requires adjustment"
+    },
+    {
+      "framework": "HIPAA",
+      "requirement": "164.312(b) — Audit Controls: Implement mechanisms to record and examine activity in systems containing PHI",
+      "status": "compliant",
+      "evidence": "Immutable append-only audit log (C-007) capturing all PHI access events with user, timestamp, patient ID, action, and source IP. 7-year retention. Async write via message queue. Tamper-evident checksums.",
+      "notes": "Audit report generation for compliance officers; anomaly alerting for suspicious access patterns"
+    },
+    {
+      "framework": "HIPAA",
+      "requirement": "164.312(c)(1) — Integrity: Protect ePHI from improper alteration or destruction",
+      "status": "compliant",
+      "evidence": "TLS 1.2+ in transit, mTLS between internal services, AES-256 encryption at rest, input validation at API Gateway and Business Logic layers, parameterized queries prevent SQL injection, DB2/400 constraints preserved",
+      "notes": "IBMi RPG program validation logic remains as additional integrity layer"
+    },
+    {
+      "framework": "HIPAA",
+      "requirement": "164.312(d) — Person or Entity Authentication: Verify identity of persons seeking access to ePHI",
+      "status": "compliant",
+      "evidence": "MFA enforced for all users (TOTP, push notification, or hardware token) via IAM service (C-004), SSO federation with external IdP, brute-force protection with account lockout",
+      "notes": "MFA methods include FIDO2 hardware tokens for highest assurance"
+    },
+    {
+      "framework": "HIPAA",
+      "requirement": "164.312(e)(1) — Transmission Security: Guard against unauthorized access to ePHI during transmission",
+      "status": "compliant",
+      "evidence": "TLS 1.2+ on all external connections, mTLS between internal services, IPsec VPN (AES-256-GCM) for IBMi connectivity, HSTS headers enforced",
+      "notes": "TLS 1.3 preferred where both endpoints support it"
+    },
+    {
+      "framework": "HIPAA",
+      "requirement": "164.308(a)(1)(ii)(D) — Information System Activity Review: Regularly review records of information system activity",
+      "status": "compliant",
+      "evidence": "Monitoring dashboard (C-008) with Prometheus/Grafana, CloudWatch log analysis, automated anomaly alerting, scheduled compliance reports from audit service (C-007)",
+      "notes": "Weekly automated reports to compliance officer; real-time alerting for high-severity events"
+    },
+    {
+      "framework": "HIPAA",
+      "requirement": "164.310(d)(1) — Device and Media Controls: Policies for receipt and removal of hardware/media containing ePHI",
+      "status": "partial",
+      "evidence": "Cloud infrastructure managed via IaC with encryption enforced. ECS Fargate tasks are ephemeral (no persistent local storage). RDS and S3 encrypted at rest.",
+      "notes": "Client responsible for on-premises IBMi device and media controls. Mobile device management (MDM) policy recommended for clinical tablets/phones."
+    },
+    {
+      "framework": "HIPAA",
+      "requirement": "164.308(a)(5)(ii)(B) — Protection from Malicious Software: Procedures for guarding against and detecting malicious software",
+      "status": "compliant",
+      "evidence": "Container image scanning in CI/CD pipeline, dependency vulnerability scanning (npm audit, Snyk), WAF with managed rule sets for known attack patterns, no direct user file uploads to application servers",
+      "notes": "Runtime container scanning recommended as enhancement"
+    },
+    {
+      "framework": "HIPAA",
+      "requirement": "164.308(a)(7)(i) — Contingency Plan: Establish policies for responding to emergencies that damage systems containing ePHI",
+      "status": "partial",
+      "evidence": "Multi-AZ deployment, RDS automated backups with point-in-time recovery, Redis replication across AZs, blue-green deployment for zero-downtime updates, 4-hour RTO / 1-hour RPO targets",
+      "notes": "Full contingency plan document to be developed during Phase 1 implementation. IBMi DR is client-managed and outside scope."
+    },
+    {
+      "framework": "HITECH",
+      "requirement": "Breach Notification Rule — Notify affected individuals within 60 days of discovering a breach of unsecured PHI",
+      "status": "compliant",
+      "evidence": "Audit logging enables rapid breach scope assessment. PHI encryption at rest and in transit means encrypted PHI is not 'unsecured PHI' under HITECH safe harbor. Incident response runbook to include notification procedures.",
+      "notes": "Legal counsel should review breach notification procedures during implementation"
+    },
+    {
+      "framework": "ADA Section 508",
+      "requirement": "Web Content Accessibility Guidelines (WCAG) 2.1 Level AA conformance",
+      "status": "compliant",
+      "evidence": "React UI built with react-aria accessibility primitives, axe-core automated testing in CI/CD, WCAG 2.1 AA as acceptance criteria for all UI modules (FR-001 through FR-006)",
+      "notes": "Manual accessibility audit recommended before each module go-live"
+    }
+  ],
+
+  "security_guardrails": {
+    "MUST": [
+      "Enforce MFA for all users accessing PHI — no exceptions for any clinical or administrative role",
+      "Encrypt all PHI at rest (AES-256) and in transit (TLS 1.2+) — applies to all data stores and all network links including IBMi connectivity",
+      "Log all PHI access events to immutable audit store with user identity, timestamp, patient ID, action type, and source IP",
+      "Validate JWT tokens server-side on every API request — never trust client-provided role claims",
+      "Execute quarterly access reviews to verify role assignments match current job functions",
+      "Maintain BAA with cloud provider before any PHI enters cloud environment",
+      "Apply input validation at both API Gateway and Business Logic layers — defense-in-depth against injection attacks",
+      "Use parameterized queries for all database access (DB2/400 and PostgreSQL) — zero tolerance for dynamic SQL construction",
+      "Enforce automatic session timeout (10 minutes inactivity) for PHI-accessing sessions",
+      "Require penetration testing before production go-live of each phase"
+    ],
+    "MUST_NOT": [
+      "Never store PHI in application logs, error messages, or monitoring dashboards — PHI is permitted only in the immutable audit log (C-007) and encrypted data stores",
+      "Never use shared accounts or shared credentials for any system access — every access must be traceable to an individual user",
+      "Never transmit PHI over unencrypted connections — no HTTP, no unencrypted ODBC/JDBC, no plaintext email",
+      "Never store secrets, credentials, or encryption keys in source code, configuration files, or environment variables — use AWS Secrets Manager exclusively",
+      "Never grant UPDATE or DELETE permissions on audit log tables to any application service account",
+      "Never bypass WAF or rate limiting for any client, including internal testing — use separate test environment instead",
+      "Never deploy container images with known critical or high CVEs — CI/CD pipeline must block deployment",
+      "Never send PHI to external AI/ML services without BAA, de-identification, and explicit security review approval"
+    ]
+  },
+
+  "findings_summary": {
+    "critical": 1,
+    "high": 2,
+    "medium": 1,
+    "low": 1,
+    "open_items": [
+      {
+        "id": "F-001",
+        "severity": "critical",
+        "finding": "No penetration testing plan exists for the modernized platform. The architecture introduces a new internet-facing attack surface (React web UI, API Gateway, cloud infrastructure) that the legacy green screen terminals did not have. Without penetration testing before go-live, unknown vulnerabilities could expose PHI for 2M+ patients.",
+        "recommendation": "Engage a qualified third-party penetration testing firm to conduct comprehensive testing (OWASP methodology) of the web application, API layer, IAM integration, and network architecture before Phase 1 production go-live. Remediate all critical and high findings before launch. Budget $30,000-$50,000 for initial assessment plus annual re-testing."
+      },
+      {
+        "id": "F-002",
+        "severity": "high",
+        "finding": "IBMi connection pool (50 concurrent connections) is a single bottleneck that could be exploited for denial of service or could fail under legitimate peak load. Current architecture relies on caching and rate limiting but has no fallback if the pool is exhausted — all clinical users across all 3 facilities would lose access simultaneously.",
+        "recommendation": "Implement connection pool monitoring with alerting at 60%, 80%, and 95% utilization thresholds. Add request queuing with configurable timeout in IBMi DAL (C-003) so excess requests wait rather than fail immediately. Define and test a graceful degradation mode where read-only cached data is served when IBMi pool is saturated. Explore increasing IBMi connection limit with IBM i administrator."
+      },
+      {
+        "id": "F-003",
+        "severity": "high",
+        "finding": "Mobile device management (MDM) policy is not defined for clinical tablets and smartphones. Clinical staff accessing PHI from mobile devices without MDM controls creates risk of PHI exposure through lost/stolen devices, unpatched operating systems, or unauthorized applications.",
+        "recommendation": "Require MDM enrollment for all mobile devices accessing the clinical application. Enforce device encryption, remote wipe capability, OS version minimums, and application allowlisting. Integrate MDM compliance status with IAM service (C-004) to block non-compliant devices at authentication time."
+      },
+      {
+        "id": "F-004",
+        "severity": "medium",
+        "finding": "Contingency plan and disaster recovery procedures for the cloud-hosted application tier are not yet documented. While the architecture includes Multi-AZ deployment and automated backups, formal incident response runbooks and DR testing procedures are needed for HIPAA compliance (164.308(a)(7)).",
+        "recommendation": "Develop formal contingency plan including: incident response procedures, backup verification testing schedule (monthly), DR failover testing schedule (quarterly), communication plan for system outages affecting clinical operations, and recovery time validation against 4-hour RTO / 1-hour RPO targets. Document and test before Phase 1 go-live."
+      },
+      {
+        "id": "F-005",
+        "severity": "low",
+        "finding": "Runtime container security scanning is not included in the current architecture. While CI/CD pipeline includes image scanning before deployment, containers running in ECS Fargate are not continuously monitored for runtime anomalies or newly disclosed vulnerabilities.",
+        "recommendation": "Evaluate runtime container security tools (e.g., AWS GuardDuty for ECS, Falco, or Aqua Security) for continuous monitoring of running containers. Implement as a Phase 2 enhancement after initial go-live. Low severity because Fargate tasks are ephemeral and redeployed frequently, limiting exposure window."
+      }
+    ]
+  },
+
+  "_metadata": {
+    "author": "sa-agent",
+    "date": "2026-03-15",
+    "validation_status": "complete",
+    "version": "1.0"
+  }
+}
