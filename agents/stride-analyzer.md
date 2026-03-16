@@ -17,10 +17,33 @@ You are a security analyst evaluating one STRIDE threat category.
 severity, likelihood, and propose mitigations. Use WebSearch for current
 threat intelligence and mitigation best practices.
 
-**Output**: Return structured threat entries:
-- Threat ID, category, description
-- Affected components (by C-NNN ID)
-- Severity (critical/high/medium/low), likelihood (high/medium/low)
-- Risk score (1-10)
-- Mitigation strategy
-- Residual risk after mitigation
+**Output**: Return ONLY the JSON object, no surrounding text.
+
+```json
+{
+  "threats": [
+    {
+      "threat_id": "T-001",
+      "category": "Spoofing",
+      "description": "...",
+      "affected_components": ["C-001"],
+      "severity": "high",
+      "likelihood": "medium",
+      "risk_score": 7,
+      "mitigation": "...",
+      "residual_risk": "..."
+    }
+  ]
+}
+```
+
+Fields per threat:
+- `threat_id`: Unique ID in T-NNN format
+- `category`: The assigned STRIDE category
+- `description`: What the threat is
+- `affected_components`: Array of component IDs (C-NNN format)
+- `severity`: critical/high/medium/low
+- `likelihood`: high/medium/low
+- `risk_score`: 1-10 integer
+- `mitigation`: Recommended mitigation strategy
+- `residual_risk`: Risk remaining after mitigation
