@@ -19,11 +19,17 @@ Get productive in 15 minutes.
 git clone https://github.com/Modular-Earth-LLC/solutions-architecture-agent.git
 cd solutions-architecture-agent
 
-# 2. Install as Claude Code plugin
-claude mcp add-from-claude-plugin .
+# 2. Install Python test dependencies
+python -m venv .venv && .venv/Scripts/activate  # Windows
+# source .venv/bin/activate                     # Linux/macOS
+pip install -r requirements.txt
 
-# Or load directly for development
+# 3. Load as Claude Code plugin
 claude --plugin-dir .
+
+# Or install persistently (see docs/local-setup.md)
+# claude plugin marketplace add .
+# claude plugin install solutions-architecture-agent@solutions-architecture-agent
 ```
 
 Claude automatically loads `CLAUDE.md` and `.claude/rules/` configuration. Skills appear as `solutions-architecture-agent:<skill-name>`.

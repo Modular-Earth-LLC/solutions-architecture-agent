@@ -19,11 +19,17 @@ A Claude Code plugin covering the **solutions architecture lifecycle**: requirem
 git clone https://github.com/Modular-Earth-LLC/solutions-architecture-agent.git
 cd solutions-architecture-agent
 
-# Install as plugin (persistent across sessions)
-claude mcp add-from-claude-plugin .
+# Install Python test dependencies
+python -m venv .venv && .venv/Scripts/activate  # Windows
+# source .venv/bin/activate                     # Linux/macOS
+pip install -r requirements.txt
 
-# Or load for development/testing only
+# Load plugin (development — reads live from this directory)
 claude --plugin-dir .
+
+# Or install persistently (see docs/local-setup.md)
+# claude plugin marketplace add .
+# claude plugin install solutions-architecture-agent@solutions-architecture-agent
 
 # Run your first skill
 # Type: /requirements
