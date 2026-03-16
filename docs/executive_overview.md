@@ -1,92 +1,78 @@
-﻿# Executive Overview
+# Executive Overview
 
-**Version**: 0.1.0-alpha | **Status**: Alpha
-
-Multi-agent AI framework that accelerates AI development 3-5x.
+AI-powered solutions architecture that accelerates SA engagements from weeks to hours.
 
 ---
 
 ## The Problem
 
-AI development is slow and inconsistent:
-- 2 days for requirements (should be 2 hours)
-- 2 weeks for architecture (should be 4 hours)
-- Months for prototypes (should be days)
-- Every project starts from scratch
-- Knowledge silos across teams
+Solutions architecture engagements are slow and inconsistent:
 
-**Cost**: Wasted time, budget overruns, inconsistent quality
+- Requirements discovery takes days of workshops
+- Architecture design takes weeks of iteration
+- Estimates and proposals are assembled manually
+- Every engagement starts from scratch
+- Quality varies across architects and teams
 
 ---
 
 ## The Solution
 
-23 specialized agents automate repetitive tasks:
-- Requirements gathering (automated workshops)
-- Architecture design (AWS Well-Architected compliant)
-- Cost/time estimation (accurate projections)
-- Code generation (16 technology specialists)
-- Deployment planning (platform-specific guides)
+A Claude Code plugin with **9 specialized skills** covering the full SA lifecycle:
 
-**Result**: 3-5x faster delivery, 60% less rework, consistent quality
+- **Requirements discovery** — progressive, structured workshops
+- **Architecture design** — Well-Architected compliant, technology-agnostic
+- **Data modeling** — ER, vector, graph, ontology
+- **Security review** — STRIDE threat modeling, compliance mapping
+- **Integration planning** — APIs, migration, legacy bridging
+- **Cost estimation** — LOE, team composition, confidence scoring
+- **Project planning** — phased roadmaps with sprints and milestones
+- **Proposal assembly** — SOW generation from upstream deliverables
+- **Deliverable review** — LLM-as-judge quality scoring
 
 ---
 
 ## Business Value
 
-**Faster Time to Market**:
-- Requirements: 2 days → 2 hours
-- Architecture: 2 weeks → 4 hours
-- Prototypes: 2 months → 2 weeks
+**Faster Time to Deliverable**:
+- Requirements: days → 1-2 hours
+- Architecture: weeks → 4-8 hours
+- Full engagement (req → proposal): months → 1-2 weeks
 
-**Cost Reduction**:
-- 60% less rework (consistent processes)
-- Accurate estimates (avoid budget overruns)
-- Scale without proportional hiring
-
-**Quality Improvement**:
-- AWS Well-Architected from day one
-- Security, reliability, performance built-in
-- Standardized across all projects
+**Consistent Quality**:
+- AWS Well-Architected scoring on every architecture (6 pillars + GenAI Lens)
+- Structured outputs validated against JSON schemas
+- Human review checkpoint after every skill
 
 **Knowledge Retention**:
-- Best practices embedded in agents
-- No knowledge silos
-- 5x faster onboarding
+- Best practices embedded in skill definitions
+- Reusable across engagements and architects
+- Standardized deliverable formats
 
 ---
 
 ## Who Benefits
 
-**Junior Engineers**: Learn from agents, ship production systems  
-**Senior Engineers**: Focus on complex decisions, eliminate grunt work  
-**Consultants**: Deliver faster, win more projects  
-**Managers**: Standardize processes, predictable delivery  
-**CTOs**: De-risk AI investments, scale capacity
+- **Solutions Architects** — systematic Well-Architected designs, consistent deliverables
+- **Consultants** — professional proposals in hours, not weeks
+- **Enterprise Architects** — standardized assessment framework across engagements
+- **Technical Pre-Sales** — rapid qualification and scoping
+- **Engineering Managers** — evidence-based project planning and estimation
 
 ---
 
-## Tech Stack
+## How It Works
 
-- Python, Streamlit, Anthropic Claude, AWS Bedrock
-- MCP (Model Context Protocol), LangChain
-- 16 specialized engineering agents
+1. Install as a Claude Code plugin (2 minutes)
+2. Invoke skills via slash commands (`/requirements`, `/architecture`, etc.)
+3. Agent guides you through structured workflows
+4. You review and approve at every checkpoint
+5. Deliverables accumulate in `knowledge_base/` as validated JSON
 
----
-
-## Deployment
-
-- **Cursor IDE**: Custom chat modes
-- **Claude Projects**: Team workspace
-- **GitHub Copilot**: VS Code integration
-
-15 minutes to first AI system.
+The agent designs solutions — it does not implement, deploy, or send deliverables to clients. Human review is mandatory before any client-facing output.
 
 ---
 
-## Alpha Status
+## Status
 
-⚠️ **Untested in production**. Use at own risk. Production-ready in v1.0.
-
----
-
+**v1.0.0** — Validated end-to-end against a healthcare IBMi modernization case study (migration flow, HIPAA, 500+ users). All 11 schema validations and 5 consistency checks pass. Four deliverable reviews scored >= 7.5/10.

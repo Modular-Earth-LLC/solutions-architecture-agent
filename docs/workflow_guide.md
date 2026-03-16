@@ -1,114 +1,97 @@
-﻿# Workflow Guide
+# Workflow Guide
 
-Complete development lifecycle: Requirements → Architecture → Engineering → Deployment
-
-<!-- Version in .repo-metadata.json -->
+How skills connect through the engagement lifecycle.
 
 ---
 
 ## Quick Reference
 
-**Build AI system**:
-1. Requirements Agent → Discover needs (15-30 min)
-2. Architecture Agent → Design system (30-60 min)
-3. Engineering Supervisor → Build prototype (1-3 hours)
-4. Deployment Agent → Deploy guide (15-30 min)
-
-**Optimize existing system**:
-1. Optimization Agent → Analyze & improve (1-3 hours)
-
-**Create prompts**:
-1. Prompt Engineering Agent → Build/optimize (30-60 min)
-
----
-
-## Full Workflow
-
-### 1. Requirements Discovery
-
-**Start**: "Help me discover requirements for [project]"
-
-**Questions asked** (15-30 min):
-- Business problem?
-- Users and use cases?
-- Success criteria?
-- Constraints (budget, timeline, technical)?
-
-**Output**: `knowledge_base/user_requirements.json`
-
-**Next**: Architecture design
-
-### 2. Architecture Design
-
-**Start**: "Design architecture for my requirements"
-
-**Agents generate** (30-60 min):
-- Tech stack selection
-- Architecture diagrams
-- Cost estimation
-- Team composition
-- Project plan
-
-**Output**: `knowledge_base/design_decisions.json`
-
-**Next**: Engineering/prototype
-
-### 3. Engineering
-
-**Start**: "Build prototype for my system"
-
-**Engineering Supervisor routes to specialists**:
-- Streamlit UI Agent → Interface code
-- Claude Code Agent → Claude integration
-- Data Engineering Agent → Database
-- Testing Agent → Test suite
-
-**Output**: Working code in `outputs/prototypes/[project]/`
-
-**Next**: Deployment
-
-### 4. Deployment
-
-**Start**: "Create deployment guide for [platform]"
-
-**Agent generates**:
-- Platform-specific instructions
-- Infrastructure code (CDK, docker-compose, etc.)
-- CI/CD workflows
-- Monitoring setup
-
-**Output**: Deployment guide + configs
-
-**YOU execute deployment** (agents don't deploy automatically)
+| Phase | Skill | Input | Output | Time |
+|-------|-------|-------|--------|------|
+| Requirements | `/requirements` | Client conversation | `requirements.json` | 15-60 min |
+| Architecture | `/architecture` | `requirements.json` | `architecture.json` | 30-60 min |
+| Data Modeling | `/data-model` | `architecture.json` | `data_model.json` | 20-40 min |
+| Security Review | `/security-review` | `architecture.json` | `security_review.json` | 20-40 min |
+| Integration Plan | `/integration-plan` | `requirements.json` + `architecture.json` | `integration_plan.json` | 20-40 min |
+| Estimation | `/estimate` | All upstream KB files | `estimate.json` | 15-30 min |
+| Project Plan | `/project-plan` | `requirements.json` + `architecture.json` + `estimate.json` | `project_plan.json` | 15-30 min |
+| Proposal | `/proposal` | All upstream KB files | `outputs/*.md` | 10-20 min |
+| Review | `/review` | All upstream KB files | `reviews.json` | 10-20 min |
 
 ---
 
-## Optimization Workflow
+## Engagement Flows
 
-**For existing systems**:
+### Greenfield (Complete 0-to-1)
 
-1. "Optimize my AI system at [path]"
-2. Agent discovers system structure
-3. Agent assesses against best practices
-4. Agent proposes improvements
-5. YOU approve which to implement
-6. Agent implements (if approved)
-7. Agent validates changes
+```
+/requirements → /architecture → /data-model → /security-review → /estimate → /project-plan → /proposal → /review
+```
 
-**Time**: 1-3 hours depending on system size
+Use when designing a new system from scratch. Every skill runs in sequence, building on upstream deliverables.
+
+### Migration
+
+```
+/requirements → /integration-plan → /architecture → /data-model → /security-review → /estimate → /project-plan → /proposal → /review
+```
+
+Use for legacy modernization. Note: `/integration-plan` runs **before** `/architecture` because migration constraints (APIs, data flows, legacy bridging) inform the target architecture.
+
+### Streamlined
+
+```
+/requirements → /architecture → /estimate → /proposal
+```
+
+Use for small projects or time-constrained engagements. Skips data modeling, security review, integration planning, and project planning.
+
+### Assessment
+
+```
+/requirements → /architecture → [/security-review] → /proposal
+```
+
+Use for discovery-only engagements (pre-commitment). Security review is optional (brackets).
+
+### Quick Qualify
+
+```
+/requirements (quick tier)
+```
+
+Use for pipeline qualification. The requirements skill has a "quick" tier that asks fewer questions and produces a lightweight assessment.
+
+---
+
+## How Skills Communicate
+
+Skills use the **blackboard pattern** — they communicate exclusively through JSON files in `knowledge_base/`:
+
+1. Each skill **reads** its upstream dependencies (declared in `$depends_on`)
+2. Each skill **writes** to exactly one output file it owns
+3. `engagement.json` tracks lifecycle state for all domain files
+4. Prerequisites are validated before each skill runs
+
+If a prerequisite is missing, the agent tells you which skill to run first.
+
+---
+
+## Human Checkpoints
+
+After every skill completes, the agent presents:
+
+1. **Summary** — What was produced and key findings
+2. **Deliverables** — Files created or updated
+3. **Next skill** — Suggested next step in the engagement flow
+
+You review, approve, and decide whether to proceed. The agent never auto-advances to the next skill without your input.
 
 ---
 
 ## Key Principles
 
-**YOU always**:
-- Answer questions (requirements)
-- Approve designs (architecture)
-- Review code (engineering)
-- Execute deployment
-- Make all critical decisions
-
-**Agents generate, YOU approve.**
-
----
-
+- **Skills design solutions — they don't implement them.** Code generation, deployment, and infrastructure provisioning are out of scope.
+- **You always approve.** The agent generates, you review and decide.
+- **Technology-agnostic.** The agent uses web search to recommend best-fit technology, not defaults.
+- **Well-Architected compliance.** Every architecture is scored against AWS 6 pillars + GenAI Lens.

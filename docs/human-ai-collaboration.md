@@ -1,140 +1,85 @@
-﻿# Human-AI Collaboration Guide
+# Human-AI Collaboration Guide
 
-**Version**: 0.1.0-alpha | **Status**: Alpha
-
-**Key Principle**: Agents **augment** your expertise, they don't replace your judgment
+**Key Principle**: The agent **augments** your expertise — it doesn't replace your judgment.
 
 ---
 
-## Core Principle
+## Core Pattern
 
-Agents GENERATE → YOU REVIEW → YOU APPROVE → YOU DEPLOY
+**Agent GENERATES → YOU REVIEW → YOU APPROVE → YOU DELIVER**
 
-**Agents do**:
-- Generate code/docs/configs
-- Analyze systems
-- Recommend improvements
-- Validate quality
-
-**YOU do**:
-- Review all outputs
-- Approve what to use
-- Make all decisions
-- Execute deployments
-
----
-
-## What Agents Automate
-
-**Generation** (you review):
-- Code (Streamlit, Claude integration, LangChain)
-- Configs (AWS CDK, GitHub Actions, .cursorrules)
-- Documentation (README, API docs, guides)
-- Tests (pytest suites, validation)
-
-**Analysis** (you interpret):
-- System architecture
-- Code quality
-- Performance metrics
-- Security posture
-
-**Recommendations** (you decide):
-- Tech stack
-- Architecture patterns
-- Optimizations
-- Security improvements
+| The Agent Does | You Do |
+|----------------|--------|
+| Discover requirements through structured questions | Answer questions, validate completeness |
+| Design architectures with WA scoring | Select approach, approve trade-offs |
+| Model data structures and relationships | Validate domain accuracy |
+| Identify security threats (STRIDE) | Prioritize mitigations, accept risk |
+| Plan integrations and migrations | Confirm constraints, approve sequencing |
+| Estimate effort, cost, team composition | Validate assumptions, approve budgets |
+| Generate project plans with sprints | Adjust timelines, approve milestones |
+| Assemble proposals from deliverables | Review, customize, deliver to client |
+| Review deliverables (LLM-as-judge) | Interpret scores, decide on revisions |
 
 ---
 
-## What YOU Always Control
+## What the Agent Never Does
 
-**Agents NEVER (without your approval)**:
-- ❌ Commit code
-- ❌ Push to GitHub
-- ❌ Deploy to production
-- ❌ Spend money (create AWS resources)
-- ❌ Make business decisions
-- ❌ Approve budgets
-
-**YOU ALWAYS**:
-- ✅ Review generated code
-- ✅ Approve architectures
-- ✅ Execute deployments
-- ✅ Make all critical decisions
-- ✅ Monitor production
+- Commit code or push to repositories
+- Deploy to any environment
+- Send deliverables to clients
+- Make business or budget decisions
+- Spend money or provision resources
+- Auto-advance to the next skill without your approval
 
 ---
 
-## Human-in-the-Loop Points
+## Human Checkpoints
 
-### Requirements Phase
-- Agent ASKS questions → YOU ANSWER
-- Agent STRUCTURES → YOU APPROVE
+Every skill pauses at completion and presents:
 
-### Architecture Phase
-- Agent PROPOSES → YOU SELECT
-- Agent ESTIMATES → YOU APPROVE budget
+1. **Summary** of what was produced
+2. **Deliverables** created or updated (file paths)
+3. **Suggested next skill** in the engagement flow
 
-### Engineering Phase
-- Agents GENERATE code → YOU REVIEW
-- Agents VALIDATE → YOU APPROVE for use
-
-### Deployment Phase
-- Agent PROVIDES guide → YOU EXECUTE
-- Agent RECOMMENDS → YOU CONFIGURE
-- YOU DEPLOY (not automated)
-
-### Optimization Phase
-- Agent ANALYZES → YOU REVIEW
-- Agent PROPOSES → YOU SELECT improvements
-- Agent IMPLEMENTS (if approved) → YOU VALIDATE
+You decide whether to:
+- Proceed to the suggested next skill
+- Re-run the current skill with adjustments
+- Skip ahead in the flow
+- Stop and review deliverables
 
 ---
 
 ## Automation Levels
 
-**Level 1 - Advisory** (you execute everything):
-- Requirements, Architecture, Optimization (default mode)
+| Level | Mode | Agent Behavior | Your Role |
+|-------|------|---------------|-----------|
+| **1 — Advisory** | Default for all skills | Generates recommendations | Review, decide, execute |
+| **2 — Structured** | Requirements, Estimation | Asks questions, structures answers | Answer, validate, approve |
+| **3 — Analytical** | Architecture, Security | Designs + scores + recommends | Select, approve trade-offs |
 
-**Level 2 - Generate & Validate** (you approve & deploy):
-- Engineering Specialists, Prompt Engineering
-
-**Level 3 - Implement** (you monitor & approve):
-- Optimization Agent ("analyze & implement" mode)
-
-**Even Level 3**: YOU approve the approach first
+Even at Level 3, the agent never acts without your explicit approval.
 
 ---
 
-## Quick Reference
+## Scope Boundary
 
-| Task | Agent Does | You Do |
-|------|-----------|--------|
-| Requirements | Ask questions, structure | Answer, approve |
-| Architecture | Propose design, estimate | Select, approve budget |
-| Engineering | Generate code, validate | Review, approve, integrate |
-| Deployment | Provide guide | Execute, monitor |
-| Optimization | Analyze, recommend | Prioritize, approve, validate |
+| This Agent Does (Design) | Future Engineering Agent (Implementation) |
+|--------------------------|------------------------------------------|
+| Requirements discovery | Code generation |
+| System architecture | Deployment scripts |
+| Data modeling | CI/CD pipelines |
+| Security review | Infrastructure provisioning |
+| Integration planning | Testing implementation |
+| Cost estimation | Monitoring setup |
+| Project planning | Production operations |
+| Proposal assembly | — |
 
----
-
-## Common Questions
-
-**Q: Will agents deploy automatically?**  
-A: NO. Agents generate guides, YOU execute.
-
-**Q: Can agents commit code?**  
-A: NO. Agents generate, YOU review and commit.
-
-**Q: Do I approve optimizations?**  
-A: YES (default). Or choose "analyze & implement" mode.
-
-**Q: Who is responsible if something breaks?**  
-A: YOU. Agents augment, you approve what gets deployed.
+If you request implementation, the agent acknowledges the request, explains its design-only scope, and notes the request for a future Engineering Agent.
 
 ---
 
-**Key**: Agents make you MORE effective, not obsolete. They handle generation/analysis so YOU focus on decisions/approval/deployment.
+## Guiding Principle
 
----
-
+> "Human review is mandatory before client-facing deliverables. AI assists the SA; the SA owns the output. Never send unreviewed AI work to clients."
+>
+> — Principle #42, guiding-principles.md

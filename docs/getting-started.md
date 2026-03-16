@@ -1,121 +1,111 @@
-﻿# Getting Started
+# Getting Started
 
 Get productive in 15 minutes.
-
-<!-- Version in .repo-metadata.json -->
 
 ---
 
 ## Prerequisites
 
-- Claude Code CLI (recommended) OR Claude Projects OR GitHub Copilot
-- Git (to clone repository)
-- Basic understanding of AI/LLMs
+- **Claude Code CLI** — [install guide](https://docs.anthropic.com/en/docs/claude-code/overview)
+- **Git** — to clone the repository
+- **Python 3.10+** — for validation scripts (`pip install jsonschema`)
 
 ---
 
-## 2-Minute Setup
+## Install the Plugin
 
-**1. Clone**:
 ```bash
+# 1. Clone
 git clone https://github.com/Modular-Earth-LLC/solutions-architecture-agent.git
 cd solutions-architecture-agent
+
+# 2. Install as Claude Code plugin
+claude mcp add-from-claude-plugin .
+
+# Or load directly for development
+claude --plugin-dir .
 ```
 
-**2. Start Claude Code**:
-```bash
-claude
-```
-
-Claude automatically loads `CLAUDE.md` and `.claude/` configuration (rules, settings, hooks).
-
-**3. Test**:
-- Type: "Build a customer support chatbot"
-- Watch it work!
+Claude automatically loads `CLAUDE.md` and `.claude/rules/` configuration. Skills appear as `solutions-architecture-agent:<skill-name>`.
 
 ---
 
-## Your First AI System
+## Run Your First Skill
 
-**Build a Streamlit chatbot with Claude (30 min)**:
+**Option A — Slash command:**
+```
+/requirements
+```
 
-1. "I need a Streamlit chat interface with Claude"
-2. Supervisor routes to → Streamlit UI + Claude Code agents
-3. They generate code
-4. YOU review code
-5. Copy to new project
-6. Run: `streamlit run app.py`
+**Option B — Natural language:**
+```
+I need to design a healthcare data platform that modernizes our legacy systems.
+```
 
-**YOU always approve before using generated code.**
+The agent classifies your intent and routes to the appropriate skill. After each skill completes, it presents a **human checkpoint**: summary, deliverables, and suggested next skill.
 
 ---
 
 ## Understanding the System
 
-**Specialized agent system** (see `.repo-metadata.json` for counts):
-- **1 Main Supervisor**: Routes your requests
-- **5 Top-Level Domain Agents**: Requirements, Architecture, Deployment, Optimization, Prompt Engineering
-- **1 Engineering Supervisor**: Second-tier orchestrator coordinating 16 technology specialists
-- **16 Engineering Specialists**: Each focused on one technology (Streamlit, Claude Code, AWS Bedrock, etc.)
+**Single agent with 9 skills.** Each skill handles one phase of the SA lifecycle:
 
-**How it works**:
-1. You make request
-2. Supervisor identifies which agent(s) needed
-3. Agents generate code/docs/configs
-4. YOU review and approve
-5. YOU deploy when ready
+1. `/requirements` — Discover what the client needs
+2. `/architecture` — Design the system
+3. `/data-model` — Model the data layer
+4. `/security-review` — STRIDE threat modeling + compliance
+5. `/integration-plan` — APIs, migration, legacy bridging
+6. `/estimate` — LOE, cost, team composition
+7. `/project-plan` — Phased roadmap with sprints
+8. `/proposal` — Assemble SOW from all upstream deliverables
+9. `/review` — LLM-as-judge quality review
 
-**Key**: Agents AUGMENT you, don't replace you. See `docs/human-ai-collaboration.md`.
+Skills communicate through JSON files in `knowledge_base/` — each skill reads from upstream files and writes to its own file.
 
 ---
 
-## Common Workflows
+## Engagement Flows
 
-**Get requirements**:
-"Help me discover requirements for [project]"
-→ Requirements Agent asks questions
+Choose the flow that matches your engagement type:
 
-**Design architecture**:
-"Design architecture for [system]"
-→ Architecture Agent creates design + estimates
+| Flow | Skills | When |
+|------|--------|------|
+| **Greenfield** | req → arch → dm → sr → est → ppl → pro → rv | New system from scratch |
+| **Migration** | req → ip → arch → dm → sr → est → ppl → pro → rv | Legacy modernization |
+| **Streamlined** | req → arch → est → pro | Small/time-constrained |
+| **Assessment** | req → arch → [sr] → pro | Discovery-only |
+| **Quick Qualify** | req (quick tier) | Pipeline qualification |
 
-**Build prototype**:
-"Build a Streamlit app that does [X]"
-→ Engineering agents generate code
+You don't need to run every skill — the agent checks prerequisites and tells you what's missing.
 
-**Optimize system**:
-"Optimize my AI system at [path]"
-→ Optimization Agent analyzes + improves
+---
+
+## Validation
+
+Run validation scripts to check KB file integrity:
+
+```bash
+# Schema validation
+python tests/validate_knowledge_base.py
+
+# Metadata consistency, $depends_on chains, ID uniqueness
+python tests/validate_consistency.py
+```
 
 ---
 
 ## Security & Sensitive Data
 
-**Protecting sensitive information:**
-
-If you're working with proprietary designs, sensitive data, or confidential information:
-
-1. Use the `private/` directory for any sensitive files
-2. Read `private/README.md` for comprehensive security guidelines
-3. Instruct AI agents to save sensitive outputs to `private/sensitive-ai-agent-outputs/`
-4. Verify with `git status` that sensitive files are never staged for commit
-
-**The `private/` directory is automatically excluded from Git** but provides local workspace for development with sensitive content.
+- Use the `private/` directory for any sensitive files (gitignored)
+- See `private/README.md` for security guidelines
+- Never commit API keys, credentials, or PII to version control
+- Verify with `git status` before committing
 
 ---
 
 ## Next Steps
 
-**Learn more**:
-- `docs/workflow_guide.md` - Detailed workflows
-- `docs/engineering-agents-guide.md` - All 16 specialists
-- `docs/github-copilot-optimization.md` - Optimize VS Code + Copilot setup
-- `docs/human-ai-collaboration.md` - Your role vs agent role
-- `private/README.md` - Security guidelines for sensitive data
-
-**Get help**:
-- GitHub Issues: Bug reports, feature requests
-- Discussions: Questions, community support
-
----
-
+- **[workflow_guide.md](workflow_guide.md)** — Detailed engagement flow walkthrough
+- **[human-ai-collaboration.md](human-ai-collaboration.md)** — What the agent does vs. what you do
+- **[../ARCHITECTURE.md](../ARCHITECTURE.md)** — System design with Mermaid diagrams
+- **[../CONTRIBUTING.md](../CONTRIBUTING.md)** — How to add new skills
