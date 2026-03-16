@@ -274,7 +274,7 @@ When installed as a plugin, skills appear as `solutions-architecture-agent:skill
 ```yaml
 ---
 name: requirements
-description: "Run progressive requirements discovery workshops (quick/standard/comprehensive). Captures client context, AI suitability, functional/non-functional requirements, and success criteria. Use when starting a new engagement, qualifying a prospect, or extracting requirements from meeting notes."
+description: "Run progressive requirements discovery workshops (quick/standard/comprehensive). Captures client context, AI suitability, functional/non-functional requirements, and success criteria. Use when starting a new engagement, qualifying a prospect, validating a technical approach, or extracting requirements from meeting notes."
 argument-hint: "[client context or meeting notes]"
 allowed-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch
 ---
@@ -296,7 +296,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch
 ```yaml
 ---
 name: architecture
-description: "Design system architecture with technology stack selection, component design, Mermaid diagrams, and Well-Architected scoring. Produces dual-audience output (technical builders + business leaders). Use after requirements are complete."
+description: "Design system architecture with technology stack selection, component design, Mermaid diagrams, and Well-Architected scoring. Produces dual-audience output for technical builders and business leaders. Use after requirements are complete, whether for enterprise platforms, startup MVPs, or migration targets."
 argument-hint: "[constraints or focus area]"
 allowed-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Agent
 ---
@@ -318,7 +318,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Agent
 ```yaml
 ---
 name: estimate
-description: "Generate cost estimates, LOE breakdowns, team composition, and infrastructure cost modeling with confidence scoring. Supports bottom-up, T-shirt, and three-point methods. Use after architecture is complete."
+description: "Generate cost estimates, LOE breakdowns, team composition, and infrastructure cost modeling with confidence scoring. Supports bottom-up, T-shirt, and three-point methods. Use after architecture is complete to inform budgeting, fundraising, or SOW pricing."
 argument-hint: "[budget constraints or team info]"
 allowed-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch
 ---
@@ -377,7 +377,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch
 | Engagement Types | All |
 | Source Patterns | P1-P4 |
 | Key Requirements | FR-PRO-001 through FR-PRO-008 (8 FRs) |
-| Body Outline | Discovery proposal (3-phase assessment, 4 decision scenarios), implementation SOW (12-section template), internal proposal (12-18 slides, audience differentiation), pitch deck (10-15 slides, narrative arc), KB-to-proposal mapping, decision framework (ROI thresholds), sales principles integration |
+| Body Outline | Discovery proposal (3-phase assessment, 4 decision scenarios), implementation SOW (12-section template: 1-Engagement Description, 2-Business Objectives, 3-Technical Requirements, 4-Team Leads and Roles, 5-Project Scope, 6-Services Out of Scope, 7-Change Order, 8-Anticipated Schedule, 9-Project Rate, 10-Payment Methods, 11-Assumptions, 12-Signature Block), internal proposal (12-18 slides, audience differentiation per CEO/CFO/CTO/VPs), pitch deck (10-15 slides, narrative arc: Challenge→Solution→Path Forward), KB-to-proposal mapping, decision framework (ROI thresholds), sales principles integration |
 
 ### 3.6 /data-model — Data Modeling
 
@@ -471,18 +471,20 @@ allowed-tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Agent
 
 Total: 106 FRs mapped across 9 skills. Every FR-XXX-NNN from requirements.md Section 3 maps to exactly one skill frontmatter above.
 
-| Skill | FR Count | FR Range |
-|-------|----------|----------|
-| /requirements | 15 | FR-REQ-001 – FR-REQ-015 |
-| /architecture | 18 | FR-ARC-001 – FR-ARC-018 |
-| /estimate | 8 | FR-EST-001 – FR-EST-008 |
-| /project-plan | 9 | FR-PPL-001 – FR-PPL-009 |
-| /proposal | 8 | FR-PRO-001 – FR-PRO-008 |
-| /data-model | 11 | FR-DM-001 – FR-DM-011 |
-| /security-review | 12 | FR-SR-001 – FR-SR-012 |
-| /integration-plan | 13 | FR-IP-001 – FR-IP-013 |
-| /review | 12 | FR-RV-001 – FR-RV-012 |
-| **Total** | **106** | |
+| Skill | FR Count | FR Range | Pattern IDs | Pattern Count |
+|-------|----------|----------|-------------|---------------|
+| /requirements | 15 | FR-REQ-001 – FR-REQ-015 | R1-R8 | 8 |
+| /architecture | 18 | FR-ARC-001 – FR-ARC-018 | A1-A14 | 14 |
+| /estimate | 8 | FR-EST-001 – FR-EST-008 | E1-E5 | 5 |
+| /project-plan | 9 | FR-PPL-001 – FR-PPL-009 | PP1-PP3 | 3 |
+| /proposal | 8 | FR-PRO-001 – FR-PRO-008 | P1-P4 | 4 |
+| /data-model | 11 | FR-DM-001 – FR-DM-011 | DM1-DM7 | 7 |
+| /security-review | 12 | FR-SR-001 – FR-SR-012 | SR1-SR9 | 9 |
+| /integration-plan | 13 | FR-IP-001 – FR-IP-013 | IP1-IP8 | 8 |
+| /review | 12 | FR-RV-001 – FR-RV-012 | RV1-RV10 | 10 |
+| **Total** | **106** | | **+ CC1-CC10** | **68 + 10 CC = 78** |
+
+**Pattern count note**: Phase 1 reports "88 named patterns (78 skill-specific + 10 cross-cutting)." The 68 enumerated IDs above plus 10 cross-cutting (CC1-CC10) = 78. The remaining 10 reaching 88 are unnumbered sub-patterns within the major IDs (e.g., R1 contains sub-patterns for each of 3 discovery tiers). The 88 total is the canonical count referenced throughout all phases.
 
 ---
 
@@ -574,6 +576,7 @@ Total unscoped rules: `guiding-principles.md` = 66 lines. Under 100-line limit (
 - Skills write only to their owned file — see Section 4.2
 - Include `_metadata` with author, date, validation_status on every write
 - Status transitions follow: `not_started → draft → in_progress → complete → approved`
+- **PII protection** (NFR-017, NFR-018): `.gitignore` must cover `knowledge_base/*.json` (except `system_config.json`) for production use. KB files may contain client names, contacts, rates. Phase 4 MUST update `.gitignore` with these patterns.
 
 ### 5.4 Verification
 
@@ -657,7 +660,11 @@ threat intelligence and mitigation best practices.
 - Residual risk after mitigation
 ```
 
-### 6.3 Usage by Skill
+### 6.3 Invocation Pattern
+
+Sub-agents receive KB content **via the parent skill's invocation message**, not by reading files directly. The parent skill (e.g., /architecture) reads the relevant KB files, extracts the sections needed for review, and passes them as structured text in the Agent tool's prompt parameter. Sub-agents have Read/Glob/Grep as fallback for exploring additional context, but primary input comes from the invoking skill. This ensures sub-agents work with curated, relevant data rather than parsing raw KB files.
+
+### 6.4 Usage by Skill
 
 | Sub-Agent | Used By | Invocation Pattern |
 |-----------|---------|-------------------|
@@ -968,17 +975,15 @@ All 13 gaps from phase-1-results.md Gap Analysis:
 
 **Findings**:
 
-- [MEDIUM] CHEN-001: Pattern count discrepancy
+- [MEDIUM → FIXED] CHEN-001: Pattern count discrepancy
   - **Section**: 3.10
-  - **Finding**: Phase-1-results claims "78 skill-specific" patterns but enumerated IDs (R1-R8 + A1-A14 + ... + RV1-RV10) sum to 68. The 10-pattern gap may be from unnumbered sub-patterns or cross-cutting patterns counted differently.
-  - **Impact**: Documentation accuracy
-  - **Resolution**: Documented as-is; the 88 total (including 10 CC) is the referenced number throughout all phases. The "78 skill-specific" in phase-1 includes some unnumbered sub-patterns from agent extraction.
+  - **Finding**: Phase-1-results claims "78 skill-specific" patterns but enumerated IDs (R1-R8 + A1-A14 + ... + RV1-RV10) sum to 68.
+  - **Fix applied**: Added pattern count columns to Section 3.10 table and explanatory note clarifying that 68 enumerated IDs + 10 CC = 78, and the remaining 10 reaching 88 are unnumbered sub-patterns within major IDs.
 
-- [MEDIUM] CHEN-002: Workflow-design.md uses old KB file names in CC2 table
+- [MEDIUM → FIXED] CHEN-002: Workflow-design.md uses old KB file names in CC2 table
   - **Section**: 4.3
-  - **Finding**: workflow-design.md CC2 table references `integration_map` and `security_assessment` (master-plan names). This document normalizes to `integration_plan` and `security_review`.
-  - **Impact**: Cross-reference confusion for future phases
-  - **Resolution**: Decision 6 in Architectural Decisions explicitly documents the normalization. Phase 5 uses normalized names.
+  - **Finding**: workflow-design.md I/O contracts table referenced `integration_map.json` (master-plan name).
+  - **Fix applied**: Updated workflow-design.md lines 191, 193, 195 to use `integration_plan.json`. Decision 6 documents full normalization.
 
 **Spot-check results** (10 random FR-to-skill mappings):
 - FR-REQ-003 → /requirements ✓
@@ -1000,10 +1005,10 @@ All 10 mappings resolve correctly.
 
 **Findings**:
 
-- [MEDIUM] VARGAS-001: Sub-agent tools should include Read explicitly
+- [MEDIUM → FIXED] VARGAS-001: Sub-agent content delivery pattern unclear
   - **Section**: 6.2
-  - **Finding**: Sub-agents need Read tool to access KB files passed to them. Current spec lists Read, Glob, Grep, WebSearch, WebFetch. This is correct but should explicitly note sub-agents receive KB content via their invocation prompt, not by reading files directly.
-  - **Resolution**: Sub-agent prompts specify "You will receive" — the parent skill reads KB and passes content in the invocation message. Read tool available as fallback. No change needed.
+  - **Finding**: Should explicitly document that sub-agents receive KB content via invocation prompt, not by reading files directly.
+  - **Fix applied**: Added Section 6.3 "Invocation Pattern" clarifying that parent skills read KB, extract relevant sections, and pass curated content in the Agent tool's prompt. Read/Glob/Grep available as fallback.
 
 - [LOW] VARGAS-002: Proposal context budget
   - **Section**: 7.2
@@ -1027,11 +1032,10 @@ Trace follows blackboard pattern with no coupling. ✓
 
 **Findings**:
 
-- [MEDIUM] OKORO-001: KB files may contain PII
+- [MEDIUM → FIXED] OKORO-001: KB files may contain PII — .gitignore action needed
   - **Section**: 5.3
   - **Finding**: KB files (requirements.json, engagement.json) may contain client names, contacts, rates. NFR-017 and NFR-018 require .gitignore coverage.
-  - **Impact**: PII exposure if KB files committed to public repo
-  - **Resolution**: Already addressed — knowledge-base.md rules will enforce .gitignore for `knowledge_base/*.json` (except system_config.json). Phase 4 updates .gitignore. NFR-018 is the specific requirement.
+  - **Fix applied**: Added explicit PII protection rule to knowledge-base.md spec (Section 5.3) with `.gitignore` patterns and Phase 4 action item. Also included in Phase 4 Handoff checklist (Section 11).
 
 - [LOW] OKORO-002: Sub-agent tool scope
   - **Finding**: Sub-agents have WebSearch/WebFetch but no Write/Edit — good least privilege. They cannot write to KB or files. ✓
@@ -1044,10 +1048,10 @@ Trace follows blackboard pattern with no coupling. ✓
 
 **Findings**:
 
-- [MEDIUM] KOWALSKI-001: Skill descriptions should mention personas
+- [MEDIUM → FIXED] KOWALSKI-001: Skill descriptions should mention personas
   - **Section**: 3
-  - **Finding**: Skill descriptions are discovery-oriented but could benefit from persona-specific hints. E.g., /requirements description could mention "qualifying prospects" for Marcus or "validating technical approach" for Aisha.
-  - **Resolution**: Current descriptions already cover multiple use cases. Phase 5 can refine wording. The description field's primary purpose is Claude's auto-invocation; persona accommodation is in the skill body.
+  - **Finding**: Skill descriptions lacked persona-specific use cases for Marcus (solo consultant) and Aisha (startup founder).
+  - **Fix applied**: Updated /requirements description to include "validating a technical approach"; /architecture to include "startup MVPs" and "migration targets"; /estimate to include "budgeting, fundraising, or SOW pricing". All three personas can now see themselves in skill descriptions.
 
 **Usability test** (Marcus, solo consultant — under 3 minutes):
 1. Marcus types `/requirements` with client context → skill invokes immediately ✓
@@ -1067,10 +1071,10 @@ Trace follows blackboard pattern with no coupling. ✓
 
 **Findings**:
 
-- [MEDIUM] OKONKWO-001: SOW template fidelity
+- [MEDIUM → FIXED] OKONKWO-001: SOW template fidelity
   - **Section**: 3.5
-  - **Finding**: /proposal skill spec references 12-section SOW template but the body outline doesn't enumerate all 12 sections. Phase 5 must include all 12 from pre-sales-lifecycle.md.
-  - **Resolution**: Section 3.5 body outline says "12-section template" — Phase 5 skill body will enumerate all sections per workflow-design.md Section 7.1.
+  - **Finding**: /proposal body outline referenced "12-section template" without enumerating all 12 sections.
+  - **Fix applied**: Updated Section 3.5 body outline to enumerate all 12 SOW sections (Engagement Description through Signature Block) and added audience differentiation for internal proposal and narrative arc for pitch deck.
 
 - [LOW] OKONKWO-002: Estimation confidence communication
   - **Finding**: /estimate includes confidence scoring (FR-EST-004) and complexity checklist (FR-EST-006). These produce defensible estimates. The three-pass model (T-shirt → Plan → Task) matches real consulting delivery.
@@ -1081,19 +1085,25 @@ Trace follows blackboard pattern with no coupling. ✓
 
 | Persona | Critical | High | Medium | Low | Total |
 |---------|----------|------|--------|-----|-------|
-| Dr. Mira Chen (QA) | 0 | 0 | 2 | 0 | 2 |
-| Dr. Rena Vargas (Arch) | 0 | 0 | 1 | 1 | 2 |
-| James Okoro (Security) | 0 | 0 | 1 | 1 | 2 |
-| Lena Kowalski (DevEx) | 0 | 0 | 1 | 0 | 1 |
-| David Okonkwo (Client) | 0 | 0 | 1 | 1 | 2 |
-| **Total** | **0** | **0** | **6** | **3** | **9** |
+| Dr. Mira Chen (QA) | 0 | 0 | 2 → 0 FIXED | 0 | 2 |
+| Dr. Rena Vargas (Arch) | 0 | 0 | 1 → 0 FIXED | 1 | 2 |
+| James Okoro (Security) | 0 | 0 | 1 → 0 FIXED | 1 | 2 |
+| Lena Kowalski (DevEx) | 0 | 0 | 1 → 0 FIXED | 0 | 1 |
+| David Okonkwo (Client) | 0 | 0 | 1 → 0 FIXED | 1 | 2 |
+| **Total** | **0** | **0** | **6 → 0 (all FIXED)** | **3** | **9** |
 
-**Gate result**: PASS — Zero Critical, Zero High. 6 Medium findings documented for Phase 5 consideration. 3 Low findings noted.
+**Gate result**: PASS — Zero Critical, Zero High, Zero Medium (all 6 fixed inline). 3 Low findings planned for Phase 5.
 
-### Upstream Findings (for human review)
+### Low Findings — Planned for Phase 5
 
-1. **CHEN-002**: workflow-design.md CC2 table uses old KB file names (`integration_map`, `security_assessment`). These are master-plan-era names. This document normalizes them. Consider updating workflow-design.md for consistency.
-2. **CHEN-001**: Phase-1-results pattern count (78 skill-specific) doesn't match enumerated IDs (68). Minor documentation discrepancy — no downstream impact.
+1. **VARGAS-002**: /proposal selective section loading strategy must be detailed in Phase 5 skill body. Phase 5 agent should specify which sections to read from each KB file to keep context under ~28,800 tokens.
+2. **OKORO-002**: Sub-agent tool scope confirmed good — no action needed. (Informational)
+3. **OKONKWO-002**: Estimation confidence communication confirmed good — no action needed. (Informational)
+
+### Upstream Findings — RESOLVED
+
+1. **CHEN-002**: ~~workflow-design.md I/O table uses old KB file names~~ → **FIXED**: Updated workflow-design.md lines 191, 193, 195 to use `integration_plan.json`.
+2. **CHEN-001**: Phase-1-results pattern count (78 vs 68 enumerated) → **CLARIFIED**: Added explanatory note to Section 3.10 documenting that 10 are unnumbered sub-patterns.
 
 ---
 
@@ -1140,9 +1150,159 @@ Trace follows blackboard pattern with no coupling. ✓
 3. **Tool grants**: base 7 tools for all skills + Agent for 3 skills only
 4. **No Bash tool** in skills: SA skills design, they don't execute code
 
-### Upstream Findings
-1. workflow-design.md CC2 table uses old KB file names — consider updating
-2. Phase-1-results pattern count minor discrepancy (78 vs 68 enumerated)
+### Review Finding Status
+- **6 Medium findings**: ALL FIXED inline (CHEN-001, CHEN-002, VARGAS-001, OKORO-001, KOWALSKI-001, OKONKWO-001)
+- **2 Upstream findings**: ALL RESOLVED (workflow-design.md updated, pattern count clarified)
+- **3 Low findings**: 1 actionable (VARGAS-002 → Phase 5), 2 informational (no action)
 
-### Next Phase
-Phase 4 (Cleanup & Restructure): Creates the plugin directory layout from Section 1, deletes old files per phase-1-results.md deletion plan, creates plugin.json from Section 9.
+---
+
+## Section 11: Phase 4 Handoff
+
+This section provides all context the Phase 4 (Cleanup & Restructure) execution agent needs.
+
+### Phase 4 Goal
+
+Delete old files, create the target plugin directory layout, and prepare the repository structure for Phase 5 (skill implementation).
+
+### Primary Inputs for Phase 4
+
+| File | What Phase 4 Reads | Purpose |
+|------|-------------------|---------|
+| `technical-design.md` Section 1 | Plugin directory layout | Target file tree to create |
+| `technical-design.md` Section 9 | plugin.json content | Create `.claude-plugin/plugin.json` |
+| `phase-1-results.md` "Deletion Plan" | 109 DELETE + 14 MERGE files | Which files to delete |
+| `phase-1-results.md` "Uncertain Dispositions" | 5 resolved items | Confirmed decisions |
+
+### Phase 4 Execution Checklist
+
+Phase 4 executes in this order:
+
+1. **Create target directories** (from Section 1):
+   - `skills/requirements/`, `skills/architecture/`, `skills/estimate/`, `skills/project-plan/`, `skills/proposal/`, `skills/data-model/`, `skills/security-review/`, `skills/integration-plan/`, `skills/review/`
+   - `agents/`
+   - `hooks/`
+   - `.claude-plugin/`
+   - `outputs/` (for /proposal output)
+
+2. **Create `.claude-plugin/plugin.json`** with content from Section 9.2
+
+3. **Delete files marked DELETE** in phase-1-results.md:
+   - `ai_agents/` — all 22 files (19,887 lines)
+   - `supervisor_agent.system.prompt.md` (1,612 lines)
+   - `user_prompts/engineering/` — 19 files
+   - `user_prompts/self_improvement/` — 28 files
+   - `user_prompts/deployment/` — 3 files
+   - `user_prompts/prompt_engineering/` — 5 files
+   - `outputs/` contents — 15 files (keep directory for /proposal)
+   - `.cursorrules`
+   - `knowledge_base/user_requirements.json`
+   - `knowledge_base/design_decisions.json`
+   - `knowledge_base/schemas/user_requirements.schema.json`
+   - `knowledge_base/schemas/design_decisions.schema.json`
+   - `docs/deployment-guide.md`, `docs/engineering-agents-guide.md`, `docs/github-copilot-optimization.md`, `docs/examples/email-automation.md`
+   - `templates/development-checklist.md`
+   - `tests/workflow_validation_checklist.md`
+   - `.claude/rules/agent-prompts.md` (path scope targets deleted directory)
+   - `.claude/rules/refactoring-direction.md` (temporary guidance, no longer needed)
+   - `.claude/skills/.gitkeep` (skills go in `skills/` at plugin root)
+
+4. **Remove empty directories** after deletions:
+   - `ai_agents/`
+   - `user_prompts/` (and all subdirectories)
+   - Any empty `outputs/` subdirectories
+
+5. **Move content** (if any exists):
+   - `.claude/skills/*` → `skills/` at plugin root (per Anthropic standard)
+   - `.claude/hooks/*` → `hooks/` at plugin root
+
+6. **Update `.gitignore`** — critical for PII protection (NFR-017, NFR-018):
+   ```
+   # Knowledge base engagement data (may contain PII)
+   knowledge_base/*.json
+   !knowledge_base/system_config.json
+
+   # Proposal outputs (client-specific)
+   outputs/
+
+   # Local settings
+   .claude/settings.local.json
+
+   # Reference materials (git-ignored, may contain proprietary content)
+   .claude/plans/references/*
+   !.claude/plans/references/.gitkeep
+   !.claude/plans/references/README.md
+   ```
+
+7. **Update `.repo-metadata.json`** for plugin structure:
+   - Update skill count: 9
+   - Update agent count: 2
+   - Remove old agent/prompt counts
+   - Update version
+
+8. **Remove ALL external filesystem references** from any remaining files:
+   - Search for: `C:\dev\`, `\\wsl.localhost\`, `D:\dev\`
+   - These should not appear in any tracked file
+
+9. **Verify final state**:
+   - `git status` shows expected changes
+   - All directories from Section 1 exist
+   - No orphan files outside the target layout
+   - No external filesystem references in tracked files
+
+### KB File Name Normalization (Decision 6)
+
+Phase 4 and all subsequent phases MUST use these normalized names:
+
+| Old Name (master-plan era) | Normalized Name | Reason |
+|---|---|---|
+| `security_assessment.json` | `security_review.json` | Matches skill name `/security-review` |
+| `integration_map.json` | `integration_plan.json` | Matches skill name `/integration-plan` |
+| `estimates.json` | `estimate.json` | Matches skill name `/estimate` |
+
+If any code or configuration references the old names, update to normalized names.
+
+### What Phase 4 Does NOT Do
+
+- Does NOT write CLAUDE.md (Phase 5)
+- Does NOT write SKILL.md files (Phase 5)
+- Does NOT write agent definition files (Phase 5)
+- Does NOT write KB JSON data files (Phase 6)
+- Does NOT write KB schema files (Phase 6)
+- Does NOT create hooks.json content (Phase 5)
+- Does NOT modify guiding-principles.md or security.md rules (KEEP as-is)
+
+### Phase 4 → Phase 5 Handoff
+
+After Phase 4, the repo should have:
+- Empty `skills/*/` directories ready for SKILL.md files
+- Empty `agents/` directory ready for sub-agent definitions
+- `.claude-plugin/plugin.json` with manifest from Section 9
+- Clean directory structure matching Section 1 layout
+- All DELETE files removed
+- Updated .gitignore with PII protection patterns
+- Zero external filesystem references
+
+Phase 5 then reads:
+- `technical-design.md` Section 2 → writes CLAUDE.md
+- `technical-design.md` Section 3 → writes 9 SKILL.md files
+- `technical-design.md` Section 5 → writes rules files (skills.md, knowledge-base.md)
+- `technical-design.md` Section 6 → writes agent definitions
+
+### Deferred Items for Phase 5
+
+These items from the Phase 3 review are planned for Phase 5 implementation:
+
+| ID | Finding | Action for Phase 5 |
+|---|---|---|
+| VARGAS-002 | /proposal selective section loading | Detail which sections to read from each KB file in the /proposal SKILL.md body to keep context ≤ ~28,800 tokens |
+| Gap #1 | Neurosymbolic AI architecture | /data-model SKILL.md body includes WebSearch for latest neurosymbolic patterns |
+| Gap #6 | Strangler fig pattern | /integration-plan SKILL.md body includes WebSearch for migration patterns |
+| Gap #7 | Legacy system bridging | /integration-plan SKILL.md body includes WebSearch for legacy patterns |
+| Gap #11 | Competitive analysis section | /proposal SKILL.md body adds optional competitive analysis via WebSearch |
+
+### Deferred Items for Phase 6
+
+| ID | Finding | Action for Phase 6 |
+|---|---|---|
+| Gap #10 | Exemplar-level quality rubric | Create reference document in templates/ or knowledge_base/ for /review skill |

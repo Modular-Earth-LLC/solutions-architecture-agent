@@ -188,11 +188,11 @@ Before invoking any skill, the dispatch logic validates:
 | Skill | KB Reads | KB Writes | User Inputs | Deliverable Outputs |
 |-------|----------|-----------|-------------|-------------------|
 | `/requirements` | `system_config.json` | `requirements.json`, `engagement.json` (creates/updates) | Client context, interview responses, meeting notes | requirements.json |
-| `/architecture` | `requirements.json`, `integration_map.json` (if exists) | `architecture.json`, `engagement.json` (updates lifecycle) | Constraints, preferences | architecture.json, Mermaid diagrams |
+| `/architecture` | `requirements.json`, `integration_plan.json` (if exists) | `architecture.json`, `engagement.json` (updates lifecycle) | Constraints, preferences | architecture.json, Mermaid diagrams |
 | `/data-model` | `requirements.json`, `architecture.json` | `data_model.json`, `engagement.json` (updates lifecycle) | Data source details | data_model.json, ERDs |
-| `/security-review` | `requirements.json`, `architecture.json`, `data_model.json` (if exists), `integration_map.json` (if exists) | `security_review.json`, `engagement.json` (updates lifecycle) | Compliance requirements, regulatory context | security_review.json, threat model |
+| `/security-review` | `requirements.json`, `architecture.json`, `data_model.json` (if exists), `integration_plan.json` (if exists) | `security_review.json`, `engagement.json` (updates lifecycle) | Compliance requirements, regulatory context | security_review.json, threat model |
 | `/integration-plan` | `requirements.json`, `architecture.json` | `integration_plan.json`, `engagement.json` (updates lifecycle) | Legacy system docs, API specs | integration_plan.json |
-| `/estimate` | `requirements.json`, `architecture.json`, `data_model.json` (if exists), `security_review.json` (if exists), `integration_map.json` (if exists) | `estimate.json`, `engagement.json` (updates lifecycle) | Budget constraints, team info, rate cards | estimate.json |
+| `/estimate` | `requirements.json`, `architecture.json`, `data_model.json` (if exists), `security_review.json` (if exists), `integration_plan.json` (if exists) | `estimate.json`, `engagement.json` (updates lifecycle) | Budget constraints, team info, rate cards | estimate.json |
 | `/project-plan` | `requirements.json`, `architecture.json`, `estimate.json` | `project_plan.json`, `engagement.json` (updates lifecycle) | Timeline constraints, team availability | project_plan.json, Gantt/timeline |
 | `/proposal` | ALL KB files (read-only) | `outputs/{engagement_id}/` (NOT KB) | Proposal type, pricing parameters | SOW/proposal documents |
 | `/review` | Target KB file + its schema | `reviews.json`, `engagement.json` (updates review_summary) | Target file selection, focus areas | reviews.json |
