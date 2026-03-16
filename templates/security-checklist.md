@@ -1,67 +1,108 @@
-﻿# Security Checklist
+# Security & Privacy Review Template
 
-**Version**: 0.1.0-alpha | **Status**: Alpha
-
-Essential security validation for AI systems.
+Output template aligned with `/security-review` skill output fields and `security_review.schema.json`.
 
 ---
 
-## Authentication & Authorization
+## Security Requirements
 
-- [ ] API keys in environment variables (never hardcoded)
-- [ ] Secrets Manager configured (AWS Secrets Manager, .env)
-- [ ] IAM policies least-privilege
-- [ ] Role-based access control implemented
-- [ ] MFA required for production access
+[5-dimension decomposition: confidentiality, integrity, availability, authentication, authorization]
 
 ---
 
-## Input Validation
+## Threat Model
 
-- [ ] All user inputs validated
-- [ ] SQL injection prevention (parameterized queries)
-- [ ] Prompt injection protection (guardrails configured)
-- [ ] File upload validation (type, size, content)
-- [ ] Rate limiting implemented
+- **Methodology**: [STRIDE / PASTA / DREAD / attack_tree / custom]
+- **Scope**: [What is covered by the threat model]
 
----
+### Threats
 
-## Data Protection
-
-- [ ] Data encrypted at rest (S3, RDS, secrets)
-- [ ] Data encrypted in transit (TLS/HTTPS)
-- [ ] PII detection configured (Bedrock Guardrails)
-- [ ] Data retention policies defined
-- [ ] Backup and recovery tested
+| ID | Category | Description | Severity | Likelihood | Risk Score | Mitigation | Residual Risk | Status |
+|----|----------|-------------|----------|------------|------------|------------|---------------|--------|
+| T-001 | [STRIDE category] | [Description] | critical/high/medium/low | high/medium/low | [1-10] | [Mitigation] | high/medium/low/negligible | identified/mitigated/accepted/transferred |
 
 ---
 
-## LLM Security
+## Defense in Depth
 
-- [ ] Content filtering active (Bedrock Guardrails)
-- [ ] Topic restrictions configured
-- [ ] Output validation implemented
-- [ ] Token limits enforced
-- [ ] Cost monitoring and alerts set
+[5-layer security architecture: perimeter, network, host, application, data]
 
 ---
 
-## Infrastructure
+## IAM Design
 
-- [ ] VPC network isolation configured
-- [ ] Security groups restrictive (minimal ports)
-- [ ] CloudWatch logging enabled
-- [ ] Security scanning in CI/CD (CodeQL, Dependabot)
-- [ ] Vulnerability scanning automated
+[Per-service least-privilege mappings]
+
+### Authentication
+- **Method**: [SSO, MFA, etc.]
+- **MFA Required**: [yes/no]
+- **Session Management**: [JWT, cookies, etc.]
+
+### Authorization
+- **Model**: [RBAC, ABAC, etc.]
+- **Roles**: [List]
+- **Enforcement Point**: [Where enforced]
+
+### Network Security
+- **VPC Design**: [Architecture]
+- **Security Groups**: [Rules]
+- **WAF**: [Enabled/disabled]
+- **DDoS Protection**: [Service]
+
+### Encryption
+- **At Rest**: [Method and key management]
+- **In Transit**: [Protocol]
+- **Key Management**: [Service]
+
+### Secrets Management
+[How secrets are stored and rotated]
+
+### Logging & Monitoring
+- **Audit Log**: [Service]
+- **Application Log**: [Service and retention]
+- **Alerting**: [Rules]
 
 ---
 
-## Compliance
+## AI Security Controls
 
-- [ ] GDPR/data residency requirements met
-- [ ] Audit logging configured
-- [ ] Compliance monitoring active
-- [ ] Incident response plan documented
+- [ ] **Prompt Injection Protection**: [Methods]
+- [ ] **Output Filtering**: [Methods]
+- [ ] **Model Access Control**: [Policy]
+- [ ] **Data Poisoning Prevention**: [Strategy]
+- [ ] **Hallucination Mitigation**: [Controls]
 
 ---
 
+## Compliance Mapping
+
+| Framework | Requirement | Status | Evidence | Notes |
+|-----------|------------|--------|----------|-------|
+| [SOC2/GDPR/HIPAA/etc.] | [Requirement] | compliant/partial/non_compliant/not_applicable | [Evidence] | [Notes] |
+
+---
+
+## Security Guardrails
+
+### MUST
+- [ ] [Required security control 1]
+- [ ] [Required security control 2]
+
+### MUST NOT
+- [ ] [Prohibited practice 1]
+- [ ] [Prohibited practice 2]
+
+---
+
+## Findings Summary
+
+- **Critical**: [N]
+- **High**: [N]
+- **Medium**: [N]
+- **Low**: [N]
+
+### Open Items
+
+| ID | Severity | Finding | Recommendation | Owner | Due Date |
+|----|----------|---------|----------------|-------|----------|
+| F-001 | [Severity] | [Finding] | [Recommendation] | [Owner] | [YYYY-MM-DD] |

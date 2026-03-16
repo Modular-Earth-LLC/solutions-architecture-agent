@@ -1,288 +1,122 @@
-# Knowledge Base - Shared Data Store
+# Knowledge Base
 
-**Purpose:** Centralized JSON storage for requirements, decisions, and configuration  
-**Format:** JSON (better parsing and validation than YAML)
+Centralized JSON storage for the Solutions Architecture Agent. Each skill owns one file and writes only to it. Skills communicate through KB files (blackboard pattern), never directly.
 
----
-
-## Overview
-
-The knowledge base is the "memory" of the Multi-Agent AI Development Framework.
+## File Topology (10 files)
 
 ```
-Requirements Agent → WRITES user_requirements.json
-                         ↓
-Architecture Agent → READS user_requirements.json
-                   → WRITES design_decisions.json
-                         ↓
-Engineering Agent → READS both files
-                  → BUILDS prototype
-                         ↓
-Deployment Agent → READS design_decisions.json
-                 → DEPLOYS system
-
-All Agents → READ system_config.json (platform settings, constraints)
+system_config.json          READ-ONLY (human-managed)
+       │
+       v
+engagement.json             Envelope — all skills create/update
+       │
+       v
+requirements.json           /requirements writes
+       │
+       ├──> architecture.json         /architecture writes
+       │         │
+       │         ├──> data_model.json        /data-model writes
+       │         ├──> security_review.json   /security-review writes
+       │         ├──> integration_plan.json  /integration-plan writes
+       │         ├──> estimate.json          /estimate writes
+       │         │         │
+       │         │         v
+       │         └──> project_plan.json      /project-plan writes
+       │
+       v
+reviews.json                /review writes (targets any file)
 ```
 
----
+## Ownership
 
-## Files
+| File | Owner Skill | $depends_on | Size Target |
+|------|------------|-------------|-------------|
+| `system_config.json` | Human (READ-ONLY) | — | Unchanged |
+| `engagement.json` | Any skill (creates), all (update) | `system_config.json` | < 100 lines |
+| `requirements.json` | `/requirements` | `system_config.json` | < 400 lines |
+| `architecture.json` | `/architecture` | `requirements.json` | < 500 lines |
+| `data_model.json` | `/data-model` | `requirements.json`, `architecture.json` | < 400 lines |
+| `security_review.json` | `/security-review` | `requirements.json`, `architecture.json` | < 300 lines |
+| `integration_plan.json` | `/integration-plan` | `requirements.json`, `architecture.json` | < 300 lines |
+| `estimate.json` | `/estimate` | `requirements.json`, `architecture.json` | < 300 lines |
+| `project_plan.json` | `/project-plan` | `requirements.json`, `architecture.json`, `estimate.json` | < 300 lines |
+| `reviews.json` | `/review` | Dynamic (targets any file) | Grows over time |
 
-### 1. `system_config.json` (READ-ONLY)
+## Status Lifecycle
 
-**Purpose:** Platform settings, constraints, team information  
-**Updated by:** You (manually)  
-**Used by:** All agents
+```
+not_started → draft → in_progress → complete → approved
+```
 
-**Key sections:**
-- Project info, platform, stakeholders
-- Constraints (budget, timeline, compliance)
-- Team (size, skills, gaps)
-- Risk tolerance
+- **Domain files** (requirements, architecture, etc.) use a 4-value enum: `draft | in_progress | complete | approved`
+- **engagement.json lifecycle_state** uses a 5-value enum (adds `not_started`)
+- **engagement.json status** has a broader 7-value enum for overall engagement state
 
-**When to update:** Project start, when constraints change, team changes
+## ID Patterns
 
----
+| Entity | Pattern | Example |
+|--------|---------|---------|
+| Engagement | `eng-YYYY-NNN` | `eng-2026-001` |
+| Success Criteria | `SC-NNN` | `SC-001` |
+| Functional Requirement | `FR-NNN` | `FR-001` |
+| Component | `C-NNN` | `C-001` |
+| Data Flow | `DF-NNN` | `DF-001` |
+| Entity | `E-NNN` | `E-001` |
+| Threat | `T-NNN` | `T-001` |
+| Finding | `F-NNN` | `F-001` |
+| API Contract | `API-NNN` | `API-001` |
+| Data Flow Mapping | `DFM-NNN` | `DFM-001` |
+| Phase | `P-NNN` | `P-001` |
+| Milestone | `M-NNN` | `M-001` |
+| Review | `R-NNN` | `R-001` |
+| Review Finding | `RF-NNN` | `RF-001` |
 
-### 2. `user_requirements.json`
+## Versioning
 
-**Purpose:** Requirements gathered during discovery  
-**Written by:** Requirements Agent  
-**Read by:** All downstream agents
+All domain files use `MAJOR.MINOR` versioning (e.g., `"1.2"`). Major increments on structural changes; minor on content updates. `engagement.json` tracks which version of each domain file is current.
 
-**Key sections:**
-- Customer context and use case
-- Business problem and value
-- Technical requirements
-- Financial projections
-- Risks and mitigation
+## Schemas
 
-**Lifecycle:** Created by Requirements Agent, updated during architecture, version controlled
+All schemas are in `knowledge_base/schemas/` using JSON Schema Draft 2020-12. Each domain file references its schema via `$schema`.
 
----
-
-### 3. `design_decisions.json`
-
-**Purpose:** Architecture decisions, estimates, costs, plans  
-**Written by:** Architecture Agent  
-**Read by:** Engineering Agent, Deployment Agent
-
-**Key sections:**
-- Executive summary
-- Tech stack and architecture
-- Team composition
-- Estimates and costs
-- Project plan
-- Risks and compliance
-
-**Lifecycle:** Created through 6-step design process, updated during implementation
-
----
-
-## Agent Access Patterns
-
-**Requirements Agent:**
-- READ: system_config.json
-- WRITE: user_requirements.json
-
-**Architecture Agent:**
-- READ: system_config.json, user_requirements.json
-- WRITE: design_decisions.json
-
-**Engineering Agent:**
-- READ: user_requirements.json, design_decisions.json
-- UPDATE: design_decisions.json (implementation learnings)
-
-**Deployment Agent:**
-- READ: design_decisions.json
-
-**Optimization Agent:**
-- READ: All files
-- UPDATE: Any file (based on findings)
-
----
-
-## Starting a New Project
-
-**Step 1:** Edit `system_config.json` with your project info, constraints, team
-
-**Step 2:** Run Requirements Agent → populates `user_requirements.json`
-
-**Step 3:** Run Architecture Agent → populates `design_decisions.json`
-
-**Step 4:** Review both JSON files for completeness before building
-
----
+| Schema File | Validates |
+|-------------|-----------|
+| `engagement.schema.json` | `engagement.json` |
+| `requirements.schema.json` | `requirements.json` |
+| `architecture.schema.json` | `architecture.json` |
+| `data_model.schema.json` | `data_model.json` |
+| `security_review.schema.json` | `security_review.json` |
+| `integration_plan.schema.json` | `integration_plan.json` |
+| `estimate.schema.json` | `estimate.json` |
+| `project_plan.schema.json` | `project_plan.json` |
+| `reviews.schema.json` | `reviews.json` |
+| `system_config.schema.json` | `system_config.json` |
+| `.repo-metadata.schema.json` | `.repo-metadata.json` |
 
 ## Validation
 
-**Online validators:**
-- JSONLint: https://jsonlint.com/
-
-**Command-line (Python):**
 ```bash
-python -m json.tool knowledge_base/user_requirements.json
+# Validate all KB files against schemas
+python tests/validate_knowledge_base.py
+
+# Validate a single file
+python tests/validate_knowledge_base.py --file system_config
+
+# Cross-file consistency checks
+python tests/validate_consistency.py
 ```
 
-**Automated:**
-```bash
-python scripts/validate_knowledge_base.py
-```
+Requires: `pip install 'jsonschema>=4.17'`
 
----
+## PII Protection
 
-## Version Control Best Practices
+KB files may contain client names, contacts, and rates. `.gitignore` covers `knowledge_base/*.json` except `system_config.json`. Never commit client data to public repositories.
 
-**Commit frequently:**
-```bash
-# After Requirements Agent
-git add knowledge_base/user_requirements.json
-git commit -m "Add requirements for [project]"
+## Rules
 
-# After each Architecture step
-git add knowledge_base/design_decisions.json
-git commit -m "Complete tech stack selection"
-```
-
-**Use branches for experimentation**
-
----
-
-## Platform Deployment
-
-**Cursor:** Files stay as JSON, agents read via file system  
-**Claude Projects:** Upload to Project Knowledge  
-**AWS Bedrock:** Ingest into Bedrock Knowledge Base  
-**Self-hosted:** Your storage mechanism
-
----
-
-## Knowledge Base Quality & Optimization
-
-**For schema improvements and data architecture optimization:**
-
-Use the specialized knowledge base improvement prompt:
-- **File:** `user_prompts/self_improvement/improve_knowledge_base_architecture.user.prompt.md`
-- **Purpose:** Enterprise-grade schema design, data modeling, and LLM optimization
-- **Authority:** Principal Knowledge Engineer standards (CTO/AI researcher approved)
-- **When to use:** Quarterly reviews, before releases, schema confusion
-- **Agent to use:** Optimization Agent or Architecture Agent
-
-This prompt enforces best practices for:
-- Data modeling and schema design
-- LLM-friendly structures
-- Data governance and quality
-- Knowledge representation
-- Enterprise standards compliance
-
----
-
-## Troubleshooting
-
-**Agent can't find files:**  
-→ Run from repository root, check paths: `knowledge_base/[file].json`
-
-**JSON parsing errors:**  
-→ Validate at jsonlint.com or use `python -m json.tool`
-
-**Missing required fields:**  
-→ Run appropriate agent to populate (don't manually fill)
-
-**Conflicts between files:**  
-→ user_requirements is source of truth for WHAT/WHY  
-→ design_decisions is source of truth for HOW/HOW MUCH
-
-**Schema quality concerns:**  
-→ Use `@improve_knowledge_base_architecture.user.prompt.md` for systematic improvements
-
----
-
-## Summary
-
-**Knowledge base = Shared memory across agents**
-
-- `system_config.json` - Your project configuration (you manage)
-- `user_requirements.json` - What to build (Requirements Agent writes)
-- `design_decisions.json` - How to build it (Architecture Agent writes)
-
-**Benefits:**
-- ✅ Consistency across workflow
-- ✅ No information loss between agents
-- ✅ Traceability (requirements → design → implementation)
-- ✅ Version history (git tracks changes)
-- ✅ Schema validation (formal contracts and IDE support)
-
----
-
-## JSON Schema Validation
-
-**Purpose:** Formal schemas enable automated validation and better IDE support
-
-**Schema Files (in `knowledge_base/schemas/`):**
-- `system_config.schema.json` - Validates system configuration structure
-- `user_requirements.schema.json` - Validates requirements format
-- `design_decisions.schema.json` - Validates architecture decisions
-
-**💡 Schemas Are the Documentation**: The JSON Schema files are human-readable and self-documenting. Each field includes descriptions, types, constraints, and examples. Read the schema files directly to understand the data structures—they're the authoritative source of truth for what fields exist, what they mean, and what values are valid.
-
-**Using Schemas:**
-
-**In VS Code / Cursor:**
-- Schemas provide autocomplete and inline validation
-- Hover over fields for documentation
-- Errors highlighted in real-time
-
-**Command-Line Validation:**
-
-```bash
-# Install JSON schema validator (if needed)
-npm install -g ajv-cli
-
-# Validate system_config.json
-ajv validate -s knowledge_base/schemas/system_config.schema.json -d knowledge_base/system_config.json
-
-# Validate user_requirements.json  
-ajv validate -s knowledge_base/schemas/user_requirements.schema.json -d knowledge_base/user_requirements.json
-
-# Validate design_decisions.json
-ajv validate -s knowledge_base/schemas/design_decisions.schema.json -d knowledge_base/design_decisions.json
-```
-
-**Python Validation:**
-
-```python
-import json
-import jsonschema
-
-def validate_knowledge_base_file(data_file: str, schema_file: str):
-    """Validate JSON file against schema."""
-    with open(schema_file) as f:
-        schema = json.load(f)
-    with open(data_file) as f:
-        data = json.load(f)
-    
-    try:
-        jsonschema.validate(instance=data, schema=schema)
-        print(f"✅ {data_file} is valid")
-    except jsonschema.exceptions.ValidationError as e:
-        print(f"❌ {data_file} validation error: {e.message}")
-        return False
-    return True
-
-# Usage:
-validate_knowledge_base_file(
-    "knowledge_base/system_config.json",
-    "knowledge_base/schemas/system_config.schema.json"
-)
-```
-
-**Benefits of Schema Validation:**
-- Catch errors early (invalid enums, missing required fields, type mismatches)
-- Self-documenting structure (schema describes expected format)
-- IDE assistance (autocomplete, inline docs, error highlighting)
-- Consistency enforcement across manual edits
-
----
-
-**Version:** 1.0  
-**Schema Support:** Added in v1.0 (JSON Schema Draft 2020-12)
+- Validate all JSON against schemas in `knowledge_base/schemas/`
+- Increment version on every write (minor for content, major for structure)
+- Enforce `$depends_on` — a skill must never read from KB files not listed in its dependency chain
+- `system_config.json` is READ-ONLY — never modify at runtime
+- Include `_metadata` block on every write: `author`, `date`, `validation_status`
+- Run `python tests/validate_knowledge_base.py` after modifying any knowledge base file

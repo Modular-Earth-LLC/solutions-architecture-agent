@@ -1,99 +1,127 @@
-﻿# Architecture Template
+# Architecture Design Template
 
-**Version**: 0.1.0-alpha | **Status**: Alpha
-
-Output template for Architecture Agent.
+Output template aligned with `/architecture` skill output fields and `architecture.schema.json`.
 
 ---
 
-## System Architecture
+## Executive Summary
 
-**Project**: [Name]  
-**Date**: [ISO 8601]  
-**Architect**: Architecture Agent
-
-### Architecture Pattern
-[Single-agent / Multi-agent supervisor-worker / RAG / etc.]
-
-### Component Diagram
-```
-[Mermaid or ASCII diagram]
-```
+- **Recommended Approach**: [One-line recommendation]
+- **Confidence Level**: [high / medium / low]
+- **Go/No-Go**: [go / go_with_conditions / pause / no_go]
+- **Key Benefits**: [List]
+- **Key Risks**: [List]
+- **Total Investment Range**: [Range]
 
 ---
 
 ## Tech Stack
 
-**Language & Framework**:
-- Python 3.12+, Streamlit
+### LLM
+- **Provider**: [Provider name]
+- **Primary Model**: [Model ID]
+- **Fallback Model**: [Model ID, if applicable]
+- **Hosting**: [Self-hosted / managed service]
+- **Rationale**: [Why this choice]
 
-**LLM & Orchestration**:
-- Anthropic Claude ([models]), LangChain
+### Orchestration
+- **Framework**: [Framework name]
+- **Pattern**: [direct_api / rag_with_routing / agent_loop / multi_agent / pipeline]
+- **Rationale**: [Why this pattern]
 
-**Data & Storage**:
-- SQLite, ChromaDB/FAISS, pandas
+### Backend
+- **Language**: [Language]
+- **Framework**: [Framework]
+- **API Style**: [rest / graphql / grpc / websocket]
 
-**AWS Services**:
-- [Bedrock, ECS, Lambda, S3, etc.]
+### Frontend
+- **Framework**: [Framework or none]
+- **Type**: [web_app / mobile_app / desktop_app / embedded_widget / cli / none]
 
-**Selection Rationale**:
-[Why this stack for these requirements]
+### Data Stores
+| Name | Technology | Hosting | Purpose |
+|------|-----------|---------|---------|
+| [Store name] | [Tech] | [Where hosted] | [Purpose] |
 
----
-
-## Cost Estimation
-
-### Development Costs
-- Engineering: [hours] × $[rate] = $[total]
-- Design/Testing: [hours] × $[rate] = $[total]
-- **Total Development**: $[total]
-
-### Infrastructure Costs (Monthly)
-- LLM APIs: $[amount]
-- AWS Services: $[amount]
-- **Total Monthly**: $[amount]
-
-### 3-Year TCO
-- Development: $[amount]
-- Operations (36 months): $[amount]
-- **Total**: $[amount]
-
----
-
-## Timeline & Team
-
-**Duration**: [weeks] ([start] to [end])
-
-**Team Composition**:
-- [Role]: [count] FTE - [responsibilities]
-- [Role]: [count] FTE - [responsibilities]
-
-**Milestones**:
-1. [Date]: [Milestone]
-2. [Date]: [Milestone]
+### Infrastructure
+- **Cloud Provider**: [Provider]
+- **Compute**: [Service]
+- **Deployment Strategy**: [blue_green / canary / rolling / recreate]
+- **Region**: [Region]
+- **Monitoring**: [Tool]
+- **Logging**: [Tool]
 
 ---
 
-## Well-Architected Assessment
+## Component Design
 
-| Pillar | Score | Key Considerations |
-|--------|-------|-------------------|
-| Operational Excellence | /10 | [Notes] |
-| Security | /10 | [Notes] |
-| Reliability | /10 | [Notes] |
-| Performance | /10 | [Notes] |
-| Cost Optimization | /10 | [Notes] |
-| Sustainability | /10 | [Notes] |
-
-**Overall**: [Average]/10
+| ID | Name | Technology | Purpose | Inputs | Outputs | Cost Driver |
+|----|------|-----------|---------|--------|---------|-------------|
+| C-001 | [Name] | [Tech] | [Purpose] | [Inputs] | [Outputs] | yes / no |
 
 ---
 
-## Risks & Mitigations
+## Data Flows
 
-| Risk | Impact | Probability | Mitigation |
-|------|--------|-------------|------------|
-| [Risk] | H/M/L | H/M/L | [Strategy] |
+| ID | Name | Source | Destination | Protocol | Latency Target | Encryption |
+|----|------|--------|-------------|----------|----------------|------------|
+| DF-001 | [Name] | [Source] | [Dest] | [Protocol] | [N]ms | [Method] |
 
 ---
 
+## Diagrams
+
+### System Context
+```mermaid
+[Mermaid diagram code]
+```
+
+### Deployment
+```mermaid
+[Mermaid diagram code]
+```
+
+### Data Flow
+```mermaid
+[Mermaid diagram code]
+```
+
+---
+
+## Cloud Infrastructure
+
+[Services, deployment pattern, DR strategy, cost optimization]
+
+---
+
+## AI/ML Components
+
+[Tool Gateway, Identity, Runtime, Memory — if applicable]
+
+---
+
+## Observability
+
+[Logging, metrics, tracing strategy]
+
+---
+
+## Well-Architected Scores
+
+| Pillar | Score | Notes |
+|--------|-------|-------|
+| Operational Excellence | [0-10] | [Notes] |
+| Security | [0-10] | [Notes] |
+| Reliability | [0-10] | [Notes] |
+| Performance Efficiency | [0-10] | [Notes] |
+| Cost Optimization | [0-10] | [Notes] |
+| Sustainability | [0-10] | [Notes] |
+| **Overall** | **[0-10]** | |
+
+---
+
+## Alternatives Considered
+
+| Name | Summary | Why Rejected |
+|------|---------|-------------|
+| [Alternative] | [Brief description] | [Reason] |

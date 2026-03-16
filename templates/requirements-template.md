@@ -1,80 +1,129 @@
-﻿# Requirements Template
+# Requirements Discovery Template
 
-**Version**: 0.1.0-alpha | **Status**: Alpha
-
-Output template for Requirements Agent.
+Output template aligned with `/requirements` skill output fields and `requirements.schema.json`.
 
 ---
 
-## Project Overview
+## Client Context
 
-**Project Name**: [Name]  
-**Organization**: [Organization]  
-**Date**: [ISO 8601]
-
-**Business Problem**:
-[Clear description of problem to solve]
-
-**Proposed Solution**:
-[High-level AI system description]
+- **Legal Name**: [Client legal entity name]
+- **Brand Name**: [Trade name, if different]
+- **Industry**: [Industry vertical]
+- **Company Size**: [startup / smb / mid_market / enterprise]
+- **AI Maturity**: [beginner / intermediate / advanced]
+- **AI History**: [Prior AI/ML experience, if any]
 
 ---
 
-## Stakeholders
+## Problem Statement
 
-**Decision Makers**:
-- [Role]: [Name] - Approval authority: [budget/technical/strategic]
+**Title**: [One-line problem title]
 
-**End Users**:
-- [Persona]: [Count] users - Technical level: [novice/intermediate/expert]
+**Summary**: [2-3 sentence problem description]
 
----
+**Current State**:
+- Process: [How things work today]
+- Tools in use: [List current tools/systems]
+- Pain points: [Classified list of pain points]
+- Annual cost: [Current cost of the problem]
+- Volume: [Scale/throughput metrics]
 
-## Requirements
-
-### Functional
-1. [Requirement] - Priority: [HIGH/MEDIUM/LOW]
-2. [Requirement] - Priority: [HIGH/MEDIUM/LOW]
-3. [Requirement] - Priority: [HIGH/MEDIUM/LOW]
-
-### Non-Functional
-- **Performance**: [Response time, throughput, availability]
-- **Security**: [Authentication, encryption, compliance]
-- **Scalability**: [User growth, data volume]
-- **Usability**: [Ease of use, learning curve]
-
----
-
-## Success Criteria
-
-**Must Have**:
-- [Measurable success criterion 1]
-- [Measurable success criterion 2]
-
-**Nice to Have**:
-- [Optional success criterion 1]
-
-**Metrics**:
-- [Metric 1]: Target [value]
-- [Metric 2]: Target [value]
-
----
-
-## Constraints
-
-**Budget**: [Range or exact]  
-**Timeline**: [Deadline] - Flexibility: [hard/moderate/soft]  
-**Technical**: [Existing systems, required integrations, restrictions]  
-**Compliance**: [GDPR, HIPAA, SOC2, etc.]
+**Desired State**:
+- Description: [What success looks like]
+- Target improvements: [Measurable targets]
 
 ---
 
 ## AI Suitability Assessment
 
-| Pain Point | AI Suitability | Rationale |
-|------------|----------------|-----------|
-| [Problem 1] | HIGH/MEDIUM/LOW | [Why this rating] |
-| [Problem 2] | HIGH/MEDIUM/LOW | [Why this rating] |
+- **Score**: [1-10]
+- **Recommendation**: [strong_fit / good_fit / conditional_fit / poor_fit / not_recommended]
+- **Rationale**: [Why this score]
+- **Favorable Factors**: [List]
+- **Risk Factors**: [List]
 
 ---
 
+## Pain Points
+
+[Classified list from discovery — each with category and severity]
+
+---
+
+## Functional Requirements
+
+| ID | Title | Priority | Complexity | Acceptance Criteria |
+|----|-------|----------|------------|-------------------|
+| FR-001 | [Title] | must_have / should_have / nice_to_have | low / medium / high / very_high | [Criteria] |
+
+---
+
+## Non-Functional Requirements
+
+**Performance**: Response time p95: [N]ms, Throughput: [N] rps, Concurrent users: [N]
+**Availability**: Target: [N]%, Maintenance window: [schedule]
+**Scalability**: Current volume: [N], Growth: [%/year], Peak multiplier: [N]x
+**Security**: Authentication: [method], Authorization: [model], Data classification: [level]
+**Data Residency**: Required regions: [list], Retention: [N] days
+
+---
+
+## Data Landscape
+
+**Sources**:
+| Name | Type | Format | Volume | PII Present | Quality Notes |
+|------|------|--------|--------|-------------|---------------|
+| [Source] | database / api / file / wiki / streaming | [Format] | [Volume] | yes / no | [Notes] |
+
+**Integration Points**:
+| System | Direction | Protocol | Auth Method |
+|--------|-----------|----------|-------------|
+| [System] | read / write / bidirectional | [Protocol] | [Auth] |
+
+---
+
+## Constraints
+
+- **Budget**: [Range]
+- **Timeline**: [N] weeks, Flexibility: [hard / moderate / soft]
+- **Technology Restrictions**: [List]
+- **Team Constraints**: [Description]
+
+---
+
+## Success Criteria
+
+| ID | Metric | Baseline | Target | Measurement | Timeframe |
+|----|--------|----------|--------|-------------|-----------|
+| SC-001 | [Metric] | [Current] | [Target] | [How measured] | [When] |
+
+---
+
+## Stakeholders
+
+| Name | Role | Type | Approval Authority | Communication Preference |
+|------|------|------|--------------------|--------------------------|
+| [Name] | [Role] | decision_maker / contributor / end_user / reviewer | [Authority] | [Preference] |
+
+---
+
+## Scope Boundaries
+
+**In Scope**: [List]
+**Out of Scope**: [List with justification]
+
+---
+
+## Assumptions
+
+- [Documented assumption 1]
+- [Documented assumption 2]
+
+---
+
+## Metadata
+
+- **Discovery Tier**: [quick / standard / comprehensive]
+- **Discovery Date**: [YYYY-MM-DD]
+- **Participants**: [List]
+- **Completeness**: [incomplete / partial / complete]
