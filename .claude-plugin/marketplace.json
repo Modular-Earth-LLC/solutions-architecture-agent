@@ -1,0 +1,14 @@
+{
+  "name": "solutions-architecture-agent",
+  "description": "AI Solutions Architecture Agent — 9 SA lifecycle skills",
+  "owner": { "name": "Modular Earth LLC" },
+  "plugins": [
+    {
+      "name": "solutions-architecture-agent",
+      "description": "9 skills covering the full SA lifecycle: requirements, architecture, data modeling, security review, integration planning, estimation, project planning, proposal assembly, and deliverable review",
+      "version": "1.0.0",
+      "source": "../",
+      "category": "productivity"
+    }
+  ]
+}
