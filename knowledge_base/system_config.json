@@ -211,6 +211,20 @@
       "cognito": "https://docs.aws.amazon.com/cognito/",
       "secrets_manager": "https://docs.aws.amazon.com/secretsmanager/"
     },
+
+    "azure_openai": {
+      "well_architected_framework": "https://learn.microsoft.com/en-us/azure/well-architected/",
+      "ai_workloads": "https://learn.microsoft.com/en-us/azure/well-architected/ai/",
+      "security_pillar": "https://learn.microsoft.com/en-us/azure/well-architected/security/",
+      "reliability_pillar": "https://learn.microsoft.com/en-us/azure/well-architected/reliability/"
+    },
+
+    "google_vertex": {
+      "architecture_framework": "https://cloud.google.com/architecture/framework",
+      "ai_ml_perspective": "https://cloud.google.com/architecture/framework/perspectives/ai-ml",
+      "security_pillar": "https://cloud.google.com/architecture/framework/security",
+      "reliability_pillar": "https://cloud.google.com/architecture/framework/reliability"
+    },
     
     "langchain": {
       "documentation": "https://python.langchain.com/docs/introduction/",

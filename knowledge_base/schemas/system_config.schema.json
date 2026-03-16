@@ -296,6 +296,8 @@
         "aws_bedrock_agentcore": {"type": "object"},
         "aws_bedrock_strands": {"type": "object"},
         "aws_general": {"type": "object"},
+        "azure_openai": {"type": "object"},
+        "google_vertex": {"type": "object"},
         "langchain": {"type": "object"},
         "streamlit": {"type": "object"},
         "github": {"type": "object"},

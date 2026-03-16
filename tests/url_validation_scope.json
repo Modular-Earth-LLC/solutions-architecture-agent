@@ -1,0 +1,22 @@
+{
+  "_description": "Scope configuration for validate_urls.py. Only files matching include_paths are scanned. Paths matching exclude_paths are skipped even if they match an include.",
+  "include_paths": [
+    "README.md",
+    "ARCHITECTURE.md",
+    "CONTRIBUTING.md",
+    "DESIGN_RATIONALE.md",
+    "CODE_OF_CONDUCT.md",
+    "SECURITY.md",
+    "docs/",
+    "tests/README.md",
+    "knowledge_base/README.md",
+    "examples/README.md"
+  ],
+  "exclude_paths": [
+    ".claude/plans/",
+    "archive/",
+    "templates/",
+    "outputs/",
+    "tmp/"
+  ]
+}
