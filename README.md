@@ -108,8 +108,9 @@ solutions-architecture-agent/
 │   ├── system_config.json         # Read-only reference
 │   └── engagement.json            # Lifecycle state tracker
 ├── hooks/hooks.json               # Pre-commit validation hooks
+├── scripts/                       # Setup & verification (per-platform, decoupled)
 ├── templates/                     # Output templates
-├── tests/                         # Validation scripts
+├── tests/                         # Validation scripts (8 scripts, 57 checks)
 ├── docs/                          # User documentation
 ├── examples/                      # Sample engagement outputs (explore these first)
 ├── .claude/rules/                 # Guiding principles, KB rules, security

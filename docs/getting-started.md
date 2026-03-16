@@ -113,6 +113,7 @@ python tests/test_skill_independence.py
 
 ## Next Steps
 
+- **[local-setup.md](local-setup.md)** — Multi-environment setup (CLI, Desktop, VS Code)
 - **[workflow_guide.md](workflow_guide.md)** — Detailed engagement flow walkthrough
 - **[human-ai-collaboration.md](human-ai-collaboration.md)** — What the agent does vs. what you do
 - **[../ARCHITECTURE.md](../ARCHITECTURE.md)** — System design with Mermaid diagrams
