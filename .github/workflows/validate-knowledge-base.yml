@@ -6,9 +6,8 @@
 # Status: READY TO ENABLE
 # To enable: Uncomment the 'on:' section below
 #
-# Note: Currently disabled because user_requirements.json and design_decisions.json
-# are user-generated during workflows. Enable this when you want to enforce
-# schema validation on commits.
+# Note: Currently disabled. KB domain files are generated during skill execution.
+# Enable when you want to enforce schema validation on commits.
 
 # Uncomment to enable:
 # on:
