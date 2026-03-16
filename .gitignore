@@ -2,18 +2,9 @@
 
 # Claude Code - local-only files
 .claude/settings.local.json
-.claude/plans/references/*
-!.claude/plans/references/.gitkeep
 
-# User-Generated Outputs (exclude project outputs but keep structure)
-outputs/requirements/*/
-outputs/architecture/*/
-outputs/proposals/*/
-outputs/prototypes/*/
-outputs/deployments/*/
-outputs/optimizations/*/
-outputs/agent_testing/*
-!outputs/README.md
+# Proposal outputs (client-specific)
+outputs/
 
 # Environment and Secrets
 .env
@@ -100,7 +91,11 @@ htmlcov/
 site/
 docs/_build/
 
-# Knowledge Base - Keep schema files but exclude user-specific data
-# (Commented - keep knowledge base in version control for now)
-# knowledge_base/user_requirements.json
-# knowledge_base/design_decisions.json
+# Knowledge base engagement data (may contain PII — NFR-017, NFR-018)
+knowledge_base/*.json
+!knowledge_base/system_config.json
+
+# Reference materials (may contain proprietary content)
+.claude/plans/references/*
+!.claude/plans/references/.gitkeep
+!.claude/plans/references/README.md

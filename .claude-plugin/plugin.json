@@ -1,0 +1,13 @@
+{
+  "name": "solutions-architecture-agent",
+  "version": "1.0.0",
+  "description": "AI Solutions Architecture Agent — 9 skills covering the full SA lifecycle from requirements discovery through technical project planning. Designs solutions, not implementation.",
+  "author": {
+    "name": "Modular Earth LLC",
+    "url": "https://github.com/Modular-Earth-LLC"
+  },
+  "homepage": "https://github.com/Modular-Earth-LLC/solutions-architecture-agent",
+  "repository": "https://github.com/Modular-Earth-LLC/solutions-architecture-agent",
+  "license": "MIT",
+  "keywords": ["solutions-architecture", "system-design", "AI", "enterprise", "well-architected"]
+}
