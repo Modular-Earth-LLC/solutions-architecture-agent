@@ -156,8 +156,8 @@ graph LR
 |-------|------|-----------|
 | Requirements | `requirements.json` | `system_config.json`, `engagement.json` |
 | Architecture | `architecture.json` | `requirements.json` |
-| Data Model | `data_model.json` | `architecture.json` |
-| Security Review | `security_review.json` | `architecture.json` |
+| Data Model | `data_model.json` | `requirements.json`, `architecture.json` |
+| Security Review | `security_review.json` | `requirements.json`, `architecture.json` |
 | Integration Plan | `integration_plan.json` | `requirements.json`, `architecture.json` (optional in migration flow) |
 | Estimate | `estimate.json` | `requirements.json`, `architecture.json`, `data_model.json`, `security_review.json`, `integration_plan.json` |
 | Project Plan | `project_plan.json` | `requirements.json`, `architecture.json`, `estimate.json` |
