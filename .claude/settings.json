@@ -28,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/hooks/protect-sensitive-files.sh \"$TOOL_INPUT\""
+            "command": "bash hooks/protect-sensitive-files.sh \"$TOOL_INPUT\""
           }
         ]
       }
