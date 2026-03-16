@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "project_plan.schema.json",
+  "title": "Project Plan",
+  "description": "Phased roadmap, sprints, milestones, risk register, and critical path produced by /project-plan skill.",
+  "type": "object",
+  "required": ["engagement_id", "version", "status", "phases"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string", "description": "JSON Schema reference" },
+    "$depends_on": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Upstream KB file dependencies"
+    },
+    "engagement_id": {
+      "type": "string",
+      "pattern": "^eng-\\d{4}-\\d{3,}$",
+      "description": "Links to engagement.json"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "MAJOR.MINOR — major on structure change, minor on content"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO 8601 date"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "in_progress", "complete", "approved"],
+      "description": "Lifecycle status"
+    },
+
+    "approach": {
+      "type": "string",
+      "description": "Delivery methodology (agile, scrum, kanban, etc.)"
+    },
+
+    "total_duration_weeks": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Overall timeline in weeks"
+    },
+
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Planned start date"
+    },
+
+    "target_end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Target completion date"
+    },
+
+    "phases": {
+      "type": "array",
+      "description": "Array of phases with duration, deliverables, team allocation",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "start_week", "end_week"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^P-\\d{3}$", "description": "Phase ID" },
+          "name": { "type": "string" },
+          "start_week": { "type": "integer", "minimum": 1 },
+          "end_week": { "type": "integer", "minimum": 1 },
+          "objectives": { "type": "array", "items": { "type": "string" } },
+          "deliverables": { "type": "array", "items": { "type": "string" } },
+          "success_criteria": { "type": "array", "items": { "type": "string" } },
+          "team_allocation": { "type": "array", "items": { "type": "string" } },
+          "dependencies": { "type": "array", "items": { "type": "string" } },
+          "risks": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+
+    "decision_gates": {
+      "type": "array",
+      "description": "Gate definitions with criteria and decision options (SKILL.md field)",
+      "items": { "type": "object" }
+    },
+
+    "sprints": {
+      "type": "array",
+      "description": "Sprint-by-sprint plan with goals, capacity, features, dependencies (SKILL.md field)",
+      "items": { "type": "object" }
+    },
+
+    "milestones": {
+      "type": "array",
+      "description": "Milestone list with dates, gates, success criteria",
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^M-\\d{3}$", "description": "Milestone ID" },
+          "name": { "type": "string" },
+          "target_date": { "type": "string", "format": "date" },
+          "phase": { "type": "string" },
+          "gate_type": { "type": "string", "enum": ["approval", "demo", "signoff", "review"] }
+        }
+      }
+    },
+
+    "critical_path": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Dependency graph with critical chain highlighted"
+    },
+
+    "risk_register": {
+      "type": "array",
+      "description": "Categorized risks with mitigations and owners (SKILL.md field)",
+      "items": { "type": "object" }
+    },
+
+    "dependencies": {
+      "type": "object",
+      "description": "Internal and external dependencies",
+      "properties": {
+        "internal": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "from": { "type": "string" },
+              "to": { "type": "string" },
+              "type": { "type": "string", "enum": ["finish_to_start", "start_to_start", "finish_to_finish"] }
+            }
+          }
+        },
+        "external": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "dependency": { "type": "string" },
+              "owner": { "type": "string" },
+              "needed_by": { "type": "string", "format": "date" },
+              "status": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "communication_plan": {
+      "type": "object",
+      "description": "Stakeholder cadence and demo schedule",
+      "properties": {
+        "stakeholder_updates": { "type": "string" },
+        "demo_schedule": { "type": "array", "items": { "type": "string" } },
+        "decision_points": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": { "type": "string" },
+              "decision": { "type": "string" },
+              "decider": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "_migration_specific": {
+      "type": ["object", "null"],
+      "description": "Migration-specific plan details (when engagement_type is migration/modernization)",
+      "properties": {
+        "legacy_system": { "type": "string" },
+        "migration_strategy": { "type": "string" },
+        "parallel_run_weeks": { "type": "integer" },
+        "data_migration_phases": { "type": "array", "items": { "type": "object" } },
+        "rollback_plan": { "type": "string" },
+        "feature_parity_checklist": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "_metadata": {
+      "type": "object",
+      "description": "Project plan-specific metadata",
+      "properties": {
+        "author": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "validation_status": { "type": "string" },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
+        "planner": { "type": "string" },
+        "planning_date": { "type": "string", "format": "date" }
+      }
+    }
+  }
+}

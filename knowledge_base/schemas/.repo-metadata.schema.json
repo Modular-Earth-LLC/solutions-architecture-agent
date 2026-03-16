@@ -1,11 +1,15 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/Modular-Earth-LLC/solutions-architecture-agent/schemas/repo-metadata.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": ".repo-metadata.schema.json",
   "title": "Repository Metadata",
-  "description": "Centralized metadata for the Solutions Architecture Agent repository",
+  "description": "Centralized metadata for the Solutions Architecture Agent repository. Single source of truth for version and counts.",
   "type": "object",
-  "required": ["version", "architecture", "prompts"],
+  "required": ["version", "architecture"],
   "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference"
+    },
     "version": {
       "type": "string",
       "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9]+)?$",
@@ -20,27 +24,62 @@
       "type": "string",
       "description": "Current release status"
     },
+    "repository": {
+      "type": "string",
+      "description": "GitHub repository URL"
+    },
+    "_comment": {
+      "type": "string",
+      "description": "Explanatory comment"
+    },
     "architecture": {
       "type": "object",
+      "description": "Plugin architecture metadata",
       "properties": {
-        "total_agents": {"type": ["number", "string"]},
-        "main_supervisor": {"type": "number"},
-        "top_level_agents": {"type": "number"},
-        "engineering_supervisor": {"type": "number"},
-        "engineering_specialists": {"type": "number"},
-        "agent_categories": {"type": "object"}
-      }
+        "type": { "type": "string", "description": "Architecture type (single-agent-with-skills)" },
+        "skills": { "type": "integer", "minimum": 0, "description": "Number of SA lifecycle skills" },
+        "sub_agents": { "type": "integer", "minimum": 0, "description": "Number of sub-agents" },
+        "skill_names": { "type": "array", "items": { "type": "string" } },
+        "sub_agent_names": { "type": "array", "items": { "type": "string" } }
+      },
+      "patternProperties": { "^_comment": { "type": "string" } }
     },
-    "prompts": {
+    "knowledge_base": {
       "type": "object",
+      "description": "Knowledge base metadata",
       "properties": {
-        "total_user_prompts": {"type": ["number", "string"]},
-        "categories": {"type": "object"}
+        "files": { "type": "integer", "minimum": 0 },
+        "schemas": { "type": "integer", "minimum": 0 },
+        "format": { "type": "string" }
       }
     },
-    "knowledge_base": {"type": "object"},
-    "documentation": {"type": "object"},
-    "tech_stack": {"type": "object"},
-    "maintenance": {"type": "object"}
+    "documentation": {
+      "type": "object",
+      "description": "Documentation file references",
+      "properties": {
+        "main_readme": { "type": "string" },
+        "architecture": { "type": "string" },
+        "contributing": { "type": "string" },
+        "guides_directory": { "type": "string" }
+      }
+    },
+    "tech_stack": {
+      "type": "object",
+      "description": "Technology stack metadata",
+      "properties": {
+        "primary_platform": { "type": "string" },
+        "primary_language": { "type": "string" },
+        "llm_providers": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "maintenance": {
+      "type": "object",
+      "description": "Maintenance and CI/CD metadata",
+      "properties": {
+        "versioning_approach": { "type": "string" },
+        "validation_scripts": { "type": "array", "items": { "type": "string" } },
+        "update_frequency": { "type": "string" }
+      }
+    }
   }
 }

@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "reviews.schema.json",
+  "title": "Reviews",
+  "description": "Quality reviews, scores, findings, and iteration history tracked by /review skill. Cross-cuts all other skill outputs.",
+  "type": "object",
+  "required": ["engagement_id", "reviews"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string", "description": "JSON Schema reference" },
+    "$depends_on": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Upstream KB file dependencies (dynamic — depends on reviewed target)"
+    },
+    "engagement_id": {
+      "type": "string",
+      "pattern": "^eng-\\d{4}-\\d{3,}$",
+      "description": "Links to engagement.json"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "MAJOR.MINOR — major on structure change, minor on content"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO 8601 date"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "in_progress", "complete", "approved"],
+      "description": "Lifecycle status"
+    },
+
+    "reviews": {
+      "type": "array",
+      "description": "Array of review records, each targeting a specific KB file",
+      "items": {
+        "type": "object",
+        "required": ["review_id", "target_file", "target_version", "review_date", "review_type", "scores"],
+        "properties": {
+          "review_id": { "type": "string", "pattern": "^R-\\d{3}$", "description": "Review ID" },
+          "target_file": { "type": "string", "description": "Which KB file was reviewed (e.g., architecture.json)" },
+          "target_version": { "type": "string", "description": "Version of the target file at time of review" },
+          "review_date": { "type": "string", "format": "date" },
+          "review_type": {
+            "type": "string",
+            "enum": ["quality", "security", "compliance", "completeness", "pre_proposal"],
+            "description": "Type of review conducted"
+          },
+
+          "scores": {
+            "type": "object",
+            "required": ["overall"],
+            "description": "Per-dimension quality scores",
+            "properties": {
+              "completeness": { "$ref": "#/$defs/score_entry" },
+              "technical_soundness": { "$ref": "#/$defs/score_entry" },
+              "well_architected": { "$ref": "#/$defs/score_entry" },
+              "clarity": { "$ref": "#/$defs/score_entry" },
+              "feasibility": { "$ref": "#/$defs/score_entry" },
+              "security": { "$ref": "#/$defs/score_entry" },
+              "overall": { "$ref": "#/$defs/score_entry" }
+            },
+            "additionalProperties": { "$ref": "#/$defs/score_entry" }
+          },
+
+          "overall_score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10,
+            "description": "Final averaged score (SKILL.md field)"
+          },
+
+          "pass_fail": {
+            "type": "string",
+            "enum": ["PASS", "CONDITIONAL PASS", "FAIL"],
+            "description": "Pass/fail determination (SKILL.md field)"
+          },
+
+          "findings": {
+            "type": "array",
+            "description": "Categorized findings with severity, description, recommendation",
+            "items": {
+              "type": "object",
+              "required": ["id", "severity", "finding"],
+              "properties": {
+                "id": { "type": "string", "pattern": "^RF-\\d{3}$", "description": "Review finding ID" },
+                "severity": { "type": "string", "enum": ["critical", "high", "medium", "low", "info"] },
+                "category": { "type": "string" },
+                "finding": { "type": "string" },
+                "recommendation": { "type": "string" },
+                "status": { "type": "string", "enum": ["open", "resolved", "wont_fix", "deferred"] }
+              }
+            }
+          },
+
+          "improvement_plan": {
+            "type": "array",
+            "description": "Prioritized actions with effort and impact (SKILL.md field)",
+            "items": { "type": "object" }
+          },
+
+          "wa_pillar_review": {
+            "type": "object",
+            "description": "Per-pillar scores and findings for architecture reviews (SKILL.md field)"
+          },
+
+          "blockers": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Critical issues that must be resolved before the target file can be approved"
+          },
+
+          "iteration_history": {
+            "type": "array",
+            "description": "History of review iterations",
+            "items": {
+              "type": "object",
+              "required": ["iteration", "date", "target_version", "overall_score"],
+              "properties": {
+                "iteration": { "type": "integer", "minimum": 1 },
+                "date": { "type": "string", "format": "date" },
+                "target_version": { "type": "string" },
+                "overall_score": { "type": "number", "minimum": 0, "maximum": 10 },
+                "key_changes_requested": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "aggregate_stats": {
+      "type": "object",
+      "description": "Summary statistics across all reviews",
+      "properties": {
+        "total_reviews": { "type": "integer", "minimum": 0 },
+        "average_score": { "type": "number", "minimum": 0, "maximum": 10 },
+        "files_reviewed": { "type": "array", "items": { "type": "string" } },
+        "files_not_reviewed": { "type": "array", "items": { "type": "string" } },
+        "open_findings_count": { "type": "integer", "minimum": 0 },
+        "blocker_count": { "type": "integer", "minimum": 0 }
+      }
+    },
+
+    "_metadata": {
+      "type": "object",
+      "description": "Review-specific metadata",
+      "properties": {
+        "author": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "validation_status": { "type": "string" },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+$" }
+      }
+    }
+  },
+
+  "$defs": {
+    "score_entry": {
+      "type": "object",
+      "required": ["score", "max"],
+      "properties": {
+        "score": { "type": "number", "minimum": 0 },
+        "max": { "type": "number", "minimum": 1 },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,300 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "requirements.schema.json",
+  "title": "Requirements",
+  "description": "Client context, problem statement, success criteria, and requirements gathered by /requirements skill.",
+  "type": "object",
+  "required": ["engagement_id", "version", "status", "client_context", "problem_statement", "success_criteria", "functional_requirements"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string", "description": "JSON Schema reference" },
+    "$depends_on": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Upstream KB file dependencies"
+    },
+    "engagement_id": {
+      "type": "string",
+      "pattern": "^eng-\\d{4}-\\d{3,}$",
+      "description": "Links to engagement.json"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "MAJOR.MINOR — major on structure change, minor on content"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO 8601 date"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "in_progress", "complete", "approved"],
+      "description": "Lifecycle status"
+    },
+
+    "client_context": {
+      "type": "object",
+      "required": ["legal_name", "industry"],
+      "description": "Industry, company, team, engagement type",
+      "properties": {
+        "legal_name": { "type": "string", "description": "Legal entity name" },
+        "brand_name": { "type": "string", "description": "Brand or trade name" },
+        "industry": { "type": "string", "description": "Industry vertical" },
+        "company_size": {
+          "type": "string",
+          "enum": ["startup", "smb", "mid_market", "enterprise"],
+          "description": "Company size category"
+        },
+        "ai_maturity": {
+          "type": "string",
+          "enum": ["beginner", "intermediate", "advanced"],
+          "description": "Client AI/ML maturity level"
+        },
+        "ai_history": { "type": "string", "description": "Prior AI/ML experience" }
+      }
+    },
+
+    "problem_statement": {
+      "type": "object",
+      "required": ["title", "summary", "current_state", "desired_state"],
+      "description": "Current state, desired state, and problem summary",
+      "properties": {
+        "title": { "type": "string", "maxLength": 200, "description": "Problem title" },
+        "summary": { "type": "string", "maxLength": 2000, "description": "Problem summary" },
+        "current_state": {
+          "type": "object",
+          "description": "Description of current process and pain points",
+          "properties": {
+            "process_description": { "type": "string" },
+            "tools_in_use": { "type": "array", "items": { "type": "string" } },
+            "pain_points": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+            "annual_cost": { "type": "string" },
+            "volume": { "type": "string" }
+          }
+        },
+        "desired_state": {
+          "type": "object",
+          "description": "Description of target state and improvements",
+          "properties": {
+            "description": { "type": "string" },
+            "target_improvements": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+
+    "ai_suitability_assessment": {
+      "type": "object",
+      "description": "AI suitability score, classification, rationale, and savings estimate",
+      "properties": {
+        "score": { "type": "integer", "minimum": 1, "maximum": 10, "description": "Suitability score 1-10" },
+        "rationale": { "type": "string", "description": "Justification for score" },
+        "favorable_factors": { "type": "array", "items": { "type": "string" } },
+        "risk_factors": { "type": "array", "items": { "type": "string" } },
+        "recommendation": {
+          "type": "string",
+          "enum": ["strong_fit", "good_fit", "conditional_fit", "poor_fit", "not_recommended"],
+          "description": "Overall AI suitability recommendation"
+        }
+      }
+    },
+
+    "pain_points": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Classified list of pain points from discovery (SKILL.md field)"
+    },
+
+    "success_criteria": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Measurable KPIs for engagement success",
+      "items": {
+        "type": "object",
+        "required": ["id", "metric", "target"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^SC-\\d{3}$", "description": "Success criteria ID" },
+          "metric": { "type": "string", "description": "Metric name" },
+          "description": { "type": "string", "description": "What this measures" },
+          "baseline": { "type": "number", "description": "Current baseline value" },
+          "target": { "type": "number", "description": "Target value" },
+          "measurement": { "type": "string", "description": "How to measure" },
+          "timeframe": { "type": "string", "description": "When target should be achieved" }
+        }
+      }
+    },
+
+    "stakeholders": {
+      "type": "array",
+      "description": "Stakeholder analysis from discovery",
+      "items": {
+        "type": "object",
+        "required": ["name", "role", "type"],
+        "properties": {
+          "name": { "type": "string" },
+          "role": { "type": "string" },
+          "type": { "type": "string", "enum": ["decision_maker", "contributor", "end_user", "reviewer"] },
+          "approval_authority": { "type": "array", "items": { "type": "string" } },
+          "communication_preference": { "type": "string" }
+        }
+      }
+    },
+
+    "functional_requirements": {
+      "type": "array",
+      "description": "Extracted and prioritized functional requirements",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "priority"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^FR-\\d{3}$", "description": "Functional requirement ID" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "priority": { "type": "string", "enum": ["must_have", "should_have", "nice_to_have"] },
+          "complexity": { "type": "string", "enum": ["low", "medium", "high", "very_high"] },
+          "acceptance_criteria": { "type": "array", "items": { "type": "string" } },
+          "dependencies": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+
+    "non_functional_requirements": {
+      "type": "object",
+      "description": "Security, performance, compliance, data residency requirements",
+      "properties": {
+        "performance": {
+          "type": "object",
+          "properties": {
+            "response_time_p95_ms": { "type": "integer", "minimum": 0 },
+            "throughput_rps": { "type": "integer", "minimum": 0 },
+            "concurrent_users": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "availability": {
+          "type": "object",
+          "properties": {
+            "target_percent": { "type": "number", "minimum": 0, "maximum": 100 },
+            "planned_maintenance_window": { "type": "string" }
+          }
+        },
+        "scalability": {
+          "type": "object",
+          "properties": {
+            "current_volume": { "type": "string" },
+            "projected_growth": { "type": "string" },
+            "peak_multiplier": { "type": "number" },
+            "geographic_regions": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "security": {
+          "type": "object",
+          "properties": {
+            "authentication": { "type": "array", "items": { "type": "string" } },
+            "authorization_model": { "type": "string" },
+            "data_classification": { "type": "string", "enum": ["public", "internal", "internal_confidential", "restricted"] },
+            "encryption_requirements": { "type": "array", "items": { "type": "string" } },
+            "compliance_frameworks": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "data_residency": {
+          "type": "object",
+          "properties": {
+            "required_regions": { "type": "array", "items": { "type": "string" } },
+            "prohibited_regions": { "type": "array", "items": { "type": "string" } },
+            "data_retention_days": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    },
+
+    "data_landscape": {
+      "type": "object",
+      "description": "Data sources, integration points, and volumes",
+      "properties": {
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "type"],
+            "properties": {
+              "name": { "type": "string" },
+              "type": { "type": "string", "enum": ["database", "api", "file", "wiki", "streaming", "data_warehouse"] },
+              "format": { "type": "string" },
+              "volume": { "type": "string" },
+              "pii_present": { "type": "boolean" },
+              "quality_notes": { "type": "string" }
+            }
+          }
+        },
+        "integration_points": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["system", "direction"],
+            "properties": {
+              "system": { "type": "string" },
+              "direction": { "type": "string", "enum": ["read", "write", "bidirectional"] },
+              "protocol": { "type": "string" },
+              "auth_method": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "constraints": {
+      "type": "object",
+      "description": "Budget, timeline, technology, and team constraints",
+      "properties": {
+        "budget_range": { "type": "string", "description": "Budget range string" },
+        "timeline_weeks": { "type": "integer", "minimum": 0, "description": "Timeline in weeks" },
+        "timeline_flexibility": { "type": "string", "enum": ["hard", "moderate", "soft"] },
+        "technology_restrictions": { "type": "array", "items": { "type": "string" } },
+        "team_constraints": { "type": "string" }
+      }
+    },
+
+    "scope_boundaries": {
+      "type": "object",
+      "description": "In-scope and out-of-scope with justification (SKILL.md field)",
+      "properties": {
+        "in_scope": { "type": "array", "items": { "type": "string" } },
+        "out_of_scope": { "type": "array", "items": { "type": "string" } },
+        "justification": { "type": "string" }
+      }
+    },
+
+    "assumptions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Documented assumptions from discovery"
+    },
+
+    "_metadata": {
+      "type": "object",
+      "description": "Requirements-specific metadata including discovery tier",
+      "properties": {
+        "author": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "validation_status": { "type": "string" },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
+        "discovery_method": {
+          "type": "string",
+          "enum": ["quick_discovery", "standard_discovery", "comprehensive_workshop", "extraction_from_notes"],
+          "description": "Discovery tier used"
+        },
+        "discovery_tier": { "type": "string", "description": "Discovery tier label" },
+        "discovery_date": { "type": "string", "format": "date" },
+        "discovery_duration_minutes": { "type": "integer", "minimum": 0 },
+        "participants": { "type": "array", "items": { "type": "string" } },
+        "completeness": {
+          "type": "string",
+          "enum": ["incomplete", "partial", "complete"],
+          "description": "Requirements completeness assessment"
+        }
+      }
+    }
+  }
+}

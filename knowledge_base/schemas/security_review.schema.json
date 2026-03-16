@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "security_review.schema.json",
+  "title": "Security Review",
+  "description": "Threat model, compliance, defense-in-depth, AI security controls, and findings produced by /security-review skill.",
+  "type": "object",
+  "required": ["engagement_id", "version", "status", "threat_model"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string", "description": "JSON Schema reference" },
+    "$depends_on": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Upstream KB file dependencies"
+    },
+    "engagement_id": {
+      "type": "string",
+      "pattern": "^eng-\\d{4}-\\d{3,}$",
+      "description": "Links to engagement.json"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "MAJOR.MINOR — major on structure change, minor on content"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO 8601 date"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "in_progress", "complete", "approved"],
+      "description": "Lifecycle status"
+    },
+
+    "security_requirements": {
+      "type": "object",
+      "description": "5-dimension security decomposition from SKILL.md Step 1"
+    },
+
+    "threat_model": {
+      "type": "object",
+      "required": ["methodology", "threats"],
+      "description": "STRIDE threats with IDs, severity, mitigations, residual risk",
+      "properties": {
+        "methodology": { "type": "string", "enum": ["STRIDE", "PASTA", "DREAD", "attack_tree", "custom"] },
+        "scope": { "type": "string" },
+        "threats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "category", "description", "severity"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^T-\\d{3}$", "description": "Threat ID" },
+              "category": { "type": "string", "enum": ["spoofing", "tampering", "repudiation", "information_disclosure", "denial_of_service", "elevation_of_privilege", "injection"] },
+              "description": { "type": "string" },
+              "affected_components": { "type": "array", "items": { "type": "string" } },
+              "severity": { "type": "string", "enum": ["critical", "high", "medium", "low"] },
+              "likelihood": { "type": "string", "enum": ["high", "medium", "low"] },
+              "risk_score": { "type": "integer", "minimum": 1, "maximum": 10 },
+              "mitigation": { "type": "string" },
+              "residual_risk": { "type": "string", "enum": ["high", "medium", "low", "negligible"] },
+              "status": { "type": "string", "enum": ["identified", "mitigated", "accepted", "transferred"] }
+            }
+          }
+        }
+      }
+    },
+
+    "defense_in_depth": {
+      "type": "object",
+      "description": "5-layer security architecture (SKILL.md field)"
+    },
+
+    "iam_design": {
+      "type": "object",
+      "description": "Per-service least-privilege mappings (SKILL.md field)"
+    },
+
+    "security_architecture": {
+      "type": "object",
+      "description": "Authentication, authorization, network, encryption, secrets, monitoring (SCHEMA_DESIGN.md field)",
+      "properties": {
+        "authentication": { "type": "object" },
+        "authorization": { "type": "object" },
+        "network": { "type": "object" },
+        "encryption": { "type": "object" },
+        "secrets_management": { "type": "string" },
+        "logging_and_monitoring": { "type": "object" }
+      }
+    },
+
+    "ai_security_controls": {
+      "type": "object",
+      "description": "AI-specific security controls (SKILL.md field name)"
+    },
+
+    "ai_specific_security": {
+      "type": "object",
+      "description": "AI-specific security (SCHEMA_DESIGN.md field name)",
+      "properties": {
+        "prompt_injection_protection": { "type": "array", "items": { "type": "string" } },
+        "output_filtering": { "type": "array", "items": { "type": "string" } },
+        "model_access_control": { "type": "string" },
+        "data_poisoning_prevention": { "type": "string" },
+        "hallucination_mitigation": { "type": "string" }
+      }
+    },
+
+    "compliance_mapping": {
+      "type": "array",
+      "description": "Framework-to-control mapping with posture (SKILL.md field name, aka compliance_checklist in SCHEMA_DESIGN.md)",
+      "items": {
+        "type": "object",
+        "required": ["framework", "requirement", "status"],
+        "properties": {
+          "framework": { "type": "string" },
+          "requirement": { "type": "string" },
+          "status": { "type": "string", "enum": ["compliant", "partial", "non_compliant", "not_applicable"] },
+          "evidence": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+
+    "compliance_checklist": {
+      "type": "array",
+      "description": "Alias — compliance checklist (SCHEMA_DESIGN.md field name)",
+      "items": {
+        "type": "object",
+        "required": ["framework", "requirement", "status"],
+        "properties": {
+          "framework": { "type": "string" },
+          "requirement": { "type": "string" },
+          "status": { "type": "string", "enum": ["compliant", "partial", "non_compliant", "not_applicable"] },
+          "evidence": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+
+    "security_guardrails": {
+      "type": "object",
+      "description": "MUST/MUST NOT checklist (SKILL.md field)"
+    },
+
+    "findings_summary": {
+      "type": "object",
+      "description": "Open items, risk scores, remediation priorities",
+      "properties": {
+        "critical": { "type": "integer", "minimum": 0 },
+        "high": { "type": "integer", "minimum": 0 },
+        "medium": { "type": "integer", "minimum": 0 },
+        "low": { "type": "integer", "minimum": 0 },
+        "open_items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "severity", "finding"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^F-\\d{3}$", "description": "Finding ID" },
+              "severity": { "type": "string", "enum": ["critical", "high", "medium", "low"] },
+              "finding": { "type": "string" },
+              "recommendation": { "type": "string" },
+              "owner": { "type": "string" },
+              "due_date": { "type": "string", "format": "date" }
+            }
+          }
+        }
+      }
+    },
+
+    "_metadata": {
+      "type": "object",
+      "description": "Security review-specific metadata",
+      "properties": {
+        "author": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "validation_status": { "type": "string" },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
+        "reviewer": { "type": "string" },
+        "review_date": { "type": "string", "format": "date" }
+      }
+    }
+  }
+}

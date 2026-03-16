@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "integration_plan.schema.json",
+  "title": "Integration Plan",
+  "description": "API contracts, data flow mappings, migration strategies, and legacy bridging patterns produced by /integration-plan skill.",
+  "type": "object",
+  "required": ["engagement_id", "version", "status", "api_contracts"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string", "description": "JSON Schema reference" },
+    "$depends_on": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Upstream KB file dependencies"
+    },
+    "engagement_id": {
+      "type": "string",
+      "pattern": "^eng-\\d{4}-\\d{3,}$",
+      "description": "Links to engagement.json"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "MAJOR.MINOR — major on structure change, minor on content"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO 8601 date"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "in_progress", "complete", "approved"],
+      "description": "Lifecycle status"
+    },
+
+    "integration_inventory": {
+      "type": "array",
+      "description": "Cataloged integration points with metadata (SKILL.md field)",
+      "items": { "type": "object" }
+    },
+
+    "api_contracts": {
+      "type": "array",
+      "description": "Per-integration contract definitions",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "direction", "protocol"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^API-\\d{3}$", "description": "API contract ID" },
+          "name": { "type": "string" },
+          "direction": { "type": "string", "enum": ["inbound", "outbound", "bidirectional"] },
+          "protocol": { "type": "string", "enum": ["REST", "GraphQL", "gRPC", "WebSocket", "AMQP", "Kafka"] },
+          "method": { "type": "string" },
+          "endpoint": { "type": "string" },
+          "authentication": { "type": "string" },
+          "request_schema": { "type": "object" },
+          "response_schema": { "type": "object" },
+          "rate_limit": { "type": "string" },
+          "error_handling": { "type": "string" },
+          "sla": {
+            "type": "object",
+            "properties": {
+              "latency_p95_ms": { "type": "integer" },
+              "availability_percent": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+
+    "data_flow_mappings": {
+      "type": "array",
+      "description": "Source-to-target field mappings with transforms",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "source_system", "target_system"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^DFM-\\d{3}$", "description": "Data flow mapping ID" },
+          "name": { "type": "string" },
+          "source_system": { "type": "string" },
+          "target_system": { "type": "string" },
+          "source_format": { "type": "string" },
+          "target_format": { "type": "string" },
+          "field_mappings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["source", "target"],
+              "properties": {
+                "source": { "type": "string" },
+                "target": { "type": "string" },
+                "transform": { "type": "string" }
+              }
+            }
+          },
+          "validation_rules": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+
+    "migration_strategy": {
+      "type": ["object", "null"],
+      "description": "Approach, sequence, rollback, cutover criteria (if migration engagement)",
+      "properties": {
+        "approach": { "type": "string", "enum": ["big_bang", "strangler_fig", "parallel_run", "blue_green", "phased"] },
+        "source_system": { "type": "string" },
+        "target_system": { "type": "string" },
+        "data_migration": {
+          "type": "object",
+          "properties": {
+            "approach": { "type": "string" },
+            "volume": { "type": "string" },
+            "downtime_plan": { "type": "string" }
+          }
+        },
+        "rollback_plan": { "type": "string" }
+      }
+    },
+
+    "legacy_bridging": {
+      "type": "array",
+      "description": "Patterns and timelines per legacy system",
+      "items": {
+        "type": "object",
+        "properties": {
+          "legacy_system": { "type": "string" },
+          "bridge_pattern": { "type": "string", "enum": ["adapter", "facade", "anti_corruption_layer", "event_bridge", "api_gateway"] },
+          "description": { "type": "string" },
+          "lifespan": { "type": "string" }
+        }
+      }
+    },
+
+    "cicd_pipeline": {
+      "type": "object",
+      "description": "6-stage pipeline architecture (SKILL.md field)"
+    },
+
+    "phased_approach": {
+      "type": "object",
+      "description": "Phase 1 and Phase 2 scope with validation criteria (SKILL.md field)"
+    },
+
+    "service_security": {
+      "type": "object",
+      "description": "Per-service identity and access configuration (SKILL.md field)"
+    },
+
+    "error_handling_patterns": {
+      "type": "object",
+      "description": "Circuit breaker, retry, dead letter queue patterns",
+      "properties": {
+        "circuit_breaker": { "type": "object" },
+        "retry_policy": { "type": "object" },
+        "dead_letter_queue": { "type": "object" }
+      }
+    },
+
+    "_metadata": {
+      "type": "object",
+      "description": "Integration plan-specific metadata",
+      "properties": {
+        "author": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "validation_status": { "type": "string" },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
+        "planner": { "type": "string" },
+        "planning_date": { "type": "string", "format": "date" }
+      }
+    }
+  }
+}

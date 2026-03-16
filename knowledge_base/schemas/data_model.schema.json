@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "data_model.schema.json",
+  "title": "Data Model",
+  "description": "Entity relationships, schema definitions, vector/graph schemas, and ontology specs produced by /data-model skill.",
+  "type": "object",
+  "required": ["engagement_id", "version", "status", "entities"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string", "description": "JSON Schema reference" },
+    "$depends_on": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Upstream KB file dependencies"
+    },
+    "engagement_id": {
+      "type": "string",
+      "pattern": "^eng-\\d{4}-\\d{3,}$",
+      "description": "Links to engagement.json"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "MAJOR.MINOR — major on structure change, minor on content"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO 8601 date"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "in_progress", "complete", "approved"],
+      "description": "Lifecycle status"
+    },
+
+    "data_requirements": {
+      "type": "object",
+      "description": "Consolidated data requirements from upstream (sources, volumes, patterns) — from SKILL.md"
+    },
+
+    "entities": {
+      "type": "array",
+      "description": "Relational entity definitions (SCHEMA_DESIGN.md entities array)",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "storage", "fields"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^E-\\d{3}$", "description": "Entity ID" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "storage": { "type": "string", "enum": ["postgresql", "dynamodb", "mongodb", "redis", "s3"] },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "type", "nullable"],
+              "properties": {
+                "name": { "type": "string" },
+                "type": { "type": "string" },
+                "nullable": { "type": "boolean" },
+                "primary_key": { "type": "boolean" },
+                "indexed": { "type": "boolean" },
+                "values": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          },
+          "relationships": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["target", "type"],
+              "properties": {
+                "target": { "type": "string" },
+                "type": { "type": "string", "enum": ["one_to_one", "one_to_many", "many_to_one", "many_to_many"] },
+                "foreign_key": { "type": "string" },
+                "join_table": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "relational_schemas": {
+      "type": "array",
+      "description": "Alias for entities — relational schema definitions (SKILL.md field name)",
+      "items": { "type": "object" }
+    },
+
+    "vector_schemas": {
+      "type": "array",
+      "description": "Vector store collections, chunking, embeddings, retrieval config",
+      "items": {
+        "type": "object",
+        "required": ["name", "storage", "dimensions", "distance_metric"],
+        "properties": {
+          "name": { "type": "string" },
+          "storage": { "type": "string" },
+          "embedding_model": { "type": "string" },
+          "dimensions": { "type": "integer", "minimum": 1 },
+          "distance_metric": { "type": "string", "enum": ["cosine", "euclidean", "dot_product"] },
+          "source": { "type": "string" },
+          "chunk_strategy": {
+            "type": "object",
+            "properties": {
+              "method": { "type": "string" },
+              "chunk_size": { "type": "integer" },
+              "overlap": { "type": "integer" }
+            }
+          },
+          "metadata_fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "type": { "type": "string" }
+              }
+            }
+          },
+          "index_type": { "type": "string" },
+          "index_lists": { "type": "integer" }
+        }
+      }
+    },
+
+    "graph_schemas": {
+      "type": "array",
+      "description": "Node types, edge types, ontology for graph databases",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "storage": { "type": "string" },
+          "node_types": { "type": "array", "items": { "type": "object" } },
+          "edge_types": { "type": "array", "items": { "type": "object" } }
+        }
+      }
+    },
+
+    "knowledge_pipeline": {
+      "type": "object",
+      "description": "Pipeline stages and configuration for knowledge processing (SKILL.md field)"
+    },
+
+    "ontology": {
+      "type": "object",
+      "description": "Domain ontology with key concepts and taxonomy",
+      "properties": {
+        "domain": { "type": "string" },
+        "key_concepts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["concept", "definition"],
+            "properties": {
+              "concept": { "type": "string" },
+              "definition": { "type": "string" },
+              "related_to": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "taxonomy": { "type": "object" }
+      }
+    },
+
+    "validation_rules": {
+      "type": "object",
+      "description": "Declarative validation framework (SKILL.md field)"
+    },
+
+    "data_governance": {
+      "type": "object",
+      "description": "PII inventory, retention, encryption, access control, audit",
+      "properties": {
+        "pii_fields": { "type": "array", "items": { "type": "string" } },
+        "retention_policy": { "type": "string" },
+        "encryption": { "type": "string" },
+        "access_control": { "type": "string" }
+      }
+    },
+
+    "migration_notes": {
+      "type": "object",
+      "description": "Schema evolution strategy, data migration considerations (SKILL.md field)"
+    },
+
+    "_metadata": {
+      "type": "object",
+      "description": "Data model-specific metadata",
+      "properties": {
+        "author": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "validation_status": { "type": "string" },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
+        "modeler": { "type": "string" },
+        "modeling_date": { "type": "string", "format": "date" }
+      }
+    }
+  }
+}

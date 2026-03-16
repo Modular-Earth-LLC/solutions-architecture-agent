@@ -1,10 +1,14 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/Modular-Earth-LLC/solutions-architecture-agent/schemas/system_config.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "system_config.schema.json",
   "title": "System Configuration",
-  "description": "Schema for platform settings, constraints, stakeholders, and team information",
+  "description": "Platform settings, constraints, stakeholders, and team information. READ-ONLY at runtime — human-managed.",
   "type": "object",
   "required": ["project", "platform", "stakeholders", "constraints"],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^_": {}
+  },
   "properties": {
     "$schema": {
       "type": "string",
@@ -20,6 +24,10 @@
       "type": "string",
       "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9]+)?$",
       "description": "Semantic version with optional prerelease tag (e.g., 0.1.0 or 0.1.0-alpha)"
+    },
+    "status": {
+      "type": "string",
+      "description": "Current release status"
     },
     "last_updated": {
       "type": "string",
@@ -37,7 +45,8 @@
         },
         "organization": {"type": "string"},
         "description": {"type": "string"}
-      }
+      },
+      "patternProperties": { "^_comment": { "type": "string" } }
     },
     "platform": {
       "type": "object",
@@ -53,7 +62,8 @@
         },
         "region": {"type": "string"},
         "multi_cloud": {"type": "boolean"}
-      }
+      },
+      "patternProperties": { "^_comment": { "type": "string" } }
     },
     "stakeholders": {
       "type": "object",
@@ -68,7 +78,8 @@
               "name": {"type": "string"},
               "approval_authority": {"type": "string"},
               "communication_preference": {"type": "string"}
-            }
+            },
+            "patternProperties": { "^_comment": { "type": "string" } }
           }
         },
         "contributors": {
@@ -84,7 +95,8 @@
                 "type": "string",
                 "enum": ["primary", "secondary", "consultant", "reviewer"]
               }
-            }
+            },
+            "patternProperties": { "^_comment": { "type": "string" } }
           }
         },
         "end_users": {
@@ -102,7 +114,8 @@
                 "type": "array",
                 "items": {"type": "string"}
               }
-            }
+            },
+            "patternProperties": { "^_comment": { "type": "string" } }
           }
         }
       }
@@ -126,7 +139,8 @@
               }
             },
             "approval_process": {"type": "string"}
-          }
+          },
+          "patternProperties": { "^_comment": { "type": "string" } }
         },
         "timeline": {
           "type": "object",
@@ -141,7 +155,8 @@
               "items": {"type": "string"}
             },
             "business_drivers": {"type": "string"}
-          }
+          },
+          "patternProperties": { "^_comment": { "type": "string" } }
         },
         "compliance": {
           "type": "object",
@@ -149,8 +164,7 @@
             "regulations": {
               "type": "array",
               "items": {
-                "type": "string",
-                "enum": ["GDPR", "HIPAA", "SOC2", "PCI-DSS", "CCPA", "ISO 27001"]
+                "type": "string"
               }
             },
             "certifications_required": {
@@ -159,7 +173,8 @@
             },
             "data_residency": {"type": "string"},
             "audit_requirements": {"type": "string"}
-          }
+          },
+          "patternProperties": { "^_comment": { "type": "string" } }
         },
         "technical": {
           "type": "object",
@@ -185,13 +200,15 @@
                 "concurrent_users": {"type": "integer", "minimum": 0}
               }
             }
-          }
+          },
+          "patternProperties": { "^_comment": { "type": "string" } }
         },
         "strategic_priority": {
           "type": "string",
           "enum": ["critical", "high", "medium", "low"]
         }
-      }
+      },
+      "patternProperties": { "^_comment": { "type": "string" } }
     },
     "team": {
       "type": "object",
@@ -212,7 +229,8 @@
         },
         "hiring_budget": {"type": "string"},
         "training_budget": {"type": "string"}
-      }
+      },
+      "patternProperties": { "^_comment": { "type": "string" } }
     },
     "preferences": {
       "type": "object",
@@ -225,7 +243,8 @@
         "documentation_requirements": {"type": "string"},
         "testing_requirements": {"type": "string"},
         "ci_cd_preferences": {"type": "string"}
-      }
+      },
+      "patternProperties": { "^_comment": { "type": "string" } }
     },
     "risk_tolerance": {
       "type": "object",
@@ -242,7 +261,8 @@
           "type": "string",
           "enum": ["prefer_build", "balanced", "prefer_buy"]
         }
-      }
+      },
+      "patternProperties": { "^_comment": { "type": "string" } }
     },
     "output_configuration": {
       "type": "object",
@@ -250,7 +270,8 @@
         "base_directory": {"type": "string", "default": "outputs"},
         "use_project_subdirectories": {"type": "boolean", "default": true},
         "timestamp_files": {"type": "boolean", "default": false}
-      }
+      },
+      "patternProperties": { "^_comment": { "type": "string" } }
     },
     "aws_well_architected_framework": {
       "type": "object",
@@ -311,65 +332,18 @@
         "_description": {"type": "string"},
         "_applies_to": {"type": "string"},
         "_last_updated": {"type": "string"},
-        "overview": {
-          "type": "object",
-          "properties": {
-            "purpose": {"type": "string"},
-            "implements": {
-              "type": "array",
-              "items": {"type": "string"}
-            }
-          }
-        },
-        "validation_workflow": {
-          "type": "object",
-          "properties": {
-            "step_1_generate": {"type": "string"},
-            "step_2_validate": {"type": "string"},
-            "step_3_improve": {"type": "string"},
-            "step_4_present": {"type": "string"},
-            "threshold": {"type": "number"},
-            "threshold_description": {"type": "string"}
-          }
-        },
-        "quality_benchmarks": {
-          "type": "object",
-          "patternProperties": {
-            ".*": {
-              "type": "object",
-              "properties": {
-                "minimum": {"type": "number"},
-                "target": {"type": "number"},
-                "metric": {"type": "string"},
-                "description": {"type": "string"},
-                "critical": {"type": "integer"},
-                "high": {"type": "integer"},
-                "medium": {"type": "integer"},
-                "response_time_ms": {"type": "integer"},
-                "memory_mb": {"type": "integer"}
-              }
-            }
-          }
-        },
-        "trm_pattern": {
-          "type": "object",
-          "properties": {
-            "name": {"type": "string"},
-            "description": {"type": "string"},
-            "steps": {
-              "type": "array",
-              "items": {"type": "string"}
-            },
-            "num_candidates": {"type": "integer"},
-            "excellence_threshold": {"type": "number"},
-            "max_iterations": {"type": "integer"}
-          }
-        },
+        "overview": {"type": "object"},
+        "validation_workflow": {"type": "object"},
+        "quality_benchmarks": {"type": "object"},
+        "trm_pattern": {"type": "object"},
         "anthropic_patterns": {"type": "object"},
         "aws_bedrock_integration": {"type": "object"},
         "implementation_requirements": {"type": "object"},
         "integration_points": {"type": "object"}
       }
+    },
+    "_usage_notes": {
+      "type": "object"
     }
   }
 }

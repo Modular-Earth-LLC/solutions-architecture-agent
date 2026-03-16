@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "architecture.schema.json",
+  "title": "Architecture Design",
+  "description": "System architecture, tech stack, component design, and diagrams produced by /architecture skill.",
+  "type": "object",
+  "required": ["engagement_id", "version", "status", "tech_stack", "component_design"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string", "description": "JSON Schema reference" },
+    "$depends_on": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Upstream KB file dependencies"
+    },
+    "engagement_id": {
+      "type": "string",
+      "pattern": "^eng-\\d{4}-\\d{3,}$",
+      "description": "Links to engagement.json"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "MAJOR.MINOR — major on structure change, minor on content"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO 8601 date"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "in_progress", "complete", "approved"],
+      "description": "Lifecycle status"
+    },
+
+    "executive_summary": {
+      "type": "object",
+      "description": "Recommended approach, confidence, go/no-go, key benefits, key risks, investment range",
+      "properties": {
+        "recommended_approach": { "type": "string", "description": "One-line recommended approach" },
+        "confidence_level": { "type": "string", "enum": ["high", "medium", "low"] },
+        "go_no_go": { "type": "string", "enum": ["go", "go_with_conditions", "pause", "no_go"] },
+        "key_benefits": { "type": "array", "items": { "type": "string" } },
+        "key_risks": { "type": "array", "items": { "type": "string" } },
+        "total_investment_range": { "type": "string", "description": "Estimated total investment range" }
+      }
+    },
+
+    "tech_stack": {
+      "type": "object",
+      "required": ["llm", "backend", "infrastructure"],
+      "description": "Per-layer selection with rationale, alternatives, trade-offs",
+      "properties": {
+        "llm": {
+          "type": "object",
+          "required": ["provider", "primary_model"],
+          "properties": {
+            "provider": { "type": "string" },
+            "primary_model": { "type": "string" },
+            "fallback_model": { "type": "string" },
+            "hosting": { "type": "string" },
+            "rationale": { "type": "string" }
+          }
+        },
+        "orchestration": {
+          "type": "object",
+          "properties": {
+            "framework": { "type": "string" },
+            "version": { "type": "string" },
+            "pattern": { "type": "string", "enum": ["direct_api", "rag_with_routing", "agent_loop", "multi_agent", "pipeline"] },
+            "rationale": { "type": "string" }
+          }
+        },
+        "backend": {
+          "type": "object",
+          "properties": {
+            "language": { "type": "string" },
+            "framework": { "type": "string" },
+            "api_style": { "type": "string", "enum": ["rest", "graphql", "grpc", "websocket"] }
+          }
+        },
+        "frontend": {
+          "type": "object",
+          "properties": {
+            "framework": { "type": "string" },
+            "type": { "type": "string", "enum": ["web_app", "mobile_app", "desktop_app", "embedded_widget", "cli", "none"] },
+            "rationale": { "type": "string" }
+          }
+        },
+        "data_stores": {
+          "type": "object",
+          "description": "Dynamic data store definitions keyed by store name",
+          "patternProperties": {
+            ".*": {
+              "type": "object",
+              "properties": {
+                "technology": { "type": "string" },
+                "hosting": { "type": "string" },
+                "purpose": { "type": "string" }
+              }
+            }
+          }
+        },
+        "infrastructure": {
+          "type": "object",
+          "properties": {
+            "cloud_provider": { "type": "string" },
+            "compute": { "type": "string" },
+            "container_orchestration": { "type": "string" },
+            "deployment_strategy": { "type": "string", "enum": ["blue_green", "canary", "rolling", "recreate"] },
+            "region": { "type": "string" },
+            "monitoring": { "type": "string" },
+            "logging": { "type": "string" }
+          }
+        }
+      }
+    },
+
+    "component_design": {
+      "type": "array",
+      "description": "Components with IDs, inputs/outputs, scalability, dependencies",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "purpose"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^C-\\d{3}$", "description": "Component ID" },
+          "name": { "type": "string" },
+          "technology": { "type": "string" },
+          "purpose": { "type": "string" },
+          "inputs": { "type": "array", "items": { "type": "string" } },
+          "outputs": { "type": "array", "items": { "type": "string" } },
+          "scalability": { "type": "string" },
+          "cost_driver": { "type": "boolean" }
+        }
+      }
+    },
+
+    "data_flows": {
+      "type": "array",
+      "description": "Source-to-destination flows with transformation steps",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "source", "destination"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^DF-\\d{3}$", "description": "Data flow ID" },
+          "name": { "type": "string" },
+          "source": { "type": "string" },
+          "destination": { "type": "string" },
+          "protocol": { "type": "string" },
+          "data_type": { "type": "string" },
+          "latency_target_ms": { "type": "integer" },
+          "encryption": { "type": "string" }
+        }
+      }
+    },
+
+    "diagrams": {
+      "type": "object",
+      "description": "Mermaid source for system context, deployment, data flow views",
+      "patternProperties": {
+        ".*": {
+          "type": "object",
+          "properties": {
+            "format": { "type": "string", "enum": ["mermaid", "ascii", "plantuml"] },
+            "code": { "type": "string" }
+          }
+        }
+      }
+    },
+
+    "cloud_infrastructure": {
+      "type": "object",
+      "description": "Cloud services, deployment pattern, DR, cost optimization (from SKILL.md)"
+    },
+
+    "ai_ml_components": {
+      "type": "object",
+      "description": "Tool Gateway, Identity, Runtime, Memory components (from SKILL.md)"
+    },
+
+    "observability": {
+      "type": "object",
+      "description": "Logging, metrics, tracing strategy (from SKILL.md)"
+    },
+
+    "well_architected_scores": {
+      "type": "object",
+      "description": "Per-pillar WA scores (0-10), strengths, gaps, recommendations",
+      "properties": {
+        "operational_excellence": { "type": "number", "minimum": 0, "maximum": 10 },
+        "security": { "type": "number", "minimum": 0, "maximum": 10 },
+        "reliability": { "type": "number", "minimum": 0, "maximum": 10 },
+        "performance_efficiency": { "type": "number", "minimum": 0, "maximum": 10 },
+        "cost_optimization": { "type": "number", "minimum": 0, "maximum": 10 },
+        "sustainability": { "type": "number", "minimum": 0, "maximum": 10 },
+        "overall": { "type": "number", "minimum": 0, "maximum": 10 },
+        "notes": { "type": "object", "description": "Per-pillar notes and recommendations" }
+      }
+    },
+
+    "alternatives_considered": {
+      "type": "array",
+      "description": "Options evaluated and rejection rationale",
+      "items": {
+        "type": "object",
+        "required": ["name", "why_rejected"],
+        "properties": {
+          "name": { "type": "string" },
+          "summary": { "type": "string" },
+          "why_rejected": { "type": "string" }
+        }
+      }
+    },
+
+    "_metadata": {
+      "type": "object",
+      "description": "Architecture-specific metadata",
+      "properties": {
+        "author": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "validation_status": { "type": "string" },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
+        "architect": { "type": "string" },
+        "design_method": { "type": "string" }
+      }
+    }
+  }
+}
