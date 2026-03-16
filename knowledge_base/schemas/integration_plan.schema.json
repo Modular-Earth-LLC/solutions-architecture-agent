@@ -50,7 +50,7 @@
           "id": { "type": "string", "pattern": "^API-\\d{3}$", "description": "API contract ID" },
           "name": { "type": "string" },
           "direction": { "type": "string", "enum": ["inbound", "outbound", "bidirectional"] },
-          "protocol": { "type": "string", "enum": ["REST", "GraphQL", "gRPC", "WebSocket", "AMQP", "Kafka"] },
+          "protocol": { "type": "string", "enum": ["REST", "GraphQL", "gRPC", "WebSocket", "AMQP", "Kafka", "SOAP", "MCP"] },
           "method": { "type": "string" },
           "endpoint": { "type": "string" },
           "authentication": { "type": "string" },

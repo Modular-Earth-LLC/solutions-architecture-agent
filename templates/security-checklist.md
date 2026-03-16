@@ -29,9 +29,9 @@ Output template aligned with `/security-review` skill output fields and `securit
 
 ---
 
-## IAM Design
+## Security Architecture
 
-[Per-service least-privilege mappings]
+Comprehensive security controls mapping to the `security_architecture` schema field.
 
 ### Authentication
 - **Method**: [SSO, MFA, etc.]
@@ -61,6 +61,16 @@ Output template aligned with `/security-review` skill output fields and `securit
 - **Audit Log**: [Service]
 - **Application Log**: [Service and retention]
 - **Alerting**: [Rules]
+
+---
+
+## IAM Design
+
+Per-service least-privilege mappings (maps to `iam_design` schema field).
+
+| Service/Component | Role | Permissions | Scope | Notes |
+|-------------------|------|-------------|-------|-------|
+| [Service] | [Role name] | [Permission set] | [Resource scope] | [Justification] |
 
 ---
 

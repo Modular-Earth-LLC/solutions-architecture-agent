@@ -37,23 +37,13 @@
     "methodology": {
       "type": "string",
       "enum": ["bottom_up", "top_down", "three_point", "analogous", "parametric"],
-      "description": "Primary estimation methodology (SCHEMA_DESIGN.md field)"
-    },
-
-    "estimation_method": {
-      "type": "object",
-      "description": "Primary method used, cross-validation results (SKILL.md field)"
+      "description": "Primary estimation methodology. SKILL.md refers to this as estimation_method."
     },
 
     "confidence_level": {
       "type": "string",
       "enum": ["high", "medium", "low"],
-      "description": "Overall confidence level"
-    },
-
-    "confidence_summary": {
-      "type": "object",
-      "description": "Overall confidence level with uncertainty sources (SKILL.md field)"
+      "description": "Overall confidence level. SKILL.md refers to this as confidence_summary."
     },
 
     "currency": { "type": "string", "default": "USD", "description": "Currency for all monetary values" },

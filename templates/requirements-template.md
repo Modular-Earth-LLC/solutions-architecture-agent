@@ -123,7 +123,7 @@ Output template aligned with `/requirements` skill output fields and `requiremen
 
 ## Metadata
 
-- **Discovery Tier**: [quick / standard / comprehensive]
+- **Discovery Tier**: [quick_discovery / standard_discovery / comprehensive_workshop / extraction_from_notes]
 - **Discovery Date**: [YYYY-MM-DD]
 - **Participants**: [List]
 - **Completeness**: [incomplete / partial / complete]

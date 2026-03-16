@@ -4,7 +4,7 @@
   "title": "Data Model",
   "description": "Entity relationships, schema definitions, vector/graph schemas, and ontology specs produced by /data-model skill.",
   "type": "object",
-  "required": ["engagement_id", "version", "status", "entities"],
+  "required": ["engagement_id", "version", "status"],
   "additionalProperties": false,
   "properties": {
     "$schema": { "type": "string", "description": "JSON Schema reference" },
@@ -41,7 +41,7 @@
 
     "entities": {
       "type": "array",
-      "description": "Relational entity definitions (SCHEMA_DESIGN.md entities array)",
+      "description": "Relational entity definitions (SCHEMA_DESIGN.md name). Alias for relational_schemas.",
       "items": {
         "type": "object",
         "required": ["id", "name", "storage", "fields"],
@@ -49,7 +49,7 @@
           "id": { "type": "string", "pattern": "^E-\\d{3}$", "description": "Entity ID" },
           "name": { "type": "string" },
           "description": { "type": "string" },
-          "storage": { "type": "string", "enum": ["postgresql", "dynamodb", "mongodb", "redis", "s3"] },
+          "storage": { "type": "string", "description": "Storage technology (technology-agnostic — any valid store name)" },
           "fields": {
             "type": "array",
             "items": {
@@ -84,7 +84,7 @@
 
     "relational_schemas": {
       "type": "array",
-      "description": "Alias for entities — relational schema definitions (SKILL.md field name)",
+      "description": "Relational entity definitions (SKILL.md canonical name). Use this OR entities — both are accepted.",
       "items": { "type": "object" }
     },
 

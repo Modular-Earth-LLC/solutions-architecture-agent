@@ -22,10 +22,11 @@ requirements.json           /requirements writes
        │         │         │
        │         │         v
        │         └──> project_plan.json      /project-plan writes
-       │
-       v
-reviews.json                /review writes (targets any file)
+
+reviews.json                /review writes (dynamic $depends_on — targets any file)
 ```
+
+> **Note**: `/proposal` reads from KB files but writes to `outputs/`, not a KB file.
 
 ## Ownership
 

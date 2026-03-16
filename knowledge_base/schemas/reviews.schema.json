@@ -114,6 +114,24 @@
             "description": "Critical issues that must be resolved before the target file can be approved"
           },
 
+          "iterations": {
+            "type": "array",
+            "description": "Array of iteration results with per-dimension scores (SKILL.md Section 5 output)",
+            "items": {
+              "type": "object",
+              "required": ["iteration", "scores"],
+              "properties": {
+                "iteration": { "type": "integer", "minimum": 1 },
+                "date": { "type": "string", "format": "date" },
+                "scores": { "$ref": "#/$defs/score_entry" },
+                "overall_score": { "type": "number", "minimum": 0, "maximum": 10 },
+                "pass_fail": { "type": "string", "enum": ["PASS", "CONDITIONAL PASS", "FAIL"] },
+                "findings_count": { "type": "integer", "minimum": 0 },
+                "key_changes": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          },
+
           "iteration_history": {
             "type": "array",
             "description": "History of review iterations",

@@ -93,12 +93,7 @@
 
     "ai_security_controls": {
       "type": "object",
-      "description": "AI-specific security controls (SKILL.md field name)"
-    },
-
-    "ai_specific_security": {
-      "type": "object",
-      "description": "AI-specific security (SCHEMA_DESIGN.md field name)",
+      "description": "AI-specific security controls (SKILL.md field name, aka ai_specific_security in SCHEMA_DESIGN.md)",
       "properties": {
         "prompt_injection_protection": { "type": "array", "items": { "type": "string" } },
         "output_filtering": { "type": "array", "items": { "type": "string" } },
@@ -111,22 +106,6 @@
     "compliance_mapping": {
       "type": "array",
       "description": "Framework-to-control mapping with posture (SKILL.md field name, aka compliance_checklist in SCHEMA_DESIGN.md)",
-      "items": {
-        "type": "object",
-        "required": ["framework", "requirement", "status"],
-        "properties": {
-          "framework": { "type": "string" },
-          "requirement": { "type": "string" },
-          "status": { "type": "string", "enum": ["compliant", "partial", "non_compliant", "not_applicable"] },
-          "evidence": { "type": "string" },
-          "notes": { "type": "string" }
-        }
-      }
-    },
-
-    "compliance_checklist": {
-      "type": "array",
-      "description": "Alias — compliance checklist (SCHEMA_DESIGN.md field name)",
       "items": {
         "type": "object",
         "required": ["framework", "requirement", "status"],

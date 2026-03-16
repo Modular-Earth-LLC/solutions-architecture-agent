@@ -24,14 +24,15 @@ except ImportError:
     sys.exit(1)
 
 
+# tests/ -> repo root
 REPO_ROOT = Path(__file__).parent.parent
 SCHEMA_DIR = REPO_ROOT / "knowledge_base" / "schemas"
 KB_DIR = REPO_ROOT / "knowledge_base"
 
 
-def discover_schemas():
+def discover_schemas() -> list[dict]:
     """Auto-discover all .schema.json files and map to their data files."""
-    mappings = []
+    mappings: list[dict] = []
     for schema_file in sorted(SCHEMA_DIR.glob("*.schema.json")):
         stem = schema_file.stem  # e.g., "system_config.schema"
         name = stem.replace(".schema", "")  # e.g., "system_config"
@@ -51,7 +52,7 @@ def discover_schemas():
     return mappings
 
 
-def validate_file(data_file, schema_file, verbose=False):
+def validate_file(data_file: Path, schema_file: Path, verbose: bool = False) -> tuple[str, str]:
     """Validate a JSON data file against its schema using Draft202012Validator."""
     # Load schema
     try:
@@ -88,7 +89,7 @@ def validate_file(data_file, schema_file, verbose=False):
     return "FAIL", "\n".join(messages)
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="Validate KB files against schemas")
     parser.add_argument("--file", help="Validate single file (e.g., --file system_config)")
     parser.add_argument("--verbose", action="store_true", help="Show detailed JSON paths")
@@ -100,14 +101,15 @@ def main():
         print("Run from the project root directory.")
         sys.exit(1)
 
-    mappings = discover_schemas()
+    all_mappings = discover_schemas()
+    mappings = all_mappings
 
     # Filter if --file specified
     if args.file:
-        mappings = [m for m in mappings if m["name"] == args.file]
+        mappings = [m for m in all_mappings if m["name"] == args.file]
         if not mappings:
             print(f"[ERROR] No schema found for '{args.file}'")
-            print(f"Available: {', '.join(m['name'] for m in discover_schemas())}")
+            print(f"Available: {', '.join(m['name'] for m in all_mappings)}")
             sys.exit(1)
 
     print("=" * 60)
