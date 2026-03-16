@@ -40,3 +40,10 @@ python tests/validate_knowledge_base.py  # Expected: 11 PASS, 0 FAIL
 - Read `requirements.json` → `architecture.json` to see how context flows downstream
 - Compare `architecture.json` fields against `knowledge_base/schemas/architecture.schema.json`
 - Read `proposal.md` for the final client-facing deliverable
+
+**Key fields in every KB file**:
+- `$depends_on` — lists which upstream KB files this skill read as input
+- `engagement_id` — shared identifier linking all files in one engagement
+- `version` — MAJOR.MINOR iteration count (increments on re-runs)
+- `status` — `draft` → `in_progress` → `complete` → `approved`
+- `lifecycle_state` (in `engagement.json`) — tracks the status of every skill's output

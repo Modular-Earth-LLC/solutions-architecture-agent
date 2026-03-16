@@ -42,7 +42,9 @@ Claude automatically loads `CLAUDE.md` and `.claude/rules/` configuration. Skill
 I need to design a healthcare data platform that modernizes our legacy systems.
 ```
 
-The agent classifies your intent and routes to the appropriate skill. After each skill completes, it presents a **human checkpoint**: summary, deliverables, and suggested next skill.
+The agent classifies your intent and routes to the appropriate skill. It asks structured questions, you answer, and it produces validated JSON output in `knowledge_base/`. After each skill completes, it presents a **human checkpoint**: summary, deliverables, and suggested next skill.
+
+Want to see what a full engagement produces? Read the [sample proposal](../examples/healthcare-ibmi-migration/proposal.md) or explore the [complete example outputs](../examples/healthcare-ibmi-migration/).
 
 ---
 

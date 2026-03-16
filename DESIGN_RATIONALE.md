@@ -97,9 +97,9 @@ Three personas drive skill design and user story coverage:
 
 ---
 
-## Open Questions
+## Product Backlog
 
-Unresolved product evolution questions from the original requirements analysis:
+Intentional scope deferrals for future versions — disciplined scope management, not unresolved design issues:
 
 1. **Discovery tier thresholds**: Quick tier duration — 15 min (from Phase 1 patterns) vs 30 min (from plan). Should we standardize to Quick (15-30 min), Standard (45-60 min), Comprehensive (90 min)?
 

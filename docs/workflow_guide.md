@@ -89,6 +89,28 @@ You review, approve, and decide whether to proceed. The agent never auto-advance
 
 ---
 
+## Re-running Skills (Mid-Engagement Changes)
+
+When requirements or other upstream deliverables change mid-engagement:
+
+1. **Re-run the changed skill first** — e.g., re-run `/requirements` with updated context
+2. **Re-run downstream skills in order** — each skill reads the latest KB files, so downstream outputs automatically reflect upstream changes
+3. **You do not need to re-run skills that are not downstream** — if only requirements changed, `/integration-plan` needs re-running but `/review` of a different file does not
+
+The agent tracks versions in `engagement.json`. When you re-run a skill, it increments the MINOR version of that KB file.
+
+---
+
+## Starting a New Engagement
+
+To start fresh after completing an engagement:
+
+1. Archive current KB files: copy `knowledge_base/*.json` (except `system_config.json`) to `examples/<engagement-name>/`
+2. Delete the archived files from `knowledge_base/`
+3. Run `/requirements` to begin the new engagement
+
+---
+
 ## Key Principles
 
 - **Skills design solutions — they don't implement them.** Code generation, deployment, and infrastructure provisioning are out of scope.

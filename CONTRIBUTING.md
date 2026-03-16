@@ -108,8 +108,10 @@ JSON structure specification with envelope fields (see Step 2)
 Summary, deliverables, next skill suggestion
 ```
 
+For a complete canonical example, see [skills/requirements/SKILL.md](skills/requirements/SKILL.md).
+
 **Rules**:
-- Keep under 500 lines; move reference tables to `${CLAUDE_SKILL_DIR}/` files
+- Keep under 500 lines (enforced by `test_plugin_structure.py`); move reference tables to `${CLAUDE_SKILL_DIR}/` files
 - No cross-skill imports at runtime — each skill is self-contained
 - Use `ultrathink` directive (in body, not frontmatter) only for deep reasoning skills
 - Use bracket syntax `$ARGUMENTS[0]` (not dot syntax `$ARGUMENTS.0`)
@@ -156,9 +158,11 @@ Refer to `knowledge_base/schemas/SCHEMA_DESIGN.md` for the full design guide.
 
 ### Step 4: Register the Skill
 
-1. Add to the skill table in `CLAUDE.md`
-2. Add to engagement flows in `CLAUDE.md` if the skill participates
-3. Update `.repo-metadata.json`:
+Update these files (all required):
+
+1. `CLAUDE.md` — add to skill table; add to engagement flows if applicable
+2. `README.md` — add to the skills table
+3. `.repo-metadata.json` — update:
    - Increment `architecture.skills`
    - Add to `architecture.skill_names`
    - Increment `knowledge_base.schemas`
