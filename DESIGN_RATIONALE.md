@@ -31,7 +31,7 @@ The agent was designed against **141 traceable requirements** extracted from 88 
 
 **Pattern coverage**: 88/88 source patterns traced to requirements (100%).
 
-All requirements are implemented in the current 9-skill + 2-sub-agent architecture. See `archive/requirements.md` for the full traceability matrix (Section 9).
+All requirements are implemented in the current 9-skill + 2-sub-agent architecture. See `.claude/plans/archive/requirements.md` for the full traceability matrix (Section 9).
 
 ---
 

@@ -39,7 +39,8 @@
   },
   "tech_stack": {
     "primary_platform": "Claude Code Plugin",
-    "primary_language": "Python",
+    "primary_language": "Markdown + JSON Schema",
+    "test_language": "Python",
     "llm_providers": [
       "Anthropic Claude"
     ]
@@ -47,8 +48,11 @@
   "maintenance": {
     "versioning_approach": "centralized",
     "validation_scripts": [
+      "tests/validate_knowledge_base.py",
       "tests/validate_consistency.py",
-      "tests/validate_knowledge_base.py"
+      "tests/test_plugin_structure.py",
+      "tests/test_engagement_flow.py",
+      "tests/test_skill_independence.py"
     ],
     "update_frequency": "Updated automatically by CI/CD and validation scripts"
   }

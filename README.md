@@ -1,12 +1,12 @@
 # AI Solutions Architecture Agent
 
-[![CI](https://github.com/Modular-Earth-LLC/solutions-architecture-agent/actions/workflows/validate-knowledge-base.yml/badge.svg)](https://github.com/Modular-Earth-LLC/solutions-architecture-agent/actions/workflows/validate-knowledge-base.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![QA Validation](https://github.com/Modular-Earth-LLC/solutions-architecture-agent/actions/workflows/validate-knowledge-base.yml/badge.svg)](https://github.com/Modular-Earth-LLC/solutions-architecture-agent/actions/workflows/validate-knowledge-base.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 A Claude Code plugin covering the **solutions architecture lifecycle**: requirements discovery, system design, data modeling, security review, integration planning, estimation, project planning, and proposal assembly.
 
 **Designs solutions — does NOT implement or deploy.**
 
-**Version**: 1.0.0 | **Owner**: [Modular Earth LLC](https://github.com/Modular-Earth-LLC) | **Validated**: 9-skill end-to-end against a healthcare IBMi migration (HIPAA, 500+ users). [See example outputs](examples/healthcare-ibmi-migration/)
+**Version**: 1.0.0 | **Owner**: [Modular Earth LLC](https://github.com/Modular-Earth-LLC) | **Validated**: 9-skill end-to-end against a HIPAA-compliant healthcare IBMi migration (500+ users). [See example outputs](examples/healthcare-ibmi-migration/)
 
 ---
 

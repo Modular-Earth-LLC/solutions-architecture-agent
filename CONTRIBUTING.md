@@ -282,7 +282,7 @@ git push -u origin feature/<skill-name>
 
 ## Code of Conduct
 
-We are committed to providing a welcoming and inclusive environment. Be respectful, constructive, and focused on what is best for the project. See the [Contributor Covenant](https://www.contributor-covenant.org/).
+We are committed to providing a welcoming and inclusive environment. Be respectful, constructive, and focused on what is best for the project. See our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ---
 
