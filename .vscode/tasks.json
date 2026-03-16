@@ -2,6 +2,16 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "Validate: Knowledge Base",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "tests/validate_knowledge_base.py"
+      ],
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
       "label": "Validate: Consistency",
       "type": "shell",
       "command": "python",
@@ -12,11 +22,51 @@
       "problemMatcher": []
     },
     {
-      "label": "Validate: Knowledge Base",
+      "label": "Validate: Plugin Structure",
       "type": "shell",
       "command": "python",
       "args": [
-        "tests/validate_knowledge_base.py"
+        "tests/test_plugin_structure.py"
+      ],
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Validate: Engagement Flow",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "tests/test_engagement_flow.py"
+      ],
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Validate: Skill Independence",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "tests/test_skill_independence.py"
+      ],
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Validate: Well-Architected",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "tests/validate_well_architected.py"
+      ],
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Validate: End-to-End Example",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "tests/test_end_to_end_example.py"
       ],
       "group": "test",
       "problemMatcher": []
@@ -35,8 +85,13 @@
       "label": "Validate: All",
       "dependsOrder": "sequence",
       "dependsOn": [
-        "Validate: Consistency",
         "Validate: Knowledge Base",
+        "Validate: Consistency",
+        "Validate: Plugin Structure",
+        "Validate: Engagement Flow",
+        "Validate: Skill Independence",
+        "Validate: Well-Architected",
+        "Validate: End-to-End Example",
         "Validate: URLs"
       ],
       "group": "test",
