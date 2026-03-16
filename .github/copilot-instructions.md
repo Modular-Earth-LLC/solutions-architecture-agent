@@ -1,6 +1,6 @@
 # Solutions Architecture Agent — GitHub Copilot Instructions
 
-A Claude Code plugin with 9 SA lifecycle skills and 2 sub-agents.
+A Claude Code plugin with SA lifecycle skills and sub-agents. See `.repo-metadata.json` for counts.
 
 Read first:
 - `CLAUDE.md`
@@ -10,8 +10,8 @@ Read first:
 
 Single agent with skills (not multi-agent). See `ARCHITECTURE.md` for full design.
 
-- 9 skills in `skills/*/SKILL.md`
-- 2 sub-agents in `agents/*.md`
+- Skills in `skills/*/SKILL.md`
+- Sub-agents in `agents/*.md`
 - Knowledge base in `knowledge_base/` (blackboard pattern)
 - Schemas in `knowledge_base/schemas/`
 
@@ -51,4 +51,4 @@ When proposing changes:
 
 ## Validation
 
-Run all 5 test scripts after changing skills, schemas, or KB files. See [CONTRIBUTING.md § Testing](../CONTRIBUTING.md#testing) and [tests/README.md](../tests/README.md) for details.
+Run all test scripts after changing skills, schemas, or KB files. See [CONTRIBUTING.md § Testing](../CONTRIBUTING.md#testing) and [tests/README.md](../tests/README.md) for details.

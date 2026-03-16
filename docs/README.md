@@ -1,6 +1,6 @@
 # Documentation
 
-Documentation for the **AI Solutions Architecture Agent** — a Claude Code plugin with 9 SA lifecycle skills.
+Documentation for the **AI Solutions Architecture Agent** — a Claude Code plugin covering the full SA lifecycle.
 
 ---
 

@@ -4,7 +4,7 @@ Automated validation for the AI Solutions Architecture Agent plugin.
 
 ---
 
-## Validation Scripts (5 Total)
+## Validation Scripts
 
 ### Knowledge Base Validation
 
@@ -132,7 +132,7 @@ Run all tests from the project root directory.
 
 ## CI/CD
 
-GitHub Actions runs all 5 validation scripts on PRs. See `.github/workflows/validate-knowledge-base.yml` and [CONTRIBUTING.md § CI/CD](../CONTRIBUTING.md#cicd).
+GitHub Actions runs all validation scripts on PRs. See `.github/workflows/validate-knowledge-base.yml` and [CONTRIBUTING.md § CI/CD](../CONTRIBUTING.md#cicd).
 
 ---
 

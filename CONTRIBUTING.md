@@ -18,13 +18,13 @@ This is the single source of truth for contributing to the Solutions Architectur
 ```
 solutions-architecture-agent/
 ├── .claude-plugin/plugin.json    # Plugin manifest (name, version, description)
-├── skills/                       # 9 SA lifecycle skills (each: <name>/SKILL.md)
-├── agents/                       # 2 sub-agents for parallel execution
+├── skills/                       # SA lifecycle skills (each: <name>/SKILL.md)
+├── agents/                       # Sub-agents for parallel execution
 ├── hooks/hooks.json              # Pre-commit validation hooks
-├── knowledge_base/               # Blackboard KB (JSON files, 11 schemas)
+├── knowledge_base/               # Blackboard KB (JSON files + schemas)
 │   ├── schemas/                  # JSON Schema Draft 2020-12 definitions
 │   └── system_config.json        # READ-ONLY reference configuration
-├── tests/                        # 5 validation scripts (stdlib + jsonschema)
+├── tests/                        # Validation scripts (stdlib + jsonschema)
 ├── docs/                         # User documentation
 ├── .claude/rules/                # Governing rules (loaded automatically)
 ├── CLAUDE.md                     # Agent identity and dispatch rules (<100 lines)
@@ -231,7 +231,7 @@ Sub-agents receive a focused prompt + relevant KB context and return structured 
 
 ### Automated Validation
 
-5 test scripts, all runnable from the project root:
+All test scripts, runnable from the project root:
 
 ```bash
 python tests/validate_knowledge_base.py    # Schema compliance (Draft 2020-12)
@@ -252,7 +252,7 @@ See [tests/README.md](tests/README.md) for expected output, troubleshooting, and
 
 ### CI/CD
 
-GitHub Actions runs all 5 test scripts on PRs touching skills, schemas, agents, plugin config, or tests. See `.github/workflows/validate-knowledge-base.yml`. Trigger manually via `workflow_dispatch`.
+GitHub Actions runs all test scripts on PRs touching skills, schemas, agents, plugin config, or tests. See `.github/workflows/validate-knowledge-base.yml`. Trigger manually via `workflow_dispatch`.
 
 ---
 
@@ -274,7 +274,7 @@ git push -u origin feature/<skill-name>
 - [ ] Envelope fields paragraph in Section 5
 - [ ] CLAUDE.md skill table updated
 - [ ] `.repo-metadata.json` counts updated
-- [ ] All 5 test scripts pass with 0 FAIL
+- [ ] All test scripts pass with 0 FAIL
 - [ ] No secrets, credentials, or PII committed
 - [ ] Documentation updated if adding to engagement flows
 

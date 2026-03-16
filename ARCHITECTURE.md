@@ -1,6 +1,6 @@
 # System Architecture
 
-**Version**: 1.0.0 | **Pattern**: Single agent with 9 skills + 2 sub-agents | **Platform**: Claude Code plugin
+**Version**: 1.0.0 | **Pattern**: Single agent with skills + sub-agents (see `.repo-metadata.json` for counts) | **Platform**: Claude Code plugin
 
 ---
 

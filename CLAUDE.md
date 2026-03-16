@@ -81,7 +81,7 @@ If a user requests implementation: acknowledge, explain scope, note for future E
 
 ## Knowledge Base
 
-- **10 JSON files** in `knowledge_base/` — each skill owns one file, writes only to it
+- **JSON files** in `knowledge_base/` — each skill owns one file, writes only to it (counts in `.repo-metadata.json`)
 - **`system_config.json`** is READ-ONLY — reference but never modify
 - **`.repo-metadata.json`** is the single source of truth for version and counts
 - **Blackboard pattern**: skills communicate only through KB files, never directly

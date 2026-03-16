@@ -66,8 +66,8 @@ Natural language also works — describe your project and the agent classifies i
 
 Skills communicate through a shared **knowledge base** (`knowledge_base/`) using the blackboard pattern:
 
-- **10 JSON files** — each skill owns one, writes only to it
-- **11 JSON schemas** — validate structure at `knowledge_base/schemas/`
+- **JSON files** — each skill owns one, writes only to it (see `.repo-metadata.json` for counts)
+- **JSON schemas** — validate structure at `knowledge_base/schemas/`
 - **`$depends_on`** — each file declares upstream dependencies
 - **`engagement.json`** — tracks lifecycle state across all domain files
 - **`system_config.json`** — read-only reference data (Well-Architected definitions, technical references)
@@ -82,7 +82,7 @@ Validate anytime: `python tests/validate_knowledge_base.py`
 solutions-architecture-agent/
 ├── .claude-plugin/plugin.json     # Plugin manifest
 ├── CLAUDE.md                      # Agent identity + dispatch rules
-├── skills/                        # 9 SA lifecycle skills
+├── skills/                        # SA lifecycle skills (see .repo-metadata.json for list)
 │   ├── requirements/SKILL.md
 │   ├── architecture/SKILL.md
 │   ├── estimate/SKILL.md
@@ -92,16 +92,16 @@ solutions-architecture-agent/
 │   ├── security-review/SKILL.md
 │   ├── integration-plan/SKILL.md
 │   └── review/SKILL.md
-├── agents/                        # 2 sub-agents (parallel execution)
+├── agents/                        # Sub-agents for parallel execution
 │   ├── parallel-wa-reviewer.md
 │   └── stride-analyzer.md
 ├── knowledge_base/                # Shared state (blackboard pattern)
-│   ├── schemas/                   # 11 JSON schemas
+│   ├── schemas/                   # JSON Schema (Draft 2020-12)
 │   ├── system_config.json         # Read-only reference
 │   └── engagement.json            # Lifecycle state tracker
 ├── hooks/hooks.json               # Pre-commit validation hooks
 ├── templates/                     # Output templates
-├── tests/                         # 5 validation scripts
+├── tests/                         # Validation scripts
 ├── docs/                          # User documentation
 ├── examples/                      # Sample engagement outputs (explore these first)
 ├── .claude/rules/                 # Guiding principles, KB rules, security

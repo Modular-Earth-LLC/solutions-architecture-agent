@@ -50,7 +50,7 @@ Want to see what a full engagement produces? Read the [sample proposal](../examp
 
 ## Understanding the System
 
-**Single agent with 9 skills.** Each skill handles one phase of the SA lifecycle:
+**Single agent with skills.** Each skill handles one phase of the SA lifecycle:
 
 1. `/requirements` — Discover what the client needs
 2. `/architecture` — Design the system
@@ -84,7 +84,7 @@ You don't need to run every skill — the agent checks prerequisites and tells y
 
 ## Validation
 
-Run the 5 validation scripts to check file integrity. See [tests/README.md](../tests/README.md) for details and expected output.
+Run the validation scripts to check file integrity. See [tests/README.md](../tests/README.md) for details and expected output.
 
 ```bash
 python tests/validate_knowledge_base.py
