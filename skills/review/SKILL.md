@@ -24,7 +24,7 @@ Surface gaps and risks explicitly — never let quality issues become client-fac
 
 Validate before proceeding:
 - At least one KB file with status `draft`, `in_progress`, or `complete`
-  - If no KB files exist → STOP: "No deliverables to review. Run a skill first."
+  - If no KB files exist → suggest running a skill first to produce deliverables, OR accept content to review directly via `$ARGUMENTS`
 
 Target selection from `$ARGUMENTS[0]`:
 - If specified: review that specific KB file (e.g., "architecture.json", "requirements.json")

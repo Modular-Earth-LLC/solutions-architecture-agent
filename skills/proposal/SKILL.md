@@ -29,7 +29,7 @@ Prerequisites vary by proposal type:
 **Internal Proposal**: `requirements.json` + `architecture.json` + `estimate.json` (all complete)
 **Pitch Deck**: `requirements.json` + `architecture.json` (complete, estimate optional)
 
-Validate required files exist with status `complete` or `approved`. If missing → STOP with specific guidance on which skills to run.
+Validate required files exist with status `complete` or `approved`. If missing → suggest which upstream skills to run first, OR accept the missing context directly via `$ARGUMENTS`.
 
 ## 3. CONTEXT LOADING — Selective Section Loading
 

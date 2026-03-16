@@ -22,9 +22,9 @@ Justify every recommendation by business value and ROI, not technical elegance a
 
 Validate before proceeding:
 - `knowledge_base/requirements.json` — status `complete` or `approved`
-  - If missing → STOP: "Run /requirements first."
+  - If missing → suggest running /requirements first, OR accept requirements context directly via `$ARGUMENTS`
 - `knowledge_base/architecture.json` — status `complete` or `approved`
-  - If missing → STOP: "Run /architecture first — estimation depends on architecture decisions."
+  - If missing → suggest running /architecture first, OR accept architecture context directly via `$ARGUMENTS`
 
 Optional reads (improve estimate accuracy):
 - `knowledge_base/data_model.json` — if exists, data layer complexity

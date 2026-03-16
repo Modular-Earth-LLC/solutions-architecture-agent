@@ -24,10 +24,10 @@ Surface risks, assumptions, and unknowns early and explicitly — never bury bad
 
 Validate before proceeding:
 - `knowledge_base/requirements.json` — status `complete` or `approved`
-  - If missing → STOP: "Run /requirements first."
+  - If missing → suggest running /requirements first, OR accept requirements context directly via `$ARGUMENTS`
   - If `draft`/`in_progress` → WARN: "Requirements incomplete. Security review may miss compliance needs."
 - `knowledge_base/architecture.json` — status `complete` or `approved`
-  - If missing → STOP: "Run /architecture first — security review requires architecture decisions."
+  - If missing → suggest running /architecture first, OR accept architecture context directly via `$ARGUMENTS`
   - If `draft`/`in_progress` → WARN: "Architecture incomplete. Security findings may change."
 
 Optional reads:

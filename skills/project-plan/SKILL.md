@@ -22,11 +22,11 @@ Surface risks and dependencies early — never let timeline assumptions become s
 
 Validate before proceeding:
 - `knowledge_base/requirements.json` — status `complete` or `approved`
-  - If missing → STOP: "Run /requirements first."
+  - If missing → suggest running /requirements first, OR accept requirements context directly via `$ARGUMENTS`
 - `knowledge_base/architecture.json` — status `complete` or `approved`
-  - If missing → STOP: "Run /architecture first."
+  - If missing → suggest running /architecture first, OR accept architecture context directly via `$ARGUMENTS`
 - `knowledge_base/estimate.json` — status `complete` or `approved`
-  - If missing → STOP: "Run /estimate first — project plans require LOE and team composition."
+  - If missing → suggest running /estimate first, OR accept estimate context directly via `$ARGUMENTS`
 
 ## 3. CONTEXT LOADING
 

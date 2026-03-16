@@ -24,10 +24,10 @@ Every schema must deliver tangible value — design for the actual problem, not 
 
 Validate before proceeding:
 - `knowledge_base/requirements.json` — status `complete` or `approved`
-  - If missing → STOP: "Run /requirements first."
+  - If missing → suggest running /requirements first, OR accept requirements context directly via `$ARGUMENTS`
   - If `draft`/`in_progress` → WARN: "Requirements incomplete. Proceed with caveats?"
 - `knowledge_base/architecture.json` — status `complete` or `approved`
-  - If missing → STOP: "Run /architecture first — data models depend on architecture decisions."
+  - If missing → suggest running /architecture first, OR accept architecture context directly via `$ARGUMENTS`
   - If `draft`/`in_progress` → WARN: "Architecture incomplete. Data model may need revision."
 
 ## 3. CONTEXT LOADING

@@ -22,7 +22,7 @@ Surface risks and unknowns early. Every integration point is a potential failure
 
 Validate before proceeding:
 - `knowledge_base/requirements.json` — status `complete` or `approved`
-  - If missing → STOP: "Run /requirements first."
+  - If missing → suggest running /requirements first, OR accept requirements context directly via `$ARGUMENTS`
   - If `draft`/`in_progress` → WARN: "Requirements incomplete. Integration plan may miss integration points."
 
 Optional but recommended:

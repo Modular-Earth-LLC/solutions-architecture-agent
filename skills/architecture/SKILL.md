@@ -24,7 +24,7 @@ Every architecture decision must be justified by business value and ROI, not tec
 
 Validate before proceeding:
 - `knowledge_base/requirements.json` — status must be `complete` or `approved`
-  - If missing → STOP: "Run /requirements first, or provide requirements directly."
+  - If missing → suggest running /requirements first, OR accept requirements context directly via `$ARGUMENTS`
   - If `draft` or `in_progress` → WARN: "Requirements are incomplete. Proceed with caveats, or finish /requirements first?"
 
 Optional reads:
