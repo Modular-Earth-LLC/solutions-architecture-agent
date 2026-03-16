@@ -30,7 +30,7 @@
 ## Post-Release Roadmap
 
 ### Near-Term (v1.1.0)
-- **Plugin installation testing** — `claude --plugin-dir .` end-to-end
+- **~~Plugin installation testing~~** — DONE (2026-03-16): setup scripts, marketplace.json, multi-env docs, all 8 tests pass
 - **Second case study** — greenfield AI project (different domain from healthcare)
 - **system_config.json cleanup** — decompose stale 779-line file into focused configs
 - **Behavioral tests** — parameterized integration test feeding synthetic $ARGUMENTS

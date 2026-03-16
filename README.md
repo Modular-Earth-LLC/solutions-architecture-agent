@@ -124,6 +124,7 @@ solutions-architecture-agent/
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** — System design with Mermaid diagrams
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** — How to add skills, PR process
 - **[docs/getting-started.md](docs/getting-started.md)** — First project walkthrough
+- **[docs/local-setup.md](docs/local-setup.md)** — Multi-environment setup (CLI, Desktop, VS Code)
 - **[docs/workflow_guide.md](docs/workflow_guide.md)** — Engagement lifecycle details
 - **[docs/executive_overview.md](docs/executive_overview.md)** — Business value and ROI
 - **[docs/human-ai-collaboration.md](docs/human-ai-collaboration.md)** — Human-in-the-loop design
