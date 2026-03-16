@@ -66,12 +66,70 @@ def validate_file(file_name: str, schema_name: str) -> tuple[bool, str]:
     return True, f"{file_name}: valid"
 
 
+def check_lifecycle_file_references() -> tuple[bool, str]:
+    """Check that engagement.json lifecycle_state file references resolve."""
+    engagement_file = EXAMPLE_DIR / "engagement.json"
+    if not engagement_file.exists():
+        return False, "engagement.json missing"
+
+    engagement = load_json(engagement_file)
+    lifecycle = engagement.get("lifecycle_state", {})
+    missing = []
+
+    for domain, entry in lifecycle.items():
+        file_name = entry.get("file")
+        if not file_name:
+            missing.append(f"{domain}: missing file field")
+            continue
+        if not (EXAMPLE_DIR / file_name).exists():
+            missing.append(f"{domain}: file '{file_name}' not found")
+
+    if missing:
+        return False, "; ".join(missing)
+    return True, "lifecycle_state file references resolve"
+
+
+def check_engagement_id_consistency() -> tuple[bool, str]:
+    """Check that all example JSON files share one engagement_id."""
+    ids = {}
+    for json_file in sorted(EXAMPLE_DIR.glob("*.json")):
+        data = load_json(json_file)
+        eid = data.get("engagement_id")
+        if eid:
+            ids[json_file.name] = eid
+
+    if len(ids) < 2:
+        return True, "fewer than 2 files with engagement_id (skip)"
+
+    unique = set(ids.values())
+    if len(unique) != 1:
+        details = ", ".join(f"{n}={e}" for n, e in ids.items())
+        return False, f"inconsistent engagement_ids: {details}"
+
+    return True, f"all files share engagement_id '{next(iter(unique))}'"
+
+
+def check_status_version_fields() -> tuple[bool, str]:
+    """Check that example JSON files include status and version envelope fields."""
+    issues = []
+    for json_file in sorted(EXAMPLE_DIR.glob("*.json")):
+        data = load_json(json_file)
+        if "status" not in data:
+            issues.append(f"{json_file.name}: missing status")
+        if json_file.name != "engagement.json" and "version" not in data:
+            issues.append(f"{json_file.name}: missing version")
+
+    if issues:
+        return False, "; ".join(issues)
+    return True, "all example files have status/version envelope fields"
+
+
 def main() -> None:
     print("=" * 60)
     print("End-to-End Example Validation")
     print("=" * 60)
 
-    print("\n[1/2] Validating healthcare example files against schemas...")
+    print("\n[1/5] Validating healthcare example files against schemas...")
     results = []
     for file_name, schema_name in SCHEMA_MAP.items():
         ok, detail = validate_file(file_name, schema_name)
@@ -79,7 +137,7 @@ def main() -> None:
         prefix = "OK" if ok else "FAIL"
         print(f"  [{prefix}] {detail}")
 
-    print("\n[2/2] Checking proposal artifact presence...")
+    print("\n[2/5] Checking proposal artifact presence...")
     proposal_path = EXAMPLE_DIR / "proposal.md"
     if proposal_path.exists():
         print("  [OK] proposal.md present")
@@ -87,6 +145,19 @@ def main() -> None:
     else:
         print("  [FAIL] proposal.md missing")
         results.append(False)
+
+    extra_checks = [
+        ("[3/5] Lifecycle file references", check_lifecycle_file_references),
+        ("[4/5] Engagement ID consistency", check_engagement_id_consistency),
+        ("[5/5] Status/version envelope fields", check_status_version_fields),
+    ]
+
+    for label, check_fn in extra_checks:
+        print(f"\n{label}...")
+        ok, detail = check_fn()
+        results.append(ok)
+        prefix = "OK" if ok else "FAIL"
+        print(f"  [{prefix}] {detail}")
 
     passed = sum(1 for r in results if r)
     failed = sum(1 for r in results if not r)

@@ -48,7 +48,7 @@ solutions-architecture-agent/
 The primary contributors to this repo are AI coding assistants. All conventions are:
 - **Explicit** — no implicit assumptions; everything is declared in files
 - **Programmatic** — machine-parseable structures (JSON schemas, YAML frontmatter)
-- **Verifiable** — 5 automated test scripts validate structure and consistency
+- **Verifiable** — 8 automated test scripts validate structure and consistency
 - **No commented-out code** — either active or deleted; never disabled-by-comment
 
 ### Single Source of Truth
@@ -234,11 +234,17 @@ Sub-agents receive a focused prompt + relevant KB context and return structured 
 All test scripts, runnable from the project root:
 
 ```bash
+# Core validation (7 scripts — run before every commit)
 python tests/validate_knowledge_base.py    # Schema compliance (Draft 2020-12)
 python tests/validate_consistency.py       # Metadata sync, DAG integrity, ID uniqueness
-python tests/test_plugin_structure.py      # Plugin packaging, frontmatter, forbidden patterns
+python tests/test_plugin_structure.py      # Plugin packaging, frontmatter, section anchors
 python tests/test_engagement_flow.py       # Canonical flow DAG, lifecycle coverage
 python tests/test_skill_independence.py    # Advisory prereqs, standalone invocation
+python tests/validate_well_architected.py  # Multi-cloud WA pillar coverage
+python tests/test_end_to_end_example.py    # Example engagement schema + integration
+
+# Optional (requires `pip install requests`)
+python tests/validate_urls.py              # External link health check
 ```
 
 See [tests/README.md](tests/README.md) for expected output, troubleshooting, and test environment setup.

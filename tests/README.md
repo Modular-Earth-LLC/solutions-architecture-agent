@@ -55,7 +55,7 @@ Validates plugin packaging:
 - No SKILL.md exceeds 500 lines
 - `.repo-metadata.json` `skill_names`/`sub_agent_names` match filesystem
 
-**Expected output**: `7 PASS, 0 FAIL`
+**Expected output**: `8 PASS, 0 FAIL`
 
 ### Engagement Flow Validation
 
@@ -90,6 +90,53 @@ Validates each skill can run independently (marketplace requirement):
 
 **Expected output**: `6 PASS, 0 FAIL`
 
+### Well-Architected Validation
+
+```bash
+python tests/validate_well_architected.py
+```
+
+Validates multi-cloud Well-Architected coverage:
+
+- ARCHITECTURE.md references all 6 WA pillars
+- `system_config.json` includes AWS WA + GenAI Lens + Azure + GCP references
+- `/architecture` skill includes WA multi-cloud scoring guidance
+- `parallel-wa-reviewer` sub-agent enumerates all 6 pillar names
+
+**Expected output**: `4 PASS, 0 FAIL`
+
+### End-to-End Example Validation
+
+```bash
+python tests/test_end_to_end_example.py
+```
+
+Validates the healthcare IBMi migration example package:
+
+- All 9 domain JSON files validate against their schemas
+- `proposal.md` artifact present
+- `engagement.json` lifecycle_state file references resolve
+- All example files share one `engagement_id`
+- All example files include `status`/`version` envelope fields
+
+**Expected output**: `13 PASS, 0 FAIL`
+
+### URL Validation (Optional)
+
+```bash
+pip install requests  # Required for accessibility checks
+python tests/validate_urls.py
+```
+
+Validates external URLs in scoped documentation files:
+
+- Extracts URLs from README, ARCHITECTURE, CONTRIBUTING, docs/, and guides
+- Tests HTTP accessibility (HEAD/GET with fallback)
+- Configurable scope via `tests/url_validation_scope.json`
+- Runs in extraction-only mode without `requests` (exit 0)
+
+**Expected output**: `0 broken URLs`
+
 ---
 
 ## Running Tests
@@ -102,6 +149,9 @@ python tests/validate_consistency.py
 python tests/test_plugin_structure.py
 python tests/test_engagement_flow.py
 python tests/test_skill_independence.py
+python tests/validate_well_architected.py
+python tests/test_end_to_end_example.py
+python tests/validate_urls.py              # optional, requires: pip install requests
 ```
 
 ### After Skill Changes
@@ -132,7 +182,7 @@ Run all tests from the project root directory.
 
 ## CI/CD
 
-GitHub Actions runs all validation scripts on PRs. See `.github/workflows/validate-knowledge-base.yml` and [CONTRIBUTING.md § CI/CD](../CONTRIBUTING.md#cicd).
+GitHub Actions runs all 8 validation scripts on PRs. See `.github/workflows/validate-knowledge-base.yml` and [CONTRIBUTING.md § CI/CD](../CONTRIBUTING.md#cicd).
 
 ---
 

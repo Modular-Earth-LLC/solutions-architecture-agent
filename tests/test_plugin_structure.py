@@ -48,6 +48,14 @@ FORBIDDEN_SKILL_PATTERNS = [
 
 MAX_SKILL_LINES = 500
 
+REQUIRED_SKILL_SECTIONS = [
+    "ROLE & CONTEXT",
+    "PREREQUISITES",
+    "CONTEXT LOADING",
+    "WORKFLOW",
+    "OUTPUT",
+]
+
 
 def parse_yaml_frontmatter(filepath: Path) -> dict | None:
     """Parse simple YAML frontmatter (key: value pairs) from a markdown file."""
@@ -199,8 +207,24 @@ def check_skill_line_count() -> tuple[bool, list[str]]:
     return len(issues) == 0, issues
 
 
+def check_skill_section_anchors() -> tuple[bool, list[str]]:
+    """Check 8: Every SKILL.md contains required section anchors."""
+    issues = []
+    for skill_dir in sorted(d for d in SKILLS_DIR.iterdir() if d.is_dir()):
+        skill_file = skill_dir / "SKILL.md"
+        if not skill_file.exists():
+            continue
+
+        text = skill_file.read_text(encoding="utf-8")
+        for section in REQUIRED_SKILL_SECTIONS:
+            if section not in text:
+                issues.append(f"{skill_dir.name}: missing section '{section}'")
+
+    return len(issues) == 0, issues
+
+
 def check_metadata_names() -> tuple[bool, list[str]]:
-    """Check 8: .repo-metadata.json skill_names/sub_agent_names match filesystem."""
+    """Check 9: .repo-metadata.json skill_names/sub_agent_names match filesystem."""
     issues = []
 
     if not METADATA_FILE.exists():
@@ -254,6 +278,7 @@ def main() -> None:
         ("Forbidden patterns", check_forbidden_patterns),
         ("SKILL.md line count", check_skill_line_count),
         ("Metadata name sync", check_metadata_names),
+        ("Skill section anchors", check_skill_section_anchors),
     ]
 
     results = []
