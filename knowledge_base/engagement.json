@@ -50,23 +50,23 @@
       "reviewed": false
     },
     "estimate": {
-      "status": "not_started",
-      "version": null,
+      "status": "complete",
+      "version": "1.0",
       "file": "estimate.json",
       "last_updated": "2026-03-16",
       "reviewed": false
     },
     "project_plan": {
-      "status": "not_started",
-      "version": null,
+      "status": "complete",
+      "version": "1.0",
       "file": "project_plan.json",
       "last_updated": "2026-03-16",
       "reviewed": false
     }
   },
   "review_summary": {
-    "total_reviews": 5,
-    "latest_overall_score": 8.2,
+    "total_reviews": 7,
+    "latest_overall_score": 8.4,
     "blocking_findings": 0
   },
   "tags": [

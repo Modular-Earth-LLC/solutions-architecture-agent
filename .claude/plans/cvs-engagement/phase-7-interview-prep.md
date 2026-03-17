@@ -62,6 +62,16 @@ Read ALL completed phase context summaries before executing. This phase has the 
 - Compliance depth: cite specific regulation sections (HIPAA §164.312(a)-(e), DEA 21 CFR 1311.115/120/150, SOC 2 CC6.1/6.2/6.3/7.2) — interviewers test if you know the actual requirements vs. general knowledge
 - 8 open findings demonstrate intellectual honesty: "Here are the gaps I identified and my remediation plan" — better than claiming everything is solved
 
+**Phase 4 Insights for Interview Prep**:
+- Estimation questions: lead with three-point methodology (P10 $8.5M / P50 $11.7M / P90 $16.5M), complexity assessment (9/10), and Kyndryl benchmark ($7.2M average — this engagement is 63% above due to GenAI pipeline + multi-cloud + HIPAA). Frame: "I validate estimates against industry benchmarks. Kyndryl's 2025 survey of 500 modernization projects provides the baseline."
+- Risk management over 18 months: 4 decision gates with specific go/no-go criteria (≥99.9% parallel validation, P95 ≤500ms, escape hatch <20%, adoption >80%). Each gate has measurable thresholds — not subjective assessments.
+- Team composition story: RPG/CL scarcity (avg age ~70 per ASNA, #1 concern at 69% of IBM i shops per Fortra 2026 survey). Frame: "I researched the IBM i talent market specifically — it's the highest-risk staffing constraint. I budgeted 60-90 day lead time and a 20-30% scarcity premium."
+- Change management budget: 15% of program costs (Gartner recommendation), not the 10% industry minimum. Prosci data: 7x more likely to meet objectives with excellent change management (n=2,600). Frame: "Change management isn't a nice-to-have — the data shows a 7x improvement in project success. At 1,000+ pharmacy staff transitioning from 30+ years of green screens, I used Gartner's 15% recommendation."
+- GenAI team composition: ML Lead + 2 ML Engineers + MLOps Engineer = 4 GenAI FTEs. This directly maps to the GenAI DS team Paul would manage. The tiered inference strategy (Gemini for complex PA, MedGemma for routine) demonstrates cost-aware AI leadership.
+- Key numbers: $22.8K/mo GCP infrastructure, $7.5K/mo third-party, 73,840 hours, 30 peak FTE across 19 roles, 39 sprints, 12 milestones, 10 risks, 16-item feature parity checklist
+- Rollback story: each workflow independently reversible via Apigee route rules — configuration change, not code deployment. Target: <15 minutes per workflow. Frame: "I designed every migration step to be reversible in under 15 minutes."
+- Critical path: Partner Interconnect provisioning is the first bottleneck — show you understand that infrastructure provisioning, not software development, gates the timeline start. HA VPN as fallback demonstrates pragmatic risk mitigation.
+
 **Phase 1 Insights for Interview Prep**:
 - HCD interview is Paul's strongest of the three — prepare detailed answers for: "How does your Cognitive Science background inform your design approach?" and "How do you handle resistance from expert users faster on the old system?"
 - Six design principles with cited theories (Hick's Law, Fitts's Law, Dreyfus model, Johnson-Laird, Reason's taxonomy, Miller's Law) provide deep interview content
