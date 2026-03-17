@@ -2,7 +2,7 @@
 
 ## Solution Architecture Document — CVS Health
 
-**Author:** Paul Pham — Modular Earth LLC
+**Author:** Paul Prae — Modular Earth LLC
 **Date:** March 2026
 **Engagement:** eng-2026-001
 
@@ -934,7 +934,7 @@ The AI productivity research that informed this methodology — BCG x Harvard (A
 
 ### Appendix C: About the Author
 
-**Paul Pham** — Solutions Architect, Modular Earth LLC
+**Paul Prae** — Solutions Architect, Modular Earth LLC
 
 15 years building AI and data systems in healthcare, life science, and enterprise technology. BA in Cognitive Science (AI focus) and BS in Computer Science from the University of Georgia.
 

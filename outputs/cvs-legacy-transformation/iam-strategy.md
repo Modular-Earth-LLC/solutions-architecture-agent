@@ -2,7 +2,7 @@
 
 > **Engagement**: eng-2026-001 | CVS Health IBMi Green Screen UI/UX Modernization
 > **Date**: 2026-03-16
-> **Author**: Paul Pham, Solutions Architect — Modular Earth LLC
+> **Author**: Paul Prae, Solutions Architect — Modular Earth LLC
 > **Status**: COMPLETE
 > **Companion Artifact**: `knowledge_base/security_review.json` (STRIDE threat model, compliance mapping, defense-in-depth)
 

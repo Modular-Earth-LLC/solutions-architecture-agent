@@ -1,0 +1,23 @@
+Subject: Solution Architecture — IBMi Green Screen Modernization
+
+
+Hi [Hiring Manager],
+
+Thank you for the opportunity to work through this case study. I genuinely enjoyed it — the problem space sits at the intersection of legacy modernization, healthcare compliance, and AI, which is exactly where I like to operate.
+
+Attached is my solution architecture document. It covers all five key considerations:
+
+  - Legacy System Integration — API-first strangler fig migration
+  - Identity and Access Management — zero trust architecture, defense-in-depth
+  - Human-Centered Design — cognitive science principles, dual-mode interface for expert and new users
+  - Technology Stack — three viable options (GCP, AWS, Modern Cloud) with a GCP recommendation aligned to the Health100 partnership
+  - Change Management — ADKAR framework with concrete adoption techniques
+
+The document also includes a GenAI pipeline concept for prior authorization automation, a high-level roadmap, and a section of questions and assumptions I'd like to discuss with the team.
+
+I'd suggest starting with the Reading Guide on the first page — it maps each section to the key considerations. The Executive Summary is designed to stand on its own if time is short.
+
+Looking forward to the conversation.
+
+Best,
+Paul Prae
