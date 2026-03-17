@@ -55,6 +55,15 @@ Adapt this plan based on findings, corrections, and insights from prior phases. 
 - Dual Run validation costs: doubles compute during validation periods (temporary)
 - HIPAA audit log storage: 6-year retention in Cloud Logging + BigQuery — significant storage cost at CVS scale
 
+**Phase 3 Insights for Estimation & Planning**:
+- Security infrastructure costs per option: GCP (Cloud Armor Enterprise ~$3K/mo, VPC-SC included, Cloud DLP pay-per-scan ~$1-3/GB, Secret Manager $0.06/version/mo), AWS (Shield Advanced $3K/mo, WAF per-rule pricing), Modern Cloud (Cloudflare Enterprise, Supabase Team+HIPAA $599+$350/mo)
+- IAM migration effort: 3 phases over 18 months — Phase 1 SSO Bridge (months 1-6), Phase 2 Identity Consolidation (months 7-12), Phase 3 Full Zero Trust (months 13-18). Requires IBM i-side developer time for journal bridge and IWS modifications.
+- Compliance audit costs: SOC 2 Type II audit $10-25K, penetration testing $15-35K (Paloist reference), DEA EPCS third-party audit every 2 years per §1311.300
+- IGA tool licensing: SailPoint/Saviynt/ConductorOne evaluation needed — budget $50-150K/yr for enterprise IGA
+- 8 open security findings need implementation effort budgeted: IBM i journal bridge (high effort — RPG/CL dev needed), break-glass workflow (medium), EPCS CSP integration (medium), cross-cloud audit bridge (medium), IWS authority audit (medium), DLP custom info types (low), DR drill procedure (low), IGA tool selection (medium)
+- SIEM procurement or integration: Chronicle, Splunk, or existing CVS SIEM — budget for integration if not existing
+- FIDO2 hardware key deployment for ~100K users: $25-50/key for high-privilege roles initially, phased rollout
+
 **Phase 1 Insights for Estimation & Planning**:
 - Change management costs must include: F-key mapping laminated cards, training sandbox environment, champion network setup, monthly NPS surveys, dual-UI maintenance during transition
 - 5 personas with mapped change resistance levels: Claims Processor (HIGH), Clinical Pharmacist (MODERATE), Benefits Analyst (LOW), IT Admin (LOW), New Hire (NONE)

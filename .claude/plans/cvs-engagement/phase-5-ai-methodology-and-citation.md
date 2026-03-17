@@ -265,6 +265,14 @@ After execution completes, save context for future phases:
 - Three options demonstrate Paul can architect for any cloud platform — not locked into one vendor
 - Phase 2 used 15 research queries across 3 tiers + 100+ sources — document the research methodology
 
+**Phase 3 Insights for AI Methodology**:
+- AI security controls should be documented as a key differentiator — OWASP LLM Top 10 alignment, structured output enforcement via Gemini controlled generation, pre/post-inference Cloud DLP blocking gates, ensemble disagreement detection (Gemini vs MedGemma), cryptographic signing of pipeline outputs, HITL mandatory for all PA decisions
+- GenAI pipeline PHI isolation architecture (genai-pipeline@ has zero direct PHI access, dedicated DLP gate service) demonstrates responsible AI governance in healthcare
+- Prompt injection prevention is not just DLP — structured output enforcement (controlled generation with JSON schema) is the primary control; DLP is defense-in-depth
+- RLHF feedback loop access control: only credentialed clinical pharmacists with MFA can submit human feedback labels — all feedback events immutably logged
+- Model evaluation framework uses synthetic clinical data (not real patient records) — addresses both HIPAA and data poisoning concerns simultaneously
+- 69 threats analyzed by 6 parallel STRIDE agents — document the multi-agent security analysis methodology as an example of AI-augmented SA practice
+
 **Phase 1 Insights for AI Methodology**:
 - The GenAI PA recommendation panel wireframe is a strong "show, don't tell" example of human-AI collaboration
 - AI-assisted UX design (research synthesis, persona drafting, journey maps) demonstrates exactly the workflow Paul would bring to the GenAI DS team

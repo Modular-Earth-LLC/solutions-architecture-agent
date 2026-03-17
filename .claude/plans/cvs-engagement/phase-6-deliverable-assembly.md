@@ -24,6 +24,16 @@ The document must:
 - **Executive summary must work as a standalone overview** for the hiring manager to assign interviewers to topics
 - **Each key consideration section must provide sufficient depth** for a 45-minute focused interview
 - Consider adding a **Reading Guide** at the top mapping sections to interview topics
+- Be concise, elegant, and minimalistic.
+- Follow best practices in progressive learning, storytelling, and technical documentation.
+- Be easy for Paul to understand and explain.
+- Speak to a diverse audience across the tech stack and software development life cycle from UX designers to back end engineers.
+
+The document must NOT:
+- Overwhelm the readers.
+- Contain redundancy or uneccesary repetition.
+- Diverge from the asks in the assignment.
+- Cause readers confusion in anyway.
 
 ## Input Dependencies
 
@@ -374,6 +384,7 @@ Before proceeding to Phase 7:
 - [ ] No unsourced technical claims
 - [ ] engagement.json updated with final lifecycle state
 - [ ] KB validation passes
+- [ ] All asks and requirements from `C:\dev\solutions-architecture-agent\.claude\plans\references\solution-architect-case-study-and-interview.md are complete and satisfied`.
 
 ## Context Handoff
 
@@ -400,6 +411,16 @@ After execution completes, save context for future phases:
 - API contracts (10) with specific SLAs provide interview-ready depth for architecture questions
 - Review scores (8.1-8.3/10) indicate solid quality — no major rework needed before assembly
 - Cost comparison table across three options needed in Section 8.3 (flagged in review RF-016)
+
+**Phase 3 Insights for Assembly**:
+- Security review (security_review.json v1.0, 8.2/10 PASS) and IAM strategy document (iam-strategy.md) are dedicated sections to assemble
+- IAM strategy document is designed as a standalone 45-minute interview artifact — include as a dedicated section with cross-references to architecture and compliance
+- STRIDE threat summary table (30 threats, 23 critical, 7 high) should appear in the security section with visual risk heat map
+- Compliance posture dashboard: 21 controls mapped, 14 compliant, 6 partial, 1 pending — present as a compliance readiness matrix
+- 5 Mermaid diagrams from IAM strategy complement the 5 architecture diagrams (10 total)
+- AI security controls section demonstrates dual competency — architect designs infrastructure, GenAI lead designs responsible AI controls
+- 8 open findings should appear in a "Known Gaps and Remediation Plan" section — transparent per guiding principle #36
+- Honesty framing: IAM section opens with "Having operated within enterprise IAM environments..."
 
 **Phase 1 Insights for Assembly**:
 - HCD section is a strength area — 6 design principles with cited cognitive science theories provide depth for the 45-minute interview

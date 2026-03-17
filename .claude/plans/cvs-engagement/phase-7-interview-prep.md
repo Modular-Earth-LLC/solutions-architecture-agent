@@ -52,6 +52,16 @@ Read ALL completed phase context summaries before executing. This phase has the 
 - Key numbers: 12 integration points, 10 API contracts, 13 data entities, 5 Mermaid diagrams, P95 500ms claims latency, 99.9% availability, RTO 15 min, RPO 1 min
 - Modern Cloud option: be prepared to discuss Vercel AI SDK 6 (24+ providers), Supabase RLS, and why this demonstrates forward-thinking architecture. Connect to Paloist production metrics.
 
+**Phase 3 Insights for Interview Prep**:
+- Security/IAM interview is Paul's highest-risk interview (IAM Strategy rated 2.5/5 in honesty map). IAM strategy document includes structured interview answer in Appendix A.
+- Key talking points for IAM question: zero trust (BeyondCorp + NIST 800-207), hybrid RBAC+ABAC (7 roles + 5 attributes), 3-phase migration with rollback, DEA EPCS compliance (21 CFR 1311), GenAI pipeline PHI isolation (genai-pipeline@ has zero PHI access)
+- For "How did you design IAM for three platforms?": compare Cloud Identity Platform vs Cognito vs Supabase Auth across identity, auth, authorization, zero trust, PAM, AI pipeline access, migration, audit. Frame: "I've architected IAM at enterprise scale on AWS and translated those patterns to GCP and Supabase."
+- STRIDE walkthrough: 30 threats across 6 categories, 23 critical. Prepare to walk through 2-3 threats per category with mitigations. Most impactful: T-001 (IBM i authority mapping), T-103 (GenAI recommendation tampering), T-201 (audit silos), T-301 (clinical notes PHI in pipeline), T-401 (DDoS on claims), T-502 (ABAC attribute falsification)
+- AI security is a differentiator: OWASP LLM Top 10, structured output enforcement, DLP blocking gates, ensemble disagreement detection — demonstrates Paul's GenAI expertise applied to security
+- IBM i security knowledge is entirely researched — be transparent: "I researched IBM i security profiles, adopted authority patterns, and journal-based auditing specifically for this engagement. Here's what I found..."
+- Compliance depth: cite specific regulation sections (HIPAA §164.312(a)-(e), DEA 21 CFR 1311.115/120/150, SOC 2 CC6.1/6.2/6.3/7.2) — interviewers test if you know the actual requirements vs. general knowledge
+- 8 open findings demonstrate intellectual honesty: "Here are the gaps I identified and my remediation plan" — better than claiming everything is solved
+
 **Phase 1 Insights for Interview Prep**:
 - HCD interview is Paul's strongest of the three — prepare detailed answers for: "How does your Cognitive Science background inform your design approach?" and "How do you handle resistance from expert users faster on the old system?"
 - Six design principles with cited theories (Hick's Law, Fitts's Law, Dreyfus model, Johnson-Laird, Reason's taxonomy, Miller's Law) provide deep interview content
