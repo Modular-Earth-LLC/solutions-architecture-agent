@@ -6,12 +6,16 @@ This phase assembles all prior work into a single cohesive Markdown document. No
 
 ## Objective
 
+The ultimate goal is to create a document to show Paul is knowledgeable and a good fit for this role. It MUST increase his chances of passing to the next round of interviews.
+
 Assemble all phase outputs into a single, cohesive Solution Architecture Document for CVS Health's Legacy System Transformation. This phase produces:
 1. `outputs/cvs-legacy-transformation/solution-architecture-document.md` — the final deliverable
 2. Quality reviews from 3 review personas
 3. Final GFM formatting validation
 
 The document must:
+- Contain ONLY information that Paul can easily talk and relate to, or at least learn very quickly.
+- Dive deep at the right depth for three 45 minute interviews with lots of talking and questioning.
 - Be a single Markdown file that renders correctly in GitHub
 - Export cleanly to Word (no complex HTML, no embedded images — Mermaid diagrams only)
 - Address all 5 key considerations from the case study
@@ -34,6 +38,8 @@ The document must NOT:
 - Contain redundancy or uneccesary repetition.
 - Diverge from the asks in the assignment.
 - Cause readers confusion in anyway.
+- Not contain any hallucinations.
+- Not make it look like Paul is bullshitting or lying.
 
 ## Input Dependencies
 
@@ -428,6 +434,19 @@ After execution completes, save context for future phases:
 - CVS brand alignment should reference their existing accessibility annotation kit methodology
 - Design principles section should be positioned prominently — Paul's Cognitive Science degree is a genuine differentiator
 - UX design document is comprehensive (65KB) — assembly should distill key elements, not reproduce in full
+
+**Phase 5 Insights for Assembly**:
+- Three Phase 5 output documents ready for embedding:
+  - `outputs/cvs-legacy-transformation/ai-methodology.md` → Section 9 (AI-Assisted Methodology)
+  - `outputs/cvs-legacy-transformation/llm-citations.md` → Appendix D (LLM Attribution)
+  - `outputs/cvs-legacy-transformation/portfolio-narrative.md` → Appendix E (About the Author)
+- The ai-methodology section should be concise in the main document (1-2 pages) with full detail available in appendix
+- The METR nuance (experienced developers 19% slower with AI) is a sophisticated talking point — include in methodology section to demonstrate informed AI practice, not AI cheerleading
+- The dual competency "Integration Point" section from portfolio-narrative.md (three "why" questions: tiered inference, VPC-SC isolation, HITL) demonstrates architect + AI leader thinking simultaneously — consider surfacing key points in the executive summary
+- The experience evidence map (15 verified claims) can serve as the "About the Author" appendix content
+- The 4-tier attribution model (human-authored, human-directed/AI-drafted, human-decided/AI-researched, human-directed/AI-generated) should be referenced in the AI methodology section
+- AI disclosure footer text is ready in llm-citations.md: "Produced with AI assistance (Anthropic Claude via Claude Code). Architecture decisions, experience claims, and quality assessments are the author's."
+- Voice consistency confirmed: all Phase 5 docs use collaborative first-person, empirical citations, warm-but-professional tone
 
 3. **Update master-plan.md** if any structural changes to the engagement
 

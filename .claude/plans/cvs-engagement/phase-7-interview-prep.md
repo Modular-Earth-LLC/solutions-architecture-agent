@@ -79,6 +79,14 @@ Read ALL completed phase context summaries before executing. This phase has the 
 - CVS's 120+ accessibility professionals mean the interviewer likely has deep accessibility knowledge — don't oversimplify WCAG discussion
 - The GenAI PA wireframe demonstrates dual competency — use it in the architecture interview too
 
+**Phase 5 Insights for Interview Prep**:
+- AI methodology is a likely interview topic — prepare Paul to discuss the directive model, METR 2025 findings (19% slower for devs who blindly accept AI), quality process (7 reviews, 8.2/10 avg), and the specific human judgments that shaped the architecture
+- The experience evidence map (15 verified claims in portfolio-narrative.md) provides pre-verified talking points — every claim has a source, so Paul can confidently cite any during interviews
+- Prepare for the curveball: "Did AI write this?" Answer: "I used AI as a research and drafting assistant, documented the methodology transparently in Section 9, and I'm prepared to discuss every technical decision. The attribution appendix shows exactly what AI did and what I did."
+- The METR nuance demonstrates sophistication: "I designed my AI workflow around this evidence — directive, not generative. I define constraints and review output, rather than accepting AI suggestions uncritically."
+- The 4-tier attribution model is itself a demonstration of responsible AI practice — highlight it when discussing how Paul would govern AI usage on the GenAI DS team
+- BCG x Harvard study (12.2% more tasks, 25.1% faster, 40% higher quality with oversight) is the strongest evidence for AI-augmented architecture practice — cite specific numbers
+
 ## Context Files
 
 **Paul's Career Data** (base: `C:\dev\paulprae-com`):
