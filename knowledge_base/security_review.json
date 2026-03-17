@@ -789,10 +789,10 @@
   },
 
   "findings_summary": {
-    "critical": 14,
-    "high": 11,
-    "medium": 4,
-    "low": 1,
+    "critical": 23,
+    "high": 7,
+    "medium": 0,
+    "low": 0,
     "open_items": [
       {
         "id": "F-001",
