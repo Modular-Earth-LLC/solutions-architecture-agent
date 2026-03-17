@@ -133,6 +133,12 @@
         },
         "project_plan": {
           "$ref": "#/$defs/lifecycle_entry"
+        },
+        "proposal": {
+          "$ref": "#/$defs/lifecycle_entry"
+        },
+        "review": {
+          "$ref": "#/$defs/lifecycle_entry"
         }
       },
       "additionalProperties": false
