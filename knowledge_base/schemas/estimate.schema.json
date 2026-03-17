@@ -147,7 +147,12 @@
           "properties": {
             "total": { "type": "number" }
           },
-          "additionalProperties": { "type": "number" }
+          "additionalProperties": {
+            "anyOf": [
+              { "type": "number" },
+              { "type": "string" }
+            ]
+          }
         },
         "infrastructure_first_year": { "type": "number" },
         "third_party_monthly": {
@@ -155,7 +160,12 @@
           "properties": {
             "total": { "type": "number" }
           },
-          "additionalProperties": { "type": "number" }
+          "additionalProperties": {
+            "anyOf": [
+              { "type": "number" },
+              { "type": "string" }
+            ]
+          }
         },
         "total_first_year": { "type": "number" },
         "tco_3_year": {
