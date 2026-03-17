@@ -217,7 +217,7 @@ If WebSearch is unavailable, proceed with KB data and flag market-rate claims fo
   - Legal language in Change Order and Signature sections
   - Client-specific customization and personalization
   - Executive summary tone and strategic framing
-- **Recommended Next Step**: `/review` — Run quality review on the assembled proposal
+- **Recommended Next Step**: `/review outputs/{engagement_id}/proposal.md` — Run final-document review on the assembled output (not individual KB files)
   - After review: human SA reviews, customizes, and delivers to client
 
 **MANDATORY STOP**: Do NOT auto-invoke the next skill. Do NOT interpret "ok" or "looks good" as "run everything." Wait for the human to explicitly name the next action. **The SA owns the output — AI assists, the SA delivers.** Human review is mandatory before sharing any proposal with clients.

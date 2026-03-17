@@ -32,14 +32,30 @@ This skill supports three depth tiers. Default is STANDARD. Accept `--depth QUIC
 
 **QUICK mode**: Execute Step 1 only (single iteration). Skip Steps 2-4. No sub-agent invocations.
 
+## 1.6 REVIEW MODES
+
+This skill supports three review modes based on the target:
+
+| Mode | Target | Behavior |
+|------|--------|----------|
+| **Single-file** | A KB file (e.g., `architecture.json`) | Current default. Full schema + content review of one KB file. |
+| **Final-document** | An output file in `outputs/` (e.g., `outputs/engagement/proposal.md`) | Review assembled output document. Single pass, no WA agents. Evaluate coherence, audience-appropriateness, length compliance, factual consistency. |
+| **Batch** | `--batch` flag or no target specified | Quick pass on all KB files with status `complete`. Aggregate scores, flag worst-scoring file. |
+
+Mode is auto-detected from the target path:
+- Path starts with `outputs/` → **final-document** mode
+- Path ends with `.json` in `knowledge_base/` → **single-file** mode
+- `--batch` in `$ARGUMENTS` → **batch** mode
+
 ## 2. PREREQUISITES
 
 Validate before proceeding:
-- At least one KB file with status `draft`, `in_progress`, or `complete`
-  - If no KB files exist → suggest running a skill first to produce deliverables, OR accept content to review directly via `$ARGUMENTS`
+- At least one KB file with status `draft`, `in_progress`, or `complete`, OR an output file in `outputs/`
+  - If no KB files or outputs exist → suggest running a skill first to produce deliverables, OR accept content to review directly via `$ARGUMENTS`
 
 Target selection from `$ARGUMENTS[0]`:
-- If specified: review that specific KB file (e.g., "architecture.json", "requirements.json")
+- If specified: review that specific file (KB file or output file)
+- If `--batch`: review all complete KB files in aggregate
 - If not specified: ask the user which deliverable to review, showing current KB status
 
 ## 3. CONTEXT LOADING
