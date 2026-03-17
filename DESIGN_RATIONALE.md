@@ -89,6 +89,33 @@ Three personas drive skill design and user story coverage:
 
 ---
 
+## Decision 7: Depth Tiers (v1.1)
+
+**Problem**: The CVS IBMi case study exposed that a ~10-page interview assignment took 13 hours across 8 phases, producing 5,919 lines of KB JSON that had to be manually condensed to 284 lines. All 9 skills produced maximum-depth output regardless of context.
+
+**Decision**: Add three depth tiers (QUICK/STANDARD/COMPREHENSIVE) to all skills. QUICK mode skips KB file production entirely, writes output directly to the final deliverable, and invokes zero sub-agents.
+
+**Research basis**:
+- Constrained output improves quality (arXiv 2407.19825): shorter output scored higher accuracy (36%→41%)
+- Word budgets per section (arXiv 2508.13805): 95% length compliance vs <30% with vague instructions
+- STRIDE complexity scoring (IBM/NeurIPS 2025): route tasks by complexity — 92% accuracy, 37% cost savings
+
+**Impact**: Eliminates 12-18 parallel sub-agent invocations and 5,000+ lines of KB JSON for QUICK engagements. Target: under 1 hour for equivalent quality to the 13-hour CVS engagement.
+
+## Decision 8: Deliverable-First Mode (v1.1)
+
+**Problem**: Skills optimized for their own KB output, not the final document. The agent treated every task as a full consulting engagement, even when the user needed a single document.
+
+**Decision**: Add deliverable-first dispatch that works backward from the desired output. When a user specifies a target deliverable (format, length, audience), the agent routes to Direct Delivery or Custom Document flow, sets QUICK depth, and uses skeleton-of-thought generation (outline first, expand after approval).
+
+**Research basis**:
+- Skeleton-of-thought (ICLR 2024): generate outline first, expand after approval — 2x speed, equal quality
+- Progressive disclosure (Anthropic): load only metadata at discovery, task-specific context on demand
+
+**Impact**: Three new canonical flows (Direct Delivery, Rapid Assessment, Custom Document) for fast turnaround without sacrificing quality.
+
+---
+
 ## Known Limitations
 
 **LLM-as-judge circularity**: The `/review` skill uses the same LLM that generated deliverables to evaluate them. This is a known limitation in AI evaluation — the model may be blind to its own systematic biases. Mitigations: (1) the 3-iteration review protocol with adversarial "Tester" persona reduces single-pass blindness, (2) structured scoring rubrics (5 dimensions, 0-10) constrain subjective drift, (3) human review is mandatory before any client-facing deliverable (Guiding Principle 42). Future work: calibrate LLM review scores against human expert assessments to measure correlation and identify systematic gaps.
@@ -110,3 +137,5 @@ Intentional scope deferrals for future versions — disciplined scope management
 4. **Sprint methodology rigidity**: The consulting delivery model mandates 2-week sprints. Should `/project-plan` support alternative sprint durations (1-week, 3-week) for different client contexts?
 
 5. **Estimation currency**: Currently hardcoded to USD. Should `/estimate` support multi-currency output?
+
+6. **system_config.json cleanup**: The `self_improvement_framework` and `validation_framework` sections reference defunct multi-agent architecture (`optimization_agent`, `prompt_engineering_agent`). These sections are harmless but confusing. Clean up when the READ-ONLY constraint on `system_config.json` is revisited (requires schema update and re-validation).

@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-03-17
+
+### Added
+- **Depth tiers**: QUICK/STANDARD/COMPREHENSIVE depth control in all 9 skills
+- **Scope negotiation**: mandatory step in dispatch — asks deliverable, audience, length, time budget, user context
+- **3 new canonical flows**: Direct Delivery, Rapid Assessment, Custom Document
+- **Deliverable-first mode**: routes single-document requests to QUICK depth automatically
+- **Skeleton-first generation**: `/proposal --type custom` generates outline, waits for approval, then expands
+- **Review modes**: single-file, final-document (for outputs/), batch (--batch)
+- **Output templates**: single-document-template.md, presentation-template.md
+- **QUICK example**: examples/quick-assessment/ with minimal engagement + output
+- 2 new test scripts: test_workflow_validation.py (8 checks), test_output_quality.py (5 checks)
+- `engagement_depth` and per-lifecycle `depth` fields in engagement schema
+
+### Changed
+- **MANDATORY STOP** in all 9 skill completion sections — no auto-invocation of next skill
+- Sub-agent invocations are now conditional on depth tier (QUICK skips all sub-agents)
+- Per-tier output length constraints in all 9 skills
+- `/proposal` now suggests final-document review of assembled output
+- Prerequisite validation checks `reviewed` field before proceeding (STANDARD/COMPREHENSIVE)
+- Version bumped to 1.1.0 across plugin.json and .repo-metadata.json
+
+### Research Basis
+- Skeleton-of-thought (ICLR 2024): 2x speed, equal quality
+- Word budgets (arXiv 2508.13805): 95% length compliance
+- Constrained output (arXiv 2407.19825): higher accuracy with shorter output
+- STRIDE complexity scoring (IBM/NeurIPS 2025): 37% cost savings via task routing
+
 ## [1.0.0] - 2026-03-16
 
 ### Added

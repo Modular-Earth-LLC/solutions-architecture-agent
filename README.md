@@ -8,7 +8,7 @@ A Claude Code plugin covering the **solutions architecture lifecycle**: requirem
 
 **Who this is for**: Solutions Architects, Consultants, Enterprise Architects, Technical Pre-Sales, and Engineering Managers who need consistent, high-quality deliverables.
 
-**Version**: 1.0.0 | **Owner**: [Modular Earth LLC](https://github.com/Modular-Earth-LLC) | **Validated**: 9-skill end-to-end against a HIPAA-compliant healthcare IBMi migration (500+ users). [See example outputs](examples/healthcare-ibmi-migration/) | [Changelog](CHANGELOG.md)
+**Version**: 1.1.0 | **Owner**: [Modular Earth LLC](https://github.com/Modular-Earth-LLC) | **Validated**: 9-skill end-to-end against a HIPAA-compliant healthcare IBMi migration (500+ users). [See example outputs](examples/healthcare-ibmi-migration/) | [Changelog](CHANGELOG.md)
 
 ---
 
@@ -65,6 +65,21 @@ Claude loads `CLAUDE.md` and `.claude/rules/` automatically. Skills appear as `s
 | **Streamlined** | req → arch → est → pro | Small projects, time-constrained |
 | **Assessment** | req → arch → [sr] → pro | Discovery-only, pre-commitment |
 | **Quick Qualify** | req (quick tier) | Pipeline qualification |
+| **Direct Delivery** | scope negotiation → single skill (QUICK) → output | Single-document tasks, interview prep |
+| **Rapid Assessment** | req (QUICK) → arch (QUICK) → pro (QUICK) | Same-day turnaround |
+| **Custom Document** | scope negotiation → selective skills (QUICK) → assembly | User-specified format |
+
+### Depth Tiers
+
+Every skill supports three depth tiers:
+
+| Tier | Behavior | KB Files | Sub-Agents |
+|------|----------|----------|------------|
+| **QUICK** | Minimal output, no KB writes, inline analysis only | None | None |
+| **STANDARD** | Full workflow (default) | Yes | Yes |
+| **COMPREHENSIVE** | Extended analysis, multi-cloud comparison | Yes | Yes |
+
+Use `--depth QUICK` for fast single-document delivery, or let scope negotiation determine the tier automatically.
 
 Natural language also works — describe your project and the agent classifies intent and routes to the right skill.
 
@@ -154,11 +169,11 @@ solutions-architecture-agent/
 
 ## Status
 
-**v1.0.0** — Validated end-to-end in Phase 7 against a healthcare IBMi modernization case study (migration flow, HIPAA compliance, 500+ users).
+**v1.1.0** — Speed, quality, and scope control overhaul. Adds depth tiers (QUICK/STANDARD/COMPREHENSIVE), deliverable-first mode, skeleton-first generation, mandatory human checkpoints, and review modes.
 
-- 11/11 schema validations PASS
-- 5/5 consistency checks PASS
-- 4 deliverable reviews >= 7.5/10
+- 32/32 automated checks PASS (19 existing + 13 new)
+- 3 new canonical flows (Direct Delivery, Rapid Assessment, Custom Document)
+- QUICK mode: zero KB files, zero sub-agents, <100 line output
 
 ---
 

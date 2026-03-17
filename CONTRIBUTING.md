@@ -117,6 +117,10 @@ For a complete canonical example, see [skills/requirements/SKILL.md](skills/requ
 - Use bracket syntax `$ARGUMENTS[0]` (not dot syntax `$ARGUMENTS.0`)
 - Prerequisites must be advisory, not blocking — always offer `$ARGUMENTS` as alternative
 - `allowed-tools` follows least privilege — only tools the skill needs
+- **Include a `## 1.5 DEPTH CONTROL` section** with QUICK/STANDARD/COMPREHENSIVE tiers (see any existing skill for pattern)
+- **Include `MANDATORY STOP`** in Section 7 (completion) — skills must never auto-invoke the next skill
+- **Include output length constraints** in Section 5 per depth tier
+- If the skill uses sub-agents, make invocation conditional on depth tier (skip for QUICK)
 
 ### Step 2: Envelope Fields (Required)
 
@@ -234,7 +238,7 @@ Sub-agents receive a focused prompt + relevant KB context and return structured 
 All test scripts, runnable from the project root:
 
 ```bash
-# Core validation (7 scripts — run before every commit)
+# Core validation (9 scripts — run before every commit)
 python tests/validate_knowledge_base.py    # Schema compliance (Draft 2020-12)
 python tests/validate_consistency.py       # Metadata sync, DAG integrity, ID uniqueness
 python tests/test_plugin_structure.py      # Plugin packaging, frontmatter, section anchors
@@ -242,6 +246,8 @@ python tests/test_engagement_flow.py       # Canonical flow DAG, lifecycle cover
 python tests/test_skill_independence.py    # Advisory prereqs, standalone invocation
 python tests/validate_well_architected.py  # Multi-cloud WA pillar coverage
 python tests/test_end_to_end_example.py    # Example engagement schema + integration
+python tests/test_workflow_validation.py   # v1.1: depth tiers, checkpoints, new flows
+python tests/test_output_quality.py        # v1.1: name checks, length limits, templates
 
 # Optional (requires `pip install requests`)
 python tests/validate_urls.py              # External link health check

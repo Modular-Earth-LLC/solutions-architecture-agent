@@ -1,6 +1,6 @@
 # System Architecture
 
-**Version**: 1.0.0 | **Pattern**: Single agent with skills + sub-agents (see `.repo-metadata.json` for counts) | **Platform**: Claude Code plugin
+**Version**: 1.1.0 | **Pattern**: Single agent with skills + sub-agents (see `.repo-metadata.json` for counts) | **Platform**: Claude Code plugin
 
 ---
 
@@ -100,9 +100,10 @@ sequenceDiagram
 When a user message arrives, `CLAUDE.md` dispatch rules:
 1. **Slash command** → direct skill invocation
 2. **Natural language** → classify across 5 dimensions (objective, domain, phase, target skill, context needed)
-3. **Validate prerequisites** → check `engagement.json` lifecycle_state for required upstream KB files
-4. **Invoke skill** → load SKILL.md, read upstream KB, execute
-5. **Human checkpoint** → summarize output, list deliverables, suggest next skill
+3. **Scope negotiation** → establish deliverable, audience, length, time budget → map to depth tier (QUICK/STANDARD/COMPREHENSIVE)
+4. **Validate prerequisites** → check `engagement.json` lifecycle_state (skip for QUICK depth)
+5. **Invoke skill** with depth tier → load SKILL.md, read upstream KB (STANDARD/COMPREHENSIVE) or skip (QUICK), execute
+6. **MANDATORY STOP** → summarize output, list deliverables, wait for explicit human approval before next skill
 
 ---
 
@@ -238,11 +239,13 @@ Two sub-agents in `agents/`:
 
 Sub-agents are invoked via the Claude Code Agent tool, receive focused prompts with relevant KB context, and return structured JSON that the parent skill incorporates into its output file.
 
+**Depth-conditional**: Sub-agents are only invoked for STANDARD and COMPREHENSIVE depth tiers. QUICK depth performs inline scoring without sub-agents, eliminating 12-18 parallel invocations.
+
 ---
 
 ## Engagement Lifecycle
 
-Five canonical flows support different engagement types:
+Eight canonical flows support different engagement types and depth tiers:
 
 | Flow | Sequence | When |
 |------|----------|------|
@@ -251,6 +254,9 @@ Five canonical flows support different engagement types:
 | **Streamlined** | req → arch → est → pro | Small projects, time-constrained |
 | **Assessment** | req → arch → [sr] → pro | Discovery-only, pre-commitment |
 | **Quick Qualify** | req (quick tier) | Pipeline qualification |
+| **Direct Delivery** | scope negotiation → single skill (QUICK) → output | Single-document tasks, interview prep |
+| **Rapid Assessment** | req (QUICK) → arch (QUICK) → pro (QUICK) | Same-day turnaround |
+| **Custom Document** | scope negotiation → selective skills (QUICK) → assembly | User-specified format and sections |
 
 ### Phase-Skip Rules
 
