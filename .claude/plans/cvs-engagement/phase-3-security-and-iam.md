@@ -36,6 +36,22 @@ Adapt this plan based on findings, corrections, and insights from prior phases. 
 - Phase 1's accessibility requirements — auth flows must be accessible
 - Any assumption corrections from prior phases
 
+**Phase 2 Insights for Security & IAM**:
+- Architecture uses Cloud Identity Platform with SAML 2.0/OIDC federation to CVS enterprise IdP (AD/Okta)
+- 23 PHI/PII fields inventoried in data_model.json — use for STRIDE information disclosure analysis
+- VPC Service Controls perimeter defined around all HIPAA-regulated services
+- Partner Interconnect + HA VPN (<5ms encryption overhead) for IBMi connectivity — attack surface for STRIDE
+- GenAI pipeline has dedicated service account (genai-pipeline@) with least-privilege — no raw PHI access
+- CDC pipeline (Precisely Connect) reads IBM i journals — journal receiver access permissions need review
+- Apigee X handles OAuth 2.0 token validation, rate limiting — API gateway security posture
+- Cloud DLP for PHI detection before GenAI model inference — de-identification pipeline
+- HIPAA retention: 6 years for audit logs, 7 years for claims (state pharmacy board requirements)
+- CMEK with separate key rings per data classification (PHI vs operational vs AI artifacts)
+- Three architecture options (GCP/AWS/Modern Cloud) — security review should focus on recommended GCP option but note security trade-offs across options
+- Hybrid RBAC + ABAC model described conceptually — Phase 3 should design specific role-to-entity access matrix
+- Cross-cloud auth needed: GCP ↔ Azure myPBM (review finding RF-010)
+- WCAG 2.2 AA 3.3.8: accessible authentication (no CAPTCHAs) — impacts login flow security controls
+
 **Phase 1 Insights for Security & IAM**:
 - WCAG 2.2 AA 3.3.8 (Accessible Authentication): login flow must not require cognitive function tests (CAPTCHAs)
 - IT Administrator persona (Raj Patel) needs unified IAM dashboard showing both IBMi + cloud user profiles during transition

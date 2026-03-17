@@ -255,6 +255,16 @@ After execution completes, save context for future phases:
    - Dual competency framing for Phase 7 (interview prep needs this narrative)
    - Specific things Paul said during methodology review that affect interview prep
 
+**Phase 2 Insights for AI Methodology**:
+- GenAI pipeline architecture (C-006, C-007 in architecture.json) demonstrates dual competency: architect designs the system, GenAI DS team leader designs the ML pipeline
+- Tiered inference pattern (Gemini for complex PA, MedGemma for routine) mirrors Paul's Paloist three-tier AI pipeline — directly cite this connection
+- Vercel AI SDK 6 model-agnostic approach (Option C) mirrors paulprae.com architecture — show Paul's consistent architectural philosophy
+- Evaluation framework (correctness, safety, groundedness, consistency) maps to GenAI DS JD responsibilities: "Implement evaluation approaches to measure correctness, consistency, and safety"
+- HITL mandatory for all clinical decisions — human-centered AI principle (guiding principle #1: augment humans over replacing)
+- Healthcare NLP API deprecating May 2026 — shows Paul's research rigor in identifying platform risks before they become problems
+- Three options demonstrate Paul can architect for any cloud platform — not locked into one vendor
+- Phase 2 used 15 research queries across 3 tiers + 100+ sources — document the research methodology
+
 **Phase 1 Insights for AI Methodology**:
 - The GenAI PA recommendation panel wireframe is a strong "show, don't tell" example of human-AI collaboration
 - AI-assisted UX design (research synthesis, persona drafting, journey maps) demonstrates exactly the workflow Paul would bring to the GenAI DS team

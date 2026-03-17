@@ -388,6 +388,19 @@ After execution completes, save context for future phases:
    - Any areas that were flagged during review that Paul should be prepared to defend
    - Voice and framing decisions that affect how Paul presents
 
+**Phase 2 Insights for Assembly**:
+- 5 Mermaid diagrams ready: system context, deployment view, data flow, GenAI pipeline, strangler fig migration
+- Three-option analysis (GCP/AWS/Modern Cloud) maps directly to interview expectation #4: "explore and present multiple options"
+- Each option has cited vendor reference architectures (AWS Healthcare Industry Lens, GCP Dual Run docs, Vercel HIPAA guide, Supabase Healthcare Solutions)
+- Architecture sections are self-contained for interview topic assignment (per Phase 6 document structure)
+- GenAI pipeline diagram (C-006, C-007) shows confidence-based routing, HITL, evaluation framework — visual proof of dual competency
+- WA scores (overall 7.7) with per-pillar notes — embed in Section 4.7 of deliverable
+- Key trade-off to highlight: GCP recommended for CVS partnership alignment, but AWS is technically strongest (HealthLake + Comprehend Medical), and Modern Cloud is fastest to deliver
+- 13 data entities with PBM domain ontology — include simplified ER diagram in Section 4.5
+- API contracts (10) with specific SLAs provide interview-ready depth for architecture questions
+- Review scores (8.1-8.3/10) indicate solid quality — no major rework needed before assembly
+- Cost comparison table across three options needed in Section 8.3 (flagged in review RF-016)
+
 **Phase 1 Insights for Assembly**:
 - HCD section is a strength area — 6 design principles with cited cognitive science theories provide depth for the 45-minute interview
 - Wireframe descriptions for Claims Adjudication Dashboard and PA Workflow show concrete thinking, not just abstract principles

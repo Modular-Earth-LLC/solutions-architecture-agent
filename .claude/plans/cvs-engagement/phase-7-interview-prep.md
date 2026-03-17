@@ -40,6 +40,18 @@ Read ALL completed phase context summaries before executing. This phase has the 
 - Understand which decisions Paul made vs. which were AI-suggested
 - Map every technology and pattern to Paul's ability to discuss it
 
+**Phase 2 Insights for Interview Prep**:
+- Three options map to Paul's experience: GCP (researched, translate from AWS), AWS (3 years Enterprise SA — deepest expertise, can speak from experience), Modern Cloud (Paloist + paulprae.com — Paul's own production systems)
+- For architecture interview: prepare to defend GCP recommendation given Paul's AWS background. Frame: "I architect for the client's platform, not my preferred platform. Here's how my AWS patterns translate to GCP."
+- For GenAI pipeline questions: reference Arine autonomous pharmacist agent as directly analogous to PA recommendation engine
+- IWS 3.0 deep dive: know Jakarta EE foundation, PCML, YAJL for JSON, 20% perf improvement, OpenAPI UI. Paul has zero IBMi hands-on — be transparent, frame through API layer patterns
+- CDC question prep: "Why not Debezium?" — it has maturity limitations for IBM i (no CLOB/XML, minimum 1GB memory, limited DDL support). Precisely is production-proven (AWS Mainframe Modernization partnership validates)
+- Healthcare NLP API deprecation (May 2026): shows research rigor — prepare as a "what I discovered during analysis" talking point
+- Dual Run preview status: prepare fallback answer (custom shadow traffic via Apigee + BigQuery comparison)
+- WA scores (overall 7.7): be prepared to discuss why performance (7) and cost (7) are lower — honest about IWS throughput uncertainty and Apigee subscription cost
+- Key numbers: 12 integration points, 10 API contracts, 13 data entities, 5 Mermaid diagrams, P95 500ms claims latency, 99.9% availability, RTO 15 min, RPO 1 min
+- Modern Cloud option: be prepared to discuss Vercel AI SDK 6 (24+ providers), Supabase RLS, and why this demonstrates forward-thinking architecture. Connect to Paloist production metrics.
+
 **Phase 1 Insights for Interview Prep**:
 - HCD interview is Paul's strongest of the three — prepare detailed answers for: "How does your Cognitive Science background inform your design approach?" and "How do you handle resistance from expert users faster on the old system?"
 - Six design principles with cited theories (Hick's Law, Fitts's Law, Dreyfus model, Johnson-Laird, Reason's taxonomy, Miller's Law) provide deep interview content

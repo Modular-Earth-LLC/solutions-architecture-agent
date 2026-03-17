@@ -42,6 +42,19 @@ Adapt this plan based on findings, corrections, and insights from prior phases. 
 - Phase 0's change management research (Cluster 6)
 - Any assumption corrections from prior phases
 
+**Phase 2 Insights for Estimation & Planning**:
+- Three architecture options need cost comparison: GCP (Apigee Enterprise ~$100K/yr, Partner Interconnect ~$600-1,500/mo, Cloud Run, Vertex AI), AWS (API Gateway pay-per-request, Direct Connect, HealthLake $0.27/hr, Bedrock), Modern Cloud (Vercel Pro+HIPAA $370/mo, Supabase Team+HIPAA ~$950/mo)
+- CDC tooling: Precisely Connect or Striim licensing needed on all platforms — neither DMS nor Datastream support Db2 for i
+- Strangler fig migration phases: Phase 1 (member eligibility, 8 weeks), Phase 2 (claims, 16 weeks), Phase 3 (formulary+PA+GenAI, 12 weeks), Phase 4 (remaining+Health100, 12 weeks) = ~48 weeks total
+- Team needs: RPG/CL developers (scarce — avg age 50+) for IWS API layer, React+TypeScript for frontend, Python for GenAI pipeline, platform engineers for multi-cloud
+- GenAI pipeline costs: Vertex AI inference (Gemini for complex, MedGemma for routine — tiered inference reduces per-call cost), Vertex AI Pipelines for batch processing
+- Cloud Run: ~$8/mo per min-instance for cold-start mitigation, auto-scaling 0-100
+- BigQuery: serverless (start on-demand, evaluate flat-rate if >$10K/mo)
+- Partner Interconnect: 1-2 Gbps via carrier CVS already uses (~$600-1,500/mo including HA VPN overlay)
+- Estimated row counts from review finding RF-017: members ~50M, claims ~500M/yr, pharmacies ~70K, drug_products ~200K, formulary_entries ~1M
+- Dual Run validation costs: doubles compute during validation periods (temporary)
+- HIPAA audit log storage: 6-year retention in Cloud Logging + BigQuery — significant storage cost at CVS scale
+
 **Phase 1 Insights for Estimation & Planning**:
 - Change management costs must include: F-key mapping laminated cards, training sandbox environment, champion network setup, monthly NPS surveys, dual-UI maintenance during transition
 - 5 personas with mapped change resistance levels: Claims Processor (HIGH), Clinical Pharmacist (MODERATE), Benefits Analyst (LOW), IT Admin (LOW), New Hire (NONE)
