@@ -132,7 +132,7 @@ The document structure maps to the 5 key considerations plus supporting sections
 # Legacy System Transformation: IBMi Green Screen Modernization
 ## Solution Architecture Document — CVS Health
 
-**Author**: Paul Pham
+**Author**: Paul Prae
 **Date**: [date]
 **Version**: 1.0
 

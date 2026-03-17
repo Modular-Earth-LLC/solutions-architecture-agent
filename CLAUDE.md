@@ -50,7 +50,8 @@ When a user message arrives:
    - Who is the audience? (client exec, technical team, internal review, interview panel)
    - Target length? (pages or line count)
    - Time budget? (quick turnaround vs. thorough engagement)
-   - Do you have a personal profile or career context to load? (file path, URL, or paste summary — used for voice/honesty calibration; if not, proceed with generic professional voice)
+   - Do you have source materials to load? (check `inputs/` directory, or provide file path, URL, or paste summary)
+   - Do you have a personal profile or career context? (for voice/honesty calibration; if not, proceed with generic professional voice)
    - Map answers to depth tier: **QUICK** | **STANDARD** | **COMPREHENSIVE**
    - Accept explicit `--depth QUICK|STANDARD|COMPREHENSIVE` flag to skip questions
    - If task maps to a single document → route to **Direct Delivery** flow

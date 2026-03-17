@@ -96,7 +96,6 @@ docs/_build/
 knowledge_base/*.json
 !knowledge_base/system_config.json
 
-# Reference materials (may contain proprietary content)
-.claude/plans/references/**
-!.claude/plans/references/.gitkeep
-!.claude/plans/references/README.md
+# Input materials (client data, assignments — may contain PII/NDA content)
+inputs/*
+!inputs/README.md
