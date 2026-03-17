@@ -5,9 +5,11 @@
 
 ## Key Findings
 
-- **METR 2025 study is a critical nuance**: Experienced developers were 19% slower with AI coding assistants on familiar codebases. This finding strengthens the directive model used in this engagement — AI works when humans direct the work, not when they blindly accept suggestions.
-- **BCG x Harvard 2023 study provides the strongest evidence**: 12.2% more tasks, 25.1% faster, 40% higher quality — when AI is used within its capability frontier with human oversight. Directly validates this engagement's methodology.
-- **Faros AI's analysis confirms task-type dependency**: AI gains are concentrated in structured generation, research synthesis, and boilerplate — exactly the tasks delegated to AI in this engagement. Architecture decisions and quality judgment show no AI acceleration.
+- **METR RCT (July 2025, arXiv:2507.09089)**: 16 experienced devs, 246 real tasks — AI users were 19% slower. Follow-up (Feb 2026): devs refused to work without AI, collapsing the control group. Strengthens the directive model — AI works when humans direct, not when they blindly accept.
+- **BCG x Harvard (2025, Organization Science)**: 758 BCG consultants — 12.2% more tasks, 25.1% faster, >40% higher quality within AI's capability frontier. Outside frontier: 19% less likely correct. "Centaur" (divide by capability) > "Cyborg" (fully integrated). This engagement follows Centaur model.
+- **Faros AI (2025, 10K+ devs, 1,255 teams)**: 21% more tasks completed, 98% more PRs merged — but 9% more bugs, 154% larger PRs, 91% longer reviews. No correlation to company-level velocity. The "AI Productivity Paradox" — individual gains neutralized by downstream bottlenecks.
+- **McKinsey State of AI (Nov 2025)**: 88% adoption, but only 39% report EBIT impact. <5% of EBIT attributable to AI. High performers 3x more likely to scale AI agents.
+- **LLM citation standards still emerging**: IEEE requires Acknowledgments disclosure; ACM prohibits AI authorship; ISO/IEC 42001 requires transparency documentation; NIST AI RMF requires model provenance. No Big 4/MBB firm uses standardized in-document AI citation. This framework goes further with per-section attribution.
 - **The engagement itself is the strongest AI methodology evidence**: 7 reviews averaging 8.2/10, 54 sources in Phase 0, 30 STRIDE threats, $11.7M three-point estimate — all produced through directive human-AI collaboration with measurable quality outcomes.
 - **LLM citation standards are still emerging**: No single industry standard exists for AI attribution in professional deliverables. The citation framework produced (4-tier attribution: human-authored, human-directed, human-decided, human-directed/AI-generated) provides a practical model.
 
