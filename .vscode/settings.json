@@ -1,4 +1,6 @@
 {
+  "markdown.preview.mermaid": true,
+  "markdown.preview.security.level": "allowScriptsAndAllContent",
   "editor.inlineSuggest.enabled": true,
   "editor.suggestSelection": "first",
   "editor.quickSuggestions": {
