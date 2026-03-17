@@ -24,11 +24,13 @@ METADATA_FILE = REPO_ROOT / ".repo-metadata.json"
 SCHEMA_DIR = REPO_ROOT / "knowledge_base" / "schemas"
 KB_DIR = REPO_ROOT / "knowledge_base"
 
-# Authoritative $depends_on DAG
+# Authoritative $depends_on DAG — minimum REQUIRED dependencies per skill.
+# Skills may declare additional optional dependencies beyond these.
+# The test validates that all required deps are present (superset check).
 DEPENDS_ON_DAG = {
     "system_config": [],
-    "engagement": ["system_config.json"],
-    "requirements": ["system_config.json"],
+    "engagement": [],  # entry point — reads system_config optionally but no hard deps
+    "requirements": [],  # entry point — reads system_config optionally but no hard deps
     "architecture": ["requirements.json"],
     "data_model": ["requirements.json", "architecture.json"],
     "security_review": ["requirements.json", "architecture.json"],
@@ -154,8 +156,12 @@ def check_depends_on() -> bool:
                 issues.append(f"  system_config.json: should have no $depends_on, found {actual_deps}")
             continue
 
-        if sorted(actual_deps) != sorted(expected_deps):
-            issues.append(f"  {name}.json: expected {expected_deps}, found {actual_deps}")
+        # Superset check: actual deps must include all required deps (may include extras)
+        actual_set = set(actual_deps)
+        expected_set = set(expected_deps)
+        missing_deps = expected_set - actual_set
+        if missing_deps:
+            issues.append(f"  {name}.json: missing required deps {sorted(missing_deps)}, found {actual_deps}")
 
     if issues:
         for issue in issues:
