@@ -70,6 +70,18 @@ Work through each section, adapting depth to the selected tier:
 
 **2f. Vision & Success** — What does success look like? Measurable KPIs, timeline expectations, must-have vs. nice-to-have outcomes.
 
+**2g. GenAI Component Quality** *(Conditional — trigger when problem involves image, content, audio, or video generation)*
+
+When the solution requires AI-generated media, probe before architecture begins:
+1. **Quality tier**: "What is the minimum acceptable output quality — photorealistic product photography, commercial-grade illustration, or schematic/draft quality?"
+2. **Text rendering**: "Does the generated output need to contain specific readable text — e.g., product names, labels, regulatory copy, or call-to-action text?"
+3. **Quality vs. cost priority**: "Is it more important to minimize per-image cost, or to maximize output quality? Or is a tiered approach acceptable — cheap for iteration, premium for final renders?"
+4. **Provider constraints**: "Are you limited to AWS-native models only, or can we use any model available through Amazon Bedrock, including Stability AI or other third-party providers?"
+5. **Region preference**: "Do you have an AWS region preference? Note: some Bedrock models (e.g., Stability AI SD3.5 Large) are only available in us-west-2 or via cross-region inference."
+6. **Volume and budget**: "How many images per run and per month? What is the acceptable per-image cost ceiling?"
+
+Capture answers in `non_functional_requirements.ai_model_requirements`. If discovery is from notes/context, infer answers and flag for human verification.
+
 For Quick tier: Cover 2a-2b in depth, 2c-2f at summary level.
 For Standard tier: All sections at moderate depth.
 For Comprehensive tier: All sections in full depth with follow-up probing.
@@ -151,7 +163,7 @@ Write to `knowledge_base/requirements.json`:
 - `ai_suitability_assessment`: Score, classification (HIGH/MEDIUM/LOW), rationale, savings estimate
 - `pain_points`: Classified list from Step 4
 - `functional_requirements`: Extracted and prioritized list
-- `non_functional_requirements`: Security, performance, compliance, data residency
+- `non_functional_requirements`: Security, performance, compliance, data residency, and `ai_model_requirements` (when GenAI generation is in scope — quality tier, text rendering flag, cost priority, provider constraints, region preference)
 - `data_landscape`: Sources, integration points, volumes
 - `constraints`: Budget, timeline, technology, team
 - `success_criteria`: Measurable KPIs
