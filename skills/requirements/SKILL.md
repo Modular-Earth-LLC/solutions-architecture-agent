@@ -193,4 +193,4 @@ Present the human checkpoint:
   - For migration engagements: `/integration-plan` first, then `/architecture`
   - For quick qualify: Review AI suitability score and decide whether to proceed to standard discovery
 
-**Human review is mandatory before sharing requirements with clients.** Ready to proceed, or review first?
+**MANDATORY STOP**: Do NOT auto-invoke the next skill. Do NOT interpret "ok" or "looks good" as "run everything." Wait for the human to explicitly name the next action (e.g., "run /architecture" or "proceed to architecture"). Human review is mandatory before sharing requirements with clients.

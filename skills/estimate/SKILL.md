@@ -197,4 +197,4 @@ If WebSearch is unavailable, proceed with general ranges and flag all pricing fo
   - Team composition alignment with client's hiring timeline
 - **Recommended Next Step**: `/project-plan` — Convert estimates into phased delivery roadmap with sprints and milestones
 
-**Human review is mandatory before sharing estimates with clients.** Ready to proceed, or review first?
+**MANDATORY STOP**: Do NOT auto-invoke the next skill. Do NOT interpret "ok" or "looks good" as "run everything." Wait for the human to explicitly name the next action. Human review is mandatory before sharing estimates with clients.

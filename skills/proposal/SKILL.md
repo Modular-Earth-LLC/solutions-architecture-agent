@@ -103,6 +103,7 @@ If not specified via `$ARGUMENTS[0]`, ask the user:
 - **Implementation**: Full SOW, $25K-$500K+, detailed phases
 - **Internal**: Executive leadership deck, budget approval
 - **Pitch**: External prospect presentation, pre-contract
+- **Custom**: User-specified format, sections, and length (see Step 8)
 
 ### Step 2: Discovery Proposal Assembly
 
@@ -163,6 +164,18 @@ If requested or relevant, use WebSearch to:
 - Benchmark pricing against market rates
 - Highlight differentiation and unique value proposition
 
+### Step 8: Custom Document Assembly (Skeleton-First)
+
+When type is **custom** (or routed via Direct Delivery / Custom Document flow):
+
+1. **Generate skeleton**: Section headings + 1-line summary + word budget per section. Total word budget derived from target page count (≈300 words/page).
+2. **Present skeleton for human approval** before expanding. MANDATORY STOP — do not expand until user confirms.
+3. **Expand each section** to its word budget. For each section requiring analysis, perform inline QUICK-depth analysis (no KB writes, no sub-agents).
+4. **Apply length constraint**: If output exceeds target by >20%, trim by removing lowest-priority content.
+5. If user provided personal/career context during scope negotiation, use it for voice calibration and honest self-representation throughout.
+
+This implements skeleton-of-thought generation: outline first, expand after approval.
+
 ## 5. OUTPUT SPECIFICATION
 
 **Output length constraints by depth tier:**
@@ -207,6 +220,4 @@ If WebSearch is unavailable, proceed with KB data and flag market-rate claims fo
 - **Recommended Next Step**: `/review` — Run quality review on the assembled proposal
   - After review: human SA reviews, customizes, and delivers to client
 
-**CRITICAL: Human review is mandatory before sharing any proposal with clients. The SA owns the output — AI assists, the SA delivers.**
-
-Ready to proceed to review, or customize the proposal first?
+**MANDATORY STOP**: Do NOT auto-invoke the next skill. Do NOT interpret "ok" or "looks good" as "run everything." Wait for the human to explicitly name the next action. **The SA owns the output — AI assists, the SA delivers.** Human review is mandatory before sharing any proposal with clients.

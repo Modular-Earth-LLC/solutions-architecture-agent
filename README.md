@@ -162,6 +162,27 @@ solutions-architecture-agent/
 
 ---
 
+## Exporting to Word/DOCX
+
+The agent produces Markdown output. To convert to Word format for client delivery:
+
+**Recommended approach**: Use [pandoc](https://pandoc.org/) with [mermaid-filter](https://github.com/raghur/mermaid-filter) or the Mermaid CLI (`mmdc`) for diagram rendering:
+
+```bash
+# Install prerequisites
+# pandoc: https://pandoc.org/installing.html
+# mmdc: npm install -g @mermaid-js/mermaid-cli
+
+# Convert Markdown to DOCX (basic)
+pandoc output.md -o output.docx --reference-doc=template.docx
+
+# With Mermaid diagram rendering (pre-render diagrams to PNG first)
+mmdc -i diagram.mmd -o diagram.png -t neutral -b transparent
+# Then reference PNGs in the markdown before pandoc conversion
+```
+
+**Alternative tools to evaluate**: MCP servers for document conversion, Claude Code community plugins, or `md-to-docx` wrapper scripts. The agent intentionally does not include a built-in export skill — use the best available ecosystem tool for your environment.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add new skills, sub-agents, and submit PRs.

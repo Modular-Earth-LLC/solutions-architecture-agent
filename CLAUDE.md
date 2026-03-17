@@ -59,10 +59,27 @@ When a user message arrives:
    - `complete` or `approved` → proceed
    - `draft` or `in_progress` → warn, offer to proceed or finish upstream
    - `not_started` or missing → block, list missing prerequisites
+   - For STANDARD/COMPREHENSIVE: if the previous skill's `reviewed` field is `false`, warn: "Previous deliverable has not been reviewed. Run `/review` first or confirm to proceed."
    - **Skip prerequisite check for QUICK depth** — QUICK mode does not require upstream KB files
 5. Invoke skill with depth tier
 6. After completion: update `engagement.json`, present human checkpoint
    - **MANDATORY STOP**: Do NOT auto-invoke the next skill. Wait for explicit human approval before proceeding. Do NOT interpret "ok" or "looks good" as "run everything."
+
+### Deliverable-First Mode
+
+When a user specifies a target deliverable (format, length, audience, sections) during scope negotiation:
+
+1. Extract the deliverable specification (format, page count, audience, required sections)
+2. Route to **Direct Delivery** or **Custom Document** flow
+3. Set depth to **QUICK** unless target exceeds 20 pages
+4. Skip KB file production — skills write output directly to the final document
+5. For multi-skill documents: `/proposal --type custom` assembles inline QUICK analysis into a single deliverable
+
+**Deliverable-first mode is the default for**:
+- Single-document requests ("write a 10-page architecture document")
+- Interview assignments and case studies
+- Presentations and pitch materials
+- Executive summaries and assessments
 
 ### Phase-Skip Rules
 

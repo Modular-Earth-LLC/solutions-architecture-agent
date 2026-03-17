@@ -181,4 +181,4 @@ If WebSearch is unavailable, proceed with general best practices and flag techno
   - `/security-review` — Assess data security posture (can run in parallel if not already done)
   - `/estimate` — After data model and security review are complete
 
-**Human review is mandatory before sharing data models with clients.** Ready to proceed, or review first?
+**MANDATORY STOP**: Do NOT auto-invoke the next skill. Do NOT interpret "ok" or "looks good" as "run everything." Wait for the human to explicitly name the next action. Human review is mandatory before sharing data models with clients.

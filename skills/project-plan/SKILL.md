@@ -210,4 +210,4 @@ If WebSearch is unavailable, proceed with established agile practices and flag m
   - External dependency timelines (verify with third parties)
 - **Recommended Next Step**: `/proposal` — Assemble project plan into client-ready SOW or proposal
 
-**Human review is mandatory before sharing project plans with clients.** Ready to proceed, or review first?
+**MANDATORY STOP**: Do NOT auto-invoke the next skill. Do NOT interpret "ok" or "looks good" as "run everything." Wait for the human to explicitly name the next action. Human review is mandatory before sharing project plans with clients.

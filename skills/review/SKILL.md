@@ -197,4 +197,4 @@ If WebSearch is unavailable, proceed with established quality frameworks and not
 - Scores **< 7.5**: REQUIRE human review of all flagged issues before proceeding to the next skill. The SA must explicitly approve or reject each P0/P1 finding.
 - Scores **>= 7.5**: Still require human sign-off, but may proceed with the SA's judgment on remaining findings.
 
-**Human review is mandatory.** The SA owns quality — AI assists the review, the SA makes the final call. Ready to proceed, or address findings first?
+**MANDATORY STOP**: Do NOT auto-invoke the next skill. Do NOT interpret "ok" or "looks good" as "run everything." Wait for the human to explicitly name the next action. The SA owns quality — AI assists the review, the SA makes the final call.
