@@ -2,6 +2,8 @@
 
 Sample outputs from validated end-to-end skill runs. Use these to understand what each skill produces and how KB files accumulate through an engagement flow.
 
+> **inputs/** vs **examples/** vs **outputs/**: `inputs/` holds raw source materials (assignment briefs, client docs) and is gitignored — contents stay local. `examples/` holds completed engagement artifacts checked into the repo as reference cases. `outputs/` holds per-engagement deliverables (proposals, documents) generated during a run. In short: inputs flow IN, examples are curated snapshots, outputs are what the client receives.
+
 ---
 
 ## Healthcare IBMi Migration

@@ -134,6 +134,8 @@ After gathering, assess completeness:
 
 For migration engagements: validate legacy system analysis, migration constraints, and current-state pain points are documented.
 
+For greenfield engagements: focus on platform selection, new data creation patterns, and build-vs-buy constraints (not legacy migration).
+
 ## 5. OUTPUT SPECIFICATION
 
 **Output length constraints by depth tier:**

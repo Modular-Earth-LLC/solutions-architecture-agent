@@ -30,6 +30,8 @@ This skill supports three depth tiers. Default is STANDARD. Accept `--depth QUIC
 
 **QUICK mode**: Execute Steps 1-2 only. No KB writes.
 
+For timelines under 1 week: produce task-level steps with time blocks, not sprints.
+
 ## 2. PREREQUISITES
 
 Validate before proceeding:

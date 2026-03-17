@@ -305,43 +305,7 @@
         "data_tools": {"type": "object"},
         "testing": {"type": "object"},
         "research_papers": {"type": "object"},
-        "design_patterns": {"type": "object"},
-        "validation_framework": {"type": "object"}
-      }
-    },
-    "self_improvement_framework": {
-      "type": "object",
-      "description": "Shared framework for all agent self-improvement prompts",
-      "properties": {
-        "_description": {"type": "string"},
-        "_usage": {"type": "string"},
-        "_last_updated": {"type": "string"},
-        "purpose": {"type": "string"},
-        "applicable_agents": {"type": "object"},
-        "recursion_prevention": {"type": "object"},
-        "core_principles": {"type": "object"},
-        "standard_methodology": {"type": "object"},
-        "quality_benchmarks": {"type": "object"},
-        "success_criteria": {"type": "object"},
-        "validation_requirements": {"type": "object"},
-        "common_focus_areas": {"type": "object"}
-      }
-    },
-    "validation_framework": {
-      "type": "object",
-      "description": "Shared validation and self-improvement patterns for all engineering agents",
-      "properties": {
-        "_description": {"type": "string"},
-        "_applies_to": {"type": "string"},
-        "_last_updated": {"type": "string"},
-        "overview": {"type": "object"},
-        "validation_workflow": {"type": "object"},
-        "quality_benchmarks": {"type": "object"},
-        "trm_pattern": {"type": "object"},
-        "anthropic_patterns": {"type": "object"},
-        "aws_bedrock_integration": {"type": "object"},
-        "implementation_requirements": {"type": "object"},
-        "integration_points": {"type": "object"}
+        "design_patterns": {"type": "object"}
       }
     },
     "_usage_notes": {

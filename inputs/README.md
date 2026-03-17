@@ -32,6 +32,10 @@ For the **Direct Delivery** flow, inputs are the primary context source (no KB f
 | **Claude Desktop** | Paste content or attach files in the conversation |
 | **Marketplace plugin** | Via `$ARGUMENTS` or pasted inline |
 
+## Relationship to examples/ and outputs/
+
+See [`examples/README.md`](../examples/README.md) for the distinction between `inputs/` (raw materials IN, gitignored), `examples/` (completed engagements OUT, checked in), and `outputs/` (per-engagement deliverables).
+
 ## Parallel to outputs/
 
 | Directory | Purpose | Gitignored |

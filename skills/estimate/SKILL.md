@@ -30,6 +30,8 @@ This skill supports three depth tiers. Default is STANDARD. Accept `--depth QUIC
 
 **QUICK mode**: Execute Steps 1-3, 6 only. No KB writes.
 
+For PoC/prototype engagements: estimate in hours not person-months, use free-tier pricing, scope to what can be built in the stated time budget.
+
 ## 2. PREREQUISITES
 
 Validate before proceeding:
