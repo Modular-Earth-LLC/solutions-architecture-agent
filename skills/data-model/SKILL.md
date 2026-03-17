@@ -20,6 +20,18 @@ Every schema must deliver tangible value — design for the actual problem, not 
 
 **Scope**: Design data models and governance policies. Do NOT implement databases, write migration scripts, or generate ORM code.
 
+## 1.5 DEPTH CONTROL
+
+This skill supports three depth tiers. Default is STANDARD. Accept `--depth QUICK|STANDARD|COMPREHENSIVE` via `$ARGUMENTS`.
+
+| Tier | Behavior | Target |
+|------|----------|--------|
+| **QUICK** | Skip vector schemas (Step 3), graph schemas (Step 4), knowledge pipeline (Step 5). ER schema + governance summary only. **No KB file** — write output directly to final deliverable. | <80 lines |
+| **STANDARD** | Full workflow as documented below. Writes to `knowledge_base/data_model.json`. | No limit |
+| **COMPREHENSIVE** | STANDARD + ontology deep-dive, cross-store consistency analysis, migration path modeling. | No limit |
+
+**QUICK mode**: Execute Steps 1-2, 6-7 only. No KB writes.
+
 ## 2. PREREQUISITES
 
 Validate before proceeding:
@@ -119,6 +131,11 @@ For each data store, document:
 - **Data residency**: Geographic constraints per regulatory requirements
 
 ## 5. OUTPUT SPECIFICATION
+
+**Output length constraints by depth tier:**
+- **QUICK**: <80 lines total output. No KB file.
+- **STANDARD**: No line limit. Full KB file.
+- **COMPREHENSIVE**: No line limit. Full KB file with extended analysis.
 
 Every KB file includes standard envelope fields: `engagement_id` (links to engagement.json), `version` (MAJOR.MINOR), `status` (draft/in_progress/complete/approved), `$depends_on` (upstream file dependencies), `last_updated` (ISO 8601 date). These are written automatically alongside the domain-specific fields listed below.
 

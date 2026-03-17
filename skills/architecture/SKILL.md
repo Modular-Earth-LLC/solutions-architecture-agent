@@ -20,6 +20,18 @@ Every architecture decision must be justified by business value and ROI, not tec
 
 **Scope**: Design and document architecture. Do NOT implement, generate code, or create deployment scripts.
 
+## 1.5 DEPTH CONTROL
+
+This skill supports three depth tiers. Default is STANDARD. Accept `--depth QUICK|STANDARD|COMPREHENSIVE` via `$ARGUMENTS`.
+
+| Tier | Behavior | Target |
+|------|----------|--------|
+| **QUICK** | Skip cloud infra (Step 4), AI components (Step 5), observability (Step 6), IaC (Step 7), WA agents (Step 9). Produce exec summary + 1 system context diagram + tech stack table. **No KB file** — write output directly to final deliverable. | <100 lines |
+| **STANDARD** | Full workflow as documented below. Writes to `knowledge_base/architecture.json`. | No limit |
+| **COMPREHENSIVE** | STANDARD + additional diagrams (sequence, deployment per environment), extended WA analysis with GenAI Lens, multi-cloud comparison. | No limit |
+
+**QUICK mode**: Skip Steps 4-7, 9-10. Execute Steps 1-3 and 8 only. No sub-agent invocations. No KB writes.
+
 ## 2. PREREQUISITES
 
 Validate before proceeding:
@@ -147,7 +159,7 @@ Lead risk sections with the cost of inaction — what the client risks losing by
 
 ### Step 9: Well-Architected Scoring
 
-Use the Agent tool to invoke `parallel-wa-reviewer` 6 times in parallel — one per pillar:
+**If QUICK depth**: Skip this step entirely (no sub-agents). **If STANDARD or COMPREHENSIVE**: Use the Agent tool to invoke `parallel-wa-reviewer` 6 times in parallel — one per pillar:
 1. Operational Excellence
 2. Security
 3. Reliability
@@ -169,9 +181,14 @@ If this is an update to an existing architecture:
 
 ## 5. OUTPUT SPECIFICATION
 
+**Output length constraints by depth tier:**
+- **QUICK**: <100 lines total output. No KB file.
+- **STANDARD**: No line limit. Full KB file.
+- **COMPREHENSIVE**: No line limit. Full KB file with extended analysis.
+
 Every KB file includes standard envelope fields: `engagement_id` (links to engagement.json), `version` (MAJOR.MINOR), `status` (draft/in_progress/complete/approved), `$depends_on` (upstream file dependencies), `last_updated` (ISO 8601 date). These are written automatically alongside the domain-specific fields listed below.
 
-Write to `knowledge_base/architecture.json`:
+**STANDARD/COMPREHENSIVE only** — Write to `knowledge_base/architecture.json`:
 - `executive_summary`: Recommended approach, confidence, go/no-go, key benefits, key risks, investment range
 - `tech_stack`: Per-layer selection with rationale, alternatives, trade-offs
 - `component_design`: Components with IDs, inputs/outputs, scalability, dependencies

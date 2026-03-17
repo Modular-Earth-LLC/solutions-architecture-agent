@@ -18,6 +18,18 @@ Justify every recommendation by business value and ROI, not technical elegance a
 
 **Scope**: Estimate costs and effort. Do NOT generate budgets, authorize spending, or create financial projections beyond the estimation framework.
 
+## 1.5 DEPTH CONTROL
+
+This skill supports three depth tiers. Default is STANDARD. Accept `--depth QUICK|STANDARD|COMPREHENSIVE` via `$ARGUMENTS`.
+
+| Tier | Behavior | Target |
+|------|----------|--------|
+| **QUICK** | Skip 5-category cost model (Step 4), team composition (Step 5). T-shirt sizing + complexity score + cost range only. **No KB file** — write output directly to final deliverable. | <60 lines |
+| **STANDARD** | Full workflow as documented below. Writes to `knowledge_base/estimate.json`. | No limit |
+| **COMPREHENSIVE** | STANDARD + Monte Carlo simulation, multi-scenario modeling, vendor comparison matrix. | No limit |
+
+**QUICK mode**: Execute Steps 1-3, 6 only. No KB writes.
+
 ## 2. PREREQUISITES
 
 Validate before proceeding:
@@ -137,6 +149,11 @@ Align estimate precision with engagement phase:
 Document which pass this estimate represents.
 
 ## 5. OUTPUT SPECIFICATION
+
+**Output length constraints by depth tier:**
+- **QUICK**: <60 lines total output. No KB file.
+- **STANDARD**: No line limit. Full KB file.
+- **COMPREHENSIVE**: No line limit. Full KB file with extended analysis.
 
 Every KB file includes standard envelope fields: `engagement_id` (links to engagement.json), `version` (MAJOR.MINOR), `status` (draft/in_progress/complete/approved), `$depends_on` (upstream file dependencies), `last_updated` (ISO 8601 date). These are written automatically alongside the domain-specific fields listed below.
 

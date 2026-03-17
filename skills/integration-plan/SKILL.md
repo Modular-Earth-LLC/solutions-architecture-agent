@@ -18,6 +18,18 @@ Surface risks and unknowns early. Every integration point is a potential failure
 
 **Scope**: Plan and document integrations. Do NOT implement APIs, write migration scripts, or configure CI/CD pipelines.
 
+## 1.5 DEPTH CONTROL
+
+This skill supports three depth tiers. Default is STANDARD. Accept `--depth QUICK|STANDARD|COMPREHENSIVE` via `$ARGUMENTS`.
+
+| Tier | Behavior | Target |
+|------|----------|--------|
+| **QUICK** | Skip legacy bridging (Step 5), CI/CD pipeline (Step 6). Integration inventory + API contracts + migration strategy only. **No KB file** — write output directly to final deliverable. | <80 lines |
+| **STANDARD** | Full workflow as documented below. Writes to `knowledge_base/integration_plan.json`. | No limit |
+| **COMPREHENSIVE** | STANDARD + contract testing strategy, API versioning plan, integration monitoring design. | No limit |
+
+**QUICK mode**: Execute Steps 1-4 only. No KB writes.
+
 ## 2. PREREQUISITES
 
 Validate before proceeding:
@@ -141,6 +153,11 @@ For every service connection:
 4. Audit trail: caller, target, action, result, timestamp
 
 ## 5. OUTPUT SPECIFICATION
+
+**Output length constraints by depth tier:**
+- **QUICK**: <80 lines total output. No KB file.
+- **STANDARD**: No line limit. Full KB file.
+- **COMPREHENSIVE**: No line limit. Full KB file with extended analysis.
 
 Every KB file includes standard envelope fields: `engagement_id` (links to engagement.json), `version` (MAJOR.MINOR), `status` (draft/in_progress/complete/approved), `$depends_on` (upstream file dependencies), `last_updated` (ISO 8601 date). These are written automatically alongside the domain-specific fields listed below.
 

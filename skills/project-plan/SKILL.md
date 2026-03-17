@@ -18,6 +18,18 @@ Surface risks and dependencies early — never let timeline assumptions become s
 
 **Scope**: Plan and schedule. Do NOT create Jira tickets, assign tasks, or manage sprints.
 
+## 1.5 DEPTH CONTROL
+
+This skill supports three depth tiers. Default is STANDARD. Accept `--depth QUICK|STANDARD|COMPREHENSIVE` via `$ARGUMENTS`.
+
+| Tier | Behavior | Target |
+|------|----------|--------|
+| **QUICK** | Skip risk register (Step 4), critical path (Step 5), milestones (Step 6), communication plan (Step 7). Phased delivery plan + timeline only. **No KB file** — write output directly to final deliverable. | <60 lines |
+| **STANDARD** | Full workflow as documented below. Writes to `knowledge_base/project_plan.json`. | No limit |
+| **COMPREHENSIVE** | STANDARD + resource leveling, earned value management setup, detailed RACI matrix. | No limit |
+
+**QUICK mode**: Execute Steps 1-2 only. No KB writes.
+
 ## 2. PREREQUISITES
 
 Validate before proceeding:
@@ -151,6 +163,11 @@ Demo schedule: What's shown, to whom, expected feedback cycle.
 Decision points: Who decides, by when, what information they need.
 
 ## 5. OUTPUT SPECIFICATION
+
+**Output length constraints by depth tier:**
+- **QUICK**: <60 lines total output. No KB file.
+- **STANDARD**: No line limit. Full KB file.
+- **COMPREHENSIVE**: No line limit. Full KB file with extended analysis.
 
 Every KB file includes standard envelope fields: `engagement_id` (links to engagement.json), `version` (MAJOR.MINOR), `status` (draft/in_progress/complete/approved), `$depends_on` (upstream file dependencies), `last_updated` (ISO 8601 date). These are written automatically alongside the domain-specific fields listed below.
 

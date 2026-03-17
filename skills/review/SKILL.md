@@ -20,6 +20,18 @@ Surface gaps and risks explicitly — never let quality issues become client-fac
 
 **Scope**: Review and score deliverables. Do NOT rewrite deliverables or make architectural decisions.
 
+## 1.5 DEPTH CONTROL
+
+This skill supports three depth tiers. Default is STANDARD. Accept `--depth QUICK|STANDARD|COMPREHENSIVE` via `$ARGUMENTS`.
+
+| Tier | Behavior | Target |
+|------|----------|--------|
+| **QUICK** | Single-pass review, no WA agents (skip Step 4). Score 5 dimensions, produce findings list. No iteration. | <50 lines |
+| **STANDARD** | Full 3-iteration workflow as documented below. WA agents for architecture reviews. | No limit |
+| **COMPREHENSIVE** | STANDARD + cross-deliverable consistency review, exemplar benchmarking, detailed remediation plans. | No limit |
+
+**QUICK mode**: Execute Step 1 only (single iteration). Skip Steps 2-4. No sub-agent invocations.
+
 ## 2. PREREQUISITES
 
 Validate before proceeding:
@@ -94,7 +106,7 @@ If still below 9.0 after Iteration 2:
 
 ### Step 4: WA Pillar Review (when target is architecture.json)
 
-Use the Agent tool to invoke `parallel-wa-reviewer` 6 times in parallel:
+**If QUICK depth**: Skip this step entirely (no sub-agents). **If STANDARD or COMPREHENSIVE**: Use the Agent tool to invoke `parallel-wa-reviewer` 6 times in parallel:
 1. Operational Excellence
 2. Security
 3. Reliability
@@ -121,6 +133,11 @@ Verify against quality targets:
 - **FAIL** (score < 5.0): Fundamental issues. Recommend re-running upstream skill(s) with revised inputs.
 
 ## 5. OUTPUT SPECIFICATION
+
+**Output length constraints by depth tier:**
+- **QUICK**: <50 lines total output. Single-pass scores and findings only.
+- **STANDARD**: No line limit. Full 3-iteration review with KB writes.
+- **COMPREHENSIVE**: No line limit. Full review with cross-deliverable analysis.
 
 Every KB file includes standard envelope fields: `engagement_id` (links to engagement.json), `version` (MAJOR.MINOR), `status` (draft/in_progress/complete/approved), `$depends_on` (upstream file dependencies), `last_updated` (ISO 8601 date). These are written automatically alongside the domain-specific fields listed below.
 

@@ -136,6 +136,11 @@ For migration engagements: validate legacy system analysis, migration constraint
 
 ## 5. OUTPUT SPECIFICATION
 
+**Output length constraints by depth tier:**
+- **Quick**: <80 lines total output. Minimal KB file (client_context + problem_statement + top requirements only).
+- **Standard**: No line limit. Full KB file.
+- **Comprehensive**: No line limit. Full KB file with extended analysis.
+
 Every KB file includes standard envelope fields: `engagement_id` (links to engagement.json), `version` (MAJOR.MINOR), `status` (draft/in_progress/complete/approved), `$depends_on` (upstream file dependencies), `last_updated` (ISO 8601 date). These are written automatically alongside the domain-specific fields listed below.
 
 Write to `knowledge_base/requirements.json`:

@@ -20,6 +20,18 @@ Surface risks, assumptions, and unknowns early and explicitly — never bury bad
 
 **Scope**: Review and document security posture. Do NOT implement security controls, write security code, or configure infrastructure.
 
+## 1.5 DEPTH CONTROL
+
+This skill supports three depth tiers. Default is STANDARD. Accept `--depth QUICK|STANDARD|COMPREHENSIVE` via `$ARGUMENTS`.
+
+| Tier | Behavior | Target |
+|------|----------|--------|
+| **QUICK** | Skip STRIDE agents (Step 2). Security requirements decomposition (Step 1) + compliance checklist (Step 6) + top 5 threats inline (no sub-agents). **No KB file** — write output directly to final deliverable. | <80 lines |
+| **STANDARD** | Full workflow as documented below. Writes to `knowledge_base/security_review.json`. | No limit |
+| **COMPREHENSIVE** | STANDARD + attack tree modeling, red team scenario planning, AI-specific threat deep-dive. | No limit |
+
+**QUICK mode**: Execute Steps 1, 6-7 only. Inline top 5 threats instead of full STRIDE. No sub-agent invocations. No KB writes.
+
 ## 2. PREREQUISITES
 
 Validate before proceeding:
@@ -71,7 +83,7 @@ Decompose across 5 dimensions:
 
 ### Step 2: STRIDE Threat Model
 
-Use the Agent tool to invoke `stride-analyzer` 6 times in parallel — one per STRIDE category:
+**If QUICK depth**: Skip this step. Instead, identify the top 5 threats inline without sub-agents and include them in the output. **If STANDARD or COMPREHENSIVE**: Use the Agent tool to invoke `stride-analyzer` 6 times in parallel — one per STRIDE category:
 1. **Spoofing** — identity threats
 2. **Tampering** — data integrity threats
 3. **Repudiation** — non-repudiation failures
@@ -136,6 +148,11 @@ Assess risk for the proposed architecture changes:
 - For HIGH/CRITICAL: recommend additional review gates
 
 ## 5. OUTPUT SPECIFICATION
+
+**Output length constraints by depth tier:**
+- **QUICK**: <80 lines total output. No KB file.
+- **STANDARD**: No line limit. Full KB file.
+- **COMPREHENSIVE**: No line limit. Full KB file with extended analysis.
 
 Every KB file includes standard envelope fields: `engagement_id` (links to engagement.json), `version` (MAJOR.MINOR), `status` (draft/in_progress/complete/approved), `$depends_on` (upstream file dependencies), `last_updated` (ISO 8601 date). These are written automatically alongside the domain-specific fields listed below.
 

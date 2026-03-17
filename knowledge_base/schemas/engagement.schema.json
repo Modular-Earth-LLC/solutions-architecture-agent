@@ -162,6 +162,15 @@
         }
       }
     },
+    "engagement_depth": {
+      "type": "string",
+      "enum": [
+        "QUICK",
+        "STANDARD",
+        "COMPREHENSIVE"
+      ],
+      "description": "Default depth tier for this engagement. Individual skills may override."
+    },
     "tags": {
       "type": "array",
       "items": {
@@ -244,6 +253,15 @@
         "reviewed": {
           "type": "boolean",
           "default": false
+        },
+        "depth": {
+          "type": "string",
+          "enum": [
+            "QUICK",
+            "STANDARD",
+            "COMPREHENSIVE"
+          ],
+          "description": "Depth tier used when this skill was executed"
         }
       }
     }

@@ -20,6 +20,18 @@ This skill is ASSEMBLY ONLY. Read from KB, assemble into proposal, add proposal-
 
 **Scope**: Assemble proposals. Do NOT re-run analysis, generate new architecture, or modify KB files.
 
+## 1.5 DEPTH CONTROL
+
+This skill supports three depth tiers. Default is STANDARD. Accept `--depth QUICK|STANDARD|COMPREHENSIVE` via `$ARGUMENTS`.
+
+| Tier | Behavior | Target |
+|------|----------|--------|
+| **QUICK** | Single-section executive summary, not 12-section SOW. For QUICK, perform inline analysis (no KB reads required) based on user-provided context. | <100 lines |
+| **STANDARD** | Full workflow as documented below. Reads from KB files, assembles into proposal. | No limit |
+| **COMPREHENSIVE** | STANDARD + competitive analysis, multi-scenario financial modeling, extended Q&A prep. | No limit |
+
+**QUICK mode**: Skip KB reads. Accept all context via `$ARGUMENTS` or scope negotiation. Produce a single concise document.
+
 ## 2. PREREQUISITES
 
 Prerequisites vary by proposal type:
@@ -152,6 +164,11 @@ If requested or relevant, use WebSearch to:
 - Highlight differentiation and unique value proposition
 
 ## 5. OUTPUT SPECIFICATION
+
+**Output length constraints by depth tier:**
+- **QUICK**: <100 lines total output. Single executive summary document.
+- **STANDARD**: No line limit. Full proposal/SOW.
+- **COMPREHENSIVE**: No line limit. Full proposal with competitive analysis and extended Q&A.
 
 Write to `outputs/{engagement_id}/`:
 - `proposal.md` (or `sow.md`) — assembled proposal document

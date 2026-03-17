@@ -2,7 +2,7 @@
 
 An AI agent covering the **solutions architecture lifecycle**: requirements discovery, system design, data modeling, security review, integration planning, estimation, project planning, and proposal assembly. Designs solutions — does NOT implement or deploy.
 
-**Owner**: Modular Earth LLC (@paulpham157)
+**Owner**: Modular Earth LLC (@praeducer)
 **License**: MIT
 **Platform**: Claude Code plugin
 
@@ -33,6 +33,9 @@ An AI agent covering the **solutions architecture lifecycle**: requirements disc
 | **Streamlined** | req → arch → est → pro | Small projects, time-constrained |
 | **Assessment** | req → arch → [sr] → pro | Discovery-only, pre-commitment |
 | **Quick Qualify** | req (quick tier) | Pipeline qualification |
+| **Direct Delivery** | scope negotiation → single skill (QUICK) → output | Single-document tasks, interview prep, case studies |
+| **Rapid Assessment** | req (QUICK) → arch (QUICK) → pro (QUICK) | Same-day turnaround, lightweight proposals |
+| **Custom Document** | scope negotiation → selective skills (QUICK) → assembly | User specifies exact output format and sections |
 
 ### Dispatch
 
@@ -42,12 +45,24 @@ When a user message arrives:
 2. If natural language → classify across 5 dimensions:
    - User objective, domain, current phase, target skill, context needed
    - If unambiguous → dispatch; if ambiguous → present 2-4 options
-3. Validate prerequisites: check `engagement.json` lifecycle_state for required upstream KB files
+3. **Scope Negotiation** — before invoking any skill, establish:
+   - What is the final deliverable? (document, presentation, assessment, KB artifact)
+   - Who is the audience? (client exec, technical team, internal review, interview panel)
+   - Target length? (pages or line count)
+   - Time budget? (quick turnaround vs. thorough engagement)
+   - Do you have a personal profile or career context to load? (file path, URL, or paste summary — used for voice/honesty calibration; if not, proceed with generic professional voice)
+   - Map answers to depth tier: **QUICK** | **STANDARD** | **COMPREHENSIVE**
+   - Accept explicit `--depth QUICK|STANDARD|COMPREHENSIVE` flag to skip questions
+   - If task maps to a single document → route to **Direct Delivery** flow
+   - If QUICK depth → skills skip KB file production, write output directly
+4. Validate prerequisites: check `engagement.json` lifecycle_state for required upstream KB files
    - `complete` or `approved` → proceed
    - `draft` or `in_progress` → warn, offer to proceed or finish upstream
    - `not_started` or missing → block, list missing prerequisites
-4. Invoke skill
-5. After completion: update `engagement.json`, present human checkpoint
+   - **Skip prerequisite check for QUICK depth** — QUICK mode does not require upstream KB files
+5. Invoke skill with depth tier
+6. After completion: update `engagement.json`, present human checkpoint
+   - **MANDATORY STOP**: Do NOT auto-invoke the next skill. Wait for explicit human approval before proceeding. Do NOT interpret "ok" or "looks good" as "run everything."
 
 ### Phase-Skip Rules
 
