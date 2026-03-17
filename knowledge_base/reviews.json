@@ -518,15 +518,116 @@
       "iteration_history": [
         { "iteration": 1, "date": "2026-03-16", "target_version": "1.0", "overall_score": 8.4, "key_changes_requested": ["Clarify pre-engagement prerequisites", "Document parallel_run_weeks interpretation"] }
       ]
+    },
+
+    {
+      "review_id": "R-008",
+      "target_file": "solution-architecture-document.md",
+      "target_version": "1.0",
+      "review_date": "2026-03-16",
+      "review_type": "quality",
+      "scores": {
+        "completeness": { "score": 8.5, "max": 10, "notes": "Technical Architecture Reviewer — All 5 KCs addressed with dedicated sections. 7 Mermaid diagrams (system context, strangler fig, data flow, GenAI pipeline, deployment, identity flow, GenAI access control). 3-option comparison with genuine differentiation. WA 6-pillar scoring. Tech stack table comprehensive. CDC constraint (Datastream/DMS don't support Db2 for i) correctly identified. Minor gap: no API versioning strategy, CDC pipeline DR not explicit." },
+        "technical_soundness": { "score": 8.5, "max": 10, "notes": "Strangler fig pattern correctly described with 6-step sequence and reversibility via Apigee route config. IWS 3.0 (Jakarta EE) accurately characterized with YAJL/CGIDEV2 for hot paths. Tiered inference (Gemini + MedGemma 4B, 89.6% EHRQA) sound for cost optimization. Anti-corruption layer in BFF correctly positioned for EBCDIC→UTF-8 transforms. GCP services accurately mapped via AWS translation lens. Dual Run z/OS limitation correctly handled with Apigee request mirroring alternative." },
+        "well_architected": { "score": 8.0, "max": 10, "notes": "6-pillar scoring present with honest gaps per pillar. Overall 7.7/10 is defensible. Security pillar well-represented (zero trust, VPC-SC, CMEK, AI guardrails). Performance gap (IWS throughput uncertainty) honestly flagged. No explicit GenAI Lens reference but AI controls are thorough (OWASP LLM Top 10, DLP gate, HITL)." },
+        "clarity": { "score": 9.0, "max": 10, "notes": "Reading guide maps sections to KCs with interview focus areas — excellent for panel. Tables scannable. Diagrams well-captioned. Prose concise. Executive summary works standalone. Tech stack table is interview-ready — each row could sustain 5-10 minutes of discussion." },
+        "feasibility": { "score": 8.0, "max": 10, "notes": "Phased approach with 4 decision gates is realistic. Critical path correctly identifies non-software constraints (carrier provisioning, RPG/CL development, compliance audits). Team composition credible at 15 peak FTE. Cost benchmarked against Kyndryl survey. Risk register top 5 are the right risks." },
+        "overall": { "score": 8.4, "max": 10, "notes": "Persona: Technical Architecture Reviewer. Strong technical document suitable for a principal architect interview. GCP accuracy verified against architecture.json source. Patterns well-justified. Diagrams structurally valid. All dimensions ≥ 7.5." }
+      },
+      "overall_score": 8.4,
+      "pass_fail": "PASS",
+      "findings": [
+        { "id": "RF-052", "severity": "low", "category": "Consistency", "finding": "Executive summary says '5 Mermaid diagrams' but document contains 7 diagrams.", "recommendation": "Update executive summary to say '7 Mermaid diagrams'.", "status": "open" },
+        { "id": "RF-053", "severity": "low", "category": "Completeness", "finding": "No API versioning strategy mentioned for IWS or Cloud Run APIs.", "recommendation": "Add one sentence on URL-path versioning (/v1/) or header-based versioning — Paul can discuss in interview.", "status": "open" },
+        { "id": "RF-054", "severity": "info", "category": "Completeness", "finding": "CDC pipeline resilience not explicitly addressed — Precisely Connect failover and maximum acceptable lag threshold.", "recommendation": "Addressed in integration_plan.json (RF-008). Paul should be prepared to discuss CDC DR in interview.", "status": "deferred" }
+      ],
+      "improvement_plan": [
+        { "priority": "P0", "action": "Fix diagram count in executive summary (5 → 7)", "impact": "low", "effort": "low", "finding_ref": "RF-052" }
+      ],
+      "blockers": [],
+      "iterations": [
+        { "iteration": 1, "date": "2026-03-16", "scores": { "score": 8.4, "max": 10 }, "overall_score": 8.4, "pass_fail": "PASS", "findings_count": 3, "key_changes": ["Verified GCP service accuracy against architecture.json", "Validated all 7 Mermaid diagrams syntactically", "Confirmed strangler fig pattern correctly described with reversibility"] }
+      ],
+      "iteration_history": [
+        { "iteration": 1, "date": "2026-03-16", "target_version": "1.0", "overall_score": 8.4, "key_changes_requested": ["Fix diagram count", "Consider adding API versioning mention"] }
+      ]
+    },
+
+    {
+      "review_id": "R-009",
+      "target_file": "solution-architecture-document.md",
+      "target_version": "1.0",
+      "review_date": "2026-03-16",
+      "review_type": "security",
+      "scores": {
+        "completeness": { "score": 8.0, "max": 10, "notes": "IAM/Security Specialist — Zero trust principles properly grounded in NIST SP 800-207. RBAC + ABAC hybrid model correct for pharmacy context. 7 roles with clear PHI boundaries. genai-pipeline@ isolation is standout design. STRIDE summary comprehensive (30 threats, 6 categories). 8 open findings transparently disclosed. 6 compliance frameworks mapped. 5 defense-in-depth layers. Gaps: session management details absent (JWT lifetimes, idle timeout values), break-glass procedure not described, SMART on FHIR not explained beyond mentions." },
+        "technical_soundness": { "score": 8.5, "max": 10, "notes": "STRIDE methodology properly applied with risk scores. genai-pipeline@ zero-PHI-access design with DLP gate intermediary is architecturally sound. IBM i to cloud bridge table addresses unique hybrid IAM challenge. ABAC attributes correctly sourced server-side. DEA 21 CFR 1311 requirements accurately noted for Schedule II-V. Service account isolation with resource-level bindings follows GCP best practices." },
+        "well_architected": { "score": 8.0, "max": 10, "notes": "Security pillar strongly represented. Zero trust implementation aligns with NIST SP 800-207 seven tenets. Defense-in-depth layers comprehensive. VPC-SC perimeter correctly scoped to HIPAA-regulated services. CMEK with separate key rings per data classification. Cloud Armor with Adaptive Protection ML." },
+        "clarity": { "score": 8.5, "max": 10, "notes": "Identity flow diagram and GenAI access control diagram are excellent for interview deep-dive. STRIDE summary table scannable. Compliance mapping concise. Defense-in-depth layers table is interview-ready. Authorization roles table clear. Minor: OPA sidecar shown in diagram but not explained in prose." },
+        "feasibility": { "score": 8.0, "max": 10, "notes": "8 open findings with realistic remediation in Phase 3. 3-phase IAM migration (SSO Bridge → Identity Consolidation → Full Zero Trust) achievable within 18-month timeline. Security engineer allocation (40 weeks) credible for scope." },
+        "overall": { "score": 8.2, "max": 10, "notes": "Persona: IAM/Security Specialist. IAM section is the most technically dense section of the document — appropriate for a deep-dive interview. genai-pipeline@ isolation and STRIDE transparency are differentiators. Session management and break-glass details are interview-ready from source documents (iam-strategy.md) even if not fully distilled here. All dimensions ≥ 7.5." }
+      },
+      "overall_score": 8.2,
+      "pass_fail": "PASS",
+      "findings": [
+        { "id": "RF-055", "severity": "medium", "category": "Completeness", "finding": "Session management details absent — JWT access token lifetime (15 min), refresh token (8 hr), idle timeout (30 min HIPAA) not stated in document.", "recommendation": "Add 2-3 sentences or a small table with session parameters. Paul must know these for IAM deep-dive interview.", "status": "open" },
+        { "id": "RF-056", "severity": "medium", "category": "Completeness", "finding": "Break-glass procedure not described. PAM for pharmacy systems is a likely interview topic given HIPAA emergency access requirements.", "recommendation": "Add 2-3 sentences on break-glass: FIDO2 + justification + 4-hour max + post-incident review. Detail available in iam-strategy.md §6.3.", "status": "open" },
+        { "id": "RF-057", "severity": "low", "category": "Clarity", "finding": "SMART on FHIR mentioned in identity flow diagram and compliance table but not explained. An interviewer may ask what scopes are used.", "recommendation": "Paul should prepare to explain: patient/*.read, MedicationRequest/*.write scopes via Cloud Healthcare API. Detail in iam-strategy.md §2.2.", "status": "deferred" },
+        { "id": "RF-058", "severity": "info", "category": "Clarity", "finding": "OPA (Open Policy Agent) sidecar shown in identity flow diagram but not mentioned in prose.", "recommendation": "Minor — Paul can explain OPA if asked. One sentence would suffice if adding.", "status": "deferred" }
+      ],
+      "improvement_plan": [
+        { "priority": "P1", "action": "Add session management parameters table (JWT 15min, refresh 8hr, idle 30min)", "impact": "medium", "effort": "low", "finding_ref": "RF-055" },
+        { "priority": "P1", "action": "Add break-glass procedure summary (2-3 sentences)", "impact": "medium", "effort": "low", "finding_ref": "RF-056" }
+      ],
+      "blockers": [],
+      "iterations": [
+        { "iteration": 1, "date": "2026-03-16", "scores": { "score": 8.2, "max": 10 }, "overall_score": 8.2, "pass_fail": "PASS", "findings_count": 4, "key_changes": ["Verified STRIDE threat counts against security_review.json", "Validated compliance framework citations", "Confirmed genai-pipeline@ isolation architecture matches source", "Identified session management and break-glass gaps"] }
+      ],
+      "iteration_history": [
+        { "iteration": 1, "date": "2026-03-16", "target_version": "1.0", "overall_score": 8.2, "key_changes_requested": ["Add session management details", "Add break-glass summary"] }
+      ]
+    },
+
+    {
+      "review_id": "R-010",
+      "target_file": "solution-architecture-document.md",
+      "target_version": "1.0",
+      "review_date": "2026-03-16",
+      "review_type": "quality",
+      "scores": {
+        "completeness": { "score": 8.5, "max": 10, "notes": "Business/Executive Reviewer — Executive summary standalone and concise. Reading guide maps to interview. Investment range with P10/P50/P90 and PERT. ROI 71% 3-year with Kyndryl benchmark. Change management properly elevated with ADKAR, champion network, adoption metrics with intervention triggers. Dual competency thread in §3 (GenAI pipeline), §4 (AI security), §6 (GenAI team), §7 (methodology). About the Author with transparent gaps builds trust. Minor gap: §5 Change Management doesn't frame through Paul's direct Mento/Arine experience as honesty map recommends." },
+        "technical_soundness": { "score": 8.0, "max": 10, "notes": "Estimates properly derived with three-point methodology. Change management citations sound (85% failure stat, 7x Prosci multiplier, 15% Gartner budget). ROI methodology clear ($6.5M annual savings from training + errors + PA automation). 0.32% of CVS annual tech budget contextualization is smart. Critical path analysis correctly separates software from non-software constraints." },
+        "well_architected": { "score": 8.0, "max": 10, "notes": "WA scoring present and honest. Business justification clear with ROI and benchmark. Risk register prioritized by likelihood/impact. Decision gates with measurable criteria show governance maturity." },
+        "clarity": { "score": 9.0, "max": 10, "notes": "Reading guide is the standout feature — interviewers can navigate directly to their area of interest. Tables throughout. ADKAR applied to specific personas, not generic. Persona-to-resistance mapping with root causes and mitigations. Training program by audience. Investment breakdown transparent. Executive summary works for the hiring manager who reads only the first 2 pages." },
+        "feasibility": { "score": 8.0, "max": 10, "notes": "78-week timeline realistic with honest constraints. 15 peak FTE + CVS internal team credible. RPG/CL developer scarcity honestly flagged as #1 risk with 60-90 day lead time. Phase structure aligns with decision gate governance." },
+        "overall": { "score": 8.3, "max": 10, "notes": "Persona: Business/Executive Reviewer. Document effectively communicates business value alongside technical depth. Dual competency thread visible across 4+ sections. Change management positioned as critical success factor, not afterthought. One voice gap: §5 should reference Paul's direct coaching/training experience more explicitly. All dimensions ≥ 7.5." }
+      },
+      "overall_score": 8.3,
+      "pass_fail": "PASS",
+      "findings": [
+        { "id": "RF-059", "severity": "medium", "category": "Voice", "finding": "§5 Change Management doesn't frame through Paul's direct experience (Mento coaching: 100% leadership improvement; Arine: trained 100 engineers). Honesty map rates Change Management at 3.5/5 and recommends framing through these experiences.", "recommendation": "Add 1-2 sentences at the start of §5 connecting Paul's coaching/training background to the ADKAR approach. E.g., 'Drawing on my experience coaching executives at Mento and training 100 engineers at Arine on AI adoption...'", "status": "open" },
+        { "id": "RF-060", "severity": "low", "category": "Completeness", "finding": "CVS $20B technology investment context only appears in executive summary. Could strengthen §6 roadmap positioning.", "recommendation": "Add one sentence in §6 Investment Range: 'This represents 0.32% of CVS's annual ~$2B technology budget.' — already present, this finding is resolved.", "status": "resolved" },
+        { "id": "RF-061", "severity": "info", "category": "Completeness", "finding": "Training program doesn't mention delivery method for distributed/remote pharmacy staff.", "recommendation": "Paul can discuss LMS + virtual workshops in interview. Low priority for document.", "status": "deferred" }
+      ],
+      "improvement_plan": [
+        { "priority": "P1", "action": "Add experience framing to §5 Change Management (Mento coaching, Arine training)", "impact": "medium", "effort": "low", "finding_ref": "RF-059" }
+      ],
+      "blockers": [],
+      "iterations": [
+        { "iteration": 1, "date": "2026-03-16", "scores": { "score": 8.3, "max": 10 }, "overall_score": 8.3, "pass_fail": "PASS", "findings_count": 3, "key_changes": ["Validated executive summary works standalone", "Confirmed dual competency thread in 4+ sections", "Identified §5 voice gap per honesty map guidance", "Verified ROI and benchmark citations"] }
+      ],
+      "iteration_history": [
+        { "iteration": 1, "date": "2026-03-16", "target_version": "1.0", "overall_score": 8.3, "key_changes_requested": ["Add experience framing to §5"] }
+      ]
     }
   ],
 
   "aggregate_stats": {
-    "total_reviews": 7,
+    "total_reviews": 10,
     "average_score": 8.3,
-    "files_reviewed": ["requirements.json", "integration_plan.json", "architecture.json", "data_model.json", "security_review.json", "estimate.json", "project_plan.json"],
+    "files_reviewed": ["requirements.json", "integration_plan.json", "architecture.json", "data_model.json", "security_review.json", "estimate.json", "project_plan.json", "solution-architecture-document.md"],
     "files_not_reviewed": [],
-    "open_findings_count": 18,
+    "open_findings_count": 22,
     "blocker_count": 0
   },
 
@@ -534,6 +635,6 @@
     "author": "sa-agent",
     "date": "2026-03-16",
     "validation_status": "complete",
-    "version": "4.0"
+    "version": "5.0"
   }
 }

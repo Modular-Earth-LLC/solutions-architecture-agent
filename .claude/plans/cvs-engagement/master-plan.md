@@ -68,7 +68,7 @@ graph TD
 | **3** | Security & IAM | `/security-review`, `/review` | Large | Phase 2 | `security_review.json` + IAM strategy | **COMPLETE** (30 STRIDE threats, 21 compliance controls, 8.2/10 review, IAM strategy 10 sections + 3 appendices) |
 | **4** | Estimation & Planning | `/estimate`, `/project-plan`, `/review` | Large | Phases 2, 3 | `estimate.json` + `project_plan.json` | **COMPLETE** (estimate 8.2/10, project_plan 8.4/10; $11.7M P50; 30 peak FTE; 78 weeks; 39 sprints; 4 decision gates) |
 | **5** | AI Methodology | None (documentation) | Medium | Phases 0-4 | AI methodology section + citations | **COMPLETE** (3 output docs: ai-methodology.md, llm-citations.md, portfolio-narrative.md; 4-tier attribution model; METR/BCG/McKinsey evidence base; 15-row experience evidence map) |
-| **6** | Deliverable Assembly | `/review` (+ optional `/proposal`) | Very Large | All prior phases | Final `solution-architecture-document.md` |
+| **6** | Deliverable Assembly | `/review` | Very Large | All prior phases | Final `solution-architecture-document.md` | **COMPLETE** (55 KB; 3 review personas: 8.4, 8.2, 8.3 — avg 8.3/10; 7 Mermaid diagrams; all 5 KCs; dual competency in 4+ sections) |
 | **7** | Interview Prep | None (preparation) | Large | Phase 6 | 3 interview prep guides + Q&A bank + study guide + cheat sheets |
 
 ---

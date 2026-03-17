@@ -46,7 +46,7 @@ I recommend an **API-First Strangler Fig migration** that preserves decades of p
 
 This solution demonstrates both **principal architect** and **GenAI team leadership** capabilities:
 
-- **Architecture depth**: 12 components, 7 data flows, 5 Mermaid diagrams, Well-Architected scoring (7.7/10 overall)
+- **Architecture depth**: 12 components, 7 data flows, 7 Mermaid diagrams, Well-Architected scoring (7.7/10 overall)
 - **GenAI pipeline**: Tiered inference (Gemini for complex cases, MedGemma for routine), confidence-based routing, human-in-the-loop for all PA decisions, OWASP LLM Top 10 alignment
 - **Security rigor**: 30 STRIDE threats analyzed, 6 compliance frameworks mapped (HIPAA, HITECH, PCI-DSS 4.0, DEA 21 CFR 1311, SOC 2, NIST SP 800-207)
 - **Human-centered design**: Grounded in my Cognitive Science BA — dual-mode interface serving both green screen experts and new hires simultaneously
@@ -594,6 +594,17 @@ Pure RBAC cannot express "only DEA-certified pharmacists can access Schedule II 
 - `department`, `location` — restrict access to department-relevant data
 - `time_of_access` — off-hours triggers enhanced monitoring
 
+### Session Management
+
+| Parameter | Value | Rationale |
+|-----------|-------|-----------|
+| Access token lifetime | 15 minutes | Limits exposure window for stolen tokens |
+| Refresh token lifetime | 8 hours | Covers a full pharmacy shift without re-login |
+| Idle timeout | 30 minutes | HIPAA §164.312(a)(2)(iii) automatic logoff |
+| Absolute session max | 12 hours | Force re-authentication after maximum shift |
+
+**Break-glass procedure**: Emergency PHI access requires FIDO2 hardware key + justification text. Automated notification to security team, IT manager, and compliance officer. Maximum 4-hour session with full SQL statement audit logging. Post-incident review within 24 hours. Satisfies HIPAA §164.312(a)(2)(ii) Emergency Access Procedure.
+
 ### IBM i to Cloud Bridge
 
 Two fundamentally different identity systems must coexist during migration:
@@ -692,6 +703,8 @@ If the GenAI pipeline is compromised (prompt injection, model manipulation, supp
 ## 5. Change Management
 
 ### Why This Matters More Than Technology
+
+Drawing on my experience coaching executives at Mento (100% leadership improvement, 93% performance improvement) and training 100 engineers at Arine on AI-first development practices, I approach change management as the critical path — not an afterthought.
 
 85% of digital transformation failures are people and process issues, not technology (BCG). This is a human transformation with a technology component — not the other way around. The budget allocation reflects this: **15% of program costs** directed to change management per Gartner's recommendation, because projects with excellent change management are **7x more likely to meet objectives** (Prosci Best Practices, 12th Ed., n=2,600).
 
