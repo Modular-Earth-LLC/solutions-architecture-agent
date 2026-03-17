@@ -1,0 +1,91 @@
+{
+  "$schema": "./schemas/engagement.schema.json",
+  "$depends_on": [],
+  "engagement_id": "eng-2026-001",
+  "title": "CVS Health Legacy System Transformation — IBMi Green Screen UI/UX Modernization",
+  "engagement_type": "modernization",
+  "status": "in_progress",
+  "created_date": "2026-03-16",
+  "last_updated": "2026-03-16",
+  "version": "1.0",
+  "client": {
+    "name": "CVS Health",
+    "industry": "Healthcare / Pharmacy Benefits",
+    "size": "enterprise"
+  },
+  "lifecycle_state": {
+    "requirements": {
+      "status": "complete",
+      "version": "1.0",
+      "file": "requirements.json",
+      "last_updated": "2026-03-16",
+      "reviewed": true
+    },
+    "architecture": {
+      "status": "complete",
+      "version": "1.1",
+      "file": "architecture.json",
+      "last_updated": "2026-03-16",
+      "reviewed": false
+    },
+    "data_model": {
+      "status": "complete",
+      "version": "1.1",
+      "file": "data_model.json",
+      "last_updated": "2026-03-16",
+      "reviewed": false
+    },
+    "security_review": {
+      "status": "not_started",
+      "version": null,
+      "file": "security_review.json",
+      "last_updated": "2026-03-16",
+      "reviewed": false
+    },
+    "integration_plan": {
+      "status": "complete",
+      "version": "1.1",
+      "file": "integration_plan.json",
+      "last_updated": "2026-03-16",
+      "reviewed": false
+    },
+    "estimate": {
+      "status": "not_started",
+      "version": null,
+      "file": "estimate.json",
+      "last_updated": "2026-03-16",
+      "reviewed": false
+    },
+    "project_plan": {
+      "status": "not_started",
+      "version": null,
+      "file": "project_plan.json",
+      "last_updated": "2026-03-16",
+      "reviewed": false
+    }
+  },
+  "review_summary": {
+    "total_reviews": 4,
+    "latest_overall_score": 8.2,
+    "blocking_findings": 0
+  },
+  "tags": [
+    "legacy-modernization",
+    "ibmi",
+    "green-screen",
+    "ui-ux",
+    "healthcare",
+    "pbm",
+    "gcp",
+    "iam",
+    "hcd",
+    "change-management",
+    "genai"
+  ],
+  "_metadata": {
+    "author": "solutions-architecture-agent",
+    "date": "2026-03-16",
+    "validation_status": "pending",
+    "version": "1.0"
+  }
+}

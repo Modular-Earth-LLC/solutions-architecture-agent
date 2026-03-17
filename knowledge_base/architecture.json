@@ -1,0 +1,446 @@
+{
+  "$schema": "./schemas/architecture.schema.json",
+  "$depends_on": ["engagement.json", "requirements.json", "integration_plan.json"],
+  "engagement_id": "eng-2026-001",
+  "version": "1.1",
+  "last_updated": "2026-03-16",
+  "status": "complete",
+
+  "executive_summary": {
+    "recommended_approach": "Three viable architecture options evaluated — all use API-First Strangler Fig migration pattern with modern React frontend + BFF layer. Recommended: Option A (GCP-Native) due to strategic alignment with CVS Health's Google Cloud partnership and Health100 platform. Option B (AWS-Native) leverages the largest HIPAA-eligible service catalog with HealthLake and Bedrock. Option C (Modern Cloud) uses Vercel + Supabase for maximum developer velocity and model-agnostic AI via Vercel AI SDK 6. All three extract IBMi business logic via IWS 3.0 REST APIs, migrate workflow-by-workflow with parallel validation, and include a GenAI pipeline for PA automation.",
+    "confidence_level": "high",
+    "go_no_go": "go_with_conditions",
+    "key_benefits": [
+      "Three genuinely viable options — all modern, all HIPAA-compliant, all supporting GenAI pipeline. Decision is strategic alignment, not technical viability.",
+      "Incremental strangler fig migration with rollback at every step — high big-bang failure rate avoided across all options (industry studies from DitsTek, Programmers.io, and Gartner cite 50-70% failure rates for big-bang migrations)",
+      "Preserves decades of pharmacy business logic on IBMi during transition — zero disruption to 99%+ electronic claims adjudication",
+      "GenAI pipeline for PA automation: days → minutes for standard cases, demonstrating AI team leadership capability",
+      "Option A aligns with CVS Health100 partnership (Gemini, BigQuery, Cloud Healthcare API). Option B leverages Paul's deep AWS SA expertise (HealthLake, Bedrock, Comprehend Medical). Option C demonstrates Paul's modern architecture practice (Vercel AI SDK 6 model-agnostic AI, Supabase PostgreSQL with RLS).",
+      "Modern React UI reduces onboarding from 6-8 weeks to <10 days and cuts data entry errors by 40% (Phase 0 research: DitsTek/Programmers.io legacy modernization benchmarks; industry average for green screen → modern UI transitions)",
+      "All options use CDC from Db2 for i via Precisely Connect (neither AWS DMS nor Google Datastream support Db2 for i natively)"
+    ],
+    "reference_architectures": [
+      "GCP Mainframe Modernization: https://cloud.google.com/solutions/mainframe-modernization",
+      "Cloud Healthcare API (FHIR R4): https://cloud.google.com/healthcare-api",
+      "Vertex AI Platform: https://cloud.google.com/vertex-ai",
+      "Apigee Health APIx: https://cloud.google.com/solutions/apigee-health-apix",
+      "Dual Run for Mainframe Migration Risk Mitigation: https://cloud.google.com/blog/products/infrastructure-modernization/dual-run-by-google-cloud-helps-mitigate-mainframe-migration-risks"
+    ],
+    "key_risks": [
+      "IBMi IWS performance under high-volume pharmacy transaction load — IWS designed for ease, not peak throughput; YAJL/CGIDEV2 may be needed for hot paths",
+      "CDC requires third-party tooling (Precisely Connect) on all three cloud platforms — vendor dependency",
+      "RPG/CL developer talent scarcity (avg age 50+) — constrains IWS API development velocity regardless of cloud choice",
+      "Multi-cloud operational complexity (chosen cloud + Azure myPBM + on-premises IBMi) requires mature platform engineering",
+      "Option C (Modern Cloud) lacks enterprise healthcare case studies at CVS scale — production-proven for startups, emerging for enterprise"
+    ],
+    "total_investment_range": "Investment range to be determined by /estimate skill with cited pricing from GCP, AWS, and Vercel/Supabase. Key cost drivers vary by option: Option A (Apigee X ~$100K/yr, Partner Interconnect ~$600-1,500/mo), Option B (API Gateway pay-per-request, Direct Connect ~similar), Option C (Vercel Pro + HIPAA $370/mo, Supabase Team + HIPAA ~$950/mo). All options: CDC tooling licenses, team augmentation for RPG/CL developers."
+  },
+
+  "tech_stack": {
+    "llm": {
+      "provider": "Google Cloud (Vertex AI)",
+      "primary_model": "Gemini (latest stable via Model Garden) for clinical text processing and PA recommendation",
+      "fallback_model": "MedGemma 1.5 (4B, open-source, healthcare-specialized — 89.6% EHRQA accuracy, 128K context) for cost-optimized inference on routine PA reviews",
+      "hosting": "Vertex AI online prediction endpoints with traffic splitting for canary deployments (10%→25%→50%→100%)",
+      "rationale": "GCP-native aligns with CVS Health100 partnership. Gemini provides highest reasoning quality for clinical decisions. MedGemma offers cost-effective fallback for routine cases. Vertex AI is HIPAA-compliant with BAA, supports VPC-SC, CMEK, and model versioning. No PHI used for model training (walled garden)."
+    },
+    "orchestration": {
+      "framework": "Vertex AI Pipelines (Kubeflow-based)",
+      "version": "Latest GA",
+      "pattern": "pipeline",
+      "rationale": "Serverless ML pipeline orchestration with DAG-based workflows. Supports batch processing (clinical notes ingestion) and online prediction (real-time PA recommendations). Private Service Connect for VPC-native execution. Kubeflow SDK provides reproducible, versioned pipeline definitions. Aligns with GenAI DS team's GCP skill requirements from job description."
+    },
+    "backend": {
+      "language": "Python (GenAI/ML pipelines, Dataflow transforms) + TypeScript (BFF services, API layer)",
+      "framework": "FastAPI (Python BFF/API services) + Express/Hono (TypeScript BFF services)",
+      "api_style": "rest"
+    },
+    "frontend": {
+      "framework": "React 19 with Module Federation (micro-frontends) + Next.js for server-side rendering",
+      "type": "web_app",
+      "rationale": "React confirmed by CVS job postings and A-0-007 assumption. Module Federation enables screen-by-screen strangler fig migration — each pharmacy workflow deployed as independent micro-frontend. SSR via React Server Components keeps PHI server-side (never in client JavaScript), reducing HIPAA client-side exposure. RSC achieves LCP 1.28s with 40-60% client bundle reduction. Performance budget: 150KB JS per route, P95 LCP <2.5s. CVS Compass design system patterns + WCAG 2.2 AA compliance (May 2026 deadline). Command palette (Ctrl+K) as bridge pattern for green screen power users."
+    },
+    "data_stores": {
+      "transactional": {
+        "technology": "Cloud SQL PostgreSQL",
+        "hosting": "GCP managed (HA multi-zone)",
+        "purpose": "Transactional data store for modernized services: member profiles, session state, migration status. Receives CDC from Db2 for i. PostgreSQL for broad ecosystem compatibility and portability."
+      },
+      "analytics": {
+        "technology": "BigQuery",
+        "hosting": "GCP serverless",
+        "purpose": "Analytics warehouse for claims history, utilization data, outcomes analysis, GenAI evaluation metrics. Partitioned by date_of_service for claims. CDC events land as append-only records. Serverless — no cluster management, scales to petabytes."
+      },
+      "fhir_store": {
+        "technology": "Cloud Healthcare API (FHIR R4)",
+        "hosting": "GCP managed",
+        "purpose": "FHIR R4 resources (Patient, Claim, Medication, Practitioner, ExplanationOfBenefit) for healthcare interoperability. Supports Health100 platform integration. SMART on FHIR authorization for clinical data access scoping."
+      },
+      "legacy_source": {
+        "technology": "Db2 for i (on-premises IBMi)",
+        "hosting": "On-premises IBM i",
+        "purpose": "System of record during migration. EBCDIC, packed decimal, fixed-length records. Accessed via JDBC (JTOpen Type-4 driver) over Partner Interconnect + HA VPN (TLS 1.2+). Journal-based CDC via Precisely Connect or Striim for continuous synchronization."
+      },
+      "caching": {
+        "technology": "Memorystore for Redis",
+        "hosting": "GCP managed",
+        "purpose": "Session cache, API response cache (formulary lookups, member eligibility with configurable staleness), rate limiting counters. Reduces IBMi load during migration by caching read-heavy responses."
+      },
+      "event_store": {
+        "technology": "Pub/Sub + BigQuery (append-only event log)",
+        "hosting": "GCP managed",
+        "purpose": "Event sourcing with 31-day Pub/Sub retention. BigQuery as immutable append-only event store partitioned by timestamp, clustered by aggregate_type and aggregate_id. Enables event replay for audit and reconciliation."
+      }
+    },
+    "infrastructure": {
+      "cloud_provider": "Google Cloud Platform (primary), with Azure (myPBM, existing) and on-premises IBMi",
+      "compute": "Cloud Run (serverless containers for BFF services, stateless APIs) + GKE Autopilot (complex orchestration, Dual Run infrastructure, stateful workloads). Hybrid approach: Cloud Run for individual API backends (~$8/mo per min-instance for cold-start mitigation), GKE Autopilot for integration platform.",
+      "container_orchestration": "Cloud Run (primary for new services) + GKE Autopilot (orchestration layer)",
+      "deployment_strategy": "canary",
+      "region": "us-east1 (primary — close to CVS HQ in Woonsocket, RI), us-central1 (DR)",
+      "monitoring": "Cloud Monitoring (metrics + alerting) + Cloud Logging (structured logs, 6-year HIPAA retention) + Cloud Trace (distributed tracing across IBMi→BFF→frontend chain)",
+      "logging": "Cloud Logging with structured JSON format. Audit logs for all data access events. OpenTelemetry for cross-service correlation. Log sinks to BigQuery for long-term analytics."
+    }
+  },
+
+  "component_design": [
+    {
+      "id": "C-001",
+      "name": "React Micro-Frontend Shell",
+      "technology": "React 19 + Module Federation + Next.js (SSR/RSC)",
+      "purpose": "Application shell hosting independently deployed micro-frontends for each pharmacy workflow. Routes between legacy (terminal emulator) and modern MFEs based on migration status. Dual-mode interface: mouse-discovery for novices, keyboard-power for green screen experts. Command palette (Ctrl+K) for workflow navigation.",
+      "inputs": ["User interactions", "BFF API responses", "WebSocket/SSE for real-time updates"],
+      "outputs": ["API requests to BFF layer", "Analytics events", "User session state"],
+      "scalability": "CDN-served static assets + edge caching. SSR on Cloud Run with min-instances=1 for cold-start elimination.",
+      "cost_driver": false
+    },
+    {
+      "id": "C-002",
+      "name": "Web BFF (Backend for Frontend)",
+      "technology": "Cloud Run (TypeScript/Python, FastAPI or Hono)",
+      "purpose": "Aggregates data from multiple IBMi APIs and cloud services, optimized for web client needs. Implements anti-corruption layer: translates between IBMi data conventions (EBCDIC, packed decimal, single-char codes) and modern domain model (UTF-8, ISO dates, enum types). Handles parallel API loading for split-pane views.",
+      "inputs": ["React frontend requests", "OAuth 2.0 tokens"],
+      "outputs": ["Aggregated domain objects (JSON)", "WebSocket/SSE streams"],
+      "scalability": "Cloud Run auto-scaling 0-100 instances based on concurrent requests. Min-instances=2 for HA.",
+      "cost_driver": true
+    },
+    {
+      "id": "C-003",
+      "name": "Apigee X API Gateway",
+      "technology": "Apigee X (Enterprise tier + HealthAPIx)",
+      "purpose": "Enterprise API gateway for all IBMi and cloud service APIs. Handles OAuth 2.0 token validation, rate limiting, API analytics, developer portal. HealthAPIx provides pre-built FHIR APIs and SMART on FHIR support. Routes traffic to IBMi IWS (legacy) or Cloud Run (modern) based on strangler fig migration status. Walgreens uses Apigee for pharmacy APIs (industry precedent).",
+      "inputs": ["Inbound API requests from BFF, Health100, myPBM, partners"],
+      "outputs": ["Routed requests to IBMi IWS or Cloud Run backends", "API analytics", "Rate limit enforcement"],
+      "scalability": "GCP-managed, auto-scales. Enterprise tier SLA ≥99.99% (dual-region).",
+      "cost_driver": true
+    },
+    {
+      "id": "C-004",
+      "name": "IBM IWS 3.0 API Layer",
+      "technology": "IBM Integrated Web Services 3.0 (Jakarta EE) on IBMi",
+      "purpose": "Exposes existing RPG/CL service programs as REST APIs without rewriting business logic. PCML-based auto-generation of web service bindings. OpenAPI UI enabled by default for API documentation. 20% performance improvement over IWS 2.6. YAJL library for high-throughput JSON handling on hot paths (claims adjudication).",
+      "inputs": ["REST requests from Apigee X"],
+      "outputs": ["JSON responses wrapping RPG program output"],
+      "scalability": "Constrained by IBMi capacity. Tune: MAX ACT in *BASE pool ≥1,000, keep DB connections open, use VARCHAR over CHAR.",
+      "cost_driver": false
+    },
+    {
+      "id": "C-005",
+      "name": "CDC Pipeline (Db2 for i → GCP)",
+      "technology": "Precisely Connect or Striim → Pub/Sub → Dataflow → Cloud SQL + BigQuery",
+      "purpose": "Continuous change data capture from IBM i journals. Reads PT/UP/DL journal entries without triggers or table scans. Transforms EBCDIC→UTF-8, packed decimal→numeric, IBM dates→ISO 8601. Loads to Cloud SQL (transactional) and BigQuery (analytics). Google Datastream does NOT support Db2 for i — third-party CDC required.",
+      "inputs": ["IBM i journal receivers (RCVJRNE)"],
+      "outputs": ["Transformed records in Cloud SQL + BigQuery", "CDC events on Pub/Sub topics"],
+      "scalability": "Throughput limited by Partner Interconnect bandwidth (1-2 Gbps). Dataflow auto-scales workers.",
+      "cost_driver": true
+    },
+    {
+      "id": "C-006",
+      "name": "GenAI PA Recommendation Engine",
+      "technology": "Vertex AI (Gemini + MedGemma 1.5) + Vertex AI Pipelines (Kubeflow)",
+      "purpose": "Processes prior authorization requests: ingests clinical notes and PA documentation, extracts structured entities (ICD-10, RxNorm, SNOMED CT), generates PA recommendation (APPROVE/DENY/NEEDS_INFO) with confidence score, citations, and alternative drug suggestions. Human-in-the-loop required for all decisions. Evaluation framework measures correctness, consistency, safety, and groundedness. Demonstrates Paul's capability to lead GenAI DS team.",
+      "inputs": ["PA requests with clinical notes", "member history", "formulary context", "policy guidelines"],
+      "outputs": ["Structured PA recommendations with confidence scores", "FHIR DocumentReference resources", "Evaluation metrics to BigQuery"],
+      "scalability": "Vertex AI online prediction endpoints with traffic splitting for model canary deployments. Batch pipeline for clinical notes ingestion.",
+      "cost_driver": true
+    },
+    {
+      "id": "C-007",
+      "name": "Clinical NLP Pipeline",
+      "technology": "Vertex AI Pipelines + Gemini/MedGemma + Document AI (OCR)",
+      "purpose": "Converts unstructured clinical text into structured FHIR resources. Pipeline stages: Document AI OCR (scanned PDFs) → preprocessing/deidentification → entity extraction (Gemini) → relation extraction → FHIR R4 bundle generation → BigQuery (analytics) + FHIR Store (interoperability). Healthcare NLP API deprecated May 2026 — architecture uses Gemini/MedGemma from start.",
+      "inputs": ["Unstructured clinical notes", "scanned PA documentation"],
+      "outputs": ["FHIR R4 resources (Condition, MedicationRequest, Procedure)", "Structured entity extractions in BigQuery"],
+      "scalability": "Vertex AI Pipelines with parallel task execution. Batch processing for document ingestion, online for real-time extraction.",
+      "cost_driver": true
+    },
+    {
+      "id": "C-008",
+      "name": "Event Bus (Pub/Sub + Eventarc)",
+      "technology": "GCP Pub/Sub + Eventarc + Schema Registry",
+      "purpose": "Event-driven backbone connecting modernized PBM services, Health100 platform, and CDC pipeline. Schema registry enforces event contract compatibility. 31-day message retention enables event sourcing. Dead letter queues for failed deliveries. Kafka→Pub/Sub bridge via Kafka Connect connector for existing Kafka producers.",
+      "inputs": ["Claims events", "CDC events", "PA status changes", "formulary updates"],
+      "outputs": ["Events to Health100", "Events to analytics pipeline", "Events to notification services"],
+      "scalability": "Pub/Sub auto-scales to millions of messages/second. No provisioning required.",
+      "cost_driver": false
+    },
+    {
+      "id": "C-009",
+      "name": "Cloud Identity Platform",
+      "technology": "GCP Cloud Identity Platform + SAML 2.0/OIDC federation",
+      "purpose": "Central identity hub federating CVS enterprise IdP (Active Directory/Okta) with GCP services. OAuth 2.0 + OpenID Connect authentication. SMART on FHIR scopes for clinical data access. MFA enforcement (TOTP/biometric/security keys). Session timeout 30 min inactivity (HIPAA). WCAG 2.2 AA 3.3.8 accessible authentication (no CAPTCHAs). IBMi user profile mapping during transition.",
+      "inputs": ["Authentication requests from React frontend"],
+      "outputs": ["JWT access tokens with role claims", "Refresh tokens", "Audit events"],
+      "scalability": "GCP-managed. Auto-scales.",
+      "cost_driver": false
+    },
+    {
+      "id": "C-010",
+      "name": "Observability Stack",
+      "technology": "Cloud Monitoring + Cloud Logging + Cloud Trace + Error Reporting + OpenTelemetry",
+      "purpose": "Comprehensive observability across hybrid IBMi-GCP architecture. Structured JSON logging with 6-year HIPAA retention. Distributed tracing across IBM i API → BFF → frontend request chain. AI-specific metrics: model latency, token usage, cost per inference, evaluation scores. Per-screen migration status dashboard, adoption metrics, and performance tracking.",
+      "inputs": ["Application logs", "Infrastructure metrics", "Trace spans", "Custom business metrics"],
+      "outputs": ["Dashboards", "Alerts (PagerDuty/Opsgenie)", "Compliance audit reports"],
+      "scalability": "GCP-managed observability services auto-scale.",
+      "cost_driver": false
+    },
+    {
+      "id": "C-011",
+      "name": "Parallel Validation Engine",
+      "technology": "Custom parallel validation via Apigee request mirroring + BigQuery comparison engine (on GKE Autopilot). NOTE: GCP Dual Run is designed for z/OS mainframes, not IBM i (AS/400). This component implements equivalent parallel validation using Apigee's built-in request mirroring to shadow production traffic to both IBMi (primary) and Cloud Run (secondary), with BigQuery storing comparison results.",
+      "purpose": "Parallel production validation for strangler fig migration. Apigee mirrors live API requests to both IBMi and Cloud Run endpoints simultaneously. A comparison service on GKE Autopilot captures response pairs, computes field-level diffs with configurable tolerance levels, and stores results in BigQuery. Two-phase switching: Phase 1 (IBMi primary, Cloud Run secondary) → Phase 2 (Cloud Run primary, IBMi secondary). Configuration-managed switching via Apigee route rules — no code changes.",
+      "inputs": ["Production API requests (replicated)"],
+      "outputs": ["Comparison reports", "Discrepancy alerts", "Go/no-go metrics"],
+      "scalability": "GKE-based, scales with production traffic volume.",
+      "cost_driver": true
+    },
+    {
+      "id": "C-012",
+      "name": "Hybrid Network Layer",
+      "technology": "Partner Interconnect (1-2 Gbps) + HA VPN (IPsec overlay) + VPC Service Controls",
+      "purpose": "Secure, low-latency connectivity between on-premises IBMi and GCP. Partner Interconnect via existing carrier (AT&T/Verizon) provides dedicated bandwidth. HA VPN overlay adds IPsec encryption (<5ms overhead) for HIPAA data-in-transit compliance. VPC Service Controls create security perimeter around HIPAA-regulated services. Redundant VLAN attachments in two regions for 99.99% SLA.",
+      "inputs": ["IBMi API traffic", "CDC data streams"],
+      "outputs": ["Encrypted, low-latency connectivity to GCP services"],
+      "scalability": "Bandwidth upgradable (50 Mbps to 10 Gbps per VLAN attachment).",
+      "cost_driver": true
+    }
+  ],
+
+  "data_flows": [
+    {
+      "id": "DF-001",
+      "name": "User Request → Claims Adjudication",
+      "source": "React Frontend (C-001)",
+      "destination": "IBMi Claims Engine (C-004) via BFF (C-002) + Apigee (C-003)",
+      "protocol": "HTTPS (REST)",
+      "data_type": "NCPDP B1 claims transaction",
+      "latency_target_ms": 500,
+      "encryption": "TLS 1.2+ (frontend→BFF→Apigee), IPsec (Apigee→IBMi via HA VPN)"
+    },
+    {
+      "id": "DF-002",
+      "name": "CDC: Db2 for i → Cloud SQL + BigQuery",
+      "source": "IBM i Journal Receivers",
+      "destination": "Cloud SQL PostgreSQL + BigQuery",
+      "protocol": "Precisely Connect/Striim agent → Pub/Sub → Dataflow",
+      "data_type": "Database change events (PT/UP/DL journal entries)",
+      "latency_target_ms": 5000,
+      "encryption": "IPsec (IBMi→GCP via HA VPN), TLS 1.2+ (within GCP), AES-256 at rest (CMEK)"
+    },
+    {
+      "id": "DF-003",
+      "name": "PA Submission → GenAI Pipeline → Pharmacist Review",
+      "source": "BFF (C-002) via Pub/Sub event",
+      "destination": "GenAI PA Engine (C-006) → FHIR Store + Review Queue",
+      "protocol": "Pub/Sub (async) → Vertex AI REST API → Cloud SQL",
+      "data_type": "Clinical notes, member history, formulary context → structured PA recommendation",
+      "latency_target_ms": 10000,
+      "encryption": "TLS 1.2+ (all segments), CMEK for model data, VPC-SC perimeter"
+    },
+    {
+      "id": "DF-004",
+      "name": "PBM Events → Health100 Platform",
+      "source": "Cloud Run BFF services (C-002)",
+      "destination": "Health100 Platform (external GCP project)",
+      "protocol": "Pub/Sub (event-driven)",
+      "data_type": "Claims status, formulary updates, PA status changes, member notifications",
+      "latency_target_ms": 1000,
+      "encryption": "GCP-internal TLS, Schema Registry validated"
+    },
+    {
+      "id": "DF-005",
+      "name": "Authentication Flow: User → IdP → Token",
+      "source": "React Frontend (C-001)",
+      "destination": "Cloud Identity Platform (C-009) → Enterprise IdP (AD/Okta)",
+      "protocol": "OIDC/SAML 2.0",
+      "data_type": "Authentication credentials → JWT tokens with role claims",
+      "latency_target_ms": 500,
+      "encryption": "TLS 1.2+, tokens signed with RS256"
+    },
+    {
+      "id": "DF-006",
+      "name": "Clinical Notes → NLP Pipeline → FHIR Resources",
+      "source": "Document uploads via BFF (C-002)",
+      "destination": "Clinical NLP Pipeline (C-007) → Cloud Healthcare API FHIR Store",
+      "protocol": "Vertex AI Pipelines (Kubeflow) → FHIR R4 REST API",
+      "data_type": "Unstructured text/PDFs → FHIR R4 Condition, MedicationRequest, Procedure",
+      "latency_target_ms": 30000,
+      "encryption": "TLS 1.2+, CMEK, VPC-SC. PHI detected by Cloud DLP flagged in metadata."
+    },
+    {
+      "id": "DF-007",
+      "name": "Dual Run Validation Flow",
+      "source": "Apigee X (C-003) — replicated production requests",
+      "destination": "Dual Run Engine (C-011) → BigQuery (comparison results)",
+      "protocol": "Shadow traffic replication",
+      "data_type": "Request/response pairs from IBMi and Cloud Run for comparison",
+      "latency_target_ms": 0,
+      "encryption": "TLS 1.2+. Shadow traffic does not affect production response."
+    }
+  ],
+
+  "diagrams": {
+    "system_context": {
+      "format": "mermaid",
+      "code": "graph TB\n    subgraph Users\n        CP[Claims Processor<br/>Maria Torres]\n        PH[Clinical Pharmacist<br/>Dr. James Chen]\n        BA[Benefits Analyst<br/>Aisha Williams]\n        IT[IT Administrator<br/>Raj Patel]\n    end\n\n    subgraph \"Modernized PBM Platform (GCP)\"\n        UI[React Micro-Frontend Shell<br/>Module Federation + Next.js SSR]\n        BFF[Cloud Run BFF Layer<br/>Anti-Corruption Layer]\n        APIGEE[Apigee X API Gateway<br/>Enterprise + HealthAPIx]\n        GENAI[GenAI Pipeline<br/>Vertex AI + Gemini/MedGemma]\n        EVENTS[Pub/Sub Event Bus<br/>Schema Registry]\n    end\n\n    subgraph \"Legacy Systems (On-Premises)\"\n        IBMI[IBMi AS/400<br/>RPG/CL + Db2 for i<br/>Claims Adjudication Engine]\n        IWS[IBM IWS 3.0<br/>REST API Layer]\n    end\n\n    subgraph \"Data Layer (GCP)\"\n        CSQL[Cloud SQL PostgreSQL<br/>Transactional]\n        BQ[BigQuery<br/>Analytics + Event Store]\n        FHIR[Cloud Healthcare API<br/>FHIR R4 Store]\n    end\n\n    subgraph \"External Platforms\"\n        H100[Health100 Platform<br/>Consumer Engagement<br/>Agentic AI + Gemini]\n        MYPBM[myPBM Portal<br/>Azure - Client Mgmt<br/>130+ APIs]\n        IDP[Enterprise IdP<br/>Active Directory / Okta]\n    end\n\n    CP & PH & BA & IT --> UI\n    UI --> BFF\n    BFF --> APIGEE\n    APIGEE --> IWS\n    IWS --> IBMI\n    BFF --> GENAI\n    BFF --> EVENTS\n    EVENTS --> H100\n    IBMI -.->|CDC| BQ\n    IBMI -.->|CDC| CSQL\n    GENAI --> FHIR\n    GENAI --> BQ\n    BFF --> MYPBM\n    UI --> IDP"
+    },
+    "deployment_view": {
+      "format": "mermaid",
+      "code": "graph TB\n    subgraph \"GCP us-east1 (Primary)\"\n        subgraph \"VPC Service Controls Perimeter\"\n            subgraph \"Cloud Run Services\"\n                CR1[web-bff<br/>min-instances=2]\n                CR2[mobile-bff<br/>min-instances=1]\n                CR3[partner-api<br/>min-instances=1]\n            end\n            subgraph \"GKE Autopilot\"\n                DR[Dual Run Engine]\n                CDC[CDC Processor<br/>Dataflow Workers]\n            end\n            subgraph \"AI/ML\"\n                VAI[Vertex AI Endpoints<br/>Gemini + MedGemma]\n                PIPE[Vertex AI Pipelines<br/>Kubeflow DAGs]\n            end\n            subgraph \"Data Stores\"\n                PG[(Cloud SQL PG<br/>HA Multi-Zone)]\n                BQ2[(BigQuery<br/>Serverless)]\n                FHIR2[(Healthcare API<br/>FHIR R4)]\n                REDIS[(Memorystore<br/>Redis)]\n            end\n            subgraph \"Messaging\"\n                PS[Pub/Sub Topics<br/>+ Schema Registry]\n                DLQ[Dead Letter<br/>Queues]\n            end\n        end\n        APG[Apigee X<br/>Enterprise + HealthAPIx]\n        CIP[Cloud Identity<br/>Platform]\n        subgraph \"Observability\"\n            MON[Cloud Monitoring]\n            LOG[Cloud Logging<br/>6yr Retention]\n            TRC[Cloud Trace]\n        end\n    end\n\n    subgraph \"GCP us-central1 (DR)\"\n        DR_PG[(Cloud SQL<br/>Read Replica)]\n        DR_BQ[(BigQuery<br/>Cross-Region)]\n    end\n\n    subgraph \"On-Premises Data Center\"\n        IBMI2[IBMi AS/400<br/>Db2 for i]\n        IWS2[IWS 3.0<br/>REST APIs]\n        PREC[Precisely Connect<br/>CDC Agent]\n    end\n\n    subgraph \"Azure\"\n        MYPBM2[myPBM Portal]\n    end\n\n    IBMI2 --- IWS2\n    IBMI2 --- PREC\n    IWS2 ---|Partner Interconnect<br/>+ HA VPN<br/>1-2 Gbps| APG\n    PREC ---|Partner Interconnect| PS\n    APG --> CR1 & CR2 & CR3\n    CR1 --> PG & REDIS & PS\n    PS --> CDC & DR & VAI\n    CDC --> PG & BQ2\n    VAI --> FHIR2 & BQ2\n    PG -.->|Async Replication| DR_PG"
+    },
+    "data_flow_diagram": {
+      "format": "mermaid",
+      "code": "flowchart LR\n    subgraph \"Ingestion\"\n        A[Pharmacy POS<br/>NCPDP B1] --> B[IBMi Claims<br/>Engine]\n        C[Clinical Notes<br/>PA Docs] --> D[Document AI<br/>OCR]\n    end\n\n    subgraph \"Processing\"\n        B -->|IWS 3.0 REST| E[Apigee X]\n        E --> F[Cloud Run BFF<br/>ACL Transform]\n        D --> G[Clinical NLP<br/>Pipeline]\n        G -->|Entity Extraction| H[Gemini/MedGemma]\n    end\n\n    subgraph \"Storage\"\n        F --> I[(Cloud SQL<br/>Transactional)]\n        B -.->|CDC Journals| J[Precisely/Striim]\n        J --> K[Pub/Sub]\n        K --> L[Dataflow<br/>Transform]\n        L --> I\n        L --> M[(BigQuery<br/>Analytics)]\n        H --> N[(FHIR Store<br/>Structured)]\n    end\n\n    subgraph \"Consumption\"\n        F --> O[React UI<br/>Pharmacy Staff]\n        M --> P[Looker<br/>Dashboards]\n        K --> Q[Health100<br/>Events]\n        N --> R[Interoperability<br/>Partners]\n    end"
+    },
+    "genai_pipeline": {
+      "format": "mermaid",
+      "code": "flowchart TB\n    subgraph \"Ingestion Layer\"\n        A[PA Request<br/>via BFF API] --> B{Document Type?}\n        B -->|Scanned PDF| C[Document AI<br/>OCR Extraction]\n        B -->|Digital Text| D[Text Preprocessing<br/>Deidentification]\n        C --> D\n    end\n\n    subgraph \"AI Processing Layer\"\n        D --> E[Entity Extraction<br/>Gemini Model]\n        E --> F[ICD-10 / RxNorm /<br/>SNOMED CT Mapping]\n        F --> G[PA Recommendation<br/>Engine]\n        G --> H{Confidence<br/>Check}\n        H -->|≥0.8| I[Auto-route to<br/>Pharmacist Queue]\n        H -->|<0.8| J[Escalate to<br/>Senior Review]\n    end\n\n    subgraph \"Evaluation Layer\"\n        G --> K[Evaluation<br/>Framework]\n        K --> L[Correctness<br/>Score]\n        K --> M[Safety<br/>Score]\n        K --> N[Groundedness<br/>Score]\n        K --> O[Consistency<br/>Score]\n        L & M & N & O --> P[(BigQuery<br/>Eval Metrics)]\n    end\n\n    subgraph \"Human-in-the-Loop\"\n        I --> Q[Clinical Pharmacist<br/>Review UI]\n        J --> Q\n        Q --> R{Decision}\n        R -->|Approve| S[Update PA Status<br/>+ Audit Trail]\n        R -->|Deny| S\n        R -->|Request Info| T[Return to<br/>Requester]\n        S --> U[Pub/Sub Event<br/>→ Health100]\n    end\n\n    subgraph \"Model Management\"\n        V[Model Registry<br/>Vertex AI] --> G\n        W[A/B Testing<br/>Traffic Split<br/>10→25→50→100%] --> G\n        X[MedGemma 1.5<br/>Cost-Optimized<br/>Fallback] -.-> G\n    end"
+    },
+    "strangler_fig_migration": {
+      "format": "mermaid",
+      "code": "flowchart LR\n    subgraph \"Phase 1: Member Eligibility (Mo 1-6)\"\n        A1[Green Screen<br/>Eligibility] -->|IWS 3.0| B1[REST API]\n        B1 --> C1[Apigee X]\n        C1 --> D1[Cloud Run BFF]\n        D1 --> E1[React MFE]\n        C1 -.->|Dual Run<br/>Compare| F1[Validation]\n    end\n\n    subgraph \"Phase 2: Claims Adjudication (Mo 7-12)\"\n        A2[Green Screen<br/>Claims] -->|IWS 3.0| B2[REST API]\n        B2 --> C2[Apigee X]\n        C2 --> D2[Cloud Run BFF]\n        D2 --> E2[React MFE]\n        C2 -.->|30-day<br/>Dual Run| F2[Validation]\n    end\n\n    subgraph \"Phase 3: Formulary + PA + GenAI (Mo 13-15)\"\n        A3[Green Screen<br/>Formulary/PA] -->|IWS 3.0| B3[REST API]\n        B3 --> C3[Apigee X]\n        C3 --> D3[Cloud Run BFF]\n        D3 --> E3[React MFE]\n        D3 --> G3[Vertex AI<br/>GenAI Pipeline]\n    end\n\n    subgraph \"Phase 4: Remaining + Health100 (Mo 16-18)\"\n        D4[Remaining<br/>Workflows] --> E4[React MFEs]\n        E4 --> H4[Health100<br/>Integration]\n    end\n\n    subgraph \"Migration Controls\"\n        FT[Feature Toggles<br/>Unleash Self-Hosted]\n        RT[Apigee Routing<br/>Legacy vs Modern]\n        GS[Green Screen<br/>Escape Hatch]\n    end\n\n    FT -.-> E1 & E2 & E3 & E4\n    RT -.-> C1 & C2 & C3"
+    }
+  },
+
+  "cloud_infrastructure": {
+    "services": {
+      "compute": ["Cloud Run (BFF services)", "GKE Autopilot (Dual Run, orchestration)", "Vertex AI (ML inference + pipelines)"],
+      "storage": ["Cloud SQL PostgreSQL (transactional)", "BigQuery (analytics)", "Cloud Storage (artifacts, backups)", "Memorystore Redis (caching)"],
+      "networking": ["Partner Interconnect (1-2 Gbps)", "HA VPN (IPsec overlay)", "Cloud Load Balancing", "Cloud CDN (static assets)", "VPC Service Controls"],
+      "messaging": ["Pub/Sub (event bus)", "Eventarc (event routing)"],
+      "healthcare": ["Cloud Healthcare API (FHIR R4)", "Document AI (OCR)"],
+      "ai_ml": ["Vertex AI (Model Garden, Pipelines, Prediction Endpoints)", "MedGemma 1.5 (open-source healthcare model)"],
+      "security": ["Cloud Identity Platform", "Cloud KMS (CMEK)", "Secret Manager", "Cloud Armor (WAF)", "Cloud DLP (PHI detection)"],
+      "feature_management": ["Unleash (self-hosted on GKE for HIPAA — per-user/per-role migration rollout)"],
+      "observability": ["Cloud Monitoring", "Cloud Logging", "Cloud Trace", "Error Reporting"]
+    },
+    "deployment_pattern": "Hybrid: serverless containers (Cloud Run) for stateless services + managed Kubernetes (GKE Autopilot) for stateful orchestration. On-premises IBMi accessed via Partner Interconnect.",
+    "dr_strategy": {
+      "rto_minutes": 15,
+      "rpo_minutes": 1,
+      "approach": "Cloud SQL cross-region read replica with automatic failover. BigQuery multi-region dataset. Pub/Sub global topic routing. Cloud Run multi-region deployment with Cloud Load Balancing failover. IBMi DR handled by existing CVS infrastructure.",
+      "regions": ["us-east1 (primary)", "us-central1 (DR)"]
+    },
+    "cost_optimization": [
+      "Cloud Run scale-to-zero for non-peak services (dev/staging environments)",
+      "Committed Use Discounts for Cloud SQL and GKE (1 or 3 year)",
+      "BigQuery flat-rate pricing if analytics volume exceeds $10K/mo on-demand",
+      "Vertex AI model right-sizing: MedGemma 1.5 (4B) for routine PA, Gemini for complex cases — tiered inference reduces cost per call",
+      "Memorystore caching reduces IBMi API call volume by serving cached eligibility/formulary responses",
+      "Cloud Storage lifecycle policies: archive CDC logs >90 days to Coldline",
+      "Partner Interconnect egress discount: $0.02/GiB vs $0.08-0.12/GiB internet egress"
+    ]
+  },
+
+  "ai_ml_components": {
+    "tool_gateway": {
+      "description": "Apigee X serves as the AI model tool gateway. GenAI pipeline services are internal-only (not exposed to end users). PA recommendation endpoint (API-005) is accessed only by the BFF layer via service-to-service authentication. Rate limiting: 50 req/s for GPU-bound Vertex AI endpoints.",
+      "auth": "GCP IAM service accounts with roles/aiplatform.user. No user-facing AI endpoints — all AI interactions are mediated by the BFF."
+    },
+    "identity_layer": {
+      "description": "GenAI pipeline uses dedicated service account (genai-pipeline@cvs-pbm-prod.iam.gserviceaccount.com) with least-privilege roles. No access to raw PHI storage — receives de-identified clinical text. Workload Identity Federation for Vertex AI jobs.",
+      "auth": "GCP Workload Identity + IAM conditions"
+    },
+    "execution_runtime": {
+      "description": "Vertex AI online prediction endpoints for real-time PA recommendations. Vertex AI Pipelines (Kubeflow) for batch clinical notes processing. Model Garden hosts Gemini and MedGemma models. Traffic splitting (10→25→50→100%) for model canary deployments.",
+      "compute": "Vertex AI managed GPU instances (auto-scaled by prediction traffic)"
+    },
+    "persistent_memory": {
+      "description": "BigQuery stores evaluation metrics, model performance history, and audit trails for all AI decisions. Cloud SQL stores PA recommendation state and HITL review status. No conversational memory needed — PA recommendations are stateless request/response.",
+      "storage": "BigQuery (analytics/audit) + Cloud SQL (operational state)"
+    },
+    "evaluation_framework": {
+      "description": "Vertex AI Gen AI Evaluation Service provides model-based metrics: CORRECTNESS, SAFETY, GROUNDEDNESS, HALLUCINATION, TEXT_QUALITY. Custom evaluation: clinical entity extraction F1 (precision, recall for ICD-10/RxNorm/SNOMED CT), PA decision accuracy vs. human reviewer agreement rate. Evaluation runs after each model update and on a sample of production predictions.",
+      "metrics": ["correctness (vs. human reviewer)", "safety (policy compliance)", "groundedness (citations to source text)", "consistency (same input → same output)", "clinical_entity_f1 (entity extraction accuracy)"]
+    },
+    "guardrails": {
+      "description": "All GenAI outputs require human-in-the-loop approval before clinical action. Confidence threshold: ≥0.8 for standard review queue, <0.8 for senior review escalation. Content filtering: no patient-identifying information in model prompts (de-identification via Cloud DLP before inference). Output validation: structured output schema enforcement via Gemini Controlled Generation. No PHI used for model training — Vertex AI walled garden.",
+      "controls": ["HITL mandatory for all PA decisions", "Confidence-based routing", "Cloud DLP de-identification", "Controlled Generation for structured output", "No PHI in training data"]
+    }
+  },
+
+  "observability": {
+    "logging": {
+      "platform": "Cloud Logging with BigQuery log sink",
+      "format": "Structured JSON (OpenTelemetry semantic conventions)",
+      "retention": {
+        "audit_logs": "6 years (HIPAA requirement — 2190 days)",
+        "application_logs": "90 days in Cloud Logging, archived to Cloud Storage",
+        "security_logs": "6 years (compliance)"
+      },
+      "phi_handling": "PHI fields masked in application logs via log redaction policies. Full PHI access only in audit logs with restricted viewer access."
+    },
+    "metrics": {
+      "platform": "Cloud Monitoring with custom dashboards",
+      "infrastructure_metrics": ["CPU utilization", "memory usage", "network throughput", "disk I/O"],
+      "application_metrics": ["request rate", "error rate", "latency (avg/P50/P95/P99)", "concurrent users", "cache hit ratio"],
+      "ai_specific_metrics": ["model inference latency", "tokens consumed per request", "cost per inference", "evaluation scores (correctness, safety, groundedness)", "HITL approval/override rate", "model version traffic distribution"],
+      "business_metrics": ["claims adjudication volume", "PA processing time", "user adoption rate", "green screen escape hatch usage", "migration screen count"]
+    },
+    "tracing": {
+      "platform": "Cloud Trace with OpenTelemetry SDK",
+      "scope": "End-to-end distributed tracing: React frontend → Cloud Run BFF → Apigee → IBMi IWS → Db2 for i. Trace context propagated via W3C Trace Context headers.",
+      "correlation": "Trace ID linked to Cloud Logging entries for trace-to-log correlation. Request correlation across hybrid boundary via custom X-Correlation-ID header."
+    }
+  },
+
+  "well_architected_scores": {
+    "operational_excellence": 8,
+    "security": 8,
+    "reliability": 8,
+    "performance_efficiency": 7,
+    "cost_optimization": 7,
+    "sustainability": 8,
+    "overall": 7.7,
+    "notes": {
+      "operational_excellence": "Strengths: Comprehensive observability (Cloud Monitoring + Logging + Trace + OpenTelemetry), CI/CD with canary deployment, IaC approach, parallel validation before cutover. Gaps: IBMi operational procedures remain separate from GCP ops — unified runbook needed. Organizational change management (ADKAR model, training programs, champion network) addressed in Phase 4 estimation and project planning. Architecture provides technical enablers: preferred_ui_mode toggle, escape hatches, gradual rollout via Unleash feature flags.",
+      "security": "Strengths: Zero trust foundation (NIST 800-207), VPC-SC perimeter, CMEK, HIPAA BAA on all services, MFA, SMART on FHIR, audit logging 6-year retention, AI guardrails (HITL, de-identification, no PHI in training). Gaps: IBMi security integration (profile mapping) needs detailed design in Phase 3.",
+      "reliability": "Strengths: Multi-zone Cloud SQL HA, cross-region DR (RTO 15 min, RPO 1 min), circuit breakers per integration, dead letter queues, Dual Run validation before cutover. Gaps: IBMi as single point of failure during migration — mitigated by existing CVS IBMi HA infrastructure.",
+      "performance_efficiency": "Strengths: Cloud Run auto-scaling, Memorystore caching, SSR with RSC (LCP 1.28s), performance budgets (150KB JS, P95 <2.5s LCP). Gaps: IWS performance under peak load is a known concern — may need YAJL/CGIDEV2 for hot paths. Network latency over Partner Interconnect adds to IBMi API calls.",
+      "cost_optimization": "Strengths: Cloud Run scale-to-zero, tiered AI inference (MedGemma for routine, Gemini for complex), Interconnect egress discount, BigQuery serverless. Gaps: Apigee Enterprise subscription is significant fixed cost (~$100K/yr). CDC tooling (Precisely/Striim) licensing adds ongoing cost. Committed Use Discounts need evaluation after traffic patterns stabilize.",
+      "sustainability": "Strengths: Serverless-first (Cloud Run, BigQuery, Pub/Sub) — no idle compute. Managed services reduce operational overhead. GCP carbon-neutral operations. Migration from legacy IBMi power consumption to efficient cloud compute. Gaps: Dual Run doubles compute during validation periods (temporary)."
+    }
+  },
+
+  "alternatives_considered": [
+    {
+      "name": "Option B: AWS-Native Architecture (Proven Enterprise)",
+      "summary": "Same API-First Strangler Fig pattern on AWS — the largest cloud provider with the most mature enterprise healthcare tooling. IBMi business logic exposed via IWS 3.0, fronted by Amazon API Gateway, served by AWS Fargate/ECS containers, with AWS HealthLake (FHIR R4 with built-in NLP), Amazon Comprehend Medical (clinical entity extraction with ICD-10/RxNorm/SNOMED CT linking), and Amazon Bedrock (HIPAA-eligible, all models including Claude Opus 4.6 and Amazon Nova Pro at $0.80/1M tokens for cost-optimized inference). CDC from Db2 for i via AWS Mainframe Modernization Data Replication with Precisely (purpose-built for IBM i/AS400 — AWS DMS does not support Db2 for i). Amazon Redshift Serverless for analytics. AWS Direct Connect (1-10 Gbps) for hybrid connectivity. React frontend on ECS/Fargate or AWS Amplify. Timeline: 12-18 months. TECH STACK: API Gateway ($1-3.50/million calls, pay-per-request), ECS Fargate (per-second vCPU/memory), HealthLake ($0.27/hr + $0.37/GB storage Advanced tier, FHIR R4 with zero-ETL SQL via Athena), Comprehend Medical ($0.01/unit tiered, 85K units free first month), Bedrock (Claude Opus $5.50/$27.50 per MTok — Bedrock 10% regional premium over API-direct, Nova Pro $0.80/$3.20 per MTok, batch 50% discount), Redshift Serverless ($0.36/RPU-hr), Direct Connect (~$200-1,700/mo per 1-10 Gbps), SageMaker (ML pipelines + model hosting). STRENGTHS: 166+ HIPAA-eligible services (largest catalog, updated March 5 2026), published Healthcare Industry Lens for Well-Architected Framework, HealthLake provides FHIR R4 with built-in NLP + zero-ETL SQL analytics (no separate NLP service needed), Payor Strategic Focus Areas reference architecture covers claims modernization, Paul has 3 years as AWS Enterprise SA (deep hands-on expertise), strongest enterprise governance tooling (Organizations, Control Tower, Security Hub), Inferentia2 chips and Trainium2 available for cost-optimized ML inference. WEAKNESSES: Does not align with CVS's strategic Google Cloud partnership — Health100 platform is GCP-native (Gemini, BigQuery, Cloud Healthcare API), no GCP Dual Run equivalent for parallel production validation (would need custom shadow traffic implementation), no Apigee HealthAPIx equivalent (API Gateway lacks built-in FHIR/SMART on FHIR support), Amazon API Gateway lacks built-in developer portal and advanced API analytics. REFERENCE ARCHITECTURES: AWS Healthcare Industry Lens (Well-Architected) https://docs.aws.amazon.com/wellarchitected/latest/healthcare-industry-lens/, Healthcare Analytics Reference Architecture https://docs.aws.amazon.com/wellarchitected/latest/healthcare-industry-lens/healthcare-analytics-reference-architecture.html, Interoperability Reference Architecture https://docs.aws.amazon.com/wellarchitected/latest/healthcare-industry-lens/interoperability-architectures.html, Payor Strategic Focus Areas https://docs.aws.amazon.com/architecture-diagrams/latest/healthcare-payor-strategic-focus-areas/, HIPAA Compliance for GenAI on AWS https://aws.amazon.com/blogs/industries/hipaa-compliance-for-generative-ai-solutions-on-aws/, Modernizing Healthcare Data Platforms for GenAI https://aws.amazon.com/blogs/industries/modernizing-healthcare-data-platforms-for-generative-ai/",
+      "why_rejected": "Not recommended as primary due to misalignment with CVS's March 2026 Google Cloud strategic partnership. Health100 platform (CVS's agentic AI consumer engagement subsidiary) is built on GCP with Gemini, BigQuery, and Cloud Healthcare API. Building the PBM modernization on AWS would create cross-cloud integration complexity for Health100 events and duplicate FHIR infrastructure (HealthLake on AWS vs Cloud Healthcare API on GCP). However, AWS remains a strong secondary recommendation if the GCP partnership scope is narrower than assumed, and Paul can speak with depth on AWS architecture given his 3-year Enterprise SA background. AWS's published Healthcare Industry Lens and Payor Strategic Focus Areas reference architectures provide authoritative patterns that inform the GCP design."
+    },
+    {
+      "name": "Option C: Modern Cloud Architecture (Rapid Development)",
+      "summary": "Same strangler fig migration pattern using modern cloud platforms optimized for developer velocity and portability. Inspired by Paul's production architectures: Paloist (React Native + Supabase + Vercel AI SDK 6 + Inngest + Cloudflare R2) and paulprae.com (Next.js 16 + Vercel Fluid Compute + Vercel AI SDK 6 + prompt caching). IBMi business logic exposed via IWS 3.0, fronted by Next.js API routes on Vercel Fluid Compute (800s max duration, 90% cost savings with active CPU pricing) or self-hosted on Cloud Run/ECS. Frontend: Next.js 16 with React Server Components (40-60% client bundle reduction, PHI stays server-side). Database: Supabase PostgreSQL with Row Level Security for database-level tenant isolation (HIPAA-compliant, SOC 2 Type II). AI: Vercel AI SDK 6 — model-agnostic access to 24+ official providers (Gemini, Claude, GPT, Bedrock, Vertex AI) + 50+ community providers; swap models via configuration, zero vendor lock-in on the most volatile layer. Workflows: Inngest or Vercel WDK for durable step-based pipelines (each step independently retryable with cached intermediate results). Storage: Cloudflare R2 ($0.015/GB/mo, zero egress fees — critical for data-heavy healthcare apps). Auth: Supabase Auth with SAML 2.0 SSO + MFA (TOTP/phone). Real-time: Supabase Realtime (WebSocket subscriptions for live PA status, claims updates). CDC from Db2 for i via Precisely Connect → Supabase PostgreSQL (direct journal-based replication to PostgreSQL target). Timeline: 10-14 months (faster due to reduced infrastructure overhead). PRICING: Vercel Pro $20/seat/mo + HIPAA BAA $350/mo (available since Sept 2025), Supabase Team $599/mo + HIPAA ~$350/mo, Cloudflare R2 $0.015/GB storage + $0 egress, Vercel AI SDK 6 $0 markup (pay provider token costs only). Total platform cost significantly lower than GCP/AWS enterprise pricing for equivalent capability. STRENGTHS: Maximum developer velocity — Next.js + Supabase enables shipping in weeks, not months. Model-agnostic AI via Vercel AI SDK 6 — if any AI provider raises prices or degrades quality, switch via configuration (Paul's Paloist architecture principle). Supabase RLS enforces security at database engine level — even if application security is bypassed, PHI remains protected. Every component uses portable, standards-based interfaces (Paul's architecture principle): PostgreSQL (any host), S3-compatible storage (R2/S3/GCS), standard Node.js (any compute platform). Self-hosted Next.js via output:standalone works on Cloud Run, ECS, or bare metal. Cost-conscious: tiered AI inference (like Paloist's three-tier pipeline), zero-egress storage, serverless-first. Demonstrates Paul's modern architecture practice — the same patterns he uses in production. WEAKNESSES: No enterprise healthcare case studies at CVS scale — Supabase healthcare page cites Juniver (B2B workflows) but no pharmacy/PBM deployments. Supabase Edge Functions limited to 200ms CPU time per request (wall-clock is higher but CPU is capped at 200ms) — complex clinical NLP may need separate compute (Cloud Run or Vercel Fluid Compute). No equivalent to GCP Dual Run for parallel production validation — would need custom shadow traffic implementation. No equivalent to Cloud Healthcare API or HealthLake for managed FHIR — would use standard FHIR server (HAPI FHIR on Supabase PostgreSQL or cloud-hosted). Vercel lock-in grows with Server Component adoption — mitigated by Next.js 16 Deployment Adapters API (alpha status — functional but not yet stable, with Netlify, Cloudflare, AWS Amplify adapters). REFERENCE ARCHITECTURES: Vercel AI SDK 6 Architecture https://ai-sdk.dev/docs/introduction, Supabase Healthcare Solutions https://supabase.com/solutions/healthcare, Vercel HIPAA Compliance Guide https://vercel.com/kb/guide/hipaa-compliance-guide-vercel, Paloist Solution Architecture (Paul's production system) C:\\dev\\paloist-core\\docs\\solution-architecture.md, paulprae.com Technical Design (Paul's production system) C:\\dev\\paulprae-com\\docs\\technical-design-document.md, Vercel Fluid Compute https://vercel.com/docs/fluid-compute, Next.js Self-Hosting Guide https://nextjs.org/docs/app/getting-started/deploying",
+      "why_rejected": "Not recommended as primary due to maturity concerns at CVS enterprise scale (9,000+ retail locations, millions of daily claims). Supabase has no published PBM or large-scale pharmacy deployments. Vercel Fluid Compute's 800s max duration and Supabase Edge Functions' 200ms CPU limit may constrain complex clinical NLP workloads (though these can be offloaded to Cloud Run or dedicated compute). However, this architecture demonstrates Paul's forward-thinking modern development practice and shows he can architect beyond traditional enterprise cloud. Key components — Vercel AI SDK 6 for model-agnostic AI, Supabase PostgreSQL with RLS, tiered inference — represent emerging best practices that inform the recommended GCP architecture. The portability principles (every component uses standards-based interfaces) are applied across all three options. If CVS's modernization starts with a smaller scope (e.g., internal tooling or a new greenfield service), Option C would deliver fastest time-to-value."
+    }
+  ],
+
+  "_metadata": {
+    "author": "sa-agent",
+    "date": "2026-03-16",
+    "validation_status": "complete",
+    "version": "1.1",
+    "architect": "Solutions Architecture Agent",
+    "design_method": "Migration (req → ip → arch → dm)"
+  }
+}

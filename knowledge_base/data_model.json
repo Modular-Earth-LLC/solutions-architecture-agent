@@ -1,0 +1,573 @@
+{
+  "$schema": "./schemas/data_model.schema.json",
+  "$depends_on": ["engagement.json", "requirements.json", "architecture.json"],
+  "engagement_id": "eng-2026-001",
+  "version": "1.1",
+  "last_updated": "2026-03-16",
+  "status": "complete",
+
+  "data_requirements": {
+    "sources": [
+      { "name": "IBMi Db2 for i", "type": "relational", "format": "EBCDIC fixed-length, packed decimal", "volume": "Petabytes accumulated", "access_pattern": "Write-heavy (claims adjudication), read-heavy (eligibility lookups)", "quality": "Production-grade for claims; needs EBCDIC→UTF-8, date format, packed decimal transformation for cloud" },
+      { "name": "NCPDP Claims Stream", "type": "streaming", "format": "NCPDP Telecommunication Standard v.D.0 (B1)", "volume": "Millions of real-time claims/day at POS", "access_pattern": "Real-time write, sub-second latency", "quality": "Standardized format; validated by pharmacy systems" },
+      { "name": "Clinical Notes / PA Docs", "type": "unstructured", "format": "Free text, scanned PDFs", "volume": "Variable, growing with GenAI pipeline", "access_pattern": "Write-once, read-many for NLP processing", "quality": "Unstructured; requires NLP/LLM extraction for structured output" },
+      { "name": "myPBM (Azure)", "type": "api", "format": "REST JSON", "volume": "Client management traffic", "access_pattern": "Read-write via 130+ APIs", "quality": "Modern API architecture; well-structured" },
+      { "name": "CDC Journal Stream", "type": "streaming", "format": "Journal entries (PT/UP/DL)", "volume": "Continuous all DB changes", "access_pattern": "Append-only event stream", "quality": "High — direct from IBM i journals" }
+    ],
+    "retention": {
+      "hipaa_minimum_years": 6,
+      "hipaa_retention_days": 2190,
+      "audit_logs": "6 years minimum (HIPAA §164.530(j))",
+      "claims_data": "7 years (HIPAA + state pharmacy board requirements)",
+      "clinical_notes": "6 years from last service date",
+      "ai_evaluation_logs": "3 years (model governance + audit trail)"
+    },
+    "data_residency": "United States only (us-east1 primary, us-central1 DR)",
+    "encryption": "AES-256 at rest (CMEK via Cloud KMS), TLS 1.2+ in transit",
+    "non_relational_stores": [
+      { "name": "Cloud Healthcare API FHIR Store", "type": "document", "purpose": "HL7 FHIR R4 resources (Patient, MedicationRequest, Condition, Coverage). Schema governed by FHIR standard — no custom schema design needed. Used for interoperability with external healthcare systems.", "access_pattern": "FHIR REST API with SMART on FHIR scopes" },
+      { "name": "Memorystore Redis", "type": "cache", "purpose": "Ephemeral cache for member eligibility, formulary lookups, and session state. TTL-managed, no persistent data. Reduces IBMi API call volume by 60-80% for hot-path lookups.", "access_pattern": "Key-value get/set with TTL expiration" },
+      { "name": "Pub/Sub + BigQuery Event Store", "type": "event_store", "purpose": "Append-only event stream for CDC events, claims status changes, PA lifecycle events, and Health100 notifications. Pub/Sub for real-time routing, BigQuery for durable event storage and analytics.", "access_pattern": "Pub/Sub publish/subscribe for real-time; BigQuery SQL for historical analytics" }
+    ]
+  },
+
+  "entities": [
+    {
+      "id": "E-001",
+      "name": "members",
+      "description": "Pharmacy benefits members — demographics, plan enrollment, eligibility status. CDC-synchronized from IBMi Db2 for i MBRMASTR library.",
+      "estimated_row_count": "~50M",
+      "storage": "Cloud SQL PostgreSQL",
+      "fields": [
+        { "name": "member_id", "type": "VARCHAR(20)", "nullable": false, "primary_key": true, "indexed": true },
+        { "name": "first_name", "type": "VARCHAR(100)", "nullable": false },
+        { "name": "last_name", "type": "VARCHAR(100)", "nullable": false },
+        { "name": "date_of_birth", "type": "DATE", "nullable": false, "indexed": true },
+        { "name": "ssn_hash", "type": "CHAR(64)", "nullable": true },
+        { "name": "gender", "type": "VARCHAR(10)", "nullable": true, "values": ["MALE", "FEMALE", "NON_BINARY", "UNKNOWN"] },
+        { "name": "address_line1", "type": "VARCHAR(200)", "nullable": true },
+        { "name": "address_line2", "type": "VARCHAR(200)", "nullable": true },
+        { "name": "city", "type": "VARCHAR(100)", "nullable": true },
+        { "name": "state", "type": "CHAR(2)", "nullable": true },
+        { "name": "zip_code", "type": "VARCHAR(10)", "nullable": true },
+        { "name": "phone", "type": "VARCHAR(20)", "nullable": true },
+        { "name": "email", "type": "VARCHAR(255)", "nullable": true },
+        { "name": "plan_id", "type": "VARCHAR(20)", "nullable": false, "indexed": true },
+        { "name": "group_id", "type": "VARCHAR(20)", "nullable": false, "indexed": true },
+        { "name": "rxbin", "type": "VARCHAR(6)", "nullable": true },
+        { "name": "rxpcn", "type": "VARCHAR(10)", "nullable": true },
+        { "name": "eligibility_status", "type": "VARCHAR(10)", "nullable": false, "indexed": true, "values": ["ACTIVE", "INACTIVE", "TERMED"] },
+        { "name": "effective_date", "type": "DATE", "nullable": false },
+        { "name": "termination_date", "type": "DATE", "nullable": true },
+        { "name": "cdc_source_timestamp", "type": "TIMESTAMPTZ", "nullable": true },
+        { "name": "created_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "updated_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "created_by", "type": "VARCHAR(100)", "nullable": false }
+      ],
+      "relationships": [
+        { "target": "plans", "type": "many_to_one", "foreign_key": "plan_id" },
+        { "target": "claims", "type": "one_to_many", "foreign_key": "member_id" },
+        { "target": "prior_authorizations", "type": "one_to_many", "foreign_key": "member_id" }
+      ]
+    },
+    {
+      "id": "E-002",
+      "name": "plans",
+      "description": "Benefit plans with copay structures, formulary assignments, and coverage rules.",
+      "estimated_row_count": "~10K",
+      "storage": "Cloud SQL PostgreSQL",
+      "fields": [
+        { "name": "plan_id", "type": "VARCHAR(20)", "nullable": false, "primary_key": true },
+        { "name": "plan_name", "type": "VARCHAR(200)", "nullable": false },
+        { "name": "group_id", "type": "VARCHAR(20)", "nullable": false, "indexed": true },
+        { "name": "formulary_id", "type": "VARCHAR(20)", "nullable": false, "indexed": true },
+        { "name": "copay_generic", "type": "NUMERIC(10,2)", "nullable": false },
+        { "name": "copay_preferred_brand", "type": "NUMERIC(10,2)", "nullable": false },
+        { "name": "copay_non_preferred_brand", "type": "NUMERIC(10,2)", "nullable": false },
+        { "name": "copay_specialty", "type": "NUMERIC(10,2)", "nullable": false },
+        { "name": "deductible_amount", "type": "NUMERIC(10,2)", "nullable": true },
+        { "name": "out_of_pocket_max", "type": "NUMERIC(10,2)", "nullable": true },
+        { "name": "effective_date", "type": "DATE", "nullable": false },
+        { "name": "termination_date", "type": "DATE", "nullable": true },
+        { "name": "plan_type", "type": "VARCHAR(20)", "nullable": false, "values": ["COMMERCIAL", "MEDICARE_D", "MEDICAID", "EXCHANGE"] },
+        { "name": "created_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "updated_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "created_by", "type": "VARCHAR(100)", "nullable": false }
+      ],
+      "relationships": [
+        { "target": "members", "type": "one_to_many", "foreign_key": "plan_id" },
+        { "target": "formularies", "type": "many_to_one", "foreign_key": "formulary_id" }
+      ]
+    },
+    {
+      "id": "E-003",
+      "name": "claims",
+      "description": "Pharmacy claims — adjudication results, pricing, DUR alerts. Transactional copy in Cloud SQL; analytics copy in BigQuery (partitioned by date_of_service).",
+      "estimated_row_count": "~500M/yr",
+      "storage": "Cloud SQL PostgreSQL + BigQuery",
+      "fields": [
+        { "name": "claim_id", "type": "VARCHAR(30)", "nullable": false, "primary_key": true },
+        { "name": "member_id", "type": "VARCHAR(20)", "nullable": false, "indexed": true },
+        { "name": "pharmacy_npi", "type": "CHAR(10)", "nullable": false, "indexed": true },
+        { "name": "prescriber_npi", "type": "CHAR(10)", "nullable": false, "indexed": true },
+        { "name": "drug_ndc", "type": "CHAR(11)", "nullable": false, "indexed": true },
+        { "name": "claim_type", "type": "VARCHAR(5)", "nullable": false, "values": ["B1", "B2", "B3"] },
+        { "name": "transaction_code", "type": "VARCHAR(5)", "nullable": false },
+        { "name": "quantity_dispensed", "type": "NUMERIC(10,3)", "nullable": false },
+        { "name": "days_supply", "type": "INTEGER", "nullable": false },
+        { "name": "date_of_service", "type": "DATE", "nullable": false, "indexed": true },
+        { "name": "date_submitted", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "claim_status", "type": "VARCHAR(10)", "nullable": false, "indexed": true, "values": ["PAID", "REJECTED", "PENDING", "REVERSED"] },
+        { "name": "reject_codes", "type": "JSONB", "nullable": true },
+        { "name": "dur_alerts", "type": "JSONB", "nullable": true },
+        { "name": "ingredient_cost", "type": "NUMERIC(12,2)", "nullable": false },
+        { "name": "dispensing_fee", "type": "NUMERIC(10,2)", "nullable": false },
+        { "name": "copay_amount", "type": "NUMERIC(10,2)", "nullable": false },
+        { "name": "plan_pay_amount", "type": "NUMERIC(12,2)", "nullable": false },
+        { "name": "patient_pay_amount", "type": "NUMERIC(10,2)", "nullable": false },
+        { "name": "pa_status", "type": "VARCHAR(20)", "nullable": true, "values": ["NOT_REQUIRED", "REQUIRED", "APPROVED", "DENIED"] },
+        { "name": "compound_code", "type": "VARCHAR(5)", "nullable": true },
+        { "name": "daw_code", "type": "CHAR(1)", "nullable": true },
+        { "name": "adjudication_timestamp", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "cdc_source_timestamp", "type": "TIMESTAMPTZ", "nullable": true },
+        { "name": "created_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "updated_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "created_by", "type": "VARCHAR(100)", "nullable": false }
+      ],
+      "relationships": [
+        { "target": "members", "type": "many_to_one", "foreign_key": "member_id" },
+        { "target": "pharmacies", "type": "many_to_one", "foreign_key": "pharmacy_npi" },
+        { "target": "providers", "type": "many_to_one", "foreign_key": "prescriber_npi" },
+        { "target": "drug_products", "type": "many_to_one", "foreign_key": "drug_ndc" }
+      ]
+    },
+    {
+      "id": "E-004",
+      "name": "pharmacies",
+      "description": "Pharmacy network — retail, mail order, specialty pharmacies with NPI and NCPDP identifiers.",
+      "estimated_row_count": "~70K",
+      "storage": "Cloud SQL PostgreSQL",
+      "fields": [
+        { "name": "pharmacy_npi", "type": "CHAR(10)", "nullable": false, "primary_key": true },
+        { "name": "ncpdp_id", "type": "VARCHAR(10)", "nullable": false, "indexed": true },
+        { "name": "pharmacy_name", "type": "VARCHAR(200)", "nullable": false },
+        { "name": "pharmacy_type", "type": "VARCHAR(20)", "nullable": false, "values": ["RETAIL", "MAIL_ORDER", "SPECIALTY", "COMPOUNDING", "LONG_TERM_CARE"] },
+        { "name": "chain_code", "type": "VARCHAR(10)", "nullable": true },
+        { "name": "address_line1", "type": "VARCHAR(200)", "nullable": false },
+        { "name": "city", "type": "VARCHAR(100)", "nullable": false },
+        { "name": "state", "type": "CHAR(2)", "nullable": false, "indexed": true },
+        { "name": "zip_code", "type": "VARCHAR(10)", "nullable": false },
+        { "name": "phone", "type": "VARCHAR(20)", "nullable": true },
+        { "name": "fax", "type": "VARCHAR(20)", "nullable": true },
+        { "name": "dea_number", "type": "VARCHAR(20)", "nullable": true },
+        { "name": "network_status", "type": "VARCHAR(15)", "nullable": false, "values": ["IN_NETWORK", "OUT_OF_NETWORK", "PREFERRED"] },
+        { "name": "created_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "updated_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "created_by", "type": "VARCHAR(100)", "nullable": false }
+      ],
+      "relationships": [
+        { "target": "claims", "type": "one_to_many", "foreign_key": "pharmacy_npi" }
+      ]
+    },
+    {
+      "id": "E-005",
+      "name": "providers",
+      "description": "Prescribing providers — physicians, NPs, PAs with NPI and DEA identifiers.",
+      "estimated_row_count": "~1M",
+      "storage": "Cloud SQL PostgreSQL",
+      "fields": [
+        { "name": "provider_npi", "type": "CHAR(10)", "nullable": false, "primary_key": true },
+        { "name": "first_name", "type": "VARCHAR(100)", "nullable": false },
+        { "name": "last_name", "type": "VARCHAR(100)", "nullable": false },
+        { "name": "credential", "type": "VARCHAR(20)", "nullable": true, "values": ["MD", "DO", "NP", "PA", "PharmD", "DDS"] },
+        { "name": "specialty", "type": "VARCHAR(100)", "nullable": true },
+        { "name": "dea_number", "type": "VARCHAR(20)", "nullable": true },
+        { "name": "dea_schedule", "type": "VARCHAR(10)", "nullable": true },
+        { "name": "state_license", "type": "VARCHAR(30)", "nullable": true },
+        { "name": "practice_address", "type": "VARCHAR(300)", "nullable": true },
+        { "name": "phone", "type": "VARCHAR(20)", "nullable": true },
+        { "name": "created_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "updated_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "created_by", "type": "VARCHAR(100)", "nullable": false }
+      ],
+      "relationships": [
+        { "target": "claims", "type": "one_to_many", "foreign_key": "prescriber_npi" },
+        { "target": "prior_authorizations", "type": "one_to_many", "foreign_key": "prescriber_npi" }
+      ]
+    },
+    {
+      "id": "E-006",
+      "name": "drug_products",
+      "description": "Drug product catalog indexed by 11-digit NDC. Includes generic name, therapeutic class, and DEA schedule.",
+      "estimated_row_count": "~200K",
+      "storage": "Cloud SQL PostgreSQL",
+      "fields": [
+        { "name": "drug_ndc", "type": "CHAR(11)", "nullable": false, "primary_key": true },
+        { "name": "drug_name", "type": "VARCHAR(300)", "nullable": false, "indexed": true },
+        { "name": "generic_name", "type": "VARCHAR(300)", "nullable": false, "indexed": true },
+        { "name": "manufacturer", "type": "VARCHAR(200)", "nullable": true },
+        { "name": "dosage_form", "type": "VARCHAR(50)", "nullable": true, "values": ["TABLET", "CAPSULE", "LIQUID", "INJECTION", "TOPICAL", "INHALER", "PATCH", "SUPPOSITORY"] },
+        { "name": "strength", "type": "VARCHAR(100)", "nullable": true },
+        { "name": "route", "type": "VARCHAR(50)", "nullable": true },
+        { "name": "therapeutic_class", "type": "VARCHAR(200)", "nullable": true, "indexed": true },
+        { "name": "ahfs_code", "type": "VARCHAR(20)", "nullable": true },
+        { "name": "gpi_code", "type": "VARCHAR(20)", "nullable": true },
+        { "name": "dea_schedule", "type": "VARCHAR(5)", "nullable": true, "values": ["II", "III", "IV", "V", "NONE"] },
+        { "name": "multi_source_code", "type": "CHAR(1)", "nullable": true, "values": ["M", "O", "N", "Y"] },
+        { "name": "rxnorm_cui", "type": "VARCHAR(20)", "nullable": true },
+        { "name": "created_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "updated_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "created_by", "type": "VARCHAR(100)", "nullable": false }
+      ],
+      "relationships": [
+        { "target": "claims", "type": "one_to_many", "foreign_key": "drug_ndc" },
+        { "target": "formulary_entries", "type": "one_to_many", "foreign_key": "drug_ndc" }
+      ]
+    },
+    {
+      "id": "E-007",
+      "name": "formulary_entries",
+      "description": "Formulary tier assignments per drug per formulary. Includes PA requirements, step therapy, and quantity limits.",
+      "estimated_row_count": "~1M",
+      "storage": "Cloud SQL PostgreSQL",
+      "fields": [
+        { "name": "formulary_entry_id", "type": "UUID", "nullable": false, "primary_key": true },
+        { "name": "formulary_id", "type": "VARCHAR(20)", "nullable": false, "indexed": true },
+        { "name": "drug_ndc", "type": "CHAR(11)", "nullable": false, "indexed": true },
+        { "name": "tier", "type": "VARCHAR(20)", "nullable": false, "values": ["GENERIC", "PREFERRED_BRAND", "NON_PREFERRED_BRAND", "SPECIALTY", "EXCLUDED"] },
+        { "name": "prior_auth_required", "type": "BOOLEAN", "nullable": false },
+        { "name": "step_therapy_required", "type": "BOOLEAN", "nullable": false },
+        { "name": "quantity_limit_amount", "type": "NUMERIC(10,3)", "nullable": true },
+        { "name": "quantity_limit_days", "type": "INTEGER", "nullable": true },
+        { "name": "effective_date", "type": "DATE", "nullable": false },
+        { "name": "termination_date", "type": "DATE", "nullable": true },
+        { "name": "clinical_notes", "type": "TEXT", "nullable": true },
+        { "name": "change_reason", "type": "TEXT", "nullable": true },
+        { "name": "created_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "updated_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "created_by", "type": "VARCHAR(100)", "nullable": false }
+      ],
+      "relationships": [
+        { "target": "drug_products", "type": "many_to_one", "foreign_key": "drug_ndc" },
+        { "target": "formularies", "type": "many_to_one", "foreign_key": "formulary_id" }
+      ]
+    },
+    {
+      "id": "E-008",
+      "name": "prior_authorizations",
+      "description": "Prior authorization requests with clinical documentation, AI recommendations, and pharmacist decisions. Core entity for GenAI pipeline demonstration.",
+      "estimated_row_count": "~5M/yr",
+      "storage": "Cloud SQL PostgreSQL",
+      "fields": [
+        { "name": "pa_id", "type": "UUID", "nullable": false, "primary_key": true },
+        { "name": "member_id", "type": "VARCHAR(20)", "nullable": false, "indexed": true },
+        { "name": "drug_ndc", "type": "CHAR(11)", "nullable": false, "indexed": true },
+        { "name": "prescriber_npi", "type": "CHAR(10)", "nullable": false, "indexed": true },
+        { "name": "diagnosis_codes", "type": "JSONB", "nullable": true },
+        { "name": "clinical_notes_text", "type": "TEXT", "nullable": true },
+        { "name": "supporting_documents", "type": "JSONB", "nullable": true },
+        { "name": "urgency", "type": "VARCHAR(15)", "nullable": false, "values": ["ROUTINE", "URGENT", "EMERGENCY"] },
+        { "name": "status", "type": "VARCHAR(30)", "nullable": false, "indexed": true, "values": ["SUBMITTED", "IN_REVIEW", "AI_RECOMMENDATION_PENDING", "PHARMACIST_REVIEW", "APPROVED", "DENIED", "APPEALED", "EXPIRED"] },
+        { "name": "ai_recommendation_id", "type": "UUID", "nullable": true },
+        { "name": "reviewer_user_id", "type": "UUID", "nullable": true },
+        { "name": "reviewer_decision", "type": "VARCHAR(15)", "nullable": true, "values": ["APPROVE", "DENY", "REQUEST_INFO"] },
+        { "name": "reviewer_rationale", "type": "TEXT", "nullable": true },
+        { "name": "decision_timestamp", "type": "TIMESTAMPTZ", "nullable": true },
+        { "name": "expiration_date", "type": "DATE", "nullable": true },
+        { "name": "submitted_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "created_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "updated_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "created_by", "type": "VARCHAR(100)", "nullable": false }
+      ],
+      "relationships": [
+        { "target": "members", "type": "many_to_one", "foreign_key": "member_id" },
+        { "target": "drug_products", "type": "many_to_one", "foreign_key": "drug_ndc" },
+        { "target": "providers", "type": "many_to_one", "foreign_key": "prescriber_npi" },
+        { "target": "ai_recommendations", "type": "one_to_one", "foreign_key": "ai_recommendation_id" },
+        { "target": "users", "type": "many_to_one", "foreign_key": "reviewer_user_id" }
+      ]
+    },
+    {
+      "id": "E-009",
+      "name": "users",
+      "description": "System users with role-based access. Federated from enterprise IdP (AD/Okta) via Cloud Identity Platform. Includes IBMi user profile mapping during transition.",
+      "estimated_row_count": "~100K",
+      "storage": "Cloud SQL PostgreSQL",
+      "fields": [
+        { "name": "user_id", "type": "UUID", "nullable": false, "primary_key": true },
+        { "name": "identity_provider_id", "type": "VARCHAR(255)", "nullable": false, "indexed": true },
+        { "name": "email", "type": "VARCHAR(255)", "nullable": false, "indexed": true },
+        { "name": "display_name", "type": "VARCHAR(200)", "nullable": false },
+        { "name": "role", "type": "VARCHAR(30)", "nullable": false, "indexed": true, "values": ["CLAIMS_PROCESSOR", "CLINICAL_PHARMACIST", "BENEFITS_ANALYST", "IT_ADMINISTRATOR", "PHARMACY_TECH", "MANAGER", "SYSTEM_SERVICE"] },
+        { "name": "ibmi_user_profile", "type": "VARCHAR(10)", "nullable": true },
+        { "name": "department", "type": "VARCHAR(100)", "nullable": true },
+        { "name": "location", "type": "VARCHAR(100)", "nullable": true },
+        { "name": "mfa_enabled", "type": "BOOLEAN", "nullable": false },
+        { "name": "dea_certified", "type": "BOOLEAN", "nullable": false },
+        { "name": "hipaa_training_date", "type": "DATE", "nullable": true },
+        { "name": "last_login_at", "type": "TIMESTAMPTZ", "nullable": true },
+        { "name": "account_status", "type": "VARCHAR(15)", "nullable": false, "values": ["ACTIVE", "SUSPENDED", "DEPROVISIONED"] },
+        { "name": "preferred_ui_mode", "type": "VARCHAR(10)", "nullable": true, "values": ["MODERN", "LEGACY", "DUAL"] },
+        { "name": "created_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "updated_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "created_by", "type": "VARCHAR(100)", "nullable": false }
+      ],
+      "relationships": [
+        { "target": "audit_log", "type": "one_to_many", "foreign_key": "user_id" },
+        { "target": "prior_authorizations", "type": "one_to_many", "foreign_key": "reviewer_user_id" }
+      ]
+    },
+    {
+      "id": "E-010",
+      "name": "audit_log",
+      "description": "HIPAA-compliant audit trail for all data access, modifications, and authentication events. Append-only, 6-year retention minimum. Also replicated to BigQuery for analytics.",
+      "estimated_row_count": "~10B+",
+      "storage": "Cloud SQL PostgreSQL + BigQuery",
+      "fields": [
+        { "name": "audit_id", "type": "UUID", "nullable": false, "primary_key": true },
+        { "name": "user_id", "type": "UUID", "nullable": false, "indexed": true },
+        { "name": "action", "type": "VARCHAR(30)", "nullable": false, "indexed": true, "values": ["READ", "CREATE", "UPDATE", "DELETE", "LOGIN", "LOGOUT", "LOGIN_FAILED", "MFA_CHALLENGE", "EXPORT", "PA_REVIEW", "AI_RECOMMENDATION_VIEWED"] },
+        { "name": "resource_type", "type": "VARCHAR(50)", "nullable": false, "indexed": true },
+        { "name": "resource_id", "type": "VARCHAR(100)", "nullable": true },
+        { "name": "result", "type": "VARCHAR(10)", "nullable": false, "values": ["SUCCESS", "FAILURE", "DENIED"] },
+        { "name": "source_ip", "type": "VARCHAR(45)", "nullable": true },
+        { "name": "user_agent", "type": "VARCHAR(500)", "nullable": true },
+        { "name": "phi_accessed", "type": "BOOLEAN", "nullable": false },
+        { "name": "correlation_id", "type": "VARCHAR(100)", "nullable": true },
+        { "name": "details", "type": "JSONB", "nullable": true },
+        { "name": "created_at", "type": "TIMESTAMPTZ", "nullable": false, "indexed": true }
+      ],
+      "relationships": [
+        { "target": "users", "type": "many_to_one", "foreign_key": "user_id" }
+      ]
+    },
+    {
+      "id": "E-011",
+      "name": "ai_recommendations",
+      "description": "GenAI PA recommendations from Vertex AI pipeline. Stores model output, confidence scores, citations, evaluation metrics, and model version for audit and governance.",
+      "estimated_row_count": "~5M/yr",
+      "storage": "Cloud SQL PostgreSQL",
+      "fields": [
+        { "name": "recommendation_id", "type": "UUID", "nullable": false, "primary_key": true },
+        { "name": "pa_id", "type": "UUID", "nullable": false, "indexed": true },
+        { "name": "recommendation", "type": "VARCHAR(15)", "nullable": false, "values": ["APPROVE", "DENY", "NEEDS_INFO"] },
+        { "name": "confidence", "type": "NUMERIC(4,3)", "nullable": false },
+        { "name": "rationale", "type": "TEXT", "nullable": false },
+        { "name": "citations", "type": "JSONB", "nullable": true },
+        { "name": "alternative_drugs", "type": "JSONB", "nullable": true },
+        { "name": "extracted_entities", "type": "JSONB", "nullable": true },
+        { "name": "model_version", "type": "VARCHAR(50)", "nullable": false },
+        { "name": "model_name", "type": "VARCHAR(100)", "nullable": false },
+        { "name": "processing_time_ms", "type": "INTEGER", "nullable": false },
+        { "name": "eval_correctness", "type": "NUMERIC(4,3)", "nullable": true },
+        { "name": "eval_safety", "type": "NUMERIC(4,3)", "nullable": true },
+        { "name": "eval_groundedness", "type": "NUMERIC(4,3)", "nullable": true },
+        { "name": "eval_consistency", "type": "NUMERIC(4,3)", "nullable": true },
+        { "name": "human_override", "type": "BOOLEAN", "nullable": true },
+        { "name": "override_reason", "type": "TEXT", "nullable": true },
+        { "name": "created_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "created_by", "type": "VARCHAR(100)", "nullable": false }
+      ],
+      "relationships": [
+        { "target": "prior_authorizations", "type": "one_to_one", "foreign_key": "pa_id" }
+      ]
+    },
+    {
+      "id": "E-012",
+      "name": "migration_status",
+      "description": "Tracks per-screen strangler fig migration status, Dual Run validation results, and user adoption metrics.",
+      "estimated_row_count": "100-500",
+      "storage": "Cloud SQL PostgreSQL",
+      "fields": [
+        { "name": "migration_id", "type": "UUID", "nullable": false, "primary_key": true },
+        { "name": "screen_name", "type": "VARCHAR(100)", "nullable": false, "indexed": true },
+        { "name": "workflow_name", "type": "VARCHAR(100)", "nullable": false },
+        { "name": "migration_phase", "type": "INTEGER", "nullable": false },
+        { "name": "status", "type": "VARCHAR(20)", "nullable": false, "values": ["NOT_STARTED", "IN_DEVELOPMENT", "DUAL_RUN", "CANARY", "PRODUCTION", "LEGACY_SUNSET"] },
+        { "name": "dual_run_start_date", "type": "DATE", "nullable": true },
+        { "name": "dual_run_end_date", "type": "DATE", "nullable": true },
+        { "name": "dual_run_discrepancy_count", "type": "INTEGER", "nullable": true },
+        { "name": "dual_run_total_comparisons", "type": "INTEGER", "nullable": true },
+        { "name": "canary_percentage", "type": "NUMERIC(5,2)", "nullable": true },
+        { "name": "adoption_rate_percent", "type": "NUMERIC(5,2)", "nullable": true },
+        { "name": "escape_hatch_usage_percent", "type": "NUMERIC(5,2)", "nullable": true },
+        { "name": "go_live_date", "type": "DATE", "nullable": true },
+        { "name": "legacy_sunset_date", "type": "DATE", "nullable": true },
+        { "name": "created_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "updated_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "created_by", "type": "VARCHAR(100)", "nullable": false }
+      ],
+      "relationships": []
+    },
+    {
+      "id": "E-013",
+      "name": "cdc_sync_log",
+      "description": "CDC synchronization tracking — monitors data flow from Db2 for i to Cloud SQL/BigQuery via Precisely Connect. Tracks lag, errors, and reconciliation status.",
+      "estimated_row_count": "millions/day",
+      "storage": "Cloud SQL PostgreSQL",
+      "fields": [
+        { "name": "sync_id", "type": "UUID", "nullable": false, "primary_key": true },
+        { "name": "source_table", "type": "VARCHAR(100)", "nullable": false, "indexed": true },
+        { "name": "target_store", "type": "VARCHAR(30)", "nullable": false, "values": ["CLOUD_SQL", "BIGQUERY"] },
+        { "name": "journal_entry_type", "type": "CHAR(2)", "nullable": false, "values": ["PT", "UP", "DL"] },
+        { "name": "source_timestamp", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "target_timestamp", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "lag_ms", "type": "INTEGER", "nullable": false },
+        { "name": "status", "type": "VARCHAR(15)", "nullable": false, "values": ["SUCCESS", "FAILED", "RETRYING", "DLQ"] },
+        { "name": "error_message", "type": "TEXT", "nullable": true },
+        { "name": "record_count", "type": "INTEGER", "nullable": false },
+        { "name": "created_at", "type": "TIMESTAMPTZ", "nullable": false }
+      ],
+      "relationships": []
+    },
+    {
+      "id": "E-014",
+      "name": "formularies",
+      "description": "Formulary definitions — parent entity for formulary_entries. Each formulary defines a drug list used by one or more benefit plans.",
+      "estimated_row_count": "~500",
+      "storage": "Cloud SQL PostgreSQL",
+      "fields": [
+        { "name": "formulary_id", "type": "VARCHAR(20)", "nullable": false, "primary_key": true },
+        { "name": "formulary_name", "type": "VARCHAR(200)", "nullable": false },
+        { "name": "description", "type": "TEXT", "nullable": true },
+        { "name": "effective_date", "type": "DATE", "nullable": false },
+        { "name": "termination_date", "type": "DATE", "nullable": true },
+        { "name": "status", "type": "VARCHAR(15)", "nullable": false, "values": ["ACTIVE", "INACTIVE", "DRAFT"] },
+        { "name": "created_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "updated_at", "type": "TIMESTAMPTZ", "nullable": false },
+        { "name": "created_by", "type": "VARCHAR(100)", "nullable": false }
+      ],
+      "relationships": [
+        { "target": "plans", "type": "one_to_many", "foreign_key": "formulary_id" },
+        { "target": "formulary_entries", "type": "one_to_many", "foreign_key": "formulary_id" }
+      ]
+    }
+  ],
+
+  "vector_schemas": [
+    {
+      "name": "clinical_notes_embeddings",
+      "storage": "BigQuery (vector columns) or Cloud SQL pgvector",
+      "embedding_model": "text-embedding-005 (Google, 768 dimensions) or text-embedding-3-large (OpenAI, 3072 dimensions)",
+      "dimensions": 768,
+      "distance_metric": "cosine",
+      "source": "Clinical notes from PA submissions and clinical documentation",
+      "chunk_strategy": {
+        "method": "recursive_character with clinical section awareness",
+        "chunk_size": 1000,
+        "overlap": 200
+      },
+      "metadata_fields": [
+        { "name": "pa_id", "type": "string" },
+        { "name": "member_id", "type": "string" },
+        { "name": "document_type", "type": "string" },
+        { "name": "section_type", "type": "string" },
+        { "name": "ingestion_timestamp", "type": "datetime" },
+        { "name": "source_system", "type": "string" }
+      ],
+      "index_type": "IVFFlat",
+      "index_lists": 100
+    }
+  ],
+
+  "ontology": {
+    "domain": "Pharmacy Benefits Management (PBM)",
+    "key_concepts": [
+      { "concept": "Claims Adjudication", "definition": "Real-time processing of pharmacy claims at point of service via NCPDP B1 transactions — eligibility check, DUR screening, UM review, pricing calculation, approval/denial", "related_to": ["DUR", "Formulary", "Prior Authorization", "Member Eligibility"] },
+      { "concept": "Drug Utilization Review (DUR)", "definition": "Automated screening for drug interactions, therapeutic duplications, contraindications, and inappropriate dosing during claims adjudication", "related_to": ["Claims Adjudication", "Drug Products", "Clinical Decision Support"] },
+      { "concept": "Formulary", "definition": "Approved drug list with tier assignments (generic, preferred brand, non-preferred, specialty) determining copay structure and coverage rules", "related_to": ["Plans", "Drug Products", "Prior Authorization", "Step Therapy"] },
+      { "concept": "Prior Authorization", "definition": "Clinical review process requiring provider justification before plan covers specific medications — increasingly AI-assisted for standard cases", "related_to": ["GenAI Pipeline", "Clinical Notes", "Formulary", "Clinical Pharmacist"] },
+      { "concept": "NDC (National Drug Code)", "definition": "11-digit unique identifier for drug products in the US market: labeler (5 digits) + product (4 digits) + package (2 digits)", "related_to": ["Drug Products", "Claims", "Formulary"] },
+      { "concept": "NPI (National Provider Identifier)", "definition": "10-digit unique identifier for healthcare providers and pharmacies required for all HIPAA-covered transactions", "related_to": ["Pharmacies", "Providers", "Claims"] },
+      { "concept": "NCPDP", "definition": "National Council for Prescription Drug Programs — standards body for pharmacy claims transactions (B1 transaction format)", "related_to": ["Claims Adjudication", "Pharmacies"] },
+      { "concept": "Strangler Fig Migration", "definition": "Incremental modernization pattern: extract legacy functionality into APIs, route traffic to modern implementation, validate equivalence via Dual Run, decommission legacy screen", "related_to": ["Migration Status", "Dual Run", "Feature Toggles"] }
+    ]
+  },
+
+  "validation_rules": {
+    "member_validation": [
+      "member_id: NOT NULL, unique, max 20 characters",
+      "date_of_birth: valid date, must be in the past, must be after 1900-01-01",
+      "eligibility_status: must be one of ACTIVE, INACTIVE, TERMED",
+      "plan_id: must reference existing plan in plans table",
+      "ssn_hash: if present, must be exactly 64 chars (SHA-256)"
+    ],
+    "claims_validation": [
+      "drug_ndc: must be valid 11-digit NDC format (regex: ^\\d{11}$)",
+      "pharmacy_npi: must be valid 10-digit NPI (regex: ^\\d{10}$)",
+      "quantity_dispensed: must be > 0",
+      "days_supply: must be between 1 and 365",
+      "date_of_service: must not be in the future",
+      "cost fields (ingredient_cost, dispensing_fee, copay_amount, plan_pay_amount, patient_pay_amount): must be >= 0",
+      "plan_pay_amount + patient_pay_amount must approximately equal ingredient_cost + dispensing_fee (tolerance: $0.01)"
+    ],
+    "pa_validation": [
+      "clinical_notes_text: max 10,000 characters",
+      "urgency: must be one of ROUTINE, URGENT, EMERGENCY",
+      "status transitions must follow: SUBMITTED → IN_REVIEW → AI_RECOMMENDATION_PENDING → PHARMACIST_REVIEW → APPROVED/DENIED/APPEALED",
+      "reviewer_decision requires reviewer_user_id and decision_timestamp",
+      "AI recommendation requires confidence score between 0.0 and 1.0"
+    ],
+    "cross_entity_validation": [
+      "Claims: member must have eligibility_status = ACTIVE on date_of_service",
+      "Claims: drug_ndc must exist in formulary for member's plan on date_of_service",
+      "PA: member must have active plan enrollment",
+      "Formulary entries: effective_date must be <= today for active entries",
+      "Users: mfa_enabled must be true for roles accessing PHI"
+    ]
+  },
+
+  "data_governance": {
+    "data_classification": {
+      "basis": "HIPAA §164.312 Technical Safeguards, NIST 800-122",
+      "tiers": {
+        "RESTRICTED": {
+          "description": "PHI and highly sensitive clinical data requiring maximum protection",
+          "entities": ["members (PHI fields: name, DOB, SSN hash, address, phone, email)", "prior_authorizations (clinical_notes_text, diagnosis_codes, supporting_documents)", "ai_recommendations (extracted_entities may contain PHI — de-identified before model inference)"],
+          "controls": "CMEK encryption, Cloud DLP scanning, VPC-SC perimeter, audit logging on all access, RLS enforcement, SMART on FHIR scopes, BigQuery column-level security"
+        },
+        "CONFIDENTIAL": {
+          "description": "Business-sensitive data requiring standard protection",
+          "entities": ["plans (benefit structures, copay rates)", "formularies (drug coverage decisions)", "formulary_entries (tier assignments, PA requirements)", "providers (NPI, DEA numbers)", "drug_products (formulary-relevant attributes)", "users (credentials, role assignments, IBMi profile mapping)"],
+          "controls": "CMEK encryption, RBAC access control, audit logging for write operations, network segmentation"
+        },
+        "INTERNAL": {
+          "description": "Operational data with standard internal controls",
+          "entities": ["migration_status (migration tracking, adoption metrics)", "cdc_sync_log (synchronization monitoring)", "pharmacies (public network information)"],
+          "controls": "Encryption at rest, standard RBAC, operational monitoring"
+        }
+      }
+    },
+    "pii_fields": [
+      "members.first_name (PHI)", "members.last_name (PHI)", "members.date_of_birth (PHI)",
+      "members.ssn_hash (PHI — hashed, never plaintext)", "members.address_* (PHI)",
+      "members.phone (PHI)", "members.email (PHI)",
+      "providers.first_name (PII)", "providers.last_name (PII)", "providers.dea_number (sensitive)",
+      "prior_authorizations.clinical_notes_text (PHI)", "prior_authorizations.diagnosis_codes (PHI)",
+      "prior_authorizations.supporting_documents (PHI)",
+      "ai_recommendations.extracted_entities (may contain PHI — de-identified before model inference)",
+      "claims.member_id (indirect PHI identifier)", "claims.prescriber_npi (PII)",
+      "audit_log.source_ip (PII)", "audit_log.user_agent (PII)",
+      "users.email (PII)", "users.identity_provider_id (PII)"
+    ],
+    "retention_policy": "HIPAA minimum 6 years (2190 days) for all PHI-containing records and audit logs. Claims data retained 7 years per state pharmacy board requirements. AI evaluation logs retained 3 years for model governance. Application logs retained 90 days in Cloud Logging, archived to Cloud Storage Coldline. CDC sync logs retained 90 days.",
+    "encryption": "AES-256 at rest via Cloud KMS Customer-Managed Encryption Keys (CMEK). Separate key rings per data classification: one for PHI data stores, one for operational data, one for AI model artifacts. TLS 1.2+ for all data in transit. IPsec encryption over Partner Interconnect for IBMi connectivity (<5ms overhead). SSN never stored in plaintext — SHA-256 hash only in cloud; original SSN remains only on IBMi.",
+    "access_control": "Hybrid RBAC + ABAC model. Base roles: CLAIMS_PROCESSOR (read claims/members, process adjudication), CLINICAL_PHARMACIST (read/write PA, view AI recommendations, formulary management), BENEFITS_ANALYST (read analytics, run reports), IT_ADMINISTRATOR (user management, system config, migration dashboard). ABAC attributes: DEA certification (required for controlled substance data), department, location, time of access. Cloud SQL row-level security policies enforce tenant isolation. BigQuery column-level security masks PHI in analytics queries for non-clinical roles. SMART on FHIR scopes control clinical data access at API level."
+  },
+
+  "migration_notes": {
+    "schema_evolution_strategy": "Additive-only migrations during transition period. New columns added as nullable with defaults. No column renames or type changes while CDC is active — these require coordinated migration windows. Schema versioning tracked in migration_status table. Flyway or Liquibase for Cloud SQL schema migrations. BigQuery schema evolution is automatic for additive changes.",
+    "ibmi_to_cloud_data_mapping": "Critical transformations during CDC: EBCDIC → UTF-8 encoding, IBM packed decimal → PostgreSQL NUMERIC, IBM date formats (YYYYMMDD packed, CYYMMDD) → ISO 8601, single-character status codes (A/I/T) → descriptive enums (ACTIVE/INACTIVE/TERMED), library/file naming → schema.table naming. Transformation logic implemented in Dataflow (Apache Beam) between Pub/Sub and Cloud SQL/BigQuery.",
+    "initial_load_strategy": "Historical data backfill via batch ETL during maintenance window (Sundays 02:00-06:00 ET). Priority order: (1) member reference data, (2) drug/pharmacy/provider reference data, (3) formulary data, (4) active claims (rolling 12 months), (5) historical claims (remaining 7 years to BigQuery only). CDC activated before initial load to capture changes during backfill — deduplication via journal entry timestamp.",
+    "dual_write_period": "During migration phases, writes continue through IBMi (system of record). Cloud SQL receives updates via CDC with eventual consistency (target lag ≤ 5 seconds). No dual-write from cloud to IBMi — unidirectional until a workflow is fully cutover. After cutover, Cloud SQL becomes system of record for that domain; IBMi receives reverse CDC for remaining legacy consumers."
+  },
+
+  "_metadata": {
+    "author": "sa-agent",
+    "date": "2026-03-16",
+    "validation_status": "complete",
+    "version": "1.1",
+    "modeler": "Solutions Architecture Agent",
+    "modeling_date": "2026-03-16"
+  }
+}
