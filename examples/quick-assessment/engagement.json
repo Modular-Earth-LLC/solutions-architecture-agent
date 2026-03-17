@@ -1,0 +1,31 @@
+{
+  "$schema": "../../knowledge_base/schemas/engagement.schema.json",
+  "engagement_id": "eng-2026-002",
+  "title": "Legacy Healthcare Claims Modernization — Quick Assessment",
+  "engagement_type": "assessment",
+  "engagement_depth": "QUICK",
+  "status": "completed",
+  "created_date": "2026-03-17",
+  "last_updated": "2026-03-17",
+  "version": "1.0",
+  "client": {
+    "name": "Example Client",
+    "industry": "Healthcare",
+    "size": "enterprise"
+  },
+  "lifecycle_state": {
+    "requirements": {
+      "status": "not_started",
+      "version": null,
+      "file": "requirements.json"
+    },
+    "architecture": {
+      "status": "complete",
+      "version": "1.0",
+      "file": "architecture.json",
+      "depth": "QUICK",
+      "reviewed": true
+    }
+  },
+  "tags": ["quick-assessment", "healthcare", "legacy-modernization", "example"]
+}
