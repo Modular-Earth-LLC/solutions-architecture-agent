@@ -59,30 +59,30 @@ Every step is independently reversible via API gateway route configuration — n
 ```mermaid
 flowchart LR
     subgraph "Legacy (IBMi)"
-        A[Green Screen<br/>Application] --> B[RPG/CL<br/>Business Logic]
-        B --> C[Db2 for i]
+        A["Green Screen<br/>Application"] --> B["RPG/CL<br/>Business Logic"]
+        B --> C["Db2 for i"]
     end
 
     subgraph "API Bridge"
-        D[IBM Integrated<br/>Web Services<br/>REST APIs]
-        E[API Gateway<br/>Traffic Routing]
+        D["IBM IWS<br/>REST APIs"]
+        E["API Gateway<br/>Traffic Routing"]
     end
 
     subgraph "Modern Platform (Cloud)"
-        F[React Web UI<br/>Micro-Frontends]
-        G[Backend Services<br/>Anti-Corruption Layer]
-        H[Cloud Database]
-        I[Analytics &<br/>Reporting]
+        F["React Web UI<br/>Micro-Frontends"]
+        G["Backend Services<br/>Anti-Corruption Layer"]
+        H["Cloud Database"]
+        I["Analytics and<br/>Reporting"]
     end
 
     B --> D
     D --> E
-    E -->|Modern path| G
-    E -.->|Legacy path| A
+    E -->|"Modern path"| G
+    E -.->|"Legacy path"| A
     G --> F
     G --> H
-    C -.->|CDC<br/>Journal Sync| H
-    C -.->|CDC| I
+    C -.->|"CDC Journal Sync"| H
+    C -.->|"CDC"| I
 ```
 
 ---
@@ -159,26 +159,26 @@ The prior authorization (PA) workflow is the strongest candidate for GenAI augme
 ```mermaid
 flowchart TB
     subgraph "Ingestion"
-        A[PA Request] --> B{Document Type}
-        B -->|Scanned PDF| C[OCR Extraction]
-        B -->|Digital Text| D[Text Preprocessing<br/>+ De-identification]
+        A["PA Request"] --> B{"Document Type"}
+        B -->|"Scanned PDF"| C["OCR Extraction"]
+        B -->|"Digital Text"| D["Preprocessing<br/>De-identification"]
         C --> D
     end
 
     subgraph "AI Processing"
-        D --> E[Entity Extraction<br/>Clinical Codes]
-        E --> F[PA Recommendation<br/>Engine]
-        F --> G{Confidence<br/>Check}
-        G -->|High confidence| H[Route to<br/>Pharmacist Queue]
-        G -->|Low confidence| I[Escalate to<br/>Senior Review]
+        D --> E["Entity Extraction<br/>Clinical Codes"]
+        E --> F["PA Recommendation<br/>Engine"]
+        F --> G{"Confidence Check"}
+        G -->|"High confidence"| H["Route to<br/>Pharmacist Queue"]
+        G -->|"Low confidence"| I["Escalate to<br/>Senior Review"]
     end
 
     subgraph "Human-in-the-Loop"
-        H --> J[Clinical Pharmacist<br/>Review]
+        H --> J["Pharmacist Review"]
         I --> J
-        J --> K{Decision}
-        K -->|Approve / Deny| L[Update Status<br/>+ Audit Trail]
-        K -->|Request Info| M[Return to Requester]
+        J --> K{"Decision"}
+        K -->|"Approve or Deny"| L["Update Status<br/>Audit Trail"]
+        K -->|"Request Info"| M["Return to Requester"]
     end
 ```
 

@@ -112,42 +112,47 @@ Dataflow transforms handle the encoding boundary: EBCDIC → UTF-8, packed decim
 ```mermaid
 flowchart LR
     subgraph "Phase 1: Member Eligibility (Mo 1-6)"
-        A1[Green Screen<br/>Eligibility] -->|IWS 3.0| B1[REST API]
-        B1 --> C1[Apigee X]
-        C1 --> D1[Cloud Run BFF]
-        D1 --> E1[React MFE]
-        C1 -.->|Dual Run<br/>Compare| F1[Validation]
+        A1["Green Screen<br/>Eligibility"] -->|"IWS 3.0"| B1["REST API"]
+        B1 --> C1["Apigee X"]
+        C1 --> D1["Cloud Run BFF"]
+        D1 --> E1["React MFE"]
+        C1 -.->|"Dual Run Compare"| F1["Validation"]
     end
 
     subgraph "Phase 2: Claims Adjudication (Mo 7-12)"
-        A2[Green Screen<br/>Claims] -->|IWS 3.0| B2[REST API]
-        B2 --> C2[Apigee X]
-        C2 --> D2[Cloud Run BFF]
-        D2 --> E2[React MFE]
-        C2 -.->|30-day<br/>Dual Run| F2[Validation]
+        A2["Green Screen<br/>Claims"] -->|"IWS 3.0"| B2["REST API"]
+        B2 --> C2["Apigee X"]
+        C2 --> D2["Cloud Run BFF"]
+        D2 --> E2["React MFE"]
+        C2 -.->|"30-day Dual Run"| F2["Validation"]
     end
 
     subgraph "Phase 3: Formulary + PA + GenAI (Mo 13-15)"
-        A3[Green Screen<br/>Formulary/PA] -->|IWS 3.0| B3[REST API]
-        B3 --> C3[Apigee X]
-        C3 --> D3[Cloud Run BFF]
-        D3 --> E3[React MFE]
-        D3 --> G3[Vertex AI<br/>GenAI Pipeline]
+        A3["Green Screen<br/>Formulary/PA"] -->|"IWS 3.0"| B3["REST API"]
+        B3 --> C3["Apigee X"]
+        C3 --> D3["Cloud Run BFF"]
+        D3 --> E3["React MFE"]
+        D3 --> G3["Vertex AI<br/>GenAI Pipeline"]
     end
 
     subgraph "Phase 4: Remaining + Health100 (Mo 16-18)"
-        D4[Remaining<br/>Workflows] --> E4[React MFEs]
-        E4 --> H4[Health100<br/>Integration]
+        D4["Remaining<br/>Workflows"] --> E4["React MFEs"]
+        E4 --> H4["Health100<br/>Integration"]
     end
 
     subgraph "Migration Controls"
-        FT[Feature Toggles<br/>Unleash Self-Hosted]
-        RT[Apigee Routing<br/>Legacy vs Modern]
-        GS[Green Screen<br/>Escape Hatch]
+        FT["Feature Toggles<br/>Unleash Self-Hosted"]
+        RT["Apigee Routing<br/>Legacy vs Modern"]
+        GS["Green Screen<br/>Escape Hatch"]
     end
 
-    FT -.-> E1 & E2 & E3 & E4
-    RT -.-> C1 & C2 & C3
+    FT -.-> E1
+    FT -.-> E2
+    FT -.-> E3
+    FT -.-> E4
+    RT -.-> C1
+    RT -.-> C2
+    RT -.-> C3
 ```
 
 ### Coexistence Strategy
@@ -242,52 +247,55 @@ Key requirements for this modernization:
 ### System Context
 
 ```mermaid
-graph TB
-    subgraph Users
-        CP[Claims Processor<br/>Maria Torres]
-        PH[Clinical Pharmacist<br/>Dr. James Chen]
-        BA[Benefits Analyst<br/>Aisha Williams]
-        IT[IT Administrator<br/>Raj Patel]
+flowchart TB
+    subgraph "Users"
+        CP["Claims Processor"]
+        PH["Clinical Pharmacist"]
+        BA["Benefits Analyst"]
+        IT["IT Administrator"]
     end
 
     subgraph "Modernized PBM Platform (GCP)"
-        UI[React Micro-Frontend Shell<br/>Module Federation + Next.js SSR]
-        BFF[Cloud Run BFF Layer<br/>Anti-Corruption Layer]
-        APIGEE[Apigee X API Gateway<br/>Enterprise + HealthAPIx]
-        GENAI[GenAI Pipeline<br/>Vertex AI + Gemini/MedGemma]
-        EVENTS[Pub/Sub Event Bus<br/>Schema Registry]
+        UI["React MFE Shell<br/>Module Federation"]
+        BFF_SVC["Cloud Run BFF<br/>Anti-Corruption Layer"]
+        APIGEE["Apigee X Gateway<br/>HealthAPIx"]
+        GENAI["GenAI Pipeline<br/>Vertex AI"]
+        EVENTS["Pub/Sub Event Bus"]
     end
 
     subgraph "Legacy Systems (On-Premises)"
-        IBMI[IBMi AS/400<br/>RPG/CL + Db2 for i<br/>Claims Adjudication Engine]
-        IWS[IBM IWS 3.0<br/>REST API Layer]
+        IBMI["IBMi AS/400<br/>Claims Engine"]
+        IWS["IBM IWS 3.0<br/>REST API Layer"]
     end
 
     subgraph "Data Layer (GCP)"
-        CSQL[Cloud SQL PostgreSQL<br/>Transactional]
-        BQ[BigQuery<br/>Analytics + Event Store]
-        FHIR[Cloud Healthcare API<br/>FHIR R4 Store]
+        CSQL["Cloud SQL PostgreSQL"]
+        BQ["BigQuery Analytics"]
+        FHIR_STORE["Cloud Healthcare API<br/>FHIR R4"]
     end
 
     subgraph "External Platforms"
-        H100[Health100 Platform<br/>Consumer Engagement<br/>Agentic AI + Gemini]
-        MYPBM[myPBM Portal<br/>Azure - Client Mgmt<br/>130+ APIs]
-        IDP[Enterprise IdP<br/>Active Directory / Okta]
+        H100["Health100 Platform<br/>Agentic AI"]
+        MYPBM["myPBM Portal<br/>Azure"]
+        IDP["Enterprise IdP<br/>AD / Okta"]
     end
 
-    CP & PH & BA & IT --> UI
-    UI --> BFF
-    BFF --> APIGEE
+    CP --> UI
+    PH --> UI
+    BA --> UI
+    IT --> UI
+    UI --> BFF_SVC
+    BFF_SVC --> APIGEE
     APIGEE --> IWS
     IWS --> IBMI
-    BFF --> GENAI
-    BFF --> EVENTS
+    BFF_SVC --> GENAI
+    BFF_SVC --> EVENTS
     EVENTS --> H100
-    IBMI -.->|CDC| BQ
-    IBMI -.->|CDC| CSQL
-    GENAI --> FHIR
+    IBMI -.->|"CDC"| BQ
+    IBMI -.->|"CDC"| CSQL
+    GENAI --> FHIR_STORE
     GENAI --> BQ
-    BFF --> MYPBM
+    BFF_SVC --> MYPBM
     UI --> IDP
 ```
 
@@ -329,32 +337,32 @@ graph TB
 ```mermaid
 flowchart LR
     subgraph "Ingestion"
-        A[Pharmacy POS<br/>NCPDP B1] --> B[IBMi Claims<br/>Engine]
-        C[Clinical Notes<br/>PA Docs] --> D[Document AI<br/>OCR]
+        A["Pharmacy POS<br/>NCPDP B1"] --> B["IBMi Claims<br/>Engine"]
+        C["Clinical Notes<br/>PA Docs"] --> D["Document AI OCR"]
     end
 
     subgraph "Processing"
-        B -->|IWS 3.0 REST| E[Apigee X]
-        E --> F[Cloud Run BFF<br/>ACL Transform]
-        D --> G[Clinical NLP<br/>Pipeline]
-        G -->|Entity Extraction| H[Gemini/MedGemma]
+        B -->|"IWS 3.0 REST"| E["Apigee X"]
+        E --> F["Cloud Run BFF<br/>ACL Transform"]
+        D --> G["Clinical NLP<br/>Pipeline"]
+        G -->|"Entity Extraction"| H["Gemini / MedGemma"]
     end
 
     subgraph "Storage"
-        F --> I[(Cloud SQL<br/>Transactional)]
-        B -.->|CDC Journals| J[Precisely/Striim]
-        J --> K[Pub/Sub]
-        K --> L[Dataflow<br/>Transform]
+        F --> I[("Cloud SQL<br/>Transactional")]
+        B -.->|"CDC Journals"| J["Precisely / Striim"]
+        J --> K["Pub/Sub"]
+        K --> L["Dataflow Transform"]
         L --> I
-        L --> M[(BigQuery<br/>Analytics)]
-        H --> N[(FHIR Store<br/>Structured)]
+        L --> M[("BigQuery<br/>Analytics")]
+        H --> N[("FHIR Store")]
     end
 
     subgraph "Consumption"
-        F --> O[React UI<br/>Pharmacy Staff]
-        M --> P[Looker<br/>Dashboards]
-        K --> Q[Health100<br/>Events]
-        N --> R[Interoperability<br/>Partners]
+        F --> O["React UI<br/>Pharmacy Staff"]
+        M --> P["Looker Dashboards"]
+        K --> Q["Health100 Events"]
+        N --> R["Interoperability<br/>Partners"]
     end
 ```
 
@@ -365,44 +373,47 @@ This pipeline demonstrates the dual competency the role requires: I architect th
 ```mermaid
 flowchart TB
     subgraph "Ingestion Layer"
-        A[PA Request<br/>via BFF API] --> B{Document Type?}
-        B -->|Scanned PDF| C[Document AI<br/>OCR Extraction]
-        B -->|Digital Text| D[Text Preprocessing<br/>Deidentification]
+        A["PA Request<br/>via BFF API"] --> B{"Document Type?"}
+        B -->|"Scanned PDF"| C["Document AI<br/>OCR Extraction"]
+        B -->|"Digital Text"| D["Text Preprocessing<br/>De-identification"]
         C --> D
     end
 
     subgraph "AI Processing Layer"
-        D --> E[Entity Extraction<br/>Gemini Model]
-        E --> F[ICD-10 / RxNorm /<br/>SNOMED CT Mapping]
-        F --> G[PA Recommendation<br/>Engine]
-        G --> H{Confidence<br/>Check}
-        H -->|≥0.8| I[Auto-route to<br/>Pharmacist Queue]
-        H -->|<0.8| J[Escalate to<br/>Senior Review]
+        D --> E["Entity Extraction<br/>Gemini Model"]
+        E --> F["Clinical Code Mapping<br/>ICD-10 / RxNorm"]
+        F --> G["PA Recommendation<br/>Engine"]
+        G --> H{"Confidence Check"}
+        H -->|"High confidence"| I["Route to<br/>Pharmacist Queue"]
+        H -->|"Low confidence"| J["Escalate to<br/>Senior Review"]
     end
 
     subgraph "Evaluation Layer"
-        G --> K[Evaluation<br/>Framework]
-        K --> L[Correctness<br/>Score]
-        K --> M[Safety<br/>Score]
-        K --> N[Groundedness<br/>Score]
-        K --> O[Consistency<br/>Score]
-        L & M & N & O --> P[(BigQuery<br/>Eval Metrics)]
+        G --> K["Evaluation Framework"]
+        K --> L["Correctness Score"]
+        K --> M["Safety Score"]
+        K --> N["Groundedness Score"]
+        K --> O["Consistency Score"]
+        L --> P[("BigQuery<br/>Eval Metrics")]
+        M --> P
+        N --> P
+        O --> P
     end
 
     subgraph "Human-in-the-Loop"
-        I --> Q[Clinical Pharmacist<br/>Review UI]
+        I --> Q["Pharmacist Review UI"]
         J --> Q
-        Q --> R{Decision}
-        R -->|Approve| S[Update PA Status<br/>+ Audit Trail]
-        R -->|Deny| S
-        R -->|Request Info| T[Return to<br/>Requester]
-        S --> U[Pub/Sub Event<br/>→ Health100]
+        Q --> R{"Decision"}
+        R -->|"Approve"| S["Update PA Status<br/>Audit Trail"]
+        R -->|"Deny"| S
+        R -->|"Request Info"| T["Return to Requester"]
+        S --> U["Pub/Sub Event<br/>to Health100"]
     end
 
     subgraph "Model Management"
-        V[Model Registry<br/>Vertex AI] --> G
-        W[A/B Testing<br/>Traffic Split<br/>10→25→50→100%] --> G
-        X[MedGemma 1.5<br/>Cost-Optimized<br/>Fallback] -.-> G
+        V["Model Registry<br/>Vertex AI"] --> G
+        W["A/B Testing<br/>Traffic Split"] --> G
+        X["MedGemma 1.5<br/>Cost-Optimized"] -.-> G
     end
 ```
 
@@ -419,67 +430,75 @@ flowchart TB
 ### Deployment Architecture
 
 ```mermaid
-graph TB
+flowchart TB
     subgraph "GCP us-east1 (Primary)"
         subgraph "VPC Service Controls Perimeter"
             subgraph "Cloud Run Services"
-                CR1[web-bff<br/>min-instances=2]
-                CR2[mobile-bff<br/>min-instances=1]
-                CR3[partner-api<br/>min-instances=1]
+                CR1["web-bff"]
+                CR2["mobile-bff"]
+                CR3["partner-api"]
             end
             subgraph "GKE Autopilot"
-                DR[Dual Run Engine]
-                CDC[CDC Processor<br/>Dataflow Workers]
+                DR["Dual Run Engine"]
+                CDC_PROC["CDC Processor<br/>Dataflow"]
             end
             subgraph "AI/ML"
-                VAI[Vertex AI Endpoints<br/>Gemini + MedGemma]
-                PIPE[Vertex AI Pipelines<br/>Kubeflow DAGs]
+                VAI["Vertex AI Endpoints<br/>Gemini"]
+                PIPE["Vertex AI Pipelines"]
             end
             subgraph "Data Stores"
-                PG[(Cloud SQL PG<br/>HA Multi-Zone)]
-                BQ2[(BigQuery<br/>Serverless)]
-                FHIR2[(Healthcare API<br/>FHIR R4)]
-                REDIS[(Memorystore<br/>Redis)]
+                PG[("Cloud SQL PG<br/>HA Multi-Zone")]
+                BQ2[("BigQuery")]
+                FHIR2[("Healthcare API<br/>FHIR R4")]
+                REDIS[("Memorystore Redis")]
             end
             subgraph "Messaging"
-                PS[Pub/Sub Topics<br/>+ Schema Registry]
-                DLQ[Dead Letter<br/>Queues]
+                PS["Pub/Sub Topics<br/>Schema Registry"]
+                DLQ["Dead Letter Queues"]
             end
         end
-        APG[Apigee X<br/>Enterprise + HealthAPIx]
-        CIP[Cloud Identity<br/>Platform]
+        APG["Apigee X<br/>HealthAPIx"]
+        CIP_DEPLOY["Cloud Identity<br/>Platform"]
         subgraph "Observability"
-            MON[Cloud Monitoring]
-            LOG[Cloud Logging<br/>6yr Retention]
-            TRC[Cloud Trace]
+            MON["Cloud Monitoring"]
+            LOG["Cloud Logging"]
+            TRC["Cloud Trace"]
         end
     end
 
     subgraph "GCP us-central1 (DR)"
-        DR_PG[(Cloud SQL<br/>Read Replica)]
-        DR_BQ[(BigQuery<br/>Cross-Region)]
+        DR_PG[("Cloud SQL<br/>Read Replica")]
+        DR_BQ[("BigQuery<br/>Cross-Region")]
     end
 
     subgraph "On-Premises Data Center"
-        IBMI2[IBMi AS/400<br/>Db2 for i]
-        IWS2[IWS 3.0<br/>REST APIs]
-        PREC[Precisely Connect<br/>CDC Agent]
+        IBMI2["IBMi AS/400<br/>Db2 for i"]
+        IWS2["IWS 3.0<br/>REST APIs"]
+        PREC["Precisely Connect<br/>CDC Agent"]
     end
 
     subgraph "Azure"
-        MYPBM2[myPBM Portal]
+        MYPBM2["myPBM Portal"]
     end
 
     IBMI2 --- IWS2
     IBMI2 --- PREC
-    IWS2 ---|Partner Interconnect<br/>+ HA VPN<br/>1-2 Gbps| APG
-    PREC ---|Partner Interconnect| PS
-    APG --> CR1 & CR2 & CR3
-    CR1 --> PG & REDIS & PS
-    PS --> CDC & DR & VAI
-    CDC --> PG & BQ2
-    VAI --> FHIR2 & BQ2
-    PG -.->|Async Replication| DR_PG
+    IWS2 ---|"Partner Interconnect<br/>HA VPN"| APG
+    PREC ---|"Partner Interconnect"| PS
+    APG --> CR1
+    APG --> CR2
+    APG --> CR3
+    CR1 --> PG
+    CR1 --> REDIS
+    CR1 --> PS
+    PS --> CDC_PROC
+    PS --> DR
+    PS --> VAI
+    CDC_PROC --> PG
+    CDC_PROC --> BQ2
+    VAI --> FHIR2
+    VAI --> BQ2
+    PG -.->|"Async Replication"| DR_PG
 ```
 
 ### Well-Architected Scoring
@@ -515,61 +534,66 @@ Having operated within enterprise IAM environments across three years as an AWS 
 ```mermaid
 flowchart TB
     subgraph "User Layer"
-        CP[Claims Processor<br/>Maria Torres]
-        PH[Clinical Pharmacist<br/>Dr. James Chen]
-        BA[Benefits Analyst<br/>Aisha Williams]
-        IT[IT Administrator<br/>Raj Patel]
+        CP_USER["Claims Processor"]
+        PH_USER["Clinical Pharmacist"]
+        BA_USER["Benefits Analyst"]
+        IT_USER["IT Administrator"]
     end
 
     subgraph "Identity Layer"
-        IDP_ENT[Enterprise IdP<br/>Active Directory / Okta]
-        IDP_FED{Federation<br/>SAML 2.0 / OIDC}
+        IDP_ENT["Enterprise IdP<br/>AD / Okta"]
+        IDP_FED{"Federation<br/>SAML 2.0 / OIDC"}
     end
 
-    subgraph "Authentication & Authorization"
+    subgraph "Authentication and Authorization"
         direction TB
-        CIP[Cloud Identity Platform<br/>Central Identity Hub]
-        MFA{MFA Gate<br/>TOTP / FIDO2 / Biometric}
-        STEP_UP{Step-Up Auth<br/>PA Review / EPCS / Break-Glass}
-        OPA[OPA Policy Engine<br/>RBAC + ABAC Evaluation]
+        CIP_AUTH["Cloud Identity<br/>Platform"]
+        MFA_GATE{"MFA Gate<br/>TOTP / FIDO2"}
+        STEP_UP{"Step-Up Auth"}
+        OPA_ENGINE["OPA Policy Engine<br/>RBAC + ABAC"]
     end
 
     subgraph "API Gateway"
-        APG[Apigee X<br/>JWT Validation<br/>Rate Limiting<br/>SMART on FHIR Scopes]
+        APG_GW["Apigee X<br/>JWT Validation"]
     end
 
     subgraph "Service Layer"
-        BFF[BFF Cloud Run<br/>bff-service@]
-        GENAI[GenAI Pipeline<br/>genai-pipeline@]
-        CDC[CDC Pipeline<br/>cdc-pipeline@]
+        BFF_SVC["BFF Cloud Run"]
+        GENAI_SVC["GenAI Pipeline"]
+        CDC_SVC["CDC Pipeline"]
     end
 
     subgraph "Data Layer (Row-Level Security)"
-        CSQL[(Cloud SQL<br/>FORCE RLS on all PHI tables)]
-        BQ[(BigQuery<br/>Column-Level Security)]
-        FHIR[(FHIR Store<br/>SMART on FHIR Scopes)]
+        CSQL_DATA[("Cloud SQL<br/>FORCE RLS")]
+        BQ_DATA[("BigQuery<br/>Column Security")]
+        FHIR_DATA[("FHIR Store")]
     end
 
     subgraph "Legacy Layer"
-        IBMI[IBMi AS/400<br/>*ALLOBJ / *SECADM<br/>10-char User Profiles]
-        IWS[IWS 3.0<br/>Service Program Auth]
+        IBMI_LEGACY["IBMi AS/400<br/>User Profiles"]
+        IWS_LEGACY["IWS 3.0<br/>Service Auth"]
     end
 
-    CP & PH & BA & IT --> IDP_ENT
+    CP_USER --> IDP_ENT
+    PH_USER --> IDP_ENT
+    BA_USER --> IDP_ENT
+    IT_USER --> IDP_ENT
     IDP_ENT --> IDP_FED
-    IDP_FED --> CIP
-    CIP --> MFA
-    MFA --> CIP
-    CIP -->|JWT with role claims| APG
-    APG -->|STEP_UP required?| STEP_UP
-    STEP_UP --> APG
-    APG --> OPA
-    OPA -->|Policy decision| BFF
-    BFF --> CSQL & BQ & FHIR
-    BFF --> GENAI
-    CDC --> CSQL
-    APG ---|IWS 3.0 REST| IWS
-    IWS --> IBMI
+    IDP_FED --> CIP_AUTH
+    CIP_AUTH --> MFA_GATE
+    MFA_GATE --> CIP_AUTH
+    CIP_AUTH -->|"JWT with role claims"| APG_GW
+    APG_GW -->|"Step-up required?"| STEP_UP
+    STEP_UP --> APG_GW
+    APG_GW --> OPA_ENGINE
+    OPA_ENGINE -->|"Policy decision"| BFF_SVC
+    BFF_SVC --> CSQL_DATA
+    BFF_SVC --> BQ_DATA
+    BFF_SVC --> FHIR_DATA
+    BFF_SVC --> GENAI_SVC
+    CDC_SVC --> CSQL_DATA
+    APG_GW ---|"IWS 3.0 REST"| IWS_LEGACY
+    IWS_LEGACY --> IBMI_LEGACY
 ```
 
 ### Authorization Model: Hybrid RBAC + ABAC
@@ -624,35 +648,37 @@ The most important IAM design decision: `genai-pipeline@` has **zero direct acce
 ```mermaid
 flowchart LR
     subgraph "PHI Zone (Restricted)"
-        CSQL3[(Cloud SQL<br/>Raw PHI)]
-        FHIR3[(FHIR Store<br/>Raw PHI)]
+        CSQL3[("Cloud SQL<br/>Raw PHI")]
+        FHIR3[("FHIR Store<br/>Raw PHI")]
     end
 
     subgraph "DLP Gate Service"
-        DLP_SA[dlp-gate-service@<br/>reads raw PHI]
-        DLP2[Cloud DLP<br/>De-Identification]
+        DLP_SA["DLP Gate Service<br/>Reads Raw PHI"]
+        DLP2["Cloud DLP<br/>De-Identification"]
     end
 
     subgraph "De-Identified Zone"
-        BUCKET[(Cloud Storage<br/>dlp-processed-output<br/>De-identified only)]
+        BUCKET[("Cloud Storage<br/>De-identified Only")]
     end
 
     subgraph "AI Zone (VPC-SC Isolated)"
-        GENAI_SA[genai-pipeline@<br/>NO PHI access]
-        VAI3[Vertex AI<br/>Gemini / MedGemma]
+        GENAI_SA["GenAI Pipeline<br/>No PHI Access"]
+        VAI3["Vertex AI<br/>Gemini"]
     end
 
     subgraph "Output Zone"
-        RECS[(ai_recommendations<br/>Cloud SQL)]
-        AUDIT2[(BigQuery<br/>AI Decision Audit)]
+        RECS[("AI Recommendations<br/>Cloud SQL")]
+        AUDIT2[("BigQuery<br/>AI Decision Audit")]
     end
 
-    CSQL3 & FHIR3 --> DLP_SA
+    CSQL3 --> DLP_SA
+    FHIR3 --> DLP_SA
     DLP_SA --> DLP2
     DLP2 --> BUCKET
     BUCKET --> GENAI_SA
     GENAI_SA --> VAI3
-    VAI3 --> RECS & AUDIT2
+    VAI3 --> RECS
+    VAI3 --> AUDIT2
 ```
 
 If the GenAI pipeline is compromised (prompt injection, model manipulation, supply chain attack), the attacker gains access to de-identified clinical topics only — never raw PHI. Defense-in-depth at the architecture level.

@@ -19,66 +19,71 @@ Having operated within enterprise IAM environments across three years as an AWS 
 ```mermaid
 flowchart TB
     subgraph "User Layer"
-        CP[Claims Processor<br/>Maria Torres]
-        PH[Clinical Pharmacist<br/>Dr. James Chen]
-        BA[Benefits Analyst<br/>Aisha Williams]
-        IT[IT Administrator<br/>Raj Patel]
+        CP_USER["Claims Processor"]
+        PH_USER["Clinical Pharmacist"]
+        BA_USER["Benefits Analyst"]
+        IT_USER["IT Administrator"]
     end
 
     subgraph "Identity Layer"
-        IDP_ENT[Enterprise IdP<br/>Active Directory / Okta]
-        IDP_FED{Federation<br/>SAML 2.0 / OIDC}
+        IDP_ENT["Enterprise IdP<br/>AD / Okta"]
+        IDP_FED{"Federation<br/>SAML 2.0 / OIDC"}
     end
 
-    subgraph "Authentication & Authorization"
+    subgraph "Authentication and Authorization"
         direction TB
-        CIP[Cloud Identity Platform<br/>Central Identity Hub]
-        MFA{MFA Gate<br/>TOTP / FIDO2 / Biometric}
-        STEP_UP{Step-Up Auth<br/>PA Review / EPCS / Break-Glass}
-        OPA[OPA Policy Engine<br/>RBAC + ABAC Evaluation]
+        CIP_AUTH["Cloud Identity<br/>Platform"]
+        MFA_GATE{"MFA Gate<br/>TOTP / FIDO2"}
+        STEP_UP{"Step-Up Auth"}
+        OPA_ENGINE["OPA Policy Engine<br/>RBAC + ABAC"]
     end
 
     subgraph "API Gateway"
-        APG[Apigee X<br/>JWT Validation<br/>Rate Limiting<br/>SMART on FHIR Scopes]
+        APG_GW["Apigee X<br/>JWT Validation"]
     end
 
     subgraph "Service Layer"
-        BFF[BFF Cloud Run<br/>bff-service@]
-        GENAI[GenAI Pipeline<br/>genai-pipeline@]
-        CDC[CDC Pipeline<br/>cdc-pipeline@]
+        BFF_SVC["BFF Cloud Run"]
+        GENAI_SVC["GenAI Pipeline"]
+        CDC_SVC["CDC Pipeline"]
     end
 
     subgraph "Data Layer (Row-Level Security)"
-        CSQL[(Cloud SQL<br/>FORCE RLS on all PHI tables)]
-        BQ[(BigQuery<br/>Column-Level Security)]
-        FHIR[(FHIR Store<br/>SMART on FHIR Scopes)]
+        CSQL_DATA[("Cloud SQL<br/>FORCE RLS")]
+        BQ_DATA[("BigQuery<br/>Column Security")]
+        FHIR_DATA[("FHIR Store")]
     end
 
     subgraph "Legacy Layer"
-        IBMI[IBMi AS/400<br/>*ALLOBJ / *SECADM<br/>10-char User Profiles]
-        IWS[IWS 3.0<br/>Service Program Auth]
+        IBMI_LEGACY["IBMi AS/400<br/>User Profiles"]
+        IWS_LEGACY["IWS 3.0<br/>Service Auth"]
     end
 
-    CP & PH & BA & IT --> IDP_ENT
+    CP_USER --> IDP_ENT
+    PH_USER --> IDP_ENT
+    BA_USER --> IDP_ENT
+    IT_USER --> IDP_ENT
     IDP_ENT --> IDP_FED
-    IDP_FED --> CIP
-    CIP --> MFA
-    MFA --> CIP
-    CIP -->|JWT with role claims| APG
-    APG -->|STEP_UP required?| STEP_UP
-    STEP_UP --> APG
-    APG --> OPA
-    OPA -->|Policy decision| BFF
-    BFF --> CSQL & BQ & FHIR
-    BFF --> GENAI
-    CDC --> CSQL
-    APG ---|IWS 3.0 REST| IWS
-    IWS --> IBMI
+    IDP_FED --> CIP_AUTH
+    CIP_AUTH --> MFA_GATE
+    MFA_GATE --> CIP_AUTH
+    CIP_AUTH -->|"JWT with role claims"| APG_GW
+    APG_GW -->|"Step-up required?"| STEP_UP
+    STEP_UP --> APG_GW
+    APG_GW --> OPA_ENGINE
+    OPA_ENGINE -->|"Policy decision"| BFF_SVC
+    BFF_SVC --> CSQL_DATA
+    BFF_SVC --> BQ_DATA
+    BFF_SVC --> FHIR_DATA
+    BFF_SVC --> GENAI_SVC
+    CDC_SVC --> CSQL_DATA
+    APG_GW ---|"IWS 3.0 REST"| IWS_LEGACY
+    IWS_LEGACY --> IBMI_LEGACY
 
-    style CIP fill:#4285F4,color:#fff
-    style OPA fill:#FF6F00,color:#fff
-    style CSQL fill:#0F9D58,color:#fff
-    style IBMI fill:#8B0000,color:#fff
+    style CIP_AUTH fill:#4285F4,color:#fff
+    style OPA_ENGINE fill:#FF6F00,color:#fff
+    style CSQL_DATA fill:#0F9D58,color:#fff
+    style IBMI_LEGACY fill:#8B0000,color:#fff
 ```
 
 ### 1.2 Architecture Principles
@@ -229,22 +234,22 @@ During the 18-month migration, users access both green screen (terminal emulator
 ```mermaid
 flowchart LR
     subgraph "Single Sign-On Flow (Dual-Mode)"
-        USER[User] --> CIP[Cloud Identity<br/>Platform]
-        CIP -->|OIDC Token| REACT[React Shell<br/>Modern UI]
-        CIP -->|OIDC Token| TERM[Terminal Emulator<br/>MFE]
-        REACT --> APG[Apigee X<br/>Token Validation]
-        TERM --> APG
-        APG -->|Modern Route| BFF[Cloud Run<br/>BFF]
-        APG -->|Legacy Route| IWS[IBMi IWS 3.0]
+        USER["User"] --> CIP_SSO["Cloud Identity<br/>Platform"]
+        CIP_SSO -->|"OIDC Token"| REACT["React Shell<br/>Modern UI"]
+        CIP_SSO -->|"OIDC Token"| TERM["Terminal Emulator<br/>MFE"]
+        REACT --> APG_SSO["Apigee X<br/>Token Validation"]
+        TERM --> APG_SSO
+        APG_SSO -->|"Modern Route"| BFF_SSO["Cloud Run BFF"]
+        APG_SSO -->|"Legacy Route"| IWS_SSO["IBMi IWS 3.0"]
     end
 
     subgraph "IBM i Session Bridge"
-        IWS --> IBMI_AUTH{IBM i Auth<br/>*USRPRF Mapping}
-        IBMI_AUTH --> IBMI[IBM i<br/>Application]
+        IWS_SSO --> IBMI_AUTH{"IBM i Auth<br/>Profile Mapping"}
+        IBMI_AUTH --> IBMI_APP["IBM i Application"]
     end
 
-    style CIP fill:#4285F4,color:#fff
-    style IBMI fill:#8B0000,color:#fff
+    style CIP_SSO fill:#4285F4,color:#fff
+    style IBMI_APP fill:#8B0000,color:#fff
 ```
 
 **Key design decision**: The terminal emulator MFE (embedded green screen) authenticates via the same Cloud Identity Platform token as the modern UI. The Apigee X gateway maps the cloud identity to the corresponding IBM i user profile (via the `custom:ibmi_profile` attribute) and passes it to IWS 3.0 in the `X-IBMi-Profile` header. IWS service programs run under the mapped profile's authority.
@@ -436,43 +441,45 @@ BeyondCorp Enterprise is Google's zero trust platform, based on the internal Bey
 ### 5.3 Microsegmentation
 
 ```mermaid
-graph TB
+flowchart TB
     subgraph "VPC Service Controls Perimeter"
         direction TB
         subgraph "Public Zone"
-            GLB[Global Load Balancer]
-            ARMOR[Cloud Armor WAF]
-            APG2[Apigee X Gateway]
+            GLB["Global Load Balancer"]
+            ARMOR["Cloud Armor WAF"]
+            APG2["Apigee X Gateway"]
         end
         subgraph "Application Zone"
-            CR[Cloud Run Services<br/>No public IPs]
-            GKE[GKE Autopilot<br/>Dual Run Engine]
+            CR_ZONE["Cloud Run Services<br/>No Public IPs"]
+            GKE_ZONE["GKE Autopilot<br/>Dual Run Engine"]
         end
         subgraph "Data Zone"
-            CSQL2[(Cloud SQL<br/>FORCE RLS)]
-            REDIS2[(Memorystore<br/>AUTH + TLS)]
-            BQ3[(BigQuery<br/>Column Security)]
+            CSQL2[("Cloud SQL<br/>FORCE RLS")]
+            REDIS2[("Memorystore<br/>AUTH + TLS")]
+            BQ3[("BigQuery<br/>Column Security")]
         end
         subgraph "AI Zone"
-            VAI2[Vertex AI<br/>genai-pipeline@ only]
-            DLP[Cloud DLP Gate<br/>PHI Blocking]
+            VAI2["Vertex AI<br/>GenAI Pipeline"]
+            DLP_GATE["Cloud DLP Gate<br/>PHI Blocking"]
         end
         subgraph "Audit Zone (Separate Security Project)"
-            AUDIT[(Audit Logs<br/>WORM Storage<br/>Hash-Chained)]
+            AUDIT[("Audit Logs<br/>WORM Storage")]
         end
     end
 
     subgraph "IBM i Zone (On-Premises)"
-        IBMI2[IBM i AS/400]
-        IWS2[IWS 3.0]
+        IBMI2["IBM i AS/400"]
+        IWS2["IWS 3.0"]
     end
 
     GLB --> ARMOR --> APG2
-    APG2 --> CR
-    CR --> CSQL2 & REDIS2 & BQ3
-    CR -.-> DLP --> VAI2
+    APG2 --> CR_ZONE
+    CR_ZONE --> CSQL2
+    CR_ZONE --> REDIS2
+    CR_ZONE --> BQ3
+    CR_ZONE -.-> DLP_GATE --> VAI2
     IBMI2 --- IWS2
-    IWS2 ---|Partner Interconnect<br/>+ HA VPN<br/>IPsec| APG2
+    IWS2 ---|"Partner Interconnect<br/>HA VPN IPsec"| APG2
 
     style AUDIT fill:#FF6F00,color:#fff
     style VAI2 fill:#9C27B0,color:#fff
@@ -583,35 +590,37 @@ The GenAI pipeline operates under a strict isolation model: the genai-pipeline@ 
 ```mermaid
 flowchart LR
     subgraph "PHI Zone (Restricted)"
-        CSQL3[(Cloud SQL<br/>Raw PHI)]
-        FHIR3[(FHIR Store<br/>Raw PHI)]
+        CSQL3[("Cloud SQL<br/>Raw PHI")]
+        FHIR3[("FHIR Store<br/>Raw PHI")]
     end
 
     subgraph "DLP Gate Service"
-        DLP_SA[dlp-gate-service@<br/>reads raw PHI]
-        DLP2[Cloud DLP<br/>De-Identification]
+        DLP_SA["DLP Gate Service<br/>Reads Raw PHI"]
+        DLP2["Cloud DLP<br/>De-Identification"]
     end
 
     subgraph "De-Identified Zone"
-        BUCKET[(Cloud Storage<br/>dlp-processed-output<br/>De-identified only)]
+        BUCKET[("Cloud Storage<br/>De-identified Only")]
     end
 
     subgraph "AI Zone (VPC-SC Isolated)"
-        GENAI_SA[genai-pipeline@<br/>NO PHI access]
-        VAI3[Vertex AI<br/>Gemini / MedGemma]
+        GENAI_SA["GenAI Pipeline<br/>No PHI Access"]
+        VAI3["Vertex AI<br/>Gemini"]
     end
 
     subgraph "Output Zone"
-        RECS[(ai_recommendations<br/>Cloud SQL)]
-        AUDIT2[(BigQuery<br/>AI Decision Audit)]
+        RECS[("AI Recommendations<br/>Cloud SQL")]
+        AUDIT2[("BigQuery<br/>AI Decision Audit")]
     end
 
-    CSQL3 & FHIR3 --> DLP_SA
+    CSQL3 --> DLP_SA
+    FHIR3 --> DLP_SA
     DLP_SA --> DLP2
     DLP2 --> BUCKET
     BUCKET --> GENAI_SA
     GENAI_SA --> VAI3
-    VAI3 --> RECS & AUDIT2
+    VAI3 --> RECS
+    VAI3 --> AUDIT2
 
     style CSQL3 fill:#D32F2F,color:#fff
     style FHIR3 fill:#D32F2F,color:#fff
@@ -681,33 +690,45 @@ Reinforcement Learning from Human Feedback (RLHF) is restricted to credentialed 
 ### 8.1 IAM Migration Timeline
 
 ```mermaid
-gantt
-    title IAM Migration — 18-Month Timeline
-    dateFormat  YYYY-MM
-    axisFormat  %b %Y
+flowchart LR
+    subgraph "Phase 1: SSO Bridge (Mo 1-6)"
+        P1A["Cloud Identity<br/>Platform Setup"]
+        P1B["SAML Federation<br/>Enterprise IdP"]
+        P1C["IBM i Profile<br/>Mapping"]
+        P1D["MFA Rollout<br/>TOTP Baseline"]
+        P1E["Journal Bridge<br/>Unified Audit"]
+        P1F["Dual-Mode Login"]
+    end
 
-    section Phase 1: SSO Bridge
-    Cloud Identity Platform setup           :p1a, 2027-01, 1M
-    SAML federation with enterprise IdP     :p1b, after p1a, 1M
-    IBM i profile mapping (10-char → cloud) :p1c, after p1a, 2M
-    MFA rollout (TOTP baseline)             :p1d, after p1b, 2M
-    Journal bridge (unified audit plane)    :p1e, after p1a, 3M
-    Dual-mode login (green screen + web)    :p1f, after p1b, 2M
+    subgraph "Phase 2: Identity Consolidation (Mo 7-12)"
+        P2A["IBM i Profiles<br/>Cloud-Primary"]
+        P2B["Legacy Auth<br/>Deprecated"]
+        P2C["FHIR Scopes<br/>Enforced"]
+        P2D["MFA Mandatory<br/>FIDO2 for EPCS"]
+        P2E["OPA Policy Engine"]
+        P2F["Access Review<br/>Automation"]
+    end
 
-    section Phase 2: Identity Consolidation
-    IBM i profiles migrated to cloud-primary :p2a, 2027-07, 2M
-    *ALLOBJ/*SECADM deprecated on migrated  :p2b, after p2a, 1M
-    SMART on FHIR scopes enforced           :p2c, 2027-07, 2M
-    MFA mandatory (FIDO2 for EPCS)          :p2d, 2027-08, 2M
-    OPA policy engine deployment            :p2e, 2027-07, 2M
-    Access review automation                :p2f, 2027-09, 2M
+    subgraph "Phase 3: Full Zero Trust (Mo 13-18)"
+        P3A["BeyondCorp<br/>Device Trust"]
+        P3B["Continuous Auth"]
+        P3C["Passwordless<br/>Passkeys"]
+        P3D["IBM i Secondary<br/>Auth Only"]
+        P3E["IGA Tool<br/>Deployment"]
+    end
 
-    section Phase 3: Full Zero Trust
-    BeyondCorp device trust                 :p3a, 2028-01, 2M
-    Continuous authentication               :p3b, after p3a, 2M
-    Passwordless roadmap (passkeys)         :p3c, 2028-02, 3M
-    IBM i as secondary auth only            :p3d, 2028-03, 2M
-    IGA tool deployment                     :p3e, 2028-01, 3M
+    P1A --> P1B
+    P1B --> P1D
+    P1A --> P1C
+    P1A --> P1E
+    P1B --> P1F
+    P1F --> P2A
+    P2A --> P2B
+    P2C --> P2D
+    P2E --> P2F
+    P2F --> P3A
+    P3A --> P3B
+    P3C --> P3D
 ```
 
 ### 8.2 Phase 1: SSO Bridge (Months 1-6)

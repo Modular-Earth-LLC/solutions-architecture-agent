@@ -71,19 +71,65 @@ Output template aligned with `/architecture` skill output fields and `architectu
 
 ## Diagrams
 
+Follow Mermaid quality rules: quote all node labels with special chars or `<br/>`, quote subgraph titles, quote edge labels with spaces, keep labels 3-5 words, use `UPPER_SNAKE_CASE` or `camelCase` node IDs, declare direction explicitly, avoid `&` parallel links in complex diagrams.
+
 ### System Context
 ```mermaid
-[Mermaid diagram code]
+flowchart TB
+    subgraph "Users"
+        U1["User Type 1"]
+        U2["User Type 2"]
+    end
+
+    subgraph "Application Layer"
+        API["API Gateway"]
+        SVC["Backend Service"]
+    end
+
+    subgraph "Data Layer"
+        DB["Primary Database"]
+        CACHE["Cache Layer"]
+    end
+
+    U1 --> API
+    U2 --> API
+    API --> SVC
+    SVC --> DB
+    SVC --> CACHE
 ```
 
 ### Deployment
 ```mermaid
-[Mermaid diagram code]
+flowchart TB
+    subgraph "Cloud Region"
+        subgraph "Compute"
+            APP["App Service"]
+        end
+        subgraph "Storage"
+            DB_STORE["Database"]
+        end
+    end
+
+    APP --> DB_STORE
 ```
 
 ### Data Flow
 ```mermaid
-[Mermaid diagram code]
+flowchart LR
+    subgraph "Ingestion"
+        SRC["Data Source"]
+    end
+
+    subgraph "Processing"
+        PROC["Transform Service"]
+    end
+
+    subgraph "Storage"
+        DEST["Data Store"]
+    end
+
+    SRC --> PROC
+    PROC --> DEST
 ```
 
 ---
