@@ -3,7 +3,7 @@ name: Bug Report
 about: Report an issue with an agent prompt, workflow, or configuration
 title: '[Bug] '
 labels: bug
-assignees: paulpham157
+assignees: praeducer
 ---
 
 ## Description

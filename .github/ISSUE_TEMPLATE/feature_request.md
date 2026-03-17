@@ -3,7 +3,7 @@ name: Feature Request
 about: Suggest a new agent, prompt, or capability
 title: '[Feature] '
 labels: enhancement
-assignees: paulpham157
+assignees: praeducer
 ---
 
 ## Problem

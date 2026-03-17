@@ -2,15 +2,15 @@
 # These owners will be requested for review when PRs touch these paths.
 
 # Default owner for everything
-* @paulpham157
+* @praeducer
 
 # Skills and sub-agents require owner review
-/skills/ @paulpham157
-/agents/ @paulpham157
-/hooks/ @paulpham157
+/skills/ @praeducer
+/agents/ @praeducer
+/hooks/ @praeducer
 
 # Knowledge base and schemas
-/knowledge_base/ @paulpham157
+/knowledge_base/ @praeducer
 
 # Configuration and metadata
-/.repo-metadata.json @paulpham157
+/.repo-metadata.json @praeducer

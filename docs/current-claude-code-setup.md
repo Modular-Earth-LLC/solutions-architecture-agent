@@ -6,7 +6,7 @@
 - **Shell**: bash (Git Bash / WSL)
 - **Model**: Claude Opus 4.6 (1M context)
 - **Working directories**: `C:\dev\`, `\\wsl.localhost\Ubuntu\home\praeducer\dev`, `D:\dev`
-- **GitHub user**: @paulpham157 (Modular-Earth-LLC org)
+- **GitHub user**: @praeducer (Modular-Earth-LLC org)
 
 ## Active Plugins
 

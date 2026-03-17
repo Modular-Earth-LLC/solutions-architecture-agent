@@ -3,7 +3,7 @@ name: Skill Request
 about: Propose a new SA lifecycle skill for the plugin
 title: '[Skill] '
 labels: enhancement, skill
-assignees: paulpham157
+assignees: praeducer
 ---
 
 ## Skill Name
