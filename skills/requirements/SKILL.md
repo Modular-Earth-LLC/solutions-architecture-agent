@@ -82,6 +82,23 @@ When the solution requires AI-generated media, probe before architecture begins:
 
 Capture answers in `non_functional_requirements.ai_model_requirements`. If discovery is from notes/context, infer answers and flag for human verification.
 
+**Quality Tier Reference Matrix** (for AI suitability scoring and model selection):
+
+| Tier | Examples | Typical Score |
+|------|----------|---------------|
+| Photorealistic | Product renders, fashion photography, headshots | 9-10/10 |
+| Commercial-grade | Marketing assets, brand imagery, illustrations | 7-8/10 |
+| Schematic/Technical | Architecture diagrams, wireframes, data viz | 5-6/10 |
+| Draft/Internal | Mockups, brainstorming, internal review | 3-4/10 |
+
+**Inference Examples** (when meeting notes don't explicitly state quality):
+- "quick mockup for the team" → Draft/Internal (3-4/10)
+- "customer-facing product images" → Commercial-grade (7-8/10)
+- "we need our models to look professional" → Commercial-grade (7-8/10)
+- "identical to real photos" → Photorealistic (9-10/10)
+
+Flag inferred values for human verification with: `"inferred": true`
+
 For Quick tier: Cover 2a-2b in depth, 2c-2f at summary level.
 For Standard tier: All sections at moderate depth.
 For Comprehensive tier: All sections in full depth with follow-up probing.
