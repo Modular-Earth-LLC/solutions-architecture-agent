@@ -143,7 +143,7 @@ For each applicable framework:
 
 Use WebSearch for current compliance framework requirements and AI-specific regulations (EU AI Act, NIST AI RMF).
 
-For AI systems classified as **high-risk under EU AI Act** (healthcare, HR, critical infrastructure, education, law enforcement, biometrics): mandate conformity assessment documentation, technical documentation of the system, and post-market monitoring planning.
+**REQUIRED for high-risk AI systems (EU AI Act Article 6)**: Healthcare, HR, critical infrastructure, education, law enforcement, and biometric systems require: (1) conformity assessment, (2) technical documentation, (3) post-market monitoring plan. Document in `compliance_posture.eu_ai_act`.
 
 ### Step 7: Non-Negotiable Security Guardrails
 

@@ -100,8 +100,6 @@ For each data flow:
 
 When engagement type is migration, define approach:
 
-Use WebSearch for current best practices on migration patterns.
-
 - **Strangler Fig**: Gradually replace legacy components, routing traffic to new system incrementally
 - **Big Bang**: Full cutover at a planned date — higher risk, simpler coordination
 - **Parallel Run**: Run old and new systems simultaneously, compare outputs, validate before cutover
@@ -117,8 +115,6 @@ For the chosen approach, document:
 ### Step 5: Legacy System Bridging (if applicable)
 
 When integrating with legacy systems, recommend patterns:
-
-Use WebSearch for current legacy bridging best practices.
 
 - **Adapter Pattern**: Translate between old and new interfaces
 - **Facade Pattern**: Simplified interface over complex legacy APIs
