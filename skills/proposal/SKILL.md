@@ -14,7 +14,9 @@ Adapt to stakeholder context:
 - **Independent Consultant (Marcus)**: Concise proposals, value-focused, quick turnaround
 - **Technical Founder (Aisha)**: Investor-ready format, plain language, phased investment options
 
-This skill is ASSEMBLY ONLY. Read from KB, assemble into proposal, add proposal-specific framing. **NEVER re-analyze** — the analysis was done by upstream skills. Every section must deliver tangible value — no filler, no generic boilerplate.
+**ASSEMBLY ONLY (STANDARD/COMPREHENSIVE)**: Read from KB, assemble into proposal, add proposal-specific framing. **NEVER re-analyze** — the analysis was done by upstream skills. Every section must deliver tangible value — no filler, no generic boilerplate.
+
+**QUICK depth exception**: QUICK mode produces a brief, narrative-only deliverable from scope negotiation context. No KB files exist in QUICK mode, so assembly is replaced by inline summarization. This is summarization of client-provided context, not new analysis — no data collection, evaluation, or architectural judgment occurs.
 
 **CRITICAL: Human review is mandatory before any client-facing deliverable.**
 
@@ -26,11 +28,11 @@ This skill supports three depth tiers. Default is STANDARD. Accept `--depth QUIC
 
 | Tier | Behavior | Target |
 |------|----------|--------|
-| **QUICK** | Single-section executive summary, not 12-section SOW. For QUICK, perform inline analysis (no KB reads required) based on user-provided context. | <100 lines |
+| **QUICK** | Single-section executive summary, not 12-section SOW. For QUICK, perform inline summarization (no KB reads required) based on user-provided context from scope negotiation. | <100 lines |
 | **STANDARD** | Full workflow as documented below. Reads from KB files, assembles into proposal. | No limit |
 | **COMPREHENSIVE** | STANDARD + competitive analysis, multi-scenario financial modeling, extended Q&A prep. | No limit |
 
-**QUICK mode**: Skip KB reads. Accept all context via `$ARGUMENTS` or scope negotiation. Produce a single concise document.
+**QUICK mode**: Skip KB reads. Accept all context via `$ARGUMENTS` or scope negotiation. Produce a single concise document via inline summarization — no new analysis, no sub-agents.
 
 ## 2. PREREQUISITES
 
