@@ -46,6 +46,7 @@ Mode is auto-detected from the target path:
 - Path starts with `outputs/` → **final-document** mode
 - Path ends with `.json` in `knowledge_base/` → **single-file** mode
 - `--batch` in `$ARGUMENTS` → **batch** mode
+- No target path and no `--batch` → ask the user: "Which deliverable would you like to review?" and display current KB lifecycle status
 
 ## 2. PREREQUISITES
 
@@ -95,8 +96,7 @@ Score on 5 dimensions (1-10 each):
 
 Calculate overall score: average of 5 dimensions.
 
-If overall score >= 9.0 AND target is `architecture.json` → skip to Step 4 (WA review).
-If overall score >= 9.0 AND target is NOT `architecture.json` → skip to Step 5 (output).
+> **Early exit:** If overall score ≥ 9.0 → skip to Step 4 (`architecture.json`) or Step 5 (all other targets). Do not run additional iterations.
 
 ### Step 2: Iteration 2 — Judge, Identify, Refine
 
@@ -112,7 +112,9 @@ Generate improvement plan:
 
 For each improvement: current state (with evidence), impact (H/M/L), effort estimate, implementation steps, validation criteria.
 
-Re-score after hypothetical improvements. If projected score >= 9.0 AND target is `architecture.json` → skip to Step 4. If projected score >= 9.0 AND target is NOT `architecture.json` → skip to Step 5.
+Re-score after hypothetical improvements.
+
+> **Early exit:** If projected score ≥ 9.0 → skip to Step 4 (`architecture.json`) or Step 5 (all other targets). Do not run additional iterations.
 
 ### Step 3: Iteration 3 — Final Polish
 
