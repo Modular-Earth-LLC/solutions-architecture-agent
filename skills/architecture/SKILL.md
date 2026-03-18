@@ -77,6 +77,8 @@ Use WebSearch for current technology benchmarks, pricing, and best practices.
 
 **Model Benchmark Research** *(Required when AI/ML Platform includes image, content, audio, or video generation)*
 
+> **REQUIRED for AI/ML systems with generative models:** Complete the 5-step benchmark research process below before recommending any model.
+
 Before recommending any generative model, complete these steps in order:
 
 1. **WebSearch for current benchmarks**:
@@ -101,7 +103,7 @@ Before recommending any generative model, complete these steps in order:
 
 **Cross-region note**: The `us.stability.sd3-5-large-v1:0` example uses AWS Bedrock cross-region inference syntax (prefix `us.` routes from us-east-1/us-west-2). Azure OpenAI uses deployment-level region specification; GCP Vertex AI uses `location` parameters — syntax differs per provider.
 
-**Never write "superior quality" without a cited benchmark or stated dimension.**
+**MUST NOT** write "superior quality," "best-in-class," or equivalent claims without a cited benchmark source or explicitly stated quality dimension.
 
 ### Step 2: Component Design
 
