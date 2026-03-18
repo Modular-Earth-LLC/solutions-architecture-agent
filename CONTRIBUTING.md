@@ -257,10 +257,48 @@ See [tests/README.md](tests/README.md) for expected output, troubleshooting, and
 
 ### Manual Skill Testing
 
-1. Install plugin: `claude --plugin-dir .`
-2. Invoke your skill via slash command
-3. Verify output validates: `python tests/validate_knowledge_base.py --file <name>`
-4. Check `engagement.json` was updated with correct lifecycle_state
+After modifying a skill, verify correct behavior through a live conversation test.
+
+#### Setup
+1. Activate the plugin: `claude --plugin-dir .`
+2. Open Claude Code in a fresh session (skills load at session start)
+
+#### Skill Smoke Test
+
+For each modified skill, run the following test flow at QUICK depth:
+
+1. Invoke scope negotiation:
+   > "I need a quick [skill-name] for a SaaS project"
+2. Answer scope negotiation questions with the test scenario below
+3. Run the skill:
+   > `/[skill-name] --depth QUICK`
+4. Verify:
+   - Output follows the skill's declared output format
+   - Human checkpoint is presented after completion
+   - `engagement.json` is updated correctly (QUICK: no KB file written)
+   - No error messages or broken sub-agent calls
+
+#### Regression Test
+
+For skills with sub-agents (`/architecture`, `/security-review`, `/review`):
+1. Run at COMPREHENSIVE depth to trigger sub-agent invocations
+2. Verify all 6 sub-agent calls complete and aggregate correctly
+
+#### Test Scenarios by Skill
+
+| Skill | Quick Test Scenario |
+|-------|-------------------|
+| `/requirements` | "SaaS platform, 50 users, needs authentication and dashboards" |
+| `/architecture` | "REST API backend + React frontend, AWS, medium scale" |
+| `/estimate` | "3-person team, 3-month project, standard web app" |
+| `/project-plan` | "MVP in 8 weeks, 2 engineers" |
+| `/data-model` | "Multi-tenant SaaS with user data and activity logs" |
+| `/security-review` | "Healthcare app with PHI, HIPAA required" |
+| `/integration-plan` | "Migrate from monolith to microservices" |
+| `/review` | "Review the architecture.json from the quick-assessment example" |
+| `/proposal` | "Discovery proposal for the above scenarios" |
+
+Valid model values for sub-agent `model` field: `"sonnet"` (claude-sonnet-4-6), `"haiku"` (claude-haiku-4-5-20251001), `"opus"` (claude-opus-4-6).
 
 ### CI/CD
 
