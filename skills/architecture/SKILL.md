@@ -91,6 +91,19 @@ Before recommending any generative model, complete these steps in order:
    - Rapid prototyping → prioritize **cost** ($0.01–0.04/image tier)
 5. **Cross-region availability check**: Verify recommended model is available in the required region. Note cross-region inference paths if applicable (e.g., `us.stability.sd3-5-large-v1:0` for cross-region from us-east-1).
 
+**Current Claude model family reference** (as of model knowledge cutoff — verify against docs.anthropic.com/en/docs/about-claude/models for latest):
+- Highest capability: `claude-opus-4-6`
+- Balanced (recommended default): `claude-sonnet-4-6`
+- Fast/low-cost: `claude-haiku-4-5-20251001`
+
+**Benchmark fallback** (when no published benchmarks exist for a model, e.g., very recent release):
+1. Check vendor's own technical documentation and model cards
+2. Document that benchmarks are not yet available with timestamp
+3. Flag as `"benchmark_status": "pending"` in `tech_stack.llm.model_selection_rationale`
+4. Recommend re-evaluation within 90 days
+
+**Cross-region note**: The `us.stability.sd3-5-large-v1:0` example uses AWS Bedrock cross-region inference syntax (prefix `us.` routes from us-east-1/us-west-2). Azure OpenAI uses deployment-level region specification; GCP Vertex AI uses `location` parameters — syntax differs per provider.
+
 **Never write "superior quality" without a cited benchmark or stated dimension.**
 
 ### Step 2: Component Design
