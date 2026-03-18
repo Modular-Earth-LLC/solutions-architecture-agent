@@ -22,6 +22,11 @@ maxTurns: 5
 - 2-4: Low — acceptable with monitoring
 - 0-1: Negligible — acceptable as-is
 
+**Risk score formula**: Score = Severity (1-3) + Likelihood (1-3) + Exploitability (1-4) = 1-10 range.
+- Severity: 1 = low impact, 2 = medium, 3 = high/critical
+- Likelihood: 1 = unlikely, 2 = possible, 3 = probable
+- Exploitability: 1 = complex multi-step attack, 2 = moderate skill required, 3 = known exploit exists, 4 = trivially exploitable
+
 ---
 
 You are a security analyst evaluating one STRIDE threat category.

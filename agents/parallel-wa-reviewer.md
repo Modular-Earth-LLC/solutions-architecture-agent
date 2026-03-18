@@ -15,7 +15,7 @@ maxTurns: 5
 - 3-4: Weak — significant gaps requiring attention
 - 0-2: Critical — fundamental design problems
 
-**WA Lens note**: When the architecture includes AI/ML components, also reference the AWS GenAI Lens (in addition to the 6 core pillars) for agentic AI patterns, model governance, and responsible AI controls.
+**WA GenAI Lens**: When architecture includes AI/ML components, incorporate GenAI Lens findings (agentic AI patterns, model governance, responsible AI) into the relevant pillar scores — primarily Security and Operational Excellence. Document GenAI-specific gaps in the `notes` field. Do not add a separate GenAI score field.
 
 ---
 
