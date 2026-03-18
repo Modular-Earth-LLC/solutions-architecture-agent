@@ -102,6 +102,8 @@ See CLAUDE.md Canonical Flows table for full flow definitions and sequences.
 - Word budgets per section [arXiv:2508.13805, pending verification]: 95% length compliance vs <30% with vague instructions. Verify ID against current arXiv listings.
 - Task-complexity routing [IBM Research/NeurIPS 2025, manuscript in submission]: route by complexity — 92% accuracy, 37% cost savings. Replace with published reference when available.
 
+**Use case**: QUICK tier enables 10-30 minute turnaround for interview assignments and prospect qualification — use cases that would otherwise require 2-4 hours of SA preparation time. For Marcus (Independent Consultant) and Aisha (Technical Founder), the QUICK tier is the primary mode, not a fallback.
+
 **Impact**: Eliminates 12-18 parallel sub-agent invocations and 5,000+ lines of KB JSON for QUICK engagements. Target: under 1 hour for equivalent quality to the 13-hour CVS engagement.
 
 ## Decision 8: Deliverable-First Mode (v1.1)
@@ -114,7 +116,29 @@ See CLAUDE.md Canonical Flows table for full flow definitions and sequences.
 - Skeleton-of-thought (ICLR 2024): generate outline first, expand after approval — 2x speed, equal quality
 - Progressive disclosure (Anthropic): load only metadata at discovery, task-specific context on demand
 
+**Key insight**: Deliverable-first mode addresses a key failure mode in generalist LLMs: they optimize for completeness over constraints. Without an explicit output anchor, the agent produces exhaustive KB artifacts instead of audience-appropriate documents. By anchoring on format, page count, and audience first, scope is bounded before any analysis begins — producing scoped, usable deliverables rather than maximally complete but unusable ones.
+
 **Impact**: Three new canonical flows (Direct Delivery, Rapid Assessment, Custom Document) for fast turnaround without sacrificing quality.
+
+---
+
+## Decision 9: Blackboard Pattern for Skill Communication (v1.0)
+
+**Problem**: Skills need to share state across a multi-step engagement. Options: direct skill-to-skill calls, conversation history, shared memory, or a structured knowledge store.
+
+**Decision**: Blackboard pattern — skills communicate exclusively through JSON files in `knowledge_base/`. No direct skill-to-skill calls. Each skill owns exactly one KB file and writes only to it.
+
+**Alternatives considered**:
+- Direct skill-to-skill calls: Creates coupling — if `/architecture` calls `/requirements` directly, neither can be tested or run independently. Breaks the plugin marketplace distribution model.
+- Conversation history: Not persistent across sessions. Cannot be validated by schema. Not diff-able for human review. Violates the "auditable" quality standard.
+- Shared in-memory state: Race conditions in parallel sub-agent execution. Not portable across sessions or agents.
+
+**Rationale**: The blackboard pattern supports three critical properties:
+1. **Independent skill testing**: Each skill can be unit-tested with a synthetic KB file as input. No orchestration required.
+2. **Replay and resume**: Any skill can be re-run mid-engagement without re-running upstream skills. The KB file is the checkpoint.
+3. **Human auditability**: Every intermediate state is a JSON file with a schema, a version, and a status field. Humans can review, edit, and approve KB files before the next skill runs.
+
+**`$depends_on` declaration**: Each KB file declares its upstream dependencies. Prerequisite validation is automatic — if `architecture.json` lists `$depends_on: ["requirements.json"]`, the dispatch layer checks `requirements.json` status before invoking `/architecture`.
 
 ---
 
@@ -123,6 +147,10 @@ See CLAUDE.md Canonical Flows table for full flow definitions and sequences.
 **LLM-as-judge circularity**: The `/review` skill uses the same LLM that generated deliverables to evaluate them. This is a known limitation in AI evaluation — the model may be blind to its own systematic biases. Mitigations: (1) the 3-iteration review protocol with adversarial "Tester" persona reduces single-pass blindness, (2) structured scoring rubrics (5 dimensions, 0-10) constrain subjective drift, (3) human review is mandatory before any client-facing deliverable (Guiding Principle 42). Future work: calibrate LLM review scores against human expert assessments to measure correlation and identify systematic gaps.
 
 **Structural tests only**: The automated test suite validates file structure, schema compliance, DAG integrity, and metadata consistency — it does not invoke skills at runtime or validate behavioral output. Runtime validation was performed manually during Phase 7 (healthcare case study) and Phase 9 (sub-agent testing). Future work: parameterized integration tests with synthetic inputs.
+
+**Benchmark research quality**: Model and technology benchmark research depends on WebSearch tool availability. Offline or restricted environments (enterprise proxies, air-gapped systems) cannot perform live benchmarking. Mitigation: pre-load benchmark data in `inputs/` before running `/architecture`. The benchmark fallback guidance in `/architecture` SKILL.md covers this case.
+
+**QUICK depth skips prerequisite checks**: QUICK depth deliberately skips all upstream KB validation. This is a speed-over-auditability trade-off by design — for interview assignments, prospect qualification, and rapid turnaround scenarios, requiring KB files would eliminate the use case entirely. Consequence: QUICK output cannot be upgraded to STANDARD output without re-running upstream skills. Use QUICK only for non-client-facing deliverables or initial qualification.
 
 ---
 
