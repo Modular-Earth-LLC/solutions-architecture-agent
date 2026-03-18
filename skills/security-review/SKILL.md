@@ -79,7 +79,7 @@ Decompose across 5 dimensions:
 2. **Secrets Management**: Credentials, API keys, certificates, rotation schedules, vault strategy
 3. **Network Isolation**: Segmentation needs, public/private/isolated tiers, VPN/peering requirements
 4. **AI Guardrails**: Content filtering, PII detection/blocking, prompt injection prevention, output validation, model access control
-5. **Compliance**: Applicable frameworks (HIPAA, SOC2, CCPA, GLBA, PCI-DSS, EU AI Act), mapped to specific controls
+5. **Compliance**: Applicable frameworks (HIPAA, SOC2, CCPA, GLBA, PCI-DSS, EU AI Act, NIST AI RMF), mapped to specific controls
 
 ### Step 2: STRIDE Threat Model
 
@@ -122,6 +122,17 @@ When the solution includes AI/ML components:
 4. **Model access control**: API key management, rate limiting, usage monitoring
 5. **Data poisoning prevention**: Training data validation, provenance tracking
 
+**AI Threat to STRIDE Mapping:**
+
+| AI-Specific Threat | STRIDE Category | Mitigation |
+|-------------------|-----------------|------------|
+| Prompt injection | Tampering (T) | Input validation, system prompt hardening |
+| Model poisoning | Tampering (T) + Spoofing (S) | Data provenance, model signing |
+| Jailbreaking | Elevation of Privilege (E) | Guardrails, content classifiers |
+| Data exfiltration via model output | Information Disclosure (I) | Output filters, PII detection |
+| Denial of model service | Denial of Service (D) | Rate limiting, circuit breakers |
+| Model inversion attacks | Information Disclosure (I) | Differential privacy, output sanitization |
+
 ### Step 6: Compliance Mapping
 
 For each applicable framework:
@@ -131,6 +142,8 @@ For each applicable framework:
 4. For partial/not-met: document remediation steps with effort estimates
 
 Use WebSearch for current compliance framework requirements and AI-specific regulations (EU AI Act, NIST AI RMF).
+
+For AI systems classified as **high-risk under EU AI Act** (healthcare, HR, critical infrastructure, education, law enforcement, biometrics): mandate conformity assessment documentation, technical documentation of the system, and post-market monitoring planning.
 
 ### Step 7: Non-Negotiable Security Guardrails
 
