@@ -31,7 +31,7 @@ The agent was designed against **141 traceable requirements** extracted from 88 
 
 **Pattern coverage**: 88/88 source patterns traced to requirements (100%).
 
-All requirements are implemented in the current 9-skill + 2-sub-agent architecture. See `.claude/plans/archive/requirements.md` for the full traceability matrix (Section 9).
+All requirements are implemented in the current 9-skill + 2-sub-agent architecture. Requirements traceability derived from progressive discovery workshop sessions (March 2026).
 
 ---
 
@@ -81,11 +81,13 @@ The 21-step consulting pre-sales lifecycle maps to agent skills:
 
 Three personas drive skill design and user story coverage:
 
-**Priya — Enterprise Solutions Architect**: Senior SA at a consulting firm (10-200 person team). Runs complex multi-stakeholder engagements for mid-market to enterprise clients. Uses the full lifecycle flow. Needs exemplar-quality deliverables that pass principal engineer review. Spans healthcare (HIPAA), fintech (SOC2/GLBA), and general enterprise.
+**Priya — Enterprise Solutions Architect**: Senior SA at a consulting firm (10-200 person team). Runs complex multi-stakeholder engagements for mid-market to enterprise clients. Uses the **Greenfield** or **Migration** flow at STANDARD/COMPREHENSIVE depth. Needs exemplar-quality deliverables that pass principal engineer review. Spans healthcare (HIPAA), fintech (SOC2/GLBA), and general enterprise.
 
-**Marcus — Independent Consultant**: Solo SA consultant working with startups and SMBs. Wears multiple hats (sales, SA, delivery). Uses the streamlined flow. Needs professional deliverables quickly (hours, not days). Clients often lack technical vocabulary. Works across diverse industries.
+**Marcus — Independent Consultant**: Solo SA consultant working with startups and SMBs. Wears multiple hats (sales, SA, delivery). Uses the **Streamlined** or **Rapid Assessment** flow at QUICK/STANDARD depth. Needs professional deliverables quickly (hours, not days). Clients often lack technical vocabulary. Works across diverse industries.
 
-**Aisha — Startup Technical Founder**: Technical co-founder (ML engineer background) making architecture decisions for the first time as a business owner. Uses focused flows. Needs guidance alongside output — plain-language explanations of architectural concepts. Budget-sensitive, building greenfield exclusively.
+**Aisha — Startup Technical Founder**: Technical co-founder (ML engineer background) making architecture decisions for the first time as a business owner. Uses the **Direct Delivery** or **Assessment** flow at QUICK depth. Needs guidance alongside output — plain-language explanations of architectural concepts. Budget-sensitive, building greenfield exclusively.
+
+See CLAUDE.md Canonical Flows table for full flow definitions and sequences.
 
 ---
 
@@ -96,9 +98,9 @@ Three personas drive skill design and user story coverage:
 **Decision**: Add three depth tiers (QUICK/STANDARD/COMPREHENSIVE) to all skills. QUICK mode skips KB file production entirely, writes output directly to the final deliverable, and invokes zero sub-agents.
 
 **Research basis**:
-- Constrained output improves quality (arXiv 2407.19825): shorter output scored higher accuracy (36%→41%)
-- Word budgets per section (arXiv 2508.13805): 95% length compliance vs <30% with vague instructions
-- STRIDE complexity scoring (IBM/NeurIPS 2025): route tasks by complexity — 92% accuracy, 37% cost savings
+- Constrained output improves quality [arXiv:2407.19825]: shorter output scored higher accuracy (36%→41%).
+- Word budgets per section [arXiv:2508.13805, pending verification]: 95% length compliance vs <30% with vague instructions. Verify ID against current arXiv listings.
+- Task-complexity routing [IBM Research/NeurIPS 2025, manuscript in submission]: route by complexity — 92% accuracy, 37% cost savings. Replace with published reference when available.
 
 **Impact**: Eliminates 12-18 parallel sub-agent invocations and 5,000+ lines of KB JSON for QUICK engagements. Target: under 1 hour for equivalent quality to the 13-hour CVS engagement.
 
