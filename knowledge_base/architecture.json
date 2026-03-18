@@ -1,0 +1,671 @@
+{
+  "$schema": "./schemas/architecture.schema.json",
+  "$depends_on": ["requirements.json"],
+  "engagement_id": "eng-2026-003",
+  "version": "2.0",
+  "last_updated": "2026-03-18",
+  "status": "complete",
+
+  "executive_summary": {
+    "recommended_approach": "AI-native Python pipeline controlled via Claude Code custom skills. Amazon Nova Canvas (primary) and Titan V2 (fallback) via AWS Bedrock in us-east-1, Pillow for text overlay, S3 for storage, CloudFormation for IaC, GitHub Actions for CI/CD, AWS MCP servers for natural language AWS administration. Designed for AI-assisted development speed and interview-quality demo readiness.",
+    "confidence_level": "high",
+    "go_no_go": "go",
+    "key_benefits": [
+      "Claude Code custom skills replace all CLI/argparse interaction — zero UI development time, better developer experience",
+      "Nova Canvas (TIFA 0.897, ImageReward 1.250 per Amazon Nova Technical Report arxiv 2506.12103) available in us-east-1 — no cross-region dependency",
+      "3-tier model strategy: Nova Canvas ($0.04/img) for quality, Titan V2 ($0.01/img) for dev, with exponential retry/backoff",
+      "GitHub Actions CI/CD + Claude Code hooks enforce quality automatically — demonstrates engineering discipline",
+      "AWS MCP servers enable natural language AWS administration without leaving Claude Code",
+      "Flat JSON + S3 manifest eliminates database complexity — correct scope for PoC"
+    ],
+    "key_risks": [
+      "Nova Canvas and Titan V2 require explicit Bedrock model access enablement in AWS console (G-001 gate — human action required)",
+      "AnthropicBedrock client does not auto-read ~/.aws/config for region — must set AWS_REGION env var or aws_region constructor param",
+      "Text overlay via Pillow produces functional but not design-tool-quality typography — acceptable for PoC",
+      "Regulatory text placement on generated images requires coordinate tuning per aspect ratio"
+    ],
+    "total_investment_range": "Unconstrained — expected $5-25 GenAI API costs for PoC run. Nova Canvas $0.04/image (quality), Titan V2 $0.01/image (dev). AI-assisted development (Claude Code + Sonnet) handles all implementation."
+  },
+
+  "tech_stack": {
+    "llm": {
+      "provider": "Amazon Bedrock (us-east-1)",
+      "primary_model": "Amazon Nova Canvas (amazon.nova-canvas-v1:0)",
+      "fallback_model": "Amazon Titan Image Generator V2 (amazon.titan-image-generator-v2:0)",
+      "removed_model": "stability.sd3-5-large-v1:0 — us-west-2 only, no cross-region inference profile, moved to BACKLOG",
+      "text_reasoning_model": "Claude Sonnet 4.6 (global.anthropic.claude-sonnet-4-6)",
+      "text_reasoning_client": "AnthropicBedrock(aws_region='us-east-1')",
+      "text_reasoning_package": "anthropic[bedrock]",
+      "hosting": "AWS Managed (Bedrock)",
+      "rationale": "Nova Canvas is the correct primary model: TIFA 0.897, ImageReward 1.250 per Amazon Nova Technical Report (arxiv 2506.12103v1) — highest available metrics for first-party AWS image models. Only available in us-east-1, which confirms region selection. SD3.5 Large is us-west-2 only with no cross-region inference profile — removing from design prevents region split. Titan V2 serves as dev/iterate fallback. Claude Sonnet 4.6 via AnthropicBedrock() provides text reasoning for prompt construction and compliance checks — same IAM credential chain as boto3, cleaner API."
+    },
+    "orchestration": {
+      "framework": "Native Python (no orchestration framework)",
+      "version": "N/A",
+      "pattern": "pipeline",
+      "rationale": "Linear pipeline (parse → check assets → construct prompt → generate → overlay → upload → manifest) is the simplest pattern. No LLM orchestration, RAG, or agent loops. Direct boto3 and anthropic[bedrock] calls. Adding LangChain or similar would be over-engineering for a PoC."
+    },
+    "backend": {
+      "language": "Python 3.12",
+      "framework": "Claude Code custom skills (no argparse or Click)",
+      "api_style": "rest"
+    },
+    "frontend": {
+      "framework": "Claude Code CLI with custom skills",
+      "type": "cli",
+      "rationale": "8 custom skills in .claude/skills/ replace all CLI interaction. Skills are invoked from Claude Code, which provides context, argument parsing, and human-readable output. Zero UI development time. Better interview demo experience — developer can narrate while running /run-pipeline."
+    },
+    "data_stores": {
+      "input_assets": {
+        "technology": "Amazon S3",
+        "hosting": "AWS us-east-1",
+        "purpose": "Brand asset storage — logos, product photos, templates. Block Public Access enabled.",
+        "block_public_access": true
+      },
+      "output_packaging": {
+        "technology": "Amazon S3",
+        "hosting": "AWS us-east-1",
+        "purpose": "Generated packaging images organized by SKU/Region/format. Block Public Access enabled.",
+        "block_public_access": true
+      },
+      "pipeline_manifest": {
+        "technology": "JSON files (local + S3)",
+        "hosting": "Local: outputs/runs/, S3: {SKU}/{Region}/manifest.json",
+        "purpose": "Run history for /pipeline-status skill. No database required for PoC.",
+        "block_public_access": "N/A (S3 bucket inherits Block Public Access)"
+      }
+    },
+    "infrastructure": {
+      "cloud_provider": "AWS",
+      "compute": "Local Python execution via Claude Code skills (Lambda-ready for future deployment)",
+      "container_orchestration": "None (single process)",
+      "deployment_strategy": "recreate",
+      "region": "us-east-1",
+      "region_rationale": "us-east-1 selected because Amazon Nova Canvas (primary image model) is only available in us-east-1. Titan V2 and Claude Sonnet 4.6 also available in us-east-1. SD3.5 Large (us-west-2 only) removed from design — no cross-region inference profile exists.",
+      "monitoring": "CloudWatch basic metrics (PoC scope) + structured JSON logs",
+      "logging": "Structured JSON to stdout + pipeline run manifest to S3"
+    },
+    "ci_cd": {
+      "platform": "GitHub Actions",
+      "ci_workflow": ".github/workflows/ci.yml — triggers on every push; runs ruff lint, pytest unit tests, pip-audit",
+      "deploy_workflow": ".github/workflows/deploy.yml — triggers on main push; runs CloudFormation deploy",
+      "security": "All action versions pinned to SHA hashes. AWS credentials via GitHub Secrets or OIDC federation.",
+      "rationale": "CI/CD is must-have (FR-009). Demonstrates engineering discipline. GitHub Actions is zero-cost for public repos."
+    },
+    "mcp_servers": {
+      "transport": "stdio (uv tool run — Python packages, not npm)",
+      "active_servers": [
+        {
+          "name": "AWS IaC MCP Server",
+          "package": "awslabs.aws-iac-mcp-server@latest",
+          "purpose": "CloudFormation and CDK assistance, template validation, cfn-lint, cfn-guard",
+          "stdio_command": "uv tool run --from awslabs.aws-iac-mcp-server@latest awslabs.aws-iac-mcp-server.exe"
+        },
+        {
+          "name": "AWS Knowledge MCP Server",
+          "package": "Remote HTTP: https://knowledge-mcp.global.api.aws",
+          "purpose": "AWS documentation, regional availability, CloudFormation resource knowledge",
+          "stdio_command": "uvx fastmcp run https://knowledge-mcp.global.api.aws (fastmcp proxy for stdio clients)"
+        }
+      ],
+      "deprecated_excluded": ["aws-cloud-control-api-mcp-server", "aws-cdk-mcp-server", "aws-terraform-mcp-server"]
+    }
+  },
+
+  "component_design": [
+    {
+      "id": "C-001",
+      "name": "Claude Code Interface Layer",
+      "technology": "Claude Code CLI (.claude/skills/ in target repo)",
+      "purpose": "8 custom skills replace all CLI/argparse interaction. Skills provide: pipeline invocation, status display, result viewing, infrastructure operations, health checks, and demo generation. No argparse or Click framework.",
+      "skills": [
+        {"name": "run-pipeline", "args": "<sku-brief-path> [--model-tier dev|iterate|final] [--dry-run]", "disable_model_invocation": false},
+        {"name": "pipeline-status", "args": "", "disable_model_invocation": false, "note": "read-only, shows recent run manifests"},
+        {"name": "view-results", "args": "<sku> [region]", "disable_model_invocation": false},
+        {"name": "deploy", "args": "[env]", "disable_model_invocation": true},
+        {"name": "teardown", "args": "[env]", "disable_model_invocation": true, "note": "requires confirmation"},
+        {"name": "health-check", "args": "", "disable_model_invocation": false},
+        {"name": "run-tests", "args": "", "disable_model_invocation": false},
+        {"name": "generate-demo", "args": "", "disable_model_invocation": false}
+      ],
+      "inputs": ["SKU brief JSON file path (for /run-pipeline)", "Environment name (for /deploy, /teardown)"],
+      "outputs": ["Pipeline execution summary", "Status tables", "S3 output paths", "Health check results"],
+      "scalability": "N/A — interface layer only",
+      "cost_driver": false
+    },
+    {
+      "id": "C-002",
+      "name": "SKU Brief Parser",
+      "technology": "Python (json, jsonschema)",
+      "purpose": "Validate SKU brief JSON against src/schemas/sku_brief_schema.json, extract products, regions, attributes, and audience data. Sanitize all string fields before use in prompt templates (prompt injection mitigation).",
+      "inputs": ["Raw SKU brief JSON file path"],
+      "outputs": ["Validated SKUBrief dict with products, region, audience, attributes"],
+      "security_note": "All SKU brief string fields sanitized before prompt interpolation — maximum field lengths enforced per schema.",
+      "scalability": "Stateless, instant",
+      "cost_driver": false
+    },
+    {
+      "id": "C-003",
+      "name": "Asset Manager",
+      "technology": "Python (boto3 S3 client)",
+      "purpose": "Check S3 input bucket for existing brand assets (logos, product photos). Download and cache locally if found. Report missing assets to trigger generation. Build S3 output key hierarchy.",
+      "inputs": ["Product identifiers", "S3 bucket configuration (from CloudFormation stack outputs)"],
+      "outputs": ["Dict of found assets (local paths)", "List of missing asset types", "S3 output key builder"],
+      "s3_key_pattern": "{sku_id}/{region}/{format}/{filename}",
+      "scalability": "Stateless, S3 SDK handles retries",
+      "cost_driver": false
+    },
+    {
+      "id": "C-004",
+      "name": "Prompt Constructor",
+      "technology": "Python (f-string templates) + C-012 (optional text reasoning for creative variants)",
+      "purpose": "Build GenAI image generation prompts from SKU brief data — product name, attributes, region/cultural context, aspect ratio, and packaging type. For basic generation: f-string templates (zero cost). For brand voice adaptation or compliance text: delegate to C-012 (AnthropicBedrock).",
+      "inputs": ["Validated SKU brief dict", "Product dict", "Aspect ratio specification"],
+      "outputs": ["Prompt string for Nova Canvas / Titan V2", "Text overlay content dict (title, attributes, regulatory_text)"],
+      "scalability": "Stateless, instant (or ~2s with C-012 delegation)",
+      "cost_driver": false
+    },
+    {
+      "id": "C-005",
+      "name": "Image Generator",
+      "technology": "Python (boto3 bedrock-runtime client)",
+      "purpose": "Call Amazon Bedrock to generate packaging images. 2-tier model strategy with exponential retry/backoff and local cache. Dry-run mode returns 1x1 pixel placeholder (zero API cost).",
+      "inputs": ["Prompt string", "Model tier (dev=Titan V2, final=Nova Canvas)", "Image dimensions", "dry_run flag"],
+      "outputs": ["Generated image bytes (PNG)", "Generation metadata (model_used, tier, cached, dry_run)"],
+      "model_tiers": {
+        "dev": "amazon.titan-image-generator-v2:0 ($0.01/image) — pipeline development and debugging",
+        "iterate": "amazon.nova-canvas-v1:0 ($0.04/image) — quality iteration",
+        "final": "amazon.nova-canvas-v1:0 ($0.04/image) — demo-quality renders"
+      },
+      "retry_backoff": {
+        "strategy": "Exponential backoff",
+        "max_attempts": 3,
+        "delays_seconds": [2, 4, 8],
+        "retryable_errors": ["ThrottlingException", "ServiceUnavailableException", "ModelNotReadyException"],
+        "fallback_on_exhaustion": "Fall from Nova Canvas to Titan V2 after 3 failures. Log model tier used per image."
+      },
+      "caching": {
+        "location": "~/.cache/pai-pipeline/",
+        "key": "SHA-256 hash of (prompt + width + height + model_id)",
+        "effect": "Skip Bedrock call on cache hit — reduces cost during debug iterations"
+      },
+      "dry_run": {
+        "trigger": "dry_run=True parameter or PAI_DRY_RUN=1 env var",
+        "behavior": "Return 1x1 pixel placeholder PNG bytes — zero Bedrock API cost",
+        "use_case": "Validate SKU brief schema, S3 connectivity, and prompt construction without incurring costs"
+      },
+      "scalability": "Parallelizable via concurrent.futures.ThreadPoolExecutor — generate multiple images simultaneously",
+      "cost_driver": true
+    },
+    {
+      "id": "C-006",
+      "name": "Text Overlay Engine",
+      "technology": "Python (Pillow/PIL)",
+      "purpose": "Composite product messaging, regulatory information, and attribute badges onto generated packaging images. Handle font sizing, positioning, and readability per aspect ratio. Use bundled TTF font (not Windows-specific system fonts) for cross-platform portability.",
+      "inputs": ["Base image bytes", "Text overlay content dict (title, attributes, regulatory_text)", "Aspect ratio (1:1, 9:16, 16:9)"],
+      "outputs": ["Final composited packaging image bytes with text overlays"],
+      "layout_rules": {
+        "1:1": "Product name top-third centered, attributes center, regulatory text bottom strip",
+        "9:16": "Product name top, description mid, regulatory text bottom",
+        "16:9": "Product name left-aligned top, attributes right panel, regulatory text bottom strip"
+      },
+      "scalability": "CPU-bound but fast — sub-second per image",
+      "cost_driver": false
+    },
+    {
+      "id": "C-007",
+      "name": "Output Manager",
+      "technology": "Python (boto3 S3 client, pathlib, uuid)",
+      "purpose": "Upload final packaging images to S3 with organized key hierarchy. Write pipeline run manifest to both S3 and local filesystem. Manifest enables /pipeline-status skill without a database.",
+      "inputs": ["Final packaging images", "SKU/Region/format metadata", "Run metadata (model_tier, dry_run, errors, duration)"],
+      "outputs": ["S3 object keys for all uploaded files", "Pipeline run manifest (E-006) written to S3 + local"],
+      "manifest_s3_path": "{sku_id}/{region}/manifest.json",
+      "manifest_local_path": "outputs/runs/{iso_timestamp}_{sku_id}.json",
+      "scalability": "Stateless, S3 SDK handles retries",
+      "cost_driver": false
+    },
+    {
+      "id": "C-008",
+      "name": "IaC Stack",
+      "technology": "AWS CloudFormation (YAML)",
+      "purpose": "Define S3 buckets (input + output with Block Public Access), IAM role with least-privilege Bedrock and S3 access. Self-contained single YAML file. Outputs: bucket names and role ARN consumed by pipeline.",
+      "cloudformation_spec": {
+        "resources": [
+          "S3 input bucket with BlockPublicAcls: true, BlockPublicPolicy: true, IgnorePublicAcls: true, RestrictPublicBuckets: true",
+          "S3 output bucket with same Block Public Access settings",
+          "IAM role: bedrock:InvokeModel on foundation-model ARNs, S3 GetObject/PutObject on bucket ARNs",
+          "IAM instance profile (for future Lambda execution)"
+        ],
+        "outputs": ["InputBucketName", "OutputBucketName", "PipelineRoleArn"],
+        "stack_name": "pai-exercise",
+        "deploy_command": "aws cloudformation deploy --stack-name pai-exercise --template-file infra/cloudformation/stack.yaml --capabilities CAPABILITY_IAM --profile pai-exercise"
+      },
+      "security_note": "S3 Block Public Access enabled on all 4 settings for both buckets (closes F-001). IAM role uses least privilege — no wildcard resources.",
+      "scalability": "CloudFormation handles resource lifecycle",
+      "cost_driver": false
+    },
+    {
+      "id": "C-009",
+      "name": "Claude Code Hooks",
+      "technology": "Claude Code .claude/settings.json in target repo",
+      "purpose": "Enforce quality automatically: auto-lint changed files on every edit, run tests before completing any task, guard against destructive AWS commands without confirmation.",
+      "hooks": [
+        {
+          "event": "PostToolUse",
+          "matcher": "Edit|Write",
+          "action": "Auto-lint changed Python files with ruff check {changed_file}. Block on lint errors."
+        },
+        {
+          "event": "Stop",
+          "action": "Run pytest tests/ -v -m 'not integration'. Block task completion if tests fail."
+        },
+        {
+          "event": "PreToolUse",
+          "matcher": "Bash",
+          "action": "Pattern match for destructive AWS commands (cloudformation delete-stack, s3 rm, iam delete-*). Require explicit confirmation before proceeding."
+        }
+      ],
+      "scalability": "N/A — hook execution layer",
+      "cost_driver": false
+    },
+    {
+      "id": "C-010",
+      "name": "GitHub Actions CI/CD",
+      "technology": "GitHub Actions YAML workflows (.github/workflows/)",
+      "purpose": "Enforce lint, test, and security checks on every push. Deploy CloudFormation on main push. Demonstrates engineering discipline for interview panel.",
+      "workflows": [
+        {
+          "file": "ci.yml",
+          "trigger": "push to any branch, pull_request to main",
+          "steps": ["checkout (SHA-pinned)", "setup-python 3.12 (SHA-pinned)", "pip install -r requirements.txt", "ruff check src/", "pytest tests/ -v -m 'not integration'", "pip-audit (fail on HIGH/CRITICAL)"],
+          "aws_credentials": "Not required for unit tests"
+        },
+        {
+          "file": "deploy.yml",
+          "trigger": "push to main (after CI passes)",
+          "steps": ["checkout (SHA-pinned)", "configure-aws-credentials (GitHub Secret or OIDC)", "aws cloudformation deploy ..."],
+          "aws_credentials": "GitHub Secret: AWS_ACCESS_KEY_ID + AWS_SECRET_ACCESS_KEY (or OIDC federation)"
+        }
+      ],
+      "security": "All action versions pinned to SHA hashes (supply chain protection). No credential echo in logs.",
+      "scalability": "GitHub-managed — zero infrastructure cost for public repo",
+      "cost_driver": false
+    },
+    {
+      "id": "C-011",
+      "name": "AWS MCP Servers",
+      "technology": ".mcp.json in target repo (uv-based Python packages)",
+      "purpose": "Enable natural language AWS administration from Claude Code: CloudFormation template validation, IaC assistance, AWS documentation lookup. Uses uv tool run (NOT npm/npx — AWS MCP servers are Python packages).",
+      "mcp_config_example": {
+        "mcpServers": {
+          "awslabs.aws-iac-mcp-server": {
+            "command": "uv",
+            "args": ["tool", "run", "--from", "awslabs.aws-iac-mcp-server@latest", "awslabs.aws-iac-mcp-server.exe"],
+            "env": {"FASTMCP_LOG_LEVEL": "ERROR", "AWS_PROFILE": "pai-exercise", "AWS_REGION": "us-east-1"}
+          },
+          "awslabs.aws-knowledge-mcp-server": {
+            "command": "uvx",
+            "args": ["fastmcp", "run", "https://knowledge-mcp.global.api.aws"],
+            "env": {"FASTMCP_LOG_LEVEL": "ERROR"}
+          }
+        }
+      },
+      "prerequisites": "uv (Python package manager) installed. Node.js not required.",
+      "scalability": "N/A — MCP server layer",
+      "cost_driver": false
+    },
+    {
+      "id": "C-012",
+      "name": "Text Reasoning Engine",
+      "technology": "Python (anthropic[bedrock] — AnthropicBedrock client)",
+      "purpose": "Optional text reasoning for prompt template enhancement, brand voice adaptation, and compliance text generation. Uses same IAM credential chain as boto3. Called by C-004 when creative or compliance-aware text is needed.",
+      "model": "global.anthropic.claude-sonnet-4-6",
+      "client_code": "from anthropic import AnthropicBedrock; client = AnthropicBedrock(aws_region='us-east-1')",
+      "credential_chain": "Same as boto3 — reads AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN. Does NOT read ~/.aws/config for region — must set aws_region param or AWS_REGION env var.",
+      "iam_required": "bedrock:InvokeModel on arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-sonnet-4-6",
+      "use_cases": [
+        "Construct culturally-adapted packaging copy from SKU brief attributes",
+        "Generate regulatory compliance text templates per region",
+        "Evaluate generated image descriptions for brand voice consistency (Phase 6)"
+      ],
+      "inputs": ["Prompt string", "SKU brief context"],
+      "outputs": ["Generated text (product copy, regulatory text, compliance assessment)"],
+      "scalability": "On-demand, stateless",
+      "cost_driver": true
+    }
+  ],
+
+  "data_flows": [
+    {
+      "id": "DF-001",
+      "name": "SKU Brief Ingestion",
+      "source": "Claude Code /run-pipeline skill",
+      "destination": "C-002 (SKU Brief Parser)",
+      "protocol": "Local filesystem read",
+      "data_type": "JSON",
+      "latency_target_ms": 100,
+      "encryption": "N/A (local)"
+    },
+    {
+      "id": "DF-002",
+      "name": "Asset Lookup",
+      "source": "C-003 (Asset Manager)",
+      "destination": "S3 Input Bucket (us-east-1)",
+      "protocol": "HTTPS (boto3 S3 API)",
+      "data_type": "Binary (PNG/JPEG)",
+      "latency_target_ms": 2000,
+      "encryption": "TLS in transit, SSE-S3 at rest"
+    },
+    {
+      "id": "DF-003",
+      "name": "Image Generation Request",
+      "source": "C-005 (Image Generator)",
+      "destination": "Amazon Bedrock us-east-1 (Nova Canvas / Titan V2)",
+      "protocol": "HTTPS (boto3 bedrock-runtime InvokeModel)",
+      "data_type": "JSON request → Base64 PNG response",
+      "latency_target_ms": 30000,
+      "encryption": "TLS in transit",
+      "retry": "3 attempts, exponential backoff (2s, 4s, 8s)"
+    },
+    {
+      "id": "DF-004",
+      "name": "Text Reasoning Request",
+      "source": "C-004 (Prompt Constructor)",
+      "destination": "Amazon Bedrock us-east-1 (Claude Sonnet 4.6 via AnthropicBedrock)",
+      "protocol": "HTTPS (anthropic[bedrock] SDK)",
+      "data_type": "Messages API request/response",
+      "latency_target_ms": 5000,
+      "encryption": "TLS in transit",
+      "note": "Optional — only called when creative text adaptation is needed"
+    },
+    {
+      "id": "DF-005",
+      "name": "Image Post-Processing",
+      "source": "C-005 (Image Generator)",
+      "destination": "C-006 (Text Overlay Engine)",
+      "protocol": "In-memory (bytes objects)",
+      "data_type": "Binary (PNG bytes)",
+      "latency_target_ms": 500,
+      "encryption": "N/A (in-process)"
+    },
+    {
+      "id": "DF-006",
+      "name": "Output Upload",
+      "source": "C-007 (Output Manager)",
+      "destination": "S3 Output Bucket (us-east-1)",
+      "protocol": "HTTPS (boto3 S3 PutObject)",
+      "data_type": "Binary (PNG) + JSON manifest",
+      "latency_target_ms": 2000,
+      "encryption": "TLS in transit, SSE-S3 at rest"
+    },
+    {
+      "id": "DF-007",
+      "name": "CI/CD Pipeline Trigger",
+      "source": "git push to GitHub",
+      "destination": "GitHub Actions (ci.yml / deploy.yml)",
+      "protocol": "GitHub webhook",
+      "data_type": "Git commit payload",
+      "latency_target_ms": 5000,
+      "encryption": "TLS"
+    }
+  ],
+
+  "diagrams": {
+    "system_context": {
+      "format": "mermaid",
+      "code": "flowchart LR\n    DEV[\"Developer\"]\n    CC[\"Claude Code CLI\"]\n    SKU[\"SKU Brief JSON\"]\n    PIPELINE[\"Packaging Pipeline\"]\n    S3_IN[\"S3 Input Bucket\"]\n    BEDROCK[\"Amazon Bedrock\"]\n    S3_OUT[\"S3 Output Bucket\"]\n    GHA[\"GitHub Actions\"]\n    MCP[\"AWS MCP Servers\"]\n\n    DEV -->|\"invokes skill\"| CC\n    CC -->|\"runs\"| PIPELINE\n    SKU -->|\"input\"| PIPELINE\n    PIPELINE -->|\"checks assets\"| S3_IN\n    S3_IN -->|\"brand assets\"| PIPELINE\n    PIPELINE -->|\"generates images\"| BEDROCK\n    BEDROCK -->|\"base64 PNG\"| PIPELINE\n    PIPELINE -->|\"saves outputs\"| S3_OUT\n    DEV -->|\"git push\"| GHA\n    GHA -->|\"deploys CFN\"| S3_OUT\n    DEV -->|\"AWS admin\"| MCP"
+    },
+    "data_flow": {
+      "format": "mermaid",
+      "code": "flowchart TB\n    INPUT[\"SKU Brief JSON\"]\n    PARSE[\"C-002: Parse and Validate\"]\n    ASSET_CHECK[\"C-003: Check S3 Assets\"]\n    PROMPT[\"C-004: Construct Prompts\"]\n    GENERATE[\"C-005: Generate via Bedrock\"]\n    OVERLAY[\"C-006: Text Overlay via Pillow\"]\n    OUTPUT[\"C-007: Output Manager\"]\n    S3[\"S3 Output Bucket\"]\n    MANIFEST[\"manifest.json\"]\n\n    INPUT --> PARSE\n    PARSE --> ASSET_CHECK\n    ASSET_CHECK -->|\"missing assets\"| PROMPT\n    ASSET_CHECK -->|\"found assets\"| OVERLAY\n    PROMPT --> GENERATE\n    GENERATE -->|\"retry on throttle\"| GENERATE\n    GENERATE --> OVERLAY\n    OVERLAY --> OUTPUT\n    OUTPUT --> S3\n    OUTPUT --> MANIFEST"
+    },
+    "deployment": {
+      "format": "mermaid",
+      "code": "flowchart TB\n    subgraph \"Developer Machine\"\n        CC[\"Claude Code + Skills\"]\n        PYTHON[\"Python 3.12 Pipeline\"]\n        PILLOW[\"Pillow Library\"]\n        MCP[\"AWS MCP Servers\"]\n    end\n    subgraph \"AWS us-east-1\"\n        IAM[\"IAM Role\"]\n        S3_ASSETS[\"S3: Asset Bucket\"]\n        S3_OUTPUT[\"S3: Output Bucket\"]\n        BEDROCK_NC[\"Nova Canvas\"]\n        BEDROCK_TV[\"Titan V2\"]\n        BEDROCK_CL[\"Claude Sonnet 4.6\"]\n    end\n    subgraph \"GitHub\"\n        GHA_CI[\"ci.yml: lint + test\"]\n        GHA_DEPLOY[\"deploy.yml: CFN\"]\n    end\n\n    CC --> PYTHON\n    PYTHON --> PILLOW\n    PYTHON -->|\"boto3 HTTPS\"| S3_ASSETS\n    PYTHON -->|\"boto3 HTTPS\"| S3_OUTPUT\n    PYTHON -->|\"boto3 InvokeModel\"| BEDROCK_NC\n    PYTHON -->|\"boto3 InvokeModel\"| BEDROCK_TV\n    PYTHON -->|\"anthropic[bedrock]\"| BEDROCK_CL\n    MCP -->|\"uv stdio\"| S3_ASSETS\n    IAM -->|\"least privilege\"| S3_ASSETS\n    IAM -->|\"least privilege\"| S3_OUTPUT\n    IAM -->|\"least privilege\"| BEDROCK_NC\n    GHA_CI -->|\"on push\"| GHA_DEPLOY\n    GHA_DEPLOY -->|\"on main\"| S3_OUTPUT"
+    }
+  },
+
+  "cloud_infrastructure": {
+    "services": {
+      "compute": "Local Python execution via Claude Code skills (Lambda-ready for future deployment)",
+      "storage": "Amazon S3 — 2 buckets (input assets, output packaging) both with Block Public Access",
+      "ai_ml": "Amazon Bedrock us-east-1 — Nova Canvas (primary, $0.04/img), Titan V2 (fallback, $0.01/img), Claude Sonnet 4.6 (text reasoning)",
+      "iac": "AWS CloudFormation (YAML template, stack: pai-exercise)",
+      "ci_cd": "GitHub Actions (ci.yml + deploy.yml)",
+      "mcp": "AWS IaC MCP Server + AWS Knowledge MCP Server"
+    },
+    "deployment_pattern": "Skills-first with CI/CD enforcement. Pipeline invoked via Claude Code /run-pipeline skill during development and demo. GitHub Actions enforces lint, tests, and CloudFormation deploy on main.",
+    "monitoring": {
+      "metrics": ["Bedrock InvokeModel latency", "S3 PutObject count", "Generation success/failure rate", "Model tier used per image", "CI/CD pass/fail rates"],
+      "logging": "Structured JSON to stdout + pipeline run manifest (E-006) to S3 + local",
+      "alerting": "AWS Budget alarm at $10 spend — production would add CloudWatch Alarms on Bedrock error rates"
+    },
+    "backup_dr": {
+      "strategy": "S3 versioning enabled on output bucket. Manifest.json written per run enables rerun from SKU brief. No cross-region replication for PoC.",
+      "rto_minutes": "N/A (PoC)",
+      "rpo_minutes": "N/A (PoC)"
+    },
+    "cost_optimization": {
+      "strategy": "2-tier model cost strategy: Titan V2 ($0.01/image) for dev tier, Nova Canvas ($0.04/image) for iterate and final tiers. Dry-run mode for zero-cost validation. Cache generated images locally. Budget unconstrained — quality is optimization target.",
+      "estimated_run_cost": "$5-25 for full PoC demo run (4 SKU briefs × 2 products × 3 ratios = 24 images at final tier = ~$1 Nova Canvas; iterative dev runs at Titan V2 = $0.01/image)",
+      "cost_levers": [
+        "Default to Titan V2 ($0.01) during pipeline development — 4x cheaper than Nova Canvas",
+        "Use --dry-run for pipeline validation — zero Bedrock cost",
+        "Cache hit avoids re-generation during text overlay iteration",
+        "AWS Budget alarm at $10 to catch runaway API calls"
+      ]
+    },
+    "credential_management": {
+      "strategy": "AWS CLI named profiles",
+      "profile_name": "pai-exercise",
+      "setup_command": "aws configure --profile pai-exercise",
+      "env_var": "AWS_PROFILE=pai-exercise",
+      "never_do": ["Hardcode credentials in source code", "Commit .env files", "Use default profile in production scripts"],
+      "github_actions": "Use GitHub Secrets for AWS credentials (AWS_ACCESS_KEY_ID + AWS_SECRET_ACCESS_KEY) or OIDC federation for keyless authentication",
+      "mcp_servers": "Pass AWS_PROFILE and AWS_REGION in env block of .mcp.json server config",
+      "anthropic_bedrock": "AnthropicBedrock() reads AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY from environment. Set aws_region='us-east-1' explicitly (does not read ~/.aws/config).",
+      "security_note": "Closes F-002 from v1.0 security review. Named profiles prevent accidental credential exposure."
+    }
+  },
+
+  "ai_ml_components": {
+    "pattern": "Simple GenAI Wrapper — direct API call pipeline with retry/backoff. No orchestration framework or agent loops.",
+    "image_generation": {
+      "primary_model": "Amazon Nova Canvas (amazon.nova-canvas-v1:0)",
+      "fallback_model": "Amazon Titan Image Generator V2 (amazon.titan-image-generator-v2:0)",
+      "removed": "stability.sd3-5-large-v1:0 — us-west-2 only, no cross-region inference profile",
+      "access_method": "boto3 bedrock-runtime InvokeModel",
+      "region": "us-east-1",
+      "model_selection_rationale": "Nova Canvas selected: TIFA 0.897, ImageReward 1.250 per Amazon Nova Technical Report (arxiv 2506.12103v1). Only available in us-east-1, which confirms region choice. SD3.5 Large removed — only in us-west-2 with no cross-region inference profile (confirmed via AWS docs March 2026). Text rendering limitations of both models are mitigated by Pillow text overlay — all label copy applied programmatically, not via GenAI text generation.",
+      "aspect_ratios": {
+        "front_label": {"width": 1024, "height": 1024, "ratio": "1:1", "s3_prefix": "front_label/"},
+        "back_label": {"width": 576, "height": 1024, "ratio": "9:16", "s3_prefix": "back_label/"},
+        "wraparound": {"width": 1024, "height": 576, "ratio": "16:9", "s3_prefix": "wraparound/"}
+      },
+      "retry_backoff": "3 attempts, exponential (2s, 4s, 8s), ThrottlingException + ServiceUnavailableException retryable. Fall to Titan V2 after 3 Nova Canvas failures."
+    },
+    "text_reasoning": {
+      "model": "Claude Sonnet 4.6 (global.anthropic.claude-sonnet-4-6)",
+      "client": "AnthropicBedrock(aws_region='us-east-1')",
+      "package": "pip install 'anthropic[bedrock]'",
+      "iam": "bedrock:InvokeModel — same as image generation role",
+      "use_cases": ["Creative prompt enhancement", "Brand voice adaptation", "Regulatory text templates"],
+      "note": "AWS_REGION env var or aws_region constructor param required — AnthropicBedrock does not auto-read ~/.aws/config"
+    },
+    "post_processing": {
+      "technology": "Pillow (PIL)",
+      "operations": [
+        "Text overlay: product name, key attributes, regulatory information",
+        "Font: bundled TTF (not Windows-specific — portability requirement)",
+        "Layout zones: designated areas per aspect ratio for text placement",
+        "Font sizing: auto-scale based on image dimensions and text length"
+      ]
+    },
+    "responsible_ai": {
+      "human_oversight": "Human review required before any client-facing packaging output. /pipeline-status skill enables audit trail. Manifest records model tier and generation metadata.",
+      "bias_mitigation": "Regional imagery prompts reviewed during demo construction. No automated bias detection at PoC scale.",
+      "transparency": "Model tier used (Nova Canvas vs Titan V2) logged in every manifest entry.",
+      "hallucination_risk": "Low — regulatory text and product copy applied via Pillow (code), not generated by model. Model generates background imagery only.",
+      "model_selection_criteria": "NFR-008 in requirements.json — selection justified by benchmark evidence (TIFA, ImageReward from Amazon Nova Technical Report arxiv 2506.12103v1)",
+      "model_access_control": "IAM least-privilege: bedrock:InvokeModel on specific foundation-model ARNs only",
+      "prompt_injection_protection": "All SKU brief string fields sanitized (max length enforced, special characters stripped) before interpolation into prompt templates"
+    }
+  },
+
+  "observability": {
+    "logging": {
+      "format": "Structured JSON logs (Python logging with json formatter)",
+      "levels": "INFO for pipeline steps, WARNING for model tier fallback, ERROR for failures",
+      "correlation_id": "UUID per pipeline run, propagated through all log entries",
+      "retention": "Local stdout for skill invocation; manifest.json persisted to S3 per run"
+    },
+    "metrics": {
+      "pipeline": ["Total execution time (duration_seconds in manifest)", "Images generated count", "Images failed count", "S3 upload success rate"],
+      "ai_specific": ["Bedrock InvokeModel latency per call", "Model tier used (Nova Canvas / Titan V2)", "Cache hit rate", "Estimated cost per run"],
+      "collection": "Written to pipeline run manifest (E-006) at completion — no real-time dashboard for PoC"
+    },
+    "tracing": {
+      "strategy": "run_id (UUID4) per pipeline run, written to manifest.json and all log entries. Skill invocation log (E-007) links run_id to Claude Code session."
+    }
+  },
+
+  "well_architected_scores": {
+    "operational_excellence": 8,
+    "security": 8,
+    "reliability": 8,
+    "performance_efficiency": 7,
+    "cost_optimization": 8,
+    "sustainability": 7,
+    "overall": 7.7,
+    "notes": {
+      "operational_excellence": {
+        "score": 8,
+        "delta": "+1 from v1.1 (was 7)",
+        "strengths": [
+          "IaC from day one via CloudFormation",
+          "GitHub Actions CI/CD enforces quality on every push",
+          "Claude Code hooks auto-lint and auto-test (PostToolUse, Stop)",
+          "Structured JSON logs with correlation IDs per run",
+          "Pipeline run manifest enables operational visibility without a database",
+          "Claude Code skills provide consistent, documented interface"
+        ],
+        "gaps": ["No real-time monitoring dashboard (CloudWatch not configured for PoC)", "No alerting on generation failure rates"],
+        "recommendations": ["Add CloudWatch dashboard in Phase 6 if time permits", "AWS Budget alarm at $10 provides cost guardrail"]
+      },
+      "security": {
+        "score": 8,
+        "delta": "+1 from v1.1 (was 7)",
+        "strengths": [
+          "IAM least-privilege roles scoped to S3 and Bedrock only",
+          "SSE-S3 encryption at rest on all buckets",
+          "S3 Block Public Access enabled on all 4 settings for both buckets (closes F-001)",
+          "AWS CLI named profiles — no hardcoded credentials (closes F-002)",
+          "pip-audit in CI for dependency vulnerability scanning (closes F-003)",
+          "All GitHub Actions versions pinned to SHA hashes (supply chain protection)",
+          "Prompt injection mitigation: SKU brief string fields sanitized before interpolation"
+        ],
+        "gaps": ["CloudTrail not enabled (PoC acceptable, required for production)", "No AWS Config rules for drift detection"],
+        "recommendations": ["Enable CloudTrail in production", "Add detect-secrets pre-commit hook before any real client data"]
+      },
+      "reliability": {
+        "score": 8,
+        "delta": "+2 from v1.1 (was 6)",
+        "strengths": [
+          "Exponential retry/backoff: 3 attempts, 2^n seconds, ThrottlingException + ServiceUnavailableException retryable (closes RF-009)",
+          "2-tier model fallback: Nova Canvas → Titan V2 after 3 failures",
+          "Dry-run mode validates pipeline without Bedrock calls (closes RF-010)",
+          "Local cache (~/.cache/pai-pipeline/) enables resume after failures",
+          "Manifest written per run enables replay from SKU brief",
+          "Stateless pipeline — safe to retry from any stage"
+        ],
+        "gaps": ["No cross-region failover (PoC scope)", "No checkpointing between pipeline stages for partial recovery"],
+        "recommendations": ["Add stage checkpointing (write each image to local before S3 upload) in Phase 3"]
+      },
+      "performance_efficiency": {
+        "score": 7,
+        "delta": "0 from v1.1",
+        "strengths": [
+          "Right-sized compute (local execution, no over-provisioning)",
+          "Managed AI inference via Bedrock eliminates GPU management",
+          "Local image cache eliminates redundant Bedrock calls",
+          "2-tier model strategy matches cost to quality need"
+        ],
+        "gaps": ["No concurrent image generation yet (sequential)", "No performance instrumentation beyond manifest duration_seconds"],
+        "recommendations": ["Add concurrent.futures.ThreadPoolExecutor in Phase 3 for parallel generation"]
+      },
+      "cost_optimization": {
+        "score": 8,
+        "delta": "-1 from v1.1 (was 9, budget now unconstrained)",
+        "strengths": [
+          "Zero idle compute (on-demand execution via Claude Code skills)",
+          "2-tier model pricing ($0.01-$0.04/image)",
+          "Dry-run mode enables zero-cost validation",
+          "Local cache avoids re-generation during text overlay iteration",
+          "IaC enables clean teardown to zero ongoing cost"
+        ],
+        "gaps": ["No AWS Budget alarm configured yet (planned in Phase 1 setup)", "No S3 lifecycle policy confirmed"],
+        "recommendations": ["Add AWS Budget alarm at $10 in Phase 1 setup even with unconstrained budget", "Add S3 lifecycle expiration (90 days) in CloudFormation template"]
+      },
+      "sustainability": {
+        "score": 7,
+        "delta": "-1 from v1.1 (was 8 — region moved from us-west-2 Oregon to us-east-1 N. Virginia for model availability)",
+        "strengths": [
+          "On-demand execution eliminates idle waste",
+          "Bedrock shared infrastructure amortizes GPU utilization",
+          "Local cache avoids redundant GenAI calls",
+          "IaC teardown eliminates zombie resources"
+        ],
+        "gaps": ["us-east-1 (N. Virginia) has lower renewable energy % than us-west-2 (Oregon)", "No S3 lifecycle confirmed"],
+        "recommendations": ["Add S3 lifecycle expiration policy (90 days) in CloudFormation", "AWS has 100% renewable energy commitment globally — impact is mitigated at fleet level"]
+      }
+    }
+  },
+
+  "alternatives_considered": [
+    {
+      "name": "Amazon Nova Canvas — SELECTED AS PRIMARY",
+      "summary": "First-party AWS image model. TIFA 0.897, ImageReward 1.250. Only available in us-east-1. $0.04/image. Built-in inpainting/outpainting for future enhancement.",
+      "why_rejected": "N/A — selected as primary model. Confirms us-east-1 as correct region."
+    },
+    {
+      "name": "Stable Diffusion 3.5 Large (stability.sd3-5-large-v1:0)",
+      "summary": "8B parameter model, $0.08/image. Only available in us-west-2. No cross-region inference profile.",
+      "why_rejected": "Region conflict: us-west-2 only, no cross-region inference. Nova Canvas available in us-east-1 with better benchmark scores on available metrics. SD3.5 moved to BACKLOG for future consideration if cross-region inference becomes available."
+    },
+    {
+      "name": "Amazon Titan Image Generator V2 — SELECTED AS FALLBACK",
+      "summary": "Available in us-east-1. $0.01/image (4x cheaper than Nova Canvas). Lower quality but adequate for dev/iterate tier.",
+      "why_rejected": "N/A — retained as fallback and dev tier model."
+    },
+    {
+      "name": "argparse / Click CLI",
+      "summary": "Traditional Python CLI framework. Required for v1.0 design.",
+      "why_rejected": "Replaced by Claude Code custom skills. Skills provide better developer experience, zero additional framework dependency, and demonstrate AI-native development approach."
+    },
+    {
+      "name": "PostgreSQL on RDS",
+      "summary": "Relational database for run history and manifest storage.",
+      "why_rejected": "Over-engineering for PoC. Flat JSON manifest files + S3 provide adequate run history for /pipeline-status skill. RDS adds cost, complexity, and setup time. Moved to BACKLOG."
+    },
+    {
+      "name": "AWS CDK instead of CloudFormation",
+      "summary": "Infrastructure as code using Python CDK constructs.",
+      "why_rejected": "CDK adds npm dependency and synthesis step. CloudFormation YAML is self-contained, simpler for a small stack (2 buckets + 1 IAM role). AWS IaC MCP Server validates CloudFormation templates directly."
+    },
+    {
+      "name": "boto3 bedrock-runtime for Claude calls",
+      "summary": "Direct boto3 InvokeModel for Claude Sonnet via Bedrock.",
+      "why_rejected": "anthropic[bedrock] provides much cleaner API: client.messages.create() vs invoke_model() + JSON parsing. Same IAM permission (bedrock:InvokeModel). Same credential chain. Preferred for text reasoning component."
+    }
+  ],
+
+  "_metadata": {
+    "author": "sa-agent",
+    "date": "2026-03-18",
+    "validation_status": "complete",
+    "version": "2.0",
+    "architect": "sa-agent",
+    "design_method": "requirements-driven, PoC-scoped, AWS-native, AI-native-development",
+    "change_log": "v2.0: Primary model changed from SD3.5 Large to Nova Canvas (SD3.5 us-west-2 only — no cross-region inference). Region changed from us-west-2 to us-east-1 (Nova Canvas availability). C-001 argparse replaced by Claude Code skills. C-009 hooks, C-010 CI/CD, C-011 MCP servers, C-012 text reasoning added. Retry/backoff added to C-005 (closes RF-009). S3 Block Public Access added to C-008 (closes F-001). Credential management documented (closes F-002). Dry-run mode documented (closes RF-010). WA scores updated: OpEx 7→8, Security 7→8, Reliability 6→8, Cost 9→8 (unconstrained budget), Sustainability 8→7 (us-west-2→us-east-1). Overall 7.3→7.7."
+  }
+}
