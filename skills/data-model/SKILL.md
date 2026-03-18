@@ -88,7 +88,11 @@ When the architecture includes vector/embedding storage:
 2. **Chunking strategy**: Method (recursive character, semantic, sentence), chunk size, overlap
 3. **Metadata schema**: Source document ID, section/page, ingestion timestamp, content type, domain tags, version
 4. **Embedding model selection**: Model, dimensionality, language support — use WebSearch for current benchmarks
-5. **Relevance filtering**: Score thresholds (e.g., cosine similarity >= 0.7), re-ranking strategy
+5. **Relevance filtering**: Score thresholds (e.g., cosine similarity >= 0.7), re-ranking strategy (choose based on latency vs. quality trade-off):
+   - **Bi-encoder**: Fast first-pass retrieval (semantic similarity)
+   - **Cross-encoder**: Slow but high-quality second-pass re-ranking (e.g., MS MARCO)
+   - **Reciprocal Rank Fusion**: Ensemble approach, no model training required
+   - **BM25 hybrid**: Combine lexical + semantic for keyword-heavy domains
 6. **Retrieval parameters**: Configurable k (top results) per use case, hybrid search (dense + sparse)
 
 ### Step 4: Graph Schema Design (if applicable)
@@ -141,7 +145,7 @@ Every KB file includes standard envelope fields: `engagement_id` (links to engag
 
 Write to `knowledge_base/data_model.json`:
 - `data_requirements`: Consolidated from upstream (sources, volumes, patterns)
-- `relational_schemas`: Entities, relationships, fields, indexes, constraints. Use `relational_schemas` as the canonical field name (the schema also accepts `entities` as an alias).
+- `relational_schemas`: Entities, relationships, fields, indexes, constraints. Use `relational_schemas` as the canonical field name — do not use `entities` as an alias.
 - `vector_schemas`: Collections, chunking, embeddings, retrieval config (if applicable)
 - `graph_schemas`: Node types, edge types, ontology (if applicable)
 - `knowledge_pipeline`: Pipeline stages and configuration (if applicable)

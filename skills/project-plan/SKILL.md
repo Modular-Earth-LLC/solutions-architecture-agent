@@ -115,7 +115,11 @@ For each sprint:
 
 **Sprint ceremonies**: Planning, Daily Scrum (15 min), Review/Demo, Retrospective, Backlog Refinement.
 
-Confidence gate: "Fist of Five" vote at planning — minimum average 3 to proceed.
+Confidence gate: **Fist-of-Five** vote at sprint planning — minimum average 3 to proceed.
+
+> **Fist-of-Five**: A team confidence vote (1-5 raised fingers). 5 = full confidence; 3 = uncertain but willing to proceed; 1 = serious concerns. Gate requires ≥ 3 average to proceed; below 3 triggers a resolution discussion before commitment.
+
+**Phase scaling**: For projects < 4 weeks total, collapse Foundation + Core Development into a single phase. For projects > 6 months, add an Architecture Validation checkpoint after Foundation to verify design assumptions before committing full delivery budget.
 
 ### Step 4: Risk Register
 
