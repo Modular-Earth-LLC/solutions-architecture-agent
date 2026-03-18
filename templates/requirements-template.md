@@ -2,6 +2,14 @@
 
 Output template aligned with `/requirements` skill output fields and `requirements.schema.json`.
 
+## Depth Tier Guidance
+
+| Tier | Required Sections | Optional Sections | Target Length |
+|------|-----------------|------------------|---------------|
+| QUICK | Client Context, Problem Statement, AI Suitability, Top Requirements | All others | 1-2 pages |
+| STANDARD | All sections below | Extended stakeholder analysis | 4-6 pages |
+| COMPREHENSIVE | All sections | None | 6-10 pages |
+
 ---
 
 ## Client Context

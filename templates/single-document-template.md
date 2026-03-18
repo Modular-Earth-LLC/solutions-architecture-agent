@@ -2,6 +2,14 @@
 
 Use this template for Direct Delivery and Custom Document flows. All sections are optional — include only those relevant to the deliverable specification from scope negotiation.
 
+## Depth Tier Guidance
+
+| Tier | Required Sections | Optional Sections | Target Length |
+|------|-----------------|------------------|---------------|
+| QUICK | Executive Summary, Proposed Solution, Next Steps | All others | 4-6 pages |
+| STANDARD | Executive Summary, Current State, Proposed Solution, Implementation, Next Steps | Cost, Risk | 8-12 pages |
+| COMPREHENSIVE | All sections | None | 12-20 pages |
+
 ## Document Structure
 
 ### Executive Summary (required)

@@ -2,6 +2,14 @@
 
 Output template aligned with `/architecture` skill output fields and `architecture.schema.json`.
 
+## Depth Tier Guidance
+
+| Tier | Required Sections | Optional Sections | Target Length |
+|------|-----------------|------------------|---------------|
+| QUICK | Executive Summary, Tech Stack, System Context diagram | All others | 2-4 pages |
+| STANDARD | All sections below | Extended IaC detail | 6-10 pages |
+| COMPREHENSIVE | All sections | None | 10-20 pages |
+
 ---
 
 ## Executive Summary

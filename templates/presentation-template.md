@@ -2,6 +2,16 @@
 
 Use this template for pitch decks, executive briefings, and interview presentations.
 
+**Output format**: Markdown slide deck. Convert to PowerPoint with `pandoc -t pptx` or present in VS Code with the Marp extension.
+
+## Depth Tier Guidance
+
+| Tier | Required Sections | Optional Sections | Target Slides |
+|------|-----------------|------------------|---------------|
+| QUICK | Title, Challenge (1 slide), Solution, Next Steps | All others | 5-7 slides |
+| STANDARD | All sections below | Extended Q&A | 10-15 slides |
+| COMPREHENSIVE | All sections + speaker notes + Q&A prep | None | 15-20 slides |
+
 ## Slide Structure
 
 ### Slide 1: Title
