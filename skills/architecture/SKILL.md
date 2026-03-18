@@ -75,6 +75,24 @@ For each layer provide: primary recommendation with rationale, 1-2 alternatives 
 
 Use WebSearch for current technology benchmarks, pricing, and best practices.
 
+**Model Benchmark Research** *(Required when AI/ML Platform includes image, content, audio, or video generation)*
+
+Before recommending any generative model, complete these steps in order:
+
+1. **WebSearch for current benchmarks**:
+   - `"[model name] benchmark [year] image quality packaging product photography"`
+   - `"AWS Bedrock image generation models comparison [year]"`
+   - `"[use case] best image generation model [year] quality"`
+2. **Compare only current-generation models** — do not cite models released more than 18 months ago as primary alternatives. Flag any comparison against a legacy model with "(legacy baseline only)".
+3. **Document benchmark sources** in `tech_stack.llm.model_selection_rationale` as cited URLs or named metrics (TIFA, ImageReward, FID, human preference study).
+4. **Match quality dimension to use case**:
+   - Packaging/labels → prioritize **text/prompt adherence** (model follows label copy instructions)
+   - Product photography → prioritize **photorealism** (TIFA, ImageReward)
+   - Rapid prototyping → prioritize **cost** ($0.01–0.04/image tier)
+5. **Cross-region availability check**: Verify recommended model is available in the required region. Note cross-region inference paths if applicable (e.g., `us.stability.sd3-5-large-v1:0` for cross-region from us-east-1).
+
+**Never write "superior quality" without a cited benchmark or stated dimension.**
+
 ### Step 2: Component Design
 
 Define components with:
@@ -210,7 +228,7 @@ Update `knowledge_base/engagement.json`:
 Use WebSearch to verify:
 - Current cloud service pricing and availability
 - Latest Well-Architected Framework guidance (AWS, Azure, GCP)
-- AI/ML platform capabilities and pricing (LLM providers, vector DBs)
+- AI/ML platform capabilities, pricing, and benchmarks (LLM providers, image generation models, vector DBs) — use benchmark research sub-step in Step 1 for generative model selection
 - Technology maturity and community adoption metrics
 - Current security best practices for the chosen stack
 
