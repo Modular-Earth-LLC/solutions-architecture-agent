@@ -91,10 +91,7 @@ Before recommending any generative model, complete these steps in order:
    - Rapid prototyping → prioritize **cost** ($0.01–0.04/image tier)
 5. **Cross-region availability check**: Verify recommended model is available in the required region. Note cross-region inference paths if applicable (e.g., `us.stability.sd3-5-large-v1:0` for cross-region from us-east-1).
 
-**Current Claude model family reference** (as of model knowledge cutoff — verify against docs.anthropic.com/en/docs/about-claude/models for latest):
-- Highest capability: `claude-opus-4-6`
-- Balanced (recommended default): `claude-sonnet-4-6`
-- Fast/low-cost: `claude-haiku-4-5-20251001`
+**Current Claude models**: Consult [docs.anthropic.com/en/docs/about-claude/models](https://docs.anthropic.com/en/docs/about-claude/models) for the current roster, capabilities, and pricing before making any model recommendation.
 
 **Benchmark fallback** (when no published benchmarks exist for a model, e.g., very recent release):
 1. Check vendor's own technical documentation and model cards
