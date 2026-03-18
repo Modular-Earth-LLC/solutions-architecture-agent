@@ -677,8 +677,8 @@ proposal output (/proposal reads ALL, writes to outputs/ not KB)
   "tech_stack": {
     "llm": {
       "provider": "anthropic",
-      "primary_model": "claude-sonnet-4-0",
-      "fallback_model": "claude-haiku-3-5",
+      "primary_model": "claude-sonnet-4-6",
+      "fallback_model": "claude-haiku-4-5-20251001",
       "hosting": "aws_bedrock",
       "rationale": "Client requires AWS. Sonnet for complex queries, Haiku for FAQ classification."
     },
