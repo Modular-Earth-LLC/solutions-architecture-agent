@@ -51,13 +51,15 @@ You decide whether to:
 
 ## Automation Levels
 
-| Level | Mode | Agent Behavior | Your Role |
-|-------|------|---------------|-----------|
-| **1 — Advisory** | Default for all skills | Generates recommendations | Review, decide, execute |
-| **2 — Structured** | Requirements, Estimation | Asks questions, structures answers | Answer, validate, approve |
-| **3 — Analytical** | Architecture, Security | Designs + scores + recommends | Select, approve trade-offs |
+| Level | Mode | Depth Tier | Agent Behavior | Your Role |
+|-------|------|------------|---------------|-----------|
+| **1 — Advisory** | Default for all skills | QUICK | Generates recommendations; no KB persistence | Review output, deliver directly |
+| **2 — Augmented** | Requirements, Estimation | STANDARD | Asks questions, structures answers, writes KB | Review KB + output, provide feedback |
+| **3 — Orchestrated** | Architecture, Security | COMPREHENSIVE | Designs + scores + invokes sub-agents | Approve at each skill, review all KB files |
 
 Even at Level 3, the agent never acts without your explicit approval.
+
+> **QUICK Mode**: In QUICK depth, no KB files are written. The agent produces a final document directly. This is Level 1 (Advisory) mode — fastest path, lowest persistence. Use QUICK only for non-client-facing deliverables or initial qualification.
 
 ---
 
@@ -73,6 +75,8 @@ Even at Level 3, the agent never acts without your explicit approval.
 | Cost estimation | Monitoring setup |
 | Project planning | Production operations |
 | Proposal assembly | — |
+
+Note: `/plan-engagement` and `/research` are backlog items — not current capabilities. The current 9 skills cover the design and pre-sales lifecycle only.
 
 If you request implementation, the agent acknowledges the request, explains its design-only scope, and notes the request for a future Engineering Agent.
 
