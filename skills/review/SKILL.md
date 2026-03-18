@@ -95,7 +95,8 @@ Score on 5 dimensions (1-10 each):
 
 Calculate overall score: average of 5 dimensions.
 
-If overall score >= 9.0 → skip to Step 4 (early stop).
+If overall score >= 9.0 AND target is `architecture.json` → skip to Step 4 (WA review).
+If overall score >= 9.0 AND target is NOT `architecture.json` → skip to Step 5 (output).
 
 ### Step 2: Iteration 2 — Judge, Identify, Refine
 
@@ -111,14 +112,18 @@ Generate improvement plan:
 
 For each improvement: current state (with evidence), impact (H/M/L), effort estimate, implementation steps, validation criteria.
 
-Re-score after hypothetical improvements. If projected score >= 9.0 → skip to Step 4.
+Re-score after hypothetical improvements. If projected score >= 9.0 AND target is `architecture.json` → skip to Step 4. If projected score >= 9.0 AND target is NOT `architecture.json` → skip to Step 5.
 
 ### Step 3: Iteration 3 — Final Polish
 
 If still below 9.0 after Iteration 2:
-- Apply TRM validation: generate 2-3 candidate improvement approaches, validate against quality benchmarks, select highest-scoring
+- Apply TRM validation (see definition below): generate 2-3 targeted improvement suggestions mapped to specific missing requirements, select highest-priority based on business impact
 - Focus on remaining P0 items
 - Final re-score
+
+> **TRM (Task Requirement Mapping) Validation:** Cross-check each scored dimension against the explicit requirements captured in `requirements.json`. Generate 2-3 targeted improvement suggestions mapped to specific missing or unaddressed requirements. Select the highest-priority suggestion based on business impact.
+
+**Important**: This skill NEVER rewrites content. All improvement suggestions are advisory only and must be reviewed and approved by the SA before applying.
 
 ### Step 4: WA Pillar Review (when target is architecture.json)
 
