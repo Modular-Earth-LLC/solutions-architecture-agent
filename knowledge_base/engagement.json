@@ -32,9 +32,9 @@
     },
     "data_model": {
       "status": "complete",
-      "version": "1.0",
+      "version": "2.0",
       "file": "data_model.json",
-      "last_updated": "2026-03-17",
+      "last_updated": "2026-03-18",
       "reviewed": false,
       "depth": "STANDARD"
     },
