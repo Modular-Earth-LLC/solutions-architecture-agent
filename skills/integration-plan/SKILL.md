@@ -74,7 +74,7 @@ For each, capture: source system, target system, direction (inbound/outbound/bid
 For each integration point, define:
 - **Contract ID** (API-NNN format)
 - **Direction**: Inbound / Outbound / Bidirectional
-- **Protocol**: REST, GraphQL, gRPC, SOAP, WebSocket, MCP
+- **Protocol**: REST, GraphQL, gRPC, SOAP, WebSocket, MCP (see guidance below)
 - **Method/Operation**: HTTP method + path, or equivalent
 - **Authentication**: API key, OAuth 2.0, mTLS, SAML
 - **Request schema**: Required/optional fields with types
@@ -82,6 +82,10 @@ For each integration point, define:
 - **Rate limiting**: Requests per second/minute, burst allowance
 - **Error handling**: Retry strategy, circuit breaker, fallback behavior
 - **SLA**: Availability target, latency P99, throughput
+
+**When to use MCP vs REST:**
+- Use **MCP** when: integrating AI tools/agents that need structured tool use (e.g., a coding assistant calling an internal knowledge base). MCP is specifically designed for AI model ↔ tool communication, not general-purpose API integration.
+- Use **REST** when: integrating traditional web services, APIs with existing clients, or systems without AI-native interfaces.
 
 ### Step 3: Data Flow Mappings
 
@@ -118,7 +122,7 @@ Use WebSearch for current legacy bridging best practices.
 
 - **Adapter Pattern**: Translate between old and new interfaces
 - **Facade Pattern**: Simplified interface over complex legacy APIs
-- **Anti-Corruption Layer**: Prevent legacy data models from polluting new system
+- **Anti-Corruption Layer (ACL)**: A translation layer that isolates your domain model from a foreign domain (e.g., a legacy system). The ACL translates between models, preventing legacy concepts from "corrupting" the new system's design. Use when: legacy system has incompatible data models, or when migrating incrementally using Strangler Fig.
 - **Event Bridge**: Decouple via event-driven communication
 - **API Gateway**: Centralized routing and protocol translation
 
