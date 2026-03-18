@@ -62,6 +62,24 @@ Use for discovery-only engagements (pre-commitment). Security review is optional
 
 Use for pipeline qualification. The requirements skill has a "quick" tier that asks fewer questions and produces a lightweight assessment.
 
+### Direct Delivery
+
+**When**: Single-document request ("write a 10-page architecture document"), interview prep, case studies.
+**Sequence**: Scope negotiation → single skill (QUICK) → final output.
+**Key behavior**: No KB file production. Skills write output directly to the final document.
+
+### Rapid Assessment
+
+**When**: Same-day turnaround, lightweight proposals, interview prep.
+**Sequence**: `/requirements` (QUICK) → `/architecture` (QUICK) → `/proposal` (QUICK).
+**Key behavior**: 3 skills in sequence, each producing a brief deliverable without KB persistence.
+
+### Custom Document
+
+**When**: User specifies exact output format, sections, page count, audience.
+**Sequence**: Scope negotiation → selective skills (QUICK) → `/proposal --type custom`.
+**Key behavior**: `/proposal --type custom` assembles inline QUICK summarization into a single deliverable.
+
 ---
 
 ## How Skills Communicate

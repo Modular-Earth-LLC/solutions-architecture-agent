@@ -83,8 +83,23 @@ Choose the flow that matches your engagement type:
 | **Streamlined** | req → arch → est → pro | Small/time-constrained |
 | **Assessment** | req → arch → [sr] → pro | Discovery-only |
 | **Quick Qualify** | req (quick tier) | Pipeline qualification |
+| **Direct Delivery** | single skill (QUICK) | Single-document tasks, interview prep |
+| **Rapid Assessment** | req (QUICK) → arch (QUICK) → pro (QUICK) | Same-day turnaround |
+| **Custom Document** | selective skills (QUICK) → proposal --type custom | User-specified format and sections |
 
 You don't need to run every skill — the agent checks prerequisites and tells you what's missing.
+
+---
+
+## Depth Tiers
+
+| Tier | When to Use | KB Files? | Sub-Agents? | Typical Output |
+|------|------------|-----------|-------------|----------------|
+| QUICK | Time-constrained, interview prep, same-day | No | No | 1-4 page doc |
+| STANDARD | Client engagements, complete SA work | Yes | Conditional | Full KB + output |
+| COMPREHENSIVE | High-stakes, enterprise procurement | Yes | Yes | Full KB + review |
+
+Use `--depth QUICK` flag to set tier explicitly. Otherwise, the agent determines tier from your answers during scope negotiation.
 
 ---
 
