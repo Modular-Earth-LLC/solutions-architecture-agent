@@ -123,18 +123,7 @@ Generate diagrams in Mermaid format:
 
 For AI/ML systems, include applicable GenAI patterns: Simple LLM Wrapper, RAG Pipeline, Multi-Agent, Agentic Workflow (Tool Use), Conversational AI with Memory.
 
-**Mermaid Quality Rules** (ensures reliable rendering in mmdc v10-v11+, PNG/SVG/Word export):
-
-1. **Quote all node labels** containing special characters (`@`, `(`, `)`, `#`, `&`, `<`, `>`, `/`, `|`, `+`, `=`, etc.) — this includes ANY label with `<br/>`. Use `["label text"]` not `[label text]`.
-2. **Quote all subgraph titles**: `subgraph "Title"` not `subgraph Title`.
-3. **Keep node labels short**: 3-5 words max per node. Move details to surrounding prose.
-4. **Limit `<br/>`**: Max 2 per node. If you need more, the label is too long.
-5. **Avoid bare `@`**: Always quote labels containing `@`, or remove `@` if it's just a naming convention hint (e.g., GCP service accounts).
-6. **Quote edge labels** with spaces or special characters: `-->|"label text"|` not `-->|label text|`.
-7. **Node IDs**: `UPPER_SNAKE_CASE` or `camelCase` only — no hyphens, dots, or special characters in IDs.
-8. **Declare direction** explicitly: always `flowchart LR`, `flowchart TB`, etc.
-9. **Avoid `&` parallel links** in complex diagrams: write `A --> D` and `B --> D` on separate lines instead of `A & B --> D`.
-10. **Prefer `flowchart`** over `sequenceDiagram`, `classDiagram`, `gantt` unless they genuinely fit.
+**Mermaid diagrams**: Apply quality rules from `.claude/rules/mermaid-diagrams.md` (auto-loaded). Key points: quote all node labels with special chars, declare direction explicitly (`flowchart LR/TB`), use `flowchart` not `graph`.
 
 Provide ASCII fallback for each diagram for environments without Mermaid rendering.
 
