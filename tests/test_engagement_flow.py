@@ -63,7 +63,7 @@ SKILL_TO_KB = {
 # Expected lifecycle_state properties in engagement.schema.json
 EXPECTED_LIFECYCLE_DOMAINS = {
     "requirements", "architecture", "data_model", "security_review",
-    "integration_plan", "estimate", "project_plan",
+    "integration_plan", "estimate", "project_plan", "proposal", "review",
 }
 
 
