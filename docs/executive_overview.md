@@ -75,4 +75,8 @@ The agent designs solutions — it does not implement, deploy, or send deliverab
 
 ## Status
 
-**v1.0.0** — Validated end-to-end against a healthcare IBMi modernization case study (migration flow, HIPAA, 500+ users). All 11 schema validations and 5 consistency checks pass. Four deliverable reviews scored >= 7.5/10.
+**v1.1.0** — v1.1.0 adds: three depth tiers (QUICK/STANDARD/COMPREHENSIVE), scope negotiation at engagement start, three new delivery flows (Direct Delivery, Rapid Assessment, Custom Document), and review modes (single-file, final-document, batch).
+
+**Validated**: End-to-end against a healthcare IBMi modernization case study (`examples/healthcare-ibmi-migration/`), migration flow, HIPAA, 500+ users. All schema validations and consistency checks pass. Four deliverable reviews scored >= 7.5/10 using LLM-as-judge methodology (3-iteration `/review` skill).
+
+**Speed**: QUICK depth tier delivers a 4-6 page assessment in a single session vs. a traditional 2-4 week SA engagement at full depth.
