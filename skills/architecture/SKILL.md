@@ -178,7 +178,7 @@ Lead risk sections with the cost of inaction — what the client risks losing by
 
 ### Step 9: Well-Architected Scoring
 
-**If QUICK depth**: Skip this step entirely (no sub-agents). **If STANDARD or COMPREHENSIVE**: Use the Agent tool to invoke `parallel-wa-reviewer` 6 times in parallel — one per pillar:
+**If QUICK depth**: Skip this step entirely (no sub-agents). **If STANDARD or COMPREHENSIVE**: Use the Agent tool to invoke `solutions-architecture-agent:parallel-wa-reviewer` 6 times in parallel — one per pillar:
 1. Operational Excellence
 2. Security
 3. Reliability

@@ -114,7 +114,7 @@ Source: `inputs/PAI-Take_Home_Exercise.md`
 | Compute | Local CLI + Lambda-extensible | Simplest execution model for PoC; demo-friendly; Lambda wrapper is a natural extension |
 | Region | Verify via web research | Check SD3.5 Large, Nova Canvas, Titan V2, and Claude availability by region. Choose region with full model coverage. |
 | Repo name | `pai-take-home-exercise` | GitHub naming conventions from exercise filename |
-| Dev environment | Windows 11, Git Bash, D:\dev | See `inputs/windows-dev-environment.md` |
+| Dev environment | Windows 11, Git Bash, C:\dev | See `inputs/windows-dev-environment.md` |
 
 ---
 
@@ -234,7 +234,7 @@ Each phase plan must be **self-contained** — loadable into a fresh Claude Code
 
 ### Implementation Context
 
-The implementation agent operates in the NEW repo (`D:\dev\pai-take-home-exercise`) with:
+The implementation agent operates in the NEW repo (`C:\dev\pai-take-home-exercise`) with:
 - The current phase plan file
 - The exercise spec (`inputs/PAI-Take_Home_Exercise.md`, copied into the new repo during Phase 1)
 - Context snapshots from all completed prior phases
@@ -319,6 +319,6 @@ Include these in the target repo's `BACKLOG.md` with brief implementation notes:
 | GitHub Username | `praeducer` |
 | Developer Name | Paul Prae |
 | Target Repo | `pai-take-home-exercise` (public, under `praeducer`) |
-| Dev Path | `D:\dev\pai-take-home-exercise` |
+| Dev Path | `C:\dev\pai-take-home-exercise` |
 | Budget | Unconstrained. Optimize for quality and development speed, not cost. |
 | Timeline | One full work day for implementation |

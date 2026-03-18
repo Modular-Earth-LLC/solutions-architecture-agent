@@ -83,7 +83,7 @@ Decompose across 5 dimensions:
 
 ### Step 2: STRIDE Threat Model
 
-**If QUICK depth**: Skip this step. Instead, identify the top 5 threats inline without sub-agents and include them in the output. **If STANDARD or COMPREHENSIVE**: Use the Agent tool to invoke `stride-analyzer` 6 times in parallel — one per STRIDE category:
+**If QUICK depth**: Skip this step. Instead, identify the top 5 threats inline without sub-agents and include them in the output. **If STANDARD or COMPREHENSIVE**: Use the Agent tool to invoke `solutions-architecture-agent:stride-analyzer` 6 times in parallel — one per STRIDE category:
 1. **Spoofing** — identity threats
 2. **Tampering** — data integrity threats
 3. **Repudiation** — non-repudiation failures

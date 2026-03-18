@@ -129,7 +129,7 @@ If still below 9.0 after Iteration 2:
 
 ### Step 4: WA Pillar Review (when target is architecture.json)
 
-**If QUICK depth**: Skip this step entirely (no sub-agents). **If STANDARD or COMPREHENSIVE**: Use the Agent tool to invoke `parallel-wa-reviewer` 6 times in parallel:
+**If QUICK depth**: Skip this step entirely (no sub-agents). **If STANDARD or COMPREHENSIVE**: Use the Agent tool to invoke `solutions-architecture-agent:parallel-wa-reviewer` 6 times in parallel:
 1. Operational Excellence
 2. Security
 3. Reliability
