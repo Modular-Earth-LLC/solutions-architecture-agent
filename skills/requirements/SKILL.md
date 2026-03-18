@@ -50,7 +50,7 @@ Ask 4 questions to determine discovery depth (or infer from provided context):
 3. How many systems need integration? (0-1 / 2-4 / 5+)
 4. Is the problem domain well-understood? (Yes / Partially / No)
 
-**Scoring**: 0-3 points → **Quick** (15 min), 4-7 → **Standard** (30-45 min), 8-12 → **Comprehensive** (90 min)
+**Scoring**: 0-3 points → **QUICK**, 4-7 → **STANDARD**, 8-12 → **COMPREHENSIVE**
 
 If context is already rich (e.g., detailed meeting notes provided via `$ARGUMENTS`), skip to Step 3 and extract directly.
 
