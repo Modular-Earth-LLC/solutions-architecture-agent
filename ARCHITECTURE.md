@@ -239,7 +239,49 @@ Two sub-agents in `agents/`:
 
 Sub-agents are invoked via the Claude Code Agent tool, receive focused prompts with relevant KB context, and return structured JSON that the parent skill incorporates into its output file.
 
+**Aggregation**: Each `/architecture` run invokes 6 parallel `parallel-wa-reviewer` calls — one per pillar. Results aggregate into the `well_architected_scores` array in `architecture.json`. Each `/security-review` run invokes 6 parallel `stride-analyzer` calls — one per STRIDE category. Results aggregate into the `threats` array in `security_review.json`.
+
 **Depth-conditional**: Sub-agents are only invoked for STANDARD and COMPREHENSIVE depth tiers. QUICK depth performs inline scoring without sub-agents, eliminating 12-18 parallel invocations.
+
+---
+
+## Scope Negotiation
+
+Before invoking any skill, the dispatch layer runs a scope negotiation protocol to calibrate the engagement. This is a v1.1.0 feature with no equivalent in v1.0.
+
+**Six questions** (answered once per engagement, not per skill):
+1. What is the final deliverable? (document, presentation, assessment, KB artifact)
+2. Who is the audience? (client exec, technical team, internal review, interview panel)
+3. Target length? (pages or line count)
+4. Time budget? (quick turnaround vs. thorough engagement)
+5. Do you have source materials? (check `inputs/` directory, URL, or paste summary)
+6. Do you have a personal profile or career context? (for voice/honesty calibration)
+
+**Depth mapping**: Answers are mapped to a depth tier (QUICK/STANDARD/COMPREHENSIVE) stored in conversation context — not written to any KB file. The `--depth QUICK|STANDARD|COMPREHENSIVE` flag skips the negotiation entirely.
+
+**Skip conditions** — scope negotiation is skipped when:
+- A `--depth` flag is provided explicitly
+- QUICK depth is requested via natural language ("quick version", "just give me")
+- The user repeats a skill invocation (re-run scenario — context already established)
+
+---
+
+## Deliverable-First Mode
+
+Deliverable-first mode detects when the user specifies a target output format upfront and routes accordingly — the opposite of the default KB-first workflow.
+
+**Detection signals**: format specified ("10-page document"), page count given, audience named ("for the interview panel"), sections listed ("executive summary, architecture, cost estimate").
+
+**Routing behavior**:
+1. Extract deliverable specification (format, page count, audience, required sections)
+2. Route to **Direct Delivery** or **Custom Document** flow
+3. Set depth to QUICK (unless target exceeds 20 pages)
+4. Skip KB file production — skills write output directly to the final document
+5. For multi-skill documents: `/proposal --type custom` assembles inline QUICK analysis into a single deliverable
+
+**Skeleton-of-thought generation**: For documents over 8 pages, the agent generates an outline first (header-level structure with section purpose), pauses for human approval, then expands each section. This prevents scope creep and allows course correction before full content is produced.
+
+**Default for**: single-document requests, interview assignments, case studies, presentations, pitch materials, executive summaries.
 
 ---
 
