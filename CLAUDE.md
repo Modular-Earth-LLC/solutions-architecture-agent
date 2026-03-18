@@ -66,6 +66,11 @@ When a user message arrives:
 6. After completion: update `engagement.json`, present human checkpoint
    - **MANDATORY STOP**: Do NOT auto-invoke the next skill. Wait for explicit human approval before proceeding. Do NOT interpret "ok" or "looks good" as "run everything."
 
+**Skill Tool Invocation**: When using the `Skill` tool programmatically (e.g., in automated flows), always use fully-qualified skill names to avoid routing conflicts with other installed plugins:
+- `/review` → `Skill("solutions-architecture-agent:review")`
+- `/requirements` → `Skill("solutions-architecture-agent:requirements")`
+- All other SA skills follow the same pattern: `solutions-architecture-agent:<skill-name>`
+
 ### Deliverable-First Mode
 
 When a user specifies a target deliverable (format, length, audience, sections) during scope negotiation:
