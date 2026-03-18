@@ -1,0 +1,531 @@
+{
+  "$schema": "./schemas/requirements.schema.json",
+  "$depends_on": [],
+  "engagement_id": "eng-2026-003",
+  "version": "2.0",
+  "last_updated": "2026-03-18",
+  "status": "complete",
+
+  "client_context": {
+    "legal_name": "PAI (Adobe Enterprise Interview)",
+    "brand_name": "PAI Take-Home Exercise",
+    "industry": "Consumer Packaged Goods (CPG) — Interview Scenario",
+    "company_size": "enterprise",
+    "ai_maturity": "advanced",
+    "ai_history": "Scenario depicts a global CPG manufacturer adopting GenAI for packaging automation. Interview context: Adobe enterprise role leveraging AWS + GenAI."
+  },
+
+  "problem_statement": {
+    "title": "Product Packaging Variant Generation at Scale via GenAI",
+    "summary": "A global CPG manufacturer needs to generate hundreds of localized product packaging variants monthly across regional markets. Current manual design processes are slow, expensive, error-prone, and create bottlenecks in approval cycles. The PoC demonstrates an automated GenAI pipeline that accepts SKU briefs, generates region-specific packaging designs in multiple aspect ratios, and organizes outputs in S3.",
+    "current_state": {
+      "process_description": "Design teams manually create and localize packaging variants for hundreds of SKUs per month using decentralized design processes and multiple agencies. Regulatory review and brand approval involve multiple stakeholders per region, creating bottlenecks.",
+      "tools_in_use": ["Manual design tools", "Decentralized agency workflows", "Siloed design file storage"],
+      "pain_points": [
+        "Manual packaging design overload: creating/localizing variants for hundreds of SKUs is slow, expensive, and error-prone",
+        "Inconsistent quality and compliance: off-brand or non-compliant packaging due to decentralized processes",
+        "Slow approval cycles: bottlenecks with multiple stakeholders in each region",
+        "Difficulty tracking regulatory compliance at scale: siloed files and manual compliance checking",
+        "Resource drain: skilled design teams overloaded with repetitive layout/resizing instead of strategic creative work"
+      ],
+      "annual_cost": "Not quantified (interview scenario)",
+      "volume": "Hundreds of localized variants per month across regional markets"
+    },
+    "desired_state": {
+      "description": "Automated GenAI pipeline that generates packaging variants from SKU briefs, maintains brand consistency, produces multiple aspect ratios, and organizes outputs systematically in S3. Frees design teams for strategic creative work.",
+      "target_improvements": [
+        "Accelerate time-to-market for regional packaging variants",
+        "Ensure brand consistency across all markets via automated generation",
+        "Maximize local relevance through region-specific imagery and messaging",
+        "Reduce manual rework and approval cycle time",
+        "Track design effectiveness and compliance at scale"
+      ]
+    }
+  },
+
+  "ai_suitability_assessment": {
+    "score": 9,
+    "rationale": "GenAI image generation is the core technology for this use case. The task involves generating visual variants from structured inputs (SKU briefs), which is a direct application of generative AI. All 6 suitability criteria score YES: repeatable generation task, structured input data available, current human process is inconsistent, clear time/cost savings, error tolerances compatible with iterative generation, and human review gates prevent autonomous risk.",
+    "favorable_factors": [
+      "Image generation from structured prompts is a proven GenAI capability",
+      "Repeatable task: same pipeline processes different SKU briefs",
+      "Structured input (JSON SKU briefs) enables consistent prompt construction",
+      "Multiple aspect ratio generation is a natural fit for image generation APIs",
+      "Human review gates for brand compliance reduce autonomous decision risk",
+      "Measurable ROI: variants per hour vs. manual design time"
+    ],
+    "risk_factors": [
+      "GenAI image quality may not meet premium packaging standards without fine-tuning",
+      "Brand consistency requires careful prompt engineering or reference image conditioning",
+      "Regulatory text overlay (allergens, ingredients) needs precise placement — Pillow handles this reliably vs. relying on GenAI for text",
+      "PoC scope limits validation of production-scale reliability"
+    ],
+    "recommendation": "strong_fit"
+  },
+
+  "pain_points": [
+    "Manual packaging design overload: creating and localizing design variants for hundreds of SKUs per month is slow, expensive, and error-prone (Classification: Process inefficiency; Impact: days per variant; Pattern: GenAI automated generation)",
+    "Inconsistent quality and compliance: risk of off-brand, non-compliant packaging due to decentralized design processes and multiple agencies (Classification: Data quality / Compliance risk; Impact: brand damage, regulatory delays; Pattern: Automated brand compliance checks)",
+    "Slow approval cycles: bottlenecks in regulatory review and brand approval with multiple stakeholders per region (Classification: Process inefficiency; Impact: weeks of delay per cycle; Pattern: Automated pre-screening + approval tracking)",
+    "Difficulty tracking regulatory compliance at scale: siloed design files and manual compliance checking (Classification: Compliance risk / Integration gap; Impact: non-compliant designs reaching production; Pattern: Centralized asset management + compliance logging)",
+    "Resource drain: skilled design and brand teams overloaded with repetitive layout/resizing requests instead of strategic creative work (Classification: Process inefficiency / Knowledge loss; Impact: reduced creative output; Pattern: GenAI handles repetitive variants, humans focus on creative direction)"
+  ],
+
+  "success_criteria": [
+    {
+      "id": "SC-001",
+      "metric": "Pipeline Functionality",
+      "description": "PoC accepts SKU brief JSON and produces packaging images in 3 aspect ratios",
+      "baseline": 0,
+      "target": 1,
+      "measurement": "Binary: pipeline runs end-to-end for at least 2 products",
+      "timeframe": "Phase 2 (core pipeline)"
+    },
+    {
+      "id": "SC-002",
+      "metric": "Multi-Product Support",
+      "description": "Pipeline processes at least 2 different products/flavors from a single SKU brief",
+      "baseline": 0,
+      "target": 2,
+      "measurement": "Count of distinct products with generated packaging",
+      "timeframe": "Phase 2 (core pipeline)"
+    },
+    {
+      "id": "SC-003",
+      "metric": "S3 Output Organization",
+      "description": "Generated assets are saved to S3 organized by SKU, Region, and format",
+      "baseline": 0,
+      "target": 1,
+      "measurement": "Binary: S3 structure matches SKU/Region/format hierarchy",
+      "timeframe": "Phase 3 (output quality)"
+    },
+    {
+      "id": "SC-004",
+      "metric": "Documentation Completeness",
+      "description": "README covers how to run, example I/O, key decisions, and assumptions",
+      "baseline": 0,
+      "target": 4,
+      "measurement": "Count of required README sections present",
+      "timeframe": "Phase 5 (docs and demo)"
+    },
+    {
+      "id": "SC-005",
+      "metric": "IaC Deployment",
+      "description": "AWS resources deployed via CloudFormation (not Terraform)",
+      "baseline": 0,
+      "target": 1,
+      "measurement": "Binary: CloudFormation stack deploys to CREATE_COMPLETE",
+      "timeframe": "Phase 1 (foundation)"
+    },
+    {
+      "id": "SC-006",
+      "metric": "Image Quality Inspection",
+      "description": "Each generated packaging image is visually inspectable and displays product name, at least one key attribute, and regulatory text in legible form.",
+      "baseline": 0,
+      "target": 1,
+      "measurement": "Human visual inspection of generated images — pass if product name and attributes are readable",
+      "timeframe": "End of Phase 2 (core pipeline complete)"
+    }
+  ],
+
+  "stakeholders": [
+    {
+      "name": "Interview Panel",
+      "role": "Senior Engineers + Hiring Manager",
+      "type": "reviewer",
+      "approval_authority": ["technical", "hiring"],
+      "communication_preference": "Live demo + code walkthrough (20-30 min)"
+    },
+    {
+      "name": "Candidate (Developer)",
+      "role": "Solutions Architect / Developer",
+      "type": "contributor",
+      "approval_authority": [],
+      "communication_preference": "Self-directed, AI-assisted development"
+    }
+  ],
+
+  "functional_requirements": [
+    {
+      "id": "FR-001",
+      "title": "SKU Brief JSON Input",
+      "description": "Accept a structured JSON SKU brief containing: product(s) with at least 2 different products/flavors, target region/market, target audience/demographics, and key product attributes (e.g., organic, vegan, seasonal).",
+      "priority": "must_have",
+      "complexity": "low",
+      "acceptance_criteria": [
+        "Accepts valid JSON SKU brief",
+        "Supports at least 2 products/flavors per brief",
+        "Parses region, audience, and attribute fields"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "FR-002",
+      "title": "S3 Asset Input and Reuse",
+      "description": "Accept input brand assets stored in AWS S3 and reuse them when available for packaging generation.",
+      "priority": "must_have",
+      "complexity": "medium",
+      "acceptance_criteria": [
+        "Reads brand assets from a configured S3 bucket",
+        "Detects when existing assets are available and reuses them",
+        "Falls through to generation when assets are missing"
+      ],
+      "dependencies": ["FR-001"]
+    },
+    {
+      "id": "FR-003",
+      "title": "GenAI Image Generation",
+      "description": "When brand assets are missing, generate new packaging assets using Amazon Nova Canvas (primary) or Titan Image Generator V2 (fallback) via AWS Bedrock in us-east-1. Retry/backoff on throttling. Cache results locally.",
+      "priority": "must_have",
+      "complexity": "high",
+      "acceptance_criteria": [
+        "Calls Amazon Nova Canvas (amazon.nova-canvas-v1:0) as primary model in us-east-1",
+        "Falls back to Titan V2 (amazon.titan-image-generator-v2:0) on failure",
+        "Exponential backoff: 3 attempts, 2^n seconds between retries",
+        "Results cached to ~/.cache/pai-pipeline/ by content hash"
+      ],
+      "dependencies": ["FR-001", "FR-002"]
+    },
+    {
+      "id": "FR-004",
+      "title": "Multi-Aspect-Ratio Packaging Output",
+      "description": "Create packaging designs in at least 3 aspect ratios: front label (1:1, 1024x1024), back label (9:16, 576x1024), and wraparound (16:9, 1024x576).",
+      "priority": "must_have",
+      "complexity": "medium",
+      "acceptance_criteria": [
+        "Generates at least 3 distinct aspect ratios per product",
+        "Aspect ratios: 1:1 (1024x1024), 9:16 (576x1024), 16:9 (1024x576)",
+        "Each output is a valid PNG image file"
+      ],
+      "dependencies": ["FR-003"]
+    },
+    {
+      "id": "FR-005",
+      "title": "Product Messaging and Regulatory Info Overlay",
+      "description": "Display product messaging, key attributes, and regulatory information on the final packaging designs using Pillow text overlay. English at minimum.",
+      "priority": "must_have",
+      "complexity": "high",
+      "acceptance_criteria": [
+        "Product name, key attributes visible on packaging",
+        "Regulatory information (allergens, certifications) displayed",
+        "Text is legible and appropriately placed for each aspect ratio",
+        "English language at minimum"
+      ],
+      "dependencies": ["FR-003", "FR-004"]
+    },
+    {
+      "id": "FR-006",
+      "title": "AWS Execution Environment",
+      "description": "Pipeline runs in AWS (us-east-1). Invoked via Claude Code custom skills. No argparse or CLI framework. AWS resources provisioned via CloudFormation. Budget unconstrained.",
+      "priority": "must_have",
+      "complexity": "medium",
+      "acceptance_criteria": [
+        "Invoked via Claude Code /run-pipeline skill",
+        "AWS resources deployed via CloudFormation to us-east-1",
+        "Uses AWS CLI named profile 'pai-exercise' for credential management",
+        "Credentials sourced from ~/.aws/credentials — never hardcoded"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "FR-007",
+      "title": "Organized S3 Output Storage",
+      "description": "Save generated packaging outputs to an AWS S3 folder, clearly organized by SKU, Region, and format.",
+      "priority": "must_have",
+      "complexity": "low",
+      "acceptance_criteria": [
+        "Outputs saved to S3 bucket",
+        "Folder hierarchy: {SKU}/{Region}/{format}/",
+        "File naming convention is clear and consistent"
+      ],
+      "dependencies": ["FR-004"]
+    },
+    {
+      "id": "FR-008",
+      "title": "README Documentation",
+      "description": "Include comprehensive README explaining: how to run, example input/output, key design decisions, and assumptions/limitations.",
+      "priority": "must_have",
+      "complexity": "low",
+      "acceptance_criteria": [
+        "How to run: setup and execution instructions (5-minute setup flow)",
+        "Example input: sample SKU brief JSON",
+        "Example output: sample generated packaging images or descriptions",
+        "Key design decisions documented (8-10 decisions with rationale)",
+        "Assumptions and limitations listed honestly"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "FR-009",
+      "title": "CI/CD Pipeline",
+      "description": "GitHub Actions CI/CD pipeline with automated testing (pytest), linting (ruff/flake8), dependency vulnerability scanning (pip-audit), and CloudFormation deployment workflow.",
+      "priority": "must_have",
+      "complexity": "medium",
+      "acceptance_criteria": [
+        "GitHub Actions ci.yml runs lint and tests on every push",
+        "GitHub Actions deploy.yml runs CloudFormation deploy on main push",
+        "pip-audit runs in CI and fails on high/critical vulnerabilities",
+        "All action versions pinned to SHA hashes"
+      ],
+      "dependencies": ["FR-006"]
+    },
+    {
+      "id": "FR-010",
+      "title": "Claude Code Interface Layer",
+      "description": "Claude Code CLI with 8 custom skills replaces all CLI/argparse interaction. Skills are defined in .claude/skills/ in the target repo. No argparse or CLI framework is used.",
+      "priority": "must_have",
+      "complexity": "low",
+      "acceptance_criteria": [
+        "8 custom skills defined: /run-pipeline, /pipeline-status, /view-results, /deploy, /teardown, /health-check, /run-tests, /generate-demo",
+        "Skills invokable from Claude Code CLI in target repo",
+        "/run-pipeline accepts sku-brief-path argument",
+        "/deploy and /teardown have disable-model-invocation: true"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "FR-011",
+      "title": "Automated QA Hooks",
+      "description": "Claude Code hooks in .claude/settings.json enforce quality automatically: auto-lint on file edit/write, test gate on stop, destructive command guard on bash.",
+      "priority": "must_have",
+      "complexity": "low",
+      "acceptance_criteria": [
+        "PostToolUse on Edit|Write triggers auto-lint on changed files",
+        "Stop hook runs test suite and blocks completion if tests fail",
+        "PreToolUse on Bash validates no destructive AWS commands without confirmation"
+      ],
+      "dependencies": ["FR-009"]
+    },
+    {
+      "id": "FR-012",
+      "title": "AWS MCP Server Integration",
+      "description": "AWS MCP servers configured in .mcp.json in the target repo. Enables natural language AWS administration via Claude Code. Uses uv-based Python packages (not npm).",
+      "priority": "must_have",
+      "complexity": "low",
+      "acceptance_criteria": [
+        "awslabs.aws-iac-mcp-server@latest configured for CloudFormation and IaC assistance",
+        "AWS Knowledge MCP Server configured (remote HTTP via fastmcp proxy)",
+        "All servers use Windows stdio transport with uv tool run command",
+        "No deprecated servers (Cloud Control API, CDK, Terraform) included"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "FR-013",
+      "title": "Brand Compliance Checks",
+      "description": "Optional (Phase 6): check generated packaging for brand compliance — logo presence, required color usage, font consistency. Uses Claude via Bedrock as LLM-as-judge.",
+      "priority": "nice_to_have",
+      "complexity": "high",
+      "acceptance_criteria": [
+        "Detects presence/absence of brand logo",
+        "Validates color palette against brand guidelines",
+        "Reports compliance status per generated asset"
+      ],
+      "dependencies": ["FR-003", "FR-004"]
+    },
+    {
+      "id": "FR-014",
+      "title": "Regulatory Content Checks",
+      "description": "Optional (Phase 6): flag missing allergen disclosures, ingredient lists, or certifications for target regions using a synthetic JSON lookup table.",
+      "priority": "nice_to_have",
+      "complexity": "high",
+      "acceptance_criteria": [
+        "Checks for required regulatory content per region",
+        "Flags missing allergen or ingredient information",
+        "Reports regulatory compliance status"
+      ],
+      "dependencies": ["FR-005"]
+    },
+    {
+      "id": "FR-015",
+      "title": "Approval Status Tracking",
+      "description": "Optional (Phase 6): track and log approval status for generated designs and generation results via manifest.json append — no separate database.",
+      "priority": "nice_to_have",
+      "complexity": "medium",
+      "acceptance_criteria": [
+        "Logs generation results (success/failure, parameters used)",
+        "Tracks approval status per generated asset via manifest.json",
+        "Status queryable via /pipeline-status skill"
+      ],
+      "dependencies": ["FR-007"]
+    }
+  ],
+
+  "non_functional_requirements": {
+    "performance": {
+      "response_time_p95_ms": 60000,
+      "throughput_rps": 1,
+      "concurrent_users": 1
+    },
+    "availability": {
+      "target_percent": 95.0,
+      "planned_maintenance_window": "N/A — PoC, not production"
+    },
+    "scalability": {
+      "current_volume": "2-4 products per run (PoC)",
+      "projected_growth": "Hundreds of SKUs monthly (production scenario)",
+      "peak_multiplier": 1.0,
+      "geographic_regions": ["US", "EU", "Asia-Pacific"]
+    },
+    "security": {
+      "authentication": ["AWS IAM"],
+      "authorization_model": "IAM policies — least privilege for S3 and Bedrock access. Named profile 'pai-exercise'.",
+      "data_classification": "internal_confidential",
+      "encryption_requirements": ["S3 server-side encryption (SSE-S3)", "S3 Block Public Access enabled on all buckets", "HTTPS for API calls"],
+      "compliance_frameworks": []
+    },
+    "data_residency": {
+      "required_regions": ["us-east-1"],
+      "prohibited_regions": [],
+      "data_retention_days": 90
+    },
+    "model_quality": {
+      "nfr_id": "NFR-008",
+      "primary_model": "amazon.nova-canvas-v1:0",
+      "primary_model_rationale": "Amazon Nova Canvas scores TIFA 0.897 and ImageReward 1.250 per Amazon Nova Technical Report (arxiv 2506.12103). Higher ImageReward than competing tier-equivalent models. Built-in inpainting/outpainting for future enhancement. Only available in us-east-1 — confirms region choice.",
+      "fallback_model": "amazon.titan-image-generator-v2:0",
+      "fallback_rationale": "Available in us-east-1. Sufficient for dev/iterate tiers. Lower cost per image.",
+      "removed_model": "stability.sd3-5-large-v1:0",
+      "removed_rationale": "Only available in us-west-2 (confirmed via AWS docs). No cross-region inference profile available. Nova Canvas scores higher on available benchmarks. SD3.5 Large moved to BACKLOG for future consideration if cross-region inference becomes available.",
+      "text_reasoning_model": "global.anthropic.claude-sonnet-4-6",
+      "text_reasoning_model_id": "anthropic.claude-sonnet-4-6",
+      "text_reasoning_package": "anthropic[bedrock]",
+      "text_reasoning_client": "AnthropicBedrock(aws_region='us-east-1')",
+      "text_reasoning_iam": "bedrock:InvokeModel on foundation-model ARN",
+      "selection_must_be_justified": true
+    }
+  },
+
+  "data_landscape": {
+    "sources": [
+      {
+        "name": "SKU Brief",
+        "type": "file",
+        "format": "JSON",
+        "volume": "1-10 KB per brief",
+        "pii_present": false,
+        "quality_notes": "Structured input — schema-validated against sku_brief_schema.json"
+      },
+      {
+        "name": "Brand Assets",
+        "type": "file",
+        "format": "PNG/JPG images in S3",
+        "volume": "1-50 MB per asset set",
+        "pii_present": false,
+        "quality_notes": "Client-provided brand images (logos, product photos). Synthetic/placeholder for PoC."
+      },
+      {
+        "name": "GenAI Image API (Bedrock)",
+        "type": "api",
+        "format": "PNG output",
+        "volume": "6-12 images per pipeline run (3 aspect ratios x 2-4 products)",
+        "pii_present": false,
+        "quality_notes": "Primary: Nova Canvas. Fallback: Titan V2. Both in us-east-1."
+      },
+      {
+        "name": "Pipeline Run Manifest",
+        "type": "file",
+        "format": "JSON",
+        "volume": "1-5 KB per run",
+        "pii_present": false,
+        "quality_notes": "Written to S3 and local outputs/runs/. Enables run history without a database."
+      }
+    ],
+    "integration_points": [
+      {
+        "system": "AWS S3 (us-east-1)",
+        "direction": "bidirectional",
+        "protocol": "AWS SDK (boto3)",
+        "auth_method": "IAM named profile 'pai-exercise'"
+      },
+      {
+        "system": "Amazon Bedrock (us-east-1)",
+        "direction": "write",
+        "protocol": "AWS SDK (boto3 for image gen; anthropic[bedrock] for text reasoning)",
+        "auth_method": "IAM named profile 'pai-exercise'"
+      },
+      {
+        "system": "GitHub Actions",
+        "direction": "write",
+        "protocol": "GitHub Actions YAML workflows",
+        "auth_method": "GitHub Secrets (AWS credentials) or OIDC federation"
+      }
+    ]
+  },
+
+  "constraints": {
+    "budget_range": "Unconstrained — optimize for quality and development speed. Expected: $5-25 for PoC run (Bedrock API costs). No Free Tier restriction.",
+    "timeline_weeks": 0,
+    "timeline_flexibility": "hard",
+    "technology_restrictions": [
+      "CloudFormation for IaC (not Terraform — simpler for PoC, self-contained YAML)",
+      "GitHub for source code hosting (public repo: praeducer/pai-take-home-exercise)",
+      "Python 3.12 for pipeline code",
+      "Claude Code CLI with custom skills as interface layer — no argparse or Click CLI framework",
+      "AWS us-east-1 as primary region (Nova Canvas + Titan V2 + Claude all available)"
+    ],
+    "team_constraints": "Solo developer with AI-assisted development (Claude Code + Sonnet). AI handles all coding, testing, and scaffolding. Human handles: AWS console setup (Bedrock model access), credential configuration (aws configure), GitHub repo creation, approval gates."
+  },
+
+  "scope_boundaries": {
+    "in_scope": [
+      "GenAI packaging image generation pipeline (Nova Canvas primary, Titan V2 fallback)",
+      "SKU brief JSON input parsing and schema validation",
+      "S3 input asset retrieval and reuse",
+      "Multi-aspect-ratio output generation (1:1, 9:16, 16:9)",
+      "Product messaging and regulatory text overlay via Pillow",
+      "Organized S3 output storage (SKU/Region/format)",
+      "AWS CloudFormation deployment (us-east-1)",
+      "Claude Code custom skills as interface layer (8 skills)",
+      "GitHub Actions CI/CD (must-have: ci.yml + deploy.yml)",
+      "AWS MCP servers for natural language AWS administration (.mcp.json)",
+      "Automated QA hooks (.claude/settings.json)",
+      "--dry-run mode for zero-cost pipeline validation",
+      "Pipeline run manifest (flat JSON, no database)",
+      "README documentation with examples and design decisions"
+    ],
+    "out_of_scope": [
+      "Production-scale deployment or auto-scaling",
+      "Web application UI or dashboard",
+      "Multi-user authentication or RBAC",
+      "Real regulatory compliance databases",
+      "Brand asset library management system",
+      "A/B testing or analytics pipeline",
+      "Multi-language localization beyond English",
+      "Fine-tuned GenAI models",
+      "argparse or Click CLI framework (replaced by Claude Code skills)",
+      "PostgreSQL or any relational database (flat JSON + S3 only for PoC)",
+      "stability.sd3-5-large-v1:0 (us-west-2 only — moved to BACKLOG)"
+    ],
+    "justification": "Scoped to a PoC demonstrating technical approach, GenAI integration capability, and AI-native development practices. Production features (scale, multi-user, analytics, relational DB) and out-of-region models are outside PoC scope. Budget unconstrained — quality and speed are the optimization targets."
+  },
+
+  "assumptions": [
+    "AWS account 730007904340 is available with Bedrock model access enableable in us-east-1",
+    "Amazon Nova Canvas (amazon.nova-canvas-v1:0) and Titan V2 (amazon.titan-image-generator-v2:0) must be explicitly enabled in the AWS Bedrock console before pipeline use",
+    "Claude Sonnet 4.6 (anthropic.claude-sonnet-4-6) must be explicitly enabled in the AWS Bedrock console",
+    "SKU brief JSON schema is defined by the developer (not provided by the interviewer)",
+    "Brand assets for the PoC can be synthetic/placeholder images",
+    "Regulatory information overlay is text-based (not from a real regulatory database)",
+    "The PoC demonstrates the pipeline pattern — production quality images are not expected",
+    "Single-region deployment (us-east-1) is sufficient for the PoC",
+    "Interview panel evaluates technical approach, code quality, and architecture decisions — not pixel-perfect design output",
+    "AI-assisted development hours (Claude Code + Sonnet) are the operative unit for estimates — not raw human labor hours",
+    "GitHub repo praeducer/pai-take-home-exercise is public — no secrets or credentials committed",
+    "Node.js LTS is available for npx (if needed); uv (Python package manager) is available for AWS MCP server stdio transport"
+  ],
+
+  "_metadata": {
+    "author": "sa-agent",
+    "date": "2026-03-18",
+    "validation_status": "complete",
+    "version": "2.0",
+    "discovery_method": "extraction_from_notes",
+    "discovery_tier": "STANDARD",
+    "discovery_date": "2026-03-18",
+    "discovery_duration_minutes": 0,
+    "participants": ["sa-agent"],
+    "completeness": "complete",
+    "changelog": "v2.0: CI/CD upgraded to must_have (FR-009), Claude Code interface added (FR-010), QA hooks added (FR-011), AWS MCP servers added (FR-012), old FR-009-011 renumbered FR-013-015. SC-006 added. NFR-008 model quality added. Budget unconstrained. Nova Canvas primary model (SD3.5 removed — us-west-2 only). Region confirmed us-east-1."
+  }
+}

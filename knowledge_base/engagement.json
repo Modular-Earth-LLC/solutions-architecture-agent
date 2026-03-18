@@ -1,0 +1,79 @@
+{
+  "$schema": "./schemas/engagement.schema.json",
+  "engagement_id": "eng-2026-003",
+  "title": "PAI Packaging Automation PoC",
+  "engagement_type": "greenfield",
+  "status": "in_review",
+  "created_date": "2026-03-17",
+  "last_updated": "2026-03-18",
+  "version": "2.0",
+  "client": {
+    "name": "PAI (Adobe)",
+    "industry": "Technology / Creative Software",
+    "contact": "Interview Panel",
+    "size": "enterprise"
+  },
+  "lifecycle_state": {
+    "requirements": {
+      "status": "complete",
+      "version": "2.0",
+      "file": "requirements.json",
+      "last_updated": "2026-03-18",
+      "reviewed": false,
+      "depth": "STANDARD"
+    },
+    "architecture": {
+      "status": "complete",
+      "version": "1.0",
+      "file": "architecture.json",
+      "last_updated": "2026-03-17",
+      "reviewed": false,
+      "depth": "STANDARD"
+    },
+    "data_model": {
+      "status": "complete",
+      "version": "1.0",
+      "file": "data_model.json",
+      "last_updated": "2026-03-17",
+      "reviewed": false,
+      "depth": "STANDARD"
+    },
+    "security_review": {
+      "status": "complete",
+      "version": "1.0",
+      "file": "security_review.json",
+      "last_updated": "2026-03-17",
+      "reviewed": false,
+      "depth": "STANDARD"
+    },
+    "estimate": {
+      "status": "complete",
+      "version": "1.0",
+      "file": "estimate.json",
+      "last_updated": "2026-03-17",
+      "reviewed": false,
+      "depth": "STANDARD"
+    },
+    "project_plan": {
+      "status": "complete",
+      "version": "1.0",
+      "file": "project_plan.json",
+      "last_updated": "2026-03-17",
+      "reviewed": false,
+      "depth": "STANDARD"
+    }
+  },
+  "review_summary": {
+    "total_reviews": 2,
+    "latest_overall_score": 8.65,
+    "blocking_findings": 0
+  },
+  "engagement_depth": "STANDARD",
+  "tags": ["poc", "genai", "cpg", "packaging", "image-generation", "interview-take-home", "claude-code", "ai-assisted-dev"],
+  "_metadata": {
+    "author": "sa-agent",
+    "date": "2026-03-17",
+    "validation_status": "valid",
+    "version": "1.0"
+  }
+}
