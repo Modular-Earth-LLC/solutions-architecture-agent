@@ -42,6 +42,8 @@ If `$ARGUMENTS` are provided, treat them as client context or meeting notes to p
 
 ## 4. CORE WORKFLOW
 
+> **Shortcut — rich context provided:** If `$ARGUMENTS` contains meeting notes, an RFP, a client brief, or any detailed context, skip Steps 1-2 entirely and go directly to **Step 3** to extract requirements. Use Steps 1-2 only for live interactive discovery sessions.
+
 ### Step 1: Tier Selection — Complexity Assessment
 
 Ask 4 questions to determine discovery depth (or infer from provided context):
@@ -51,8 +53,6 @@ Ask 4 questions to determine discovery depth (or infer from provided context):
 4. Is the problem domain well-understood? (Yes / Partially / No)
 
 **Scoring**: 0-3 points → **QUICK**, 4-7 → **STANDARD**, 8-12 → **COMPREHENSIVE**
-
-If context is already rich (e.g., detailed meeting notes provided via `$ARGUMENTS`), skip to Step 3 and extract directly.
 
 ### Step 2: Progressive Questioning — 6-Step Discovery Funnel
 
