@@ -18,6 +18,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **QUICK example**: examples/quick-assessment/ with minimal engagement + output
 - 2 new test scripts: test_workflow_validation.py (8 checks), test_output_quality.py (5 checks)
 - `engagement_depth` and per-lifecycle `depth` fields in engagement schema
+- `/architecture` Step 1 now mandates model benchmark research — when AI/ML Platform includes generative models, a 5-step WebSearch benchmark process is required before model recommendations ([f06704e](../commits/f06704e))
+- `/requirements` Step 2g GenAI quality probe — captures quality tier, cost priority, provider constraints, and region preference for generative media problems ([a69010f](../commits/a69010f))
+- Self-referencing marketplace entry in `.claude-plugin/plugin.json` ([5716411](../commits/5716411))
+
+### Fixed
+- Dispatch: use fully-qualified skill names (`solutions-architecture-agent:<skill-name>`) to prevent routing conflicts when multiple plugins are installed ([0e4ba60](../commits/0e4ba60))
+- Tests: add `proposal` and `review` to `EXPECTED_LIFECYCLE_DOMAINS` ([95c4ae1](../commits/95c4ae1))
+- Schema: add `proposal` and `review` to `lifecycle_state` enum ([250ee51](../commits/250ee51))
+- Schema: allow string `notes` in cost sub-objects ([a6a652a](../commits/a6a652a))
+
+### Removed
+- `scripts/` directory — helper scripts removed; use `python tests/` commands directly ([4fdb3b0](../commits/4fdb3b0))
 
 ### Changed
 - **MANDATORY STOP** in all 9 skill completion sections — no auto-invocation of next skill
