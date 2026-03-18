@@ -101,8 +101,8 @@ Determine proposal type from `$ARGUMENTS[0]` or ask user: discovery, implementat
 ### Step 1: Proposal Type Selection
 
 If not specified via `$ARGUMENTS[0]`, ask the user:
-- **Discovery**: Assessment-focused, $5K-$25K range, 2-6 week scope
-- **Implementation**: Full SOW, $25K-$500K+, detailed phases
+- **Discovery**: Assessment-focused, 2-6 week scope
+- **Implementation**: Full SOW, detailed phases
 - **Internal**: Executive leadership deck, budget approval
 - **Pitch**: External prospect presentation, pre-contract
 - **Custom**: User-specified format, sections, and length (see Step 8)
