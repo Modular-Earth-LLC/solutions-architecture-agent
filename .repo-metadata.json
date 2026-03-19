@@ -1,8 +1,8 @@
 {
   "$schema": "./knowledge_base/schemas/.repo-metadata.schema.json",
-  "version": "1.1.0",
-  "last_updated": "2026-03-17",
-  "status": "v1.1.0 — Depth tiers, deliverable-first mode, checkpoint enforcement, review modes",
+  "version": "1.1.1",
+  "last_updated": "2026-03-19",
+  "status": "v1.1.1 — Fixed 14 schema-skill mismatches across all 9 skills; added WA score provenance fields to architecture schema",
   "repository": "https://github.com/Modular-Earth-LLC/solutions-architecture-agent",
   "_comment": "Single source of truth for repository-wide metadata. All skills and documentation should reference this file instead of hard-coding values.",
   "architecture": {
