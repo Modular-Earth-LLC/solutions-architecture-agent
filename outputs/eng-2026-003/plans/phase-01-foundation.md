@@ -18,7 +18,7 @@ Complete ALL of these before starting Phase 1:
 - [ ] `aws configure --profile pai-exercise` complete → `aws sts get-caller-identity --profile pai-exercise` returns `730007904340`
 - [ ] `gh auth status` shows authenticated as `praeducer` → if not: `gh auth login --web`
 - [ ] Python 3.12 available: `python --version` returns `3.12.x`
-- [ ] Node.js LTS available (for uv/npx): `node --version` returns `v20.x` or higher
+- [ ] `uv` available for MCP server execution: `uv --version` → if not: `pip install uv` (Node.js is NOT required — AWS MCP servers use `uv tool run`)
 - [ ] Git Bash or WSL available: `git --version` returns `2.x`
 - [ ] `uv` available: `uv --version` → if not: `pip install uv`
 
