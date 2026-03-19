@@ -33,7 +33,7 @@
       "primary_model": "Amazon Nova Canvas (amazon.nova-canvas-v1:0)",
       "fallback_model": "Amazon Titan Image Generator V2 (amazon.titan-image-generator-v2:0)",
       "removed_model": "stability.sd3-5-large-v1:0 — us-west-2 only, no cross-region inference profile, moved to BACKLOG",
-      "text_reasoning_model": "Claude Sonnet 4.6 (global.anthropic.claude-sonnet-4-6)",
+      "text_reasoning_model": "Claude Sonnet 4.6 (anthropic.claude-sonnet-4-6)",
       "text_reasoning_client": "AnthropicBedrock(aws_region='us-east-1')",
       "text_reasoning_package": "anthropic[bedrock]",
       "hosting": "AWS Managed (Bedrock)",
@@ -178,9 +178,11 @@
         "final": "amazon.nova-canvas-v1:0 ($0.04/image) — demo-quality renders"
       },
       "retry_backoff": {
-        "strategy": "Exponential backoff",
+        "strategy": "Exponential backoff with jitter",
         "max_attempts": 3,
-        "delays_seconds": [2, 4, 8],
+        "base_delays_seconds": [2, 4, 8],
+        "jitter": "random(0, base_delay * 0.3) added to each base delay — prevents thundering herd under concurrent load",
+        "effective_delay_range": "[2.0–2.6s, 4.0–5.2s, 8.0–10.4s]",
         "retryable_errors": ["ThrottlingException", "ServiceUnavailableException", "ModelNotReadyException"],
         "fallback_on_exhaustion": "Fall from Nova Canvas to Titan V2 after 3 failures. Log model tier used per image."
       },
@@ -319,7 +321,7 @@
       "name": "Text Reasoning Engine",
       "technology": "Python (anthropic[bedrock] — AnthropicBedrock client)",
       "purpose": "Optional text reasoning for prompt template enhancement, brand voice adaptation, and compliance text generation. Uses same IAM credential chain as boto3. Called by C-004 when creative or compliance-aware text is needed.",
-      "model": "global.anthropic.claude-sonnet-4-6",
+      "model": "anthropic.claude-sonnet-4-6",
       "client_code": "from anthropic import AnthropicBedrock; client = AnthropicBedrock(aws_region='us-east-1')",
       "credential_chain": "Same as boto3 — reads AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN. Does NOT read ~/.aws/config for region — must set aws_region param or AWS_REGION env var.",
       "iam_required": "bedrock:InvokeModel on arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-sonnet-4-6",
@@ -365,7 +367,7 @@
       "data_type": "JSON request → Base64 PNG response",
       "latency_target_ms": 30000,
       "encryption": "TLS in transit",
-      "retry": "3 attempts, exponential backoff (2s, 4s, 8s)"
+      "retry": "3 attempts, exponential backoff with jitter (2–2.6s, 4–5.2s, 8–10.4s)"
     },
     {
       "id": "DF-004",
@@ -485,7 +487,7 @@
       "retry_backoff": "3 attempts, exponential (2s, 4s, 8s), ThrottlingException + ServiceUnavailableException retryable. Fall to Titan V2 after 3 Nova Canvas failures."
     },
     "text_reasoning": {
-      "model": "Claude Sonnet 4.6 (global.anthropic.claude-sonnet-4-6)",
+      "model": "Claude Sonnet 4.6 (anthropic.claude-sonnet-4-6)",
       "client": "AnthropicBedrock(aws_region='us-east-1')",
       "package": "pip install 'anthropic[bedrock]'",
       "iam": "bedrock:InvokeModel — same as image generation role",
@@ -530,17 +532,19 @@
   },
 
   "well_architected_scores": {
-    "operational_excellence": 8,
-    "security": 8,
-    "reliability": 8,
-    "performance_efficiency": 7,
-    "cost_optimization": 8,
+    "operational_excellence": 6,
+    "security": 7,
+    "reliability": 6,
+    "performance_efficiency": 6,
+    "cost_optimization": 9,
     "sustainability": 7,
-    "overall": 7.7,
+    "overall": 6.8,
+    "score_source": "parallel-wa-reviewer sub-agents (6 parallel assessments via /review R-004)",
+    "calibration_note": "Scores reflect independent parallel agent review, not self-assessment. Self-assessment scored 7.7; parallel review scored 6.8. Discrepancy is driven by PoC gaps in observability, jitter, parallelism, and per-call timeouts — all appropriate deferrals for a PoC scope. Production path to 8.5+ documented in BACKLOG.",
     "notes": {
       "operational_excellence": {
-        "score": 8,
-        "delta": "+1 from v1.1 (was 7)",
+        "score": 6,
+        "delta": "Revised from self-assessed 8 to parallel-agent 6",
         "strengths": [
           "IaC from day one via CloudFormation",
           "GitHub Actions CI/CD enforces quality on every push",
@@ -549,12 +553,21 @@
           "Pipeline run manifest enables operational visibility without a database",
           "Claude Code skills provide consistent, documented interface"
         ],
-        "gaps": ["No real-time monitoring dashboard (CloudWatch not configured for PoC)", "No alerting on generation failure rates"],
-        "recommendations": ["Add CloudWatch dashboard in Phase 6 if time permits", "AWS Budget alarm at $10 provides cost guardrail"]
+        "gaps": [
+          "No CloudWatch log group or dashboards — metrics written to manifest only",
+          "No operational runbooks or incident response procedures",
+          "Local image cache has no TTL or invalidation strategy",
+          "No ORR (Operational Readiness Review) gate before release"
+        ],
+        "recommendations": [
+          "Add CloudWatch log group to CloudFormation stack for pipeline invocations",
+          "Document cache invalidation: TTL-based expiry or explicit --clear-cache flag",
+          "Add basic runbook in BACKLOG for production path"
+        ]
       },
       "security": {
-        "score": 8,
-        "delta": "+1 from v1.1 (was 7)",
+        "score": 7,
+        "delta": "Revised from self-assessed 8 to parallel-agent 7",
         "strengths": [
           "IAM least-privilege roles scoped to S3 and Bedrock only",
           "SSE-S3 encryption at rest on all buckets",
@@ -564,59 +577,91 @@
           "All GitHub Actions versions pinned to SHA hashes (supply chain protection)",
           "Prompt injection mitigation: SKU brief string fields sanitized before interpolation"
         ],
-        "gaps": ["CloudTrail not enabled (PoC acceptable, required for production)", "No AWS Config rules for drift detection"],
-        "recommendations": ["Enable CloudTrail in production", "Add detect-secrets pre-commit hook before any real client data"]
+        "gaps": [
+          "Bedrock invocation logging not enabled (no CloudTrail data events for model calls — F-004 open)",
+          "OIDC federation recommended but Secrets-based credentials are the default CI path",
+          "MCP server packages run with uv (internet-fetched) — no version pinning in .mcp.json"
+        ],
+        "recommendations": [
+          "Enable Bedrock model invocation logging to S3 in production",
+          "Pin awslabs MCP package version in .mcp.json (e.g., awslabs.aws-iac-mcp-server==0.1.2)",
+          "Set OIDC as default CI credential method — document Secrets as fallback only"
+        ]
       },
       "reliability": {
-        "score": 8,
-        "delta": "+2 from v1.1 (was 6)",
+        "score": 6,
+        "delta": "Revised from self-assessed 8 to parallel-agent 6",
         "strengths": [
-          "Exponential retry/backoff: 3 attempts, 2^n seconds, ThrottlingException + ServiceUnavailableException retryable (closes RF-009)",
+          "Exponential retry/backoff with jitter: 3 attempts, ThrottlingException + ServiceUnavailableException retryable (closes RF-009)",
           "2-tier model fallback: Nova Canvas → Titan V2 after 3 failures",
           "Dry-run mode validates pipeline without Bedrock calls (closes RF-010)",
           "Local cache (~/.cache/pai-pipeline/) enables resume after failures",
           "Manifest written per run enables replay from SKU brief",
           "Stateless pipeline — safe to retry from any stage"
         ],
-        "gaps": ["No cross-region failover (PoC scope)", "No checkpointing between pipeline stages for partial recovery"],
-        "recommendations": ["Add stage checkpointing (write each image to local before S3 upload) in Phase 3"]
+        "gaps": [
+          "No per-call Bedrock invocation timeout (boto3 default is no timeout — risk of indefinite hang)",
+          "RTO/RPO not defined — explicitly undefined for PoC but should be stated",
+          "No stage checkpointing between pipeline stages for partial run recovery"
+        ],
+        "recommendations": [
+          "Add boto3 Config(connect_timeout=5, read_timeout=120) to Bedrock client",
+          "State explicitly: RTO=best-effort, RPO=none (no stateful data at risk) for PoC",
+          "Add stage checkpointing in Phase 3 (write each image to local before S3 upload)"
+        ]
       },
       "performance_efficiency": {
-        "score": 7,
-        "delta": "0 from v1.1",
+        "score": 6,
+        "delta": "Revised from self-assessed 7 to parallel-agent 6",
         "strengths": [
           "Right-sized compute (local execution, no over-provisioning)",
           "Managed AI inference via Bedrock eliminates GPU management",
           "Local image cache eliminates redundant Bedrock calls",
           "2-tier model strategy matches cost to quality need"
         ],
-        "gaps": ["No concurrent image generation yet (sequential)", "No performance instrumentation beyond manifest duration_seconds"],
-        "recommendations": ["Add concurrent.futures.ThreadPoolExecutor in Phase 3 for parallel generation"]
+        "gaps": [
+          "Sequential image generation — 6 images at 30s each = ~3 minutes, likely violates p95 NFR ≤60s for multi-product runs",
+          "No performance instrumentation beyond total duration_seconds in manifest",
+          "No per-image timing logged (impossible to identify slow requests)"
+        ],
+        "recommendations": [
+          "Add concurrent.futures.ThreadPoolExecutor for parallel image generation (Phase 3 or BACKLOG)",
+          "Add per-image duration_ms to manifest E-006 for granular performance tracking",
+          "Note p95 NFR as best-effort for PoC; requires parallel execution for production compliance"
+        ]
       },
       "cost_optimization": {
-        "score": 8,
-        "delta": "-1 from v1.1 (was 9, budget now unconstrained)",
+        "score": 9,
+        "delta": "Revised from self-assessed 8 to parallel-agent 9 — tiered model strategy is genuinely strong",
         "strengths": [
           "Zero idle compute (on-demand execution via Claude Code skills)",
-          "2-tier model pricing ($0.01-$0.04/image)",
-          "Dry-run mode enables zero-cost validation",
-          "Local cache avoids re-generation during text overlay iteration",
-          "IaC enables clean teardown to zero ongoing cost"
+          "2-tier model pricing ($0.01 Titan V2 dev / $0.04 Nova Canvas final)",
+          "Dry-run mode enables zero-cost pipeline validation",
+          "Local cache avoids re-generation during text overlay iteration — amortizes per-run cost",
+          "IaC enables clean teardown to zero ongoing cost",
+          "AWS Budget alarm planned at $10 provides runaway cost protection"
         ],
-        "gaps": ["No AWS Budget alarm configured yet (planned in Phase 1 setup)", "No S3 lifecycle policy confirmed"],
-        "recommendations": ["Add AWS Budget alarm at $10 in Phase 1 setup even with unconstrained budget", "Add S3 lifecycle expiration (90 days) in CloudFormation template"]
+        "gaps": ["No S3 lifecycle policy confirmed in CloudFormation template"],
+        "recommendations": [
+          "Add S3 lifecycle expiration (90 days) in CloudFormation template",
+          "Consider Nova Canvas Standard vs. Premium tiers if available for further cost optimization"
+        ]
       },
       "sustainability": {
         "score": 7,
-        "delta": "-1 from v1.1 (was 8 — region moved from us-west-2 Oregon to us-east-1 N. Virginia for model availability)",
+        "delta": "Confirmed by parallel-agent review (no change from self-assessed 7)",
         "strengths": [
           "On-demand execution eliminates idle waste",
-          "Bedrock shared infrastructure amortizes GPU utilization",
-          "Local cache avoids redundant GenAI calls",
+          "Bedrock shared infrastructure amortizes GPU utilization across AWS fleet",
+          "Local cache avoids redundant GenAI calls — directly reduces energy consumption",
           "IaC teardown eliminates zombie resources"
         ],
         "gaps": ["us-east-1 (N. Virginia) has lower renewable energy % than us-west-2 (Oregon)", "No S3 lifecycle confirmed"],
-        "recommendations": ["Add S3 lifecycle expiration policy (90 days) in CloudFormation", "AWS has 100% renewable energy commitment globally — impact is mitigated at fleet level"]
+        "recommendations": [
+          "Add S3 lifecycle expiration policy (90 days) in CloudFormation",
+          "AWS 100% renewable energy commitment globally mitigates regional gap at fleet level",
+          "Document cache hit rate in manifest to quantify energy savings from reuse"
+        ]
       }
     }
   },

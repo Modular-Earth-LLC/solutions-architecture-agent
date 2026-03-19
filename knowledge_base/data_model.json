@@ -55,7 +55,7 @@
       "fields": [
         { "name": "brief_id", "type": "string", "nullable": false, "primary_key": true, "indexed": false },
         { "name": "brand", "type": "string", "nullable": false, "primary_key": false, "indexed": false },
-        { "name": "region", "type": "string", "nullable": false, "primary_key": false, "indexed": false, "values": ["us", "eu", "asia-pacific"] },
+        { "name": "region", "type": "string", "nullable": false, "primary_key": false, "indexed": false, "values": ["us-west", "eu", "latam", "apac"] },
         { "name": "target_audience", "type": "string", "nullable": true, "primary_key": false, "indexed": false },
         { "name": "products", "type": "array<Product>", "nullable": false, "primary_key": false, "indexed": false },
         { "name": "products[].sku_id", "type": "string", "nullable": false, "primary_key": false, "indexed": false },

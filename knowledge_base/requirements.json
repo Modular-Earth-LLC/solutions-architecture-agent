@@ -456,6 +456,7 @@
   "constraints": {
     "budget_range": "Unconstrained — optimize for quality and development speed. Expected: $5-25 for PoC run (Bedrock API costs). No Free Tier restriction.",
     "timeline_weeks": 0,
+    "timeline_note": "Interview take-home exercise — AI-accelerated delivery, estimated 1 work day with Claude Code assistance. 0 = deadline not formally specified; submission timing is interview-driven.",
     "timeline_flexibility": "hard",
     "technology_restrictions": [
       "CloudFormation for IaC (not Terraform — simpler for PoC, self-contained YAML)",

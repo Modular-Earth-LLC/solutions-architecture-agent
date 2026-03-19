@@ -384,7 +384,7 @@
       "For production: Amazon Rekognition DetectModerationLabels on generated images before S3 upload",
       "For production: brand compliance scoring on outputs before S3 storage"
     ],
-    "model_access_control": "IAM policy restricts Bedrock InvokeModel to four specific model ARNs: Nova Canvas, Titan Image Generator V2, and Claude Sonnet 4.6. All model access provisioned via CloudFormation — no ad-hoc Bedrock console invocations during pipeline execution.",
+    "model_access_control": "IAM policy restricts Bedrock InvokeModel to three specific model ARNs: Nova Canvas (amazon.nova-canvas-v1:0), Titan Image Generator V2 (amazon.titan-image-generator-v2:0), and Claude Sonnet 4.6 (anthropic.claude-sonnet-4-6). All model access provisioned via CloudFormation — no ad-hoc Bedrock console invocations during pipeline execution.",
     "data_poisoning_prevention": "Not applicable for PoC scope. Pipeline uses pre-trained foundation models via Bedrock API — no fine-tuning, no training data ingestion, no model customization. For production: if fine-tuning is added, implement training data validation, provenance tracking, and model performance benchmarking.",
     "hallucination_mitigation": "Image generation off-brand or inappropriate imagery mitigated by: (1) structured prompts grounded in SKU brief data, (2) negative prompts to exclude known failure modes, (3) mandatory human review before any packaging goes to market. Text reasoning (C-012) outputs validated for schema conformance before use. PoC explicitly does not claim production-quality fidelity."
   },
@@ -429,7 +429,7 @@
       "framework": "AWS Well-Architected GenAI Lens",
       "requirement": "AIML-SEC01: Control access to AI/ML models",
       "status": "compliant",
-      "evidence": "IAM policy restricts Bedrock InvokeModel to four specific model ARNs (Nova Canvas, Titan V2, Claude Sonnet 4.6). No wildcard model access. All model access provisioned via CloudFormation.",
+      "evidence": "IAM policy restricts Bedrock InvokeModel to three specific model ARNs (Nova Canvas, Titan V2, Claude Sonnet 4.6). No wildcard model access. All model access provisioned via CloudFormation.",
       "notes": "Text reasoning model (Claude Sonnet 4.6) added to IAM scope in v2.0 alongside image generation models."
     },
     {

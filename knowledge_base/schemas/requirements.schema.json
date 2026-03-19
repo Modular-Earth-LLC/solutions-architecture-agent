@@ -249,7 +249,8 @@
       "description": "Budget, timeline, technology, and team constraints",
       "properties": {
         "budget_range": { "type": "string", "description": "Budget range string" },
-        "timeline_weeks": { "type": "integer", "minimum": 0, "description": "Timeline in weeks" },
+        "timeline_weeks": { "type": "integer", "minimum": 0, "description": "Timeline in weeks. Use 0 only if timeline is truly undefined." },
+        "timeline_note": { "type": "string", "description": "Free-form timeline clarification, used when timeline_weeks is 0 or approximate" },
         "timeline_flexibility": { "type": "string", "enum": ["hard", "moderate", "soft"] },
         "technology_restrictions": { "type": "array", "items": { "type": "string" } },
         "team_constraints": { "type": "string" }

@@ -247,7 +247,7 @@
     "Claude Sonnet 4.6 via Bedrock: $3.00/MTok input tokens (source: aws.amazon.com/bedrock/pricing/)",
     "Budget is unconstrained — quality and development speed take priority over cost minimization",
     "No third-party licenses required — Python, boto3, anthropic, Pillow, pytest, ruff are all open source",
-    "Developer has local Python 3.12+ environment, Node.js LTS for MCP npx, and AWS CLI 2.x+",
+    "Developer has local Python 3.12+ environment, uv (Python package manager for MCP server execution), and AWS CLI 2.x+. Node.js is NOT required — AWS MCP servers run via uv tool run, not npx.",
     "GitHub account praeducer exists and gh CLI is authenticated",
     "PoC does not require production-quality packaging imagery — functional demonstration is sufficient"
   ],
