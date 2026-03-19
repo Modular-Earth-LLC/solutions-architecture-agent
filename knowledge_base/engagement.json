@@ -82,9 +82,10 @@
     "latest_overall_score": 9.05,
     "pass_fail": "PASS",
     "blocking_findings": 0,
-    "open_findings": 9,
-    "open_p1_findings": ["RF-012 (global. model ID prefix in architecture.json)", "RF-013 (WA score discrepancy in architecture.json)"],
-    "wa_gap_note": "Architecture WA self-assessed 7.7/10; parallel agent review scored 6.8/10. OpEx/Reliability/Performance gaps are PoC-appropriate and documented in BACKLOG. Not blocking."
+    "open_findings": 3,
+    "open_p1_findings": [],
+    "resolved_after_review": ["RF-012", "RF-013", "RF-015", "RF-017", "RF-018"],
+    "wa_gap_note": "Architecture WA parallel agent review: 6.8/10. Self-assessed values corrected to match. OpEx/Reliability/Performance gaps are PoC-appropriate and documented in BACKLOG. Not blocking."
   },
   "engagement_depth": "STANDARD",
   "tags": ["poc", "genai", "cpg", "packaging", "image-generation", "interview-take-home", "claude-code", "ai-assisted-dev"],
