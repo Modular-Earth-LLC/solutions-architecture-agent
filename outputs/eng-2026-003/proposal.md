@@ -136,13 +136,15 @@ SKU Brief JSON → Claude Code /run-pipeline skill
 
 | Pillar | Score | Key Strength | Key Gap |
 |--------|-------|--------------|---------|
-| Operational Excellence | **8/10** | CI/CD from day one, Claude Code hooks auto-enforce quality, structured JSON manifests | CloudTrail audit logging (F-004, PoC acceptable) |
-| Security | **8/10** | IAM least-privilege, SSE-S3, S3 Block Public Access in CloudFormation, pip-audit in CI | GitHub Actions SHA pinning (F-010, Phase 4 implementation item) |
-| Reliability | **8/10** | Retry/backoff (3 attempts, 2^n seconds), model tier fallback, stateless pipeline, S3 managed SLAs | Single-region (F-009, PoC acceptable) |
-| Performance Efficiency | 7/10 | Right-sized compute, Bedrock managed inference, image caching | Sequential generation (parallelizable for production) |
-| Cost Optimization | **8/10** | Tiered model pricing (dev: $0.01, final: $0.04), AWS Budget alarm in CloudFormation, --dry-run mode | No automated cost tagging |
-| Sustainability | 7/10 | On-demand only, zero idle compute, S3 lifecycle policies | No carbon-aware scheduling |
-| **Overall** | **7.7/10** | Reliability and Security both at 8 — previous lowest pillars improved | |
+| Operational Excellence | 6/10 | CI/CD from day one, Claude Code hooks auto-enforce quality, structured JSON manifests | No CloudWatch dashboards, no runbooks, cache has no TTL (PoC scope) |
+| Security | 7/10 | IAM least-privilege, SSE-S3, S3 Block Public Access in CloudFormation, pip-audit in CI | No Bedrock invocation logging (F-004), OIDC not default in CI |
+| Reliability | 6/10 | Retry/backoff with jitter (3 attempts), model tier fallback, stateless pipeline | No per-call Bedrock timeouts, no RTO/RPO defined, no stage checkpointing |
+| Performance Efficiency | 6/10 | Right-sized compute, Bedrock managed inference, image caching | Sequential generation may miss p95 NFR for multi-product runs |
+| Cost Optimization | **9/10** | Tiered model pricing (dev: $0.01, final: $0.04), dry-run zero-cost validation, cache eliminates re-generation | No S3 lifecycle policy in CloudFormation template |
+| Sustainability | 7/10 | On-demand only, zero idle compute, cache reduces redundant Bedrock calls | us-east-1 lower renewable % than us-west-2 (model availability trade-off) |
+| **Overall** | **6.8/10** | Scores from independent parallel WA review — PoC-appropriate gaps documented | Production path to 8.5+ in BACKLOG.md |
+
+> **Note on WA Scores:** Scores reflect independent parallel agent review (6 pillar reviewers), not self-assessment. PoC gaps in observability, parallelism, and operational procedures are appropriate deferrals — they are documented in BACKLOG.md with production implementations defined. The cost optimization pillar (9/10) is a genuine strength of the tiered model strategy.
 
 ---
 

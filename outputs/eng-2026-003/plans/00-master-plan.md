@@ -153,7 +153,7 @@ Future phases load these snapshots to maintain continuity without requiring the 
 | SA security review | `knowledge_base/security_review.json` v2.0 | STRIDE threats, IAM design, findings |
 | SA estimate | `knowledge_base/estimate.json` v2.0 | AI-assisted hours, human action list |
 | SA project plan | `knowledge_base/project_plan.json` v2.0 | 6 phases, 5 gates, risk register |
-| Previous proposal | `outputs/eng-2026-003/proposal.md` | Prior framing (being updated to v2.0) |
+| Proposal | `outputs/eng-2026-003/proposal.md` v2.0 | Claude Code interface, CI/CD must-have, Nova Canvas primary, WA scores updated to parallel agent review (6.8/10) — reviewed 2026-03-18 |
 
 ---
 

@@ -188,7 +188,17 @@ Lead risk sections with the cost of inaction — what the client risks losing by
 
 Pass to each agent: the pillar name, architecture content (tech stack, components, data flows), and relevant requirements sections (non-functional requirements, constraints).
 
-Aggregate the 6 results into `well_architected_scores`. Calculate overall score as weighted average.
+Aggregate the 6 results into `well_architected_scores`. Calculate overall score as simple average.
+
+**CRITICAL — Use parallel agent scores, not self-assessment:**
+- The `well_architected_scores` in `architecture.json` MUST be populated with scores returned by the parallel-wa-reviewer agents.
+- Do NOT self-assess WA scores and use those as the final values.
+- Self-assessment consistently overestimates scores by 1-2 points per pillar relative to independent review.
+- If parallel agents are unavailable (QUICK depth), explicitly label scores as `"score_source": "self-assessment (unverified)"` and recommend /review for calibration.
+
+Add to architecture.json WA scores section:
+- `"score_source": "parallel-wa-reviewer sub-agents (6 parallel assessments)"`
+- `"calibration_note": "Scores reflect independent parallel agent review. Self-assessment alone is not authoritative."`
 
 ### Step 10: Cascade Analysis
 
