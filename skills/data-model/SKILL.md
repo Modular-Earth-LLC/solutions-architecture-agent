@@ -147,7 +147,8 @@ Write to `knowledge_base/data_model.json`:
 - `data_requirements`: Consolidated from upstream (sources, volumes, patterns)
 - `relational_schemas`: Entities, relationships, fields, indexes, constraints. Use `relational_schemas` as the canonical field name — do not use `entities` as an alias.
 - `vector_schemas`: Collections, chunking, embeddings, retrieval config (if applicable)
-- `graph_schemas`: Node types, edge types, ontology (if applicable)
+- `graph_schemas`: Node types, edge types, traversal patterns (if applicable)
+- `ontology`: Dedicated top-level ontology definition — domain, key_concepts, taxonomy (if ontology design is in scope; do not embed inside `graph_schemas`)
 - `knowledge_pipeline`: Pipeline stages and configuration (if applicable)
 - `validation_rules`: Declarative validation framework
 - `data_governance`: PII inventory, retention, encryption, access control, audit

@@ -151,7 +151,7 @@ For each milestone:
 - Name and description
 - Target date
 - Phase association
-- Gate type: Approval / Demo / Signoff
+- Gate type: `approval` / `demo` / `signoff` / `review` (use lowercase — these are the schema enum values)
 - Deliverables required
 - Success criteria
 
@@ -182,7 +182,8 @@ Write to `knowledge_base/project_plan.json`:
 - `decision_gates`: Gate definitions with criteria and decision options
 - `sprints`: Sprint-by-sprint plan with goals, capacity, features, dependencies
 - `risk_register`: Categorized risks with mitigations and owners
-- `critical_path`: Dependency graph with critical chain highlighted
+- `dependencies`: Structured dependency graph — internal finish-to-start relationships and external dependencies with owner, needed-by date, fallback (see Step 5)
+- `critical_path`: Flat array of work item names/IDs representing the critical chain (longest path through the dependency graph)
 - `milestones`: Milestone list with dates, gates, success criteria
 - `communication_plan`: Stakeholder cadence and demo schedule
 - `total_duration_weeks`: Overall timeline

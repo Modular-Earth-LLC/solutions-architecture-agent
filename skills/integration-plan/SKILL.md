@@ -81,7 +81,7 @@ For each integration point, define:
 - **Response schema**: Success and error response structures
 - **Rate limiting**: Requests per second/minute, burst allowance
 - **Error handling**: Retry strategy, circuit breaker, fallback behavior
-- **SLA**: Availability target, latency P99, throughput
+- **SLA**: Availability target, latency P95 (`latency_p95_ms`), throughput
 
 **When to use MCP vs REST:**
 - Use **MCP** when: integrating AI tools/agents that need structured tool use (e.g., a coding assistant calling an internal knowledge base). MCP is specifically designed for AI model ↔ tool communication, not general-purpose API integration.
@@ -170,6 +170,7 @@ Write to `knowledge_base/integration_plan.json`:
 - `cicd_pipeline`: 6-stage pipeline architecture
 - `phased_approach`: Phase 1 and Phase 2 scope with validation criteria
 - `service_security`: Per-service identity and access configuration
+- `error_handling_patterns`: Cross-cutting circuit breaker, retry policy, and dead letter queue patterns (top-level; distinct from per-contract error_handling in api_contracts)
 - `_metadata`: `{ "author": "sa-agent", "date": "<today>", "validation_status": "complete", "version": "1.0" }`
 
 Update `knowledge_base/engagement.json`:

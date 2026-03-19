@@ -138,7 +138,7 @@ When the solution includes AI/ML components:
 For each applicable framework:
 1. Identify requirements by data types, industry, and geography
 2. Map controls: encryption requirements → encryption patterns, access control → IAM design, audit → monitoring strategy, data residency → region constraints
-3. Document posture per control: **met** / **partially met** / **not met**
+3. Document posture per control: `compliant` / `partial` / `non_compliant` / `not_applicable` (these are the valid schema enum values)
 4. For partial/not-met: document remediation steps with effort estimates
 
 Use WebSearch for current compliance framework requirements and AI-specific regulations (EU AI Act, NIST AI RMF).
@@ -159,6 +159,8 @@ Assess risk for the proposed architecture changes:
 - Risk Score = Change Type + Blast Radius + Testing Coverage + Reversibility + System Maturity
 - Interpret: 0-3 LOW, 4-7 MEDIUM, 8-12 HIGH, 13+ CRITICAL
 - For HIGH/CRITICAL: recommend additional review gates
+
+Write results into `findings_summary.change_impact`: `{ "risk_score": <N>, "risk_level": "LOW|MEDIUM|HIGH|CRITICAL", "recommendation": "<gates or mitigations>" }`
 
 ## 5. OUTPUT SPECIFICATION
 
