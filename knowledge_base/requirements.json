@@ -365,7 +365,7 @@
       "current_volume": "2-4 products per run (PoC)",
       "projected_growth": "Hundreds of SKUs monthly (production scenario)",
       "peak_multiplier": 1.0,
-      "geographic_regions": ["US", "EU", "Asia-Pacific"]
+      "geographic_regions": ["us-west", "eu", "latam", "apac"]
     },
     "security": {
       "authentication": ["AWS IAM"],
@@ -387,7 +387,7 @@
       "fallback_rationale": "Available in us-east-1. Sufficient for dev/iterate tiers. Lower cost per image.",
       "removed_model": "stability.sd3-5-large-v1:0",
       "removed_rationale": "Only available in us-west-2 (confirmed via AWS docs). No cross-region inference profile available. Nova Canvas scores higher on available benchmarks. SD3.5 Large moved to BACKLOG for future consideration if cross-region inference becomes available.",
-      "text_reasoning_model": "global.anthropic.claude-sonnet-4-6",
+      "text_reasoning_model": "anthropic.claude-sonnet-4-6",
       "text_reasoning_model_id": "anthropic.claude-sonnet-4-6",
       "text_reasoning_package": "anthropic[bedrock]",
       "text_reasoning_client": "AnthropicBedrock(aws_region='us-east-1')",
