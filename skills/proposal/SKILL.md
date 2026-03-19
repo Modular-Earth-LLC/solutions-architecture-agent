@@ -75,7 +75,7 @@ From `knowledge_base/estimate.json` (if required):
 - `cost_model` → SOW Section 9
 - `team_composition` → SOW Section 4
 - `loe_breakdown` → SOW Sections 5, 8
-- `confidence_summary` → SOW Section 11
+- `confidence_level` → SOW Section 11
 
 From `knowledge_base/project_plan.json` (if required):
 - `phases` → SOW Sections 5, 8
@@ -193,7 +193,7 @@ This skill writes to `outputs/` NOT to `knowledge_base/`. Proposals are engageme
 
 Update `knowledge_base/engagement.json`:
 - Update top-level `status` field and `last_updated`
-- Do NOT set `lifecycle_state.proposal` — that key does not exist in the engagement schema (`additionalProperties: false` would reject it)
+- Set `lifecycle_state.proposal.status` to `complete` — this key exists in the engagement schema and MUST be set so downstream lifecycle checks can confirm proposal completion
 
 ## 6. DYNAMIC REFERENCES
 

@@ -177,7 +177,7 @@ Every KB file includes standard envelope fields: `engagement_id` (links to engag
 Write to `knowledge_base/requirements.json`:
 - `client_context`: Industry, company, team, engagement type
 - `problem_statement`: Current state, desired state, summary
-- `ai_suitability_assessment`: Score, classification (HIGH/MEDIUM/LOW), rationale, savings estimate
+- `ai_suitability_assessment`: Score, `recommendation` (enum: `strong_fit`, `good_fit`, `conditional_fit`, `poor_fit`, `not_recommended`), rationale, favorable_factors, risk_factors
 - `pain_points`: Classified list from Step 4
 - `functional_requirements`: Extracted and prioritized list
 - `non_functional_requirements`: Security, performance, compliance, data residency, and `ai_model_requirements` (when GenAI generation is in scope — quality tier, text rendering flag, cost priority, provider constraints, region preference)
@@ -187,7 +187,7 @@ Write to `knowledge_base/requirements.json`:
 - `stakeholders`: Analysis from Step 6
 - `scope_boundaries`: In-scope and out-of-scope with justification
 - `assumptions`: Documented assumptions
-- `_metadata`: `{ "author": "sa-agent", "date": "<today>", "validation_status": "<completeness_score>", "discovery_tier": "<tier>", "version": "1.0" }`
+- `_metadata`: `{ "author": "sa-agent", "date": "<today>", "completeness": "<COMPLETE|PARTIAL|INCOMPLETE>", "discovery_tier": "<tier>", "version": "1.0" }` — use `completeness` not `validation_status` for the structured enum field
 
 Update `knowledge_base/engagement.json`:
 - Create if new engagement (set `engagement_id`, `engagement_type`, `created_date`)

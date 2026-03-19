@@ -164,7 +164,7 @@ Write to `knowledge_base/estimate.json`:
 - `loe_breakdown`: Per-phase effort with hours, points, and confidence
 - `cost_model`: 5-category cost breakdown with assumptions
 - `team_composition`: Roles, seniority, allocation, hiring timeline
-- `methodology`: Primary estimation method used (enum: `bottom_up`, `t_shirt`, `three_point`, `historical`), cross-validation results
+- `methodology`: Primary estimation method used (enum: `bottom_up`, `top_down`, `three_point`, `analogous`, `parametric`), cross-validation results
 - `confidence_level`: Overall confidence level (enum: `high`, `medium`, `low`) with uncertainty sources
 - `three_pass_context`: Which pass, accuracy target, caveats
 - `optimization_strategies`: Cost reduction opportunities

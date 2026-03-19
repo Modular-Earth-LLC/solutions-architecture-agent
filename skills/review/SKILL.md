@@ -166,6 +166,8 @@ Every KB file includes standard envelope fields: `engagement_id` (links to engag
 
 Write to `knowledge_base/reviews.json` — append a new entry to the `reviews[]` array with:
   - `review_id`: Unique review ID (`R-NNN` format)
+  - `review_type`: **REQUIRED** — one of `quality`, `security`, `compliance`, `completeness`, `pre_proposal`. Use `quality` for general SA deliverable reviews; `security` for security-focused reviews; `pre_proposal` when reviewing before proposal assembly.
+  - `review_date`: ISO 8601 date (today's date)
   - `target_file`: Which KB file was reviewed
   - `target_version`: Version of the file that was reviewed
   - `iterations`: Array of iteration results with per-dimension scores

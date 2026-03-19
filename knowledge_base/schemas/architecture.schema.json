@@ -195,7 +195,9 @@
         "cost_optimization": { "type": "number", "minimum": 0, "maximum": 10 },
         "sustainability": { "type": "number", "minimum": 0, "maximum": 10 },
         "overall": { "type": "number", "minimum": 0, "maximum": 10 },
-        "notes": { "type": "object", "description": "Per-pillar notes and recommendations" }
+        "notes": { "type": "object", "description": "Per-pillar notes and recommendations" },
+        "score_source": { "type": "string", "description": "Provenance of WA scores — e.g., parallel-wa-reviewer sub-agents or self-assessment" },
+        "calibration_note": { "type": "string", "description": "Note on score calibration methodology and reliability" }
       }
     },
 

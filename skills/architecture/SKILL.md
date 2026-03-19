@@ -26,7 +26,7 @@ This skill supports three depth tiers. Default is STANDARD. Accept `--depth QUIC
 
 | Tier | Behavior | Target |
 |------|----------|--------|
-| **QUICK** | Skip cloud infra (Step 4), AI components (Step 5), observability (Step 6), IaC (Step 7), WA agents (Step 9). Produce exec summary + 1 system context diagram + tech stack table. **No KB file** — write output directly to final deliverable. | <100 lines |
+| **QUICK** | Skip cloud infra (Step 4), AI components (Step 5), observability (Step 6), IaC (Step 7), WA agents (Step 9), cascade analysis (Step 10). Produce exec summary + 1 system context diagram + tech stack table. **No KB file** — write output directly to final deliverable. | <100 lines |
 | **STANDARD** | Full workflow as documented below. Writes to `knowledge_base/architecture.json`. | No limit |
 | **COMPREHENSIVE** | STANDARD + additional diagrams (sequence, deployment per environment), extended WA analysis with GenAI Lens, multi-cloud comparison. | No limit |
 
