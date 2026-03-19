@@ -395,7 +395,7 @@
       "requirement": "SEC01: Securely operate your workload",
       "status": "compliant",
       "evidence": "IAM least-privilege via CloudFormation. S3 Block Public Access on both buckets. Credential management via named profiles documented. pip-audit in CI for dependency hygiene.",
-      "notes": "Architecture v2.0 WA Security score: 8/10. Remaining gaps (CloudTrail, Budget alarms) are documented with remediation paths."
+      "notes": "Architecture v2.0 WA Security score: 7/10 (parallel agent review). Remaining gaps (CloudTrail, Budget alarms) are documented with remediation paths."
     },
     {
       "framework": "AWS Well-Architected Framework — Security Pillar",

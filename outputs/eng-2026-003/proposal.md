@@ -312,7 +312,7 @@ Full phase plans are documented in `outputs/eng-2026-003/plans/` — 7 self-cont
 | GitHub Actions OIDC IAM setup | Medium | Low | Use GitHub Secrets fallback (simpler for PoC) |
 | Prompt quality iteration overruns | Low | Low | Set one structured template upfront; iterate after pipeline is end-to-end |
 
-### Security Posture (from security_review.json v2.0 — WA 8/10)
+### Security Posture (from security_review.json v2.0 — WA Security 7/10)
 
 **Resolved in architecture v2.0:**
 - F-001: S3 Block Public Access now in CloudFormation (RESOLVED)

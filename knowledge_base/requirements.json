@@ -513,7 +513,7 @@
     "Interview panel evaluates technical approach, code quality, and architecture decisions — not pixel-perfect design output",
     "AI-assisted development hours (Claude Code + Sonnet) are the operative unit for estimates — not raw human labor hours",
     "GitHub repo praeducer/pai-take-home-exercise is public — no secrets or credentials committed",
-    "Node.js LTS is available for npx (if needed); uv (Python package manager) is available for AWS MCP server stdio transport"
+    "uv (Python package manager for MCP server execution) and AWS CLI 2.x+ are available. Node.js is not required — AWS MCP servers use uv tool run."
   ],
 
   "_metadata": {

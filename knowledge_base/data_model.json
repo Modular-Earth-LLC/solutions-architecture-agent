@@ -239,7 +239,7 @@
       },
       {
         "rule": "Region whitelist",
-        "description": "region must be one of the supported values (us, eu, asia-pacific)",
+        "description": "region must be one of the supported values (us-west, eu, latam, apac)",
         "enforcement": "Schema enum validation"
       },
       {
