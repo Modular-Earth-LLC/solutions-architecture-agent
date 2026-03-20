@@ -37,6 +37,14 @@
       "last_updated": "2026-03-20",
       "reviewed": false,
       "depth": "COMPREHENSIVE"
+    },
+    "estimate": {
+      "status": "complete",
+      "version": "1.0",
+      "file": "estimate.json",
+      "last_updated": "2026-03-20",
+      "reviewed": false,
+      "depth": "COMPREHENSIVE"
     }
   },
   "engagement_depth": "COMPREHENSIVE",
