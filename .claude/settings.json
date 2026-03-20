@@ -13,6 +13,7 @@
       "Bash(ls *)",
       "Bash(mkdir *)",
       "Bash(cat *)",
+      "Bash(claude *)",
       "WebFetch",
       "WebSearch"
     ],
@@ -29,6 +30,17 @@
           {
             "type": "command",
             "command": "bash hooks/protect-sensitive-files.sh \"$TOOL_INPUT\""
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash hooks/session-remote-ready.sh"
           }
         ]
       }
