@@ -1,532 +1,550 @@
 {
   "$schema": "./schemas/requirements.schema.json",
   "$depends_on": [],
-  "engagement_id": "eng-2026-003",
-  "version": "2.0",
-  "last_updated": "2026-03-18",
+  "engagement_id": "eng-2026-004",
+  "version": "1.0",
+  "last_updated": "2026-03-20",
   "status": "complete",
 
   "client_context": {
-    "legal_name": "PAI (Adobe Enterprise Interview)",
-    "brand_name": "PAI Take-Home Exercise",
-    "industry": "Consumer Packaged Goods (CPG) — Interview Scenario",
+    "legal_name": "National Consolidated Health Plan (fictional composite)",
+    "brand_name": "NCHP",
+    "industry": "Healthcare / Health Insurance (Payer)",
     "company_size": "enterprise",
-    "ai_maturity": "advanced",
-    "ai_history": "Scenario depicts a global CPG manufacturer adopting GenAI for packaging automation. Interview context: Adobe enterprise role leveraging AWS + GenAI."
+    "ai_maturity": "intermediate",
+    "ai_history": "Deployed rules-based auto-adjudication for claims. No AI/ML in prior authorization. Exploring Autonomize AI platform for PA automation. CIO has executive mandate for AI-driven operational efficiency."
   },
 
   "problem_statement": {
-    "title": "Product Packaging Variant Generation at Scale via GenAI",
-    "summary": "A global CPG manufacturer needs to generate hundreds of localized product packaging variants monthly across regional markets. Current manual design processes are slow, expensive, error-prone, and create bottlenecks in approval cycles. The PoC demonstrates an automated GenAI pipeline that accepts SKU briefs, generates region-specific packaging designs in multiple aspect ratios, and organizes outputs in S3.",
+    "title": "High-Cost, Slow Prior Authorization Processing Due to Manual Review and Fragmented Systems",
+    "summary": "NCHP processes ~2.5M prior authorization requests per month across 45M covered lives and 20 lines of business. Current PA processing relies on manual review of faxed requests (60% of volume), fragmented clinical data across 12+ EMR systems, and poor integration with their TriZetto Facets core administration platform. Average turnaround is 5 business days, with only 15% auto-approval rate. The CMS Prior Authorization Final Rule (CMS-0057-F) requires FHIR-based PA APIs and faster turnaround by January 1, 2027, creating regulatory urgency.",
     "current_state": {
-      "process_description": "Design teams manually create and localize packaging variants for hundreds of SKUs per month using decentralized design processes and multiple agencies. Regulatory review and brand approval involve multiple stakeholders per region, creating bottlenecks.",
-      "tools_in_use": ["Manual design tools", "Decentralized agency workflows", "Siloed design file storage"],
+      "process_description": "PA requests arrive via fax (60%), proprietary web portal (25%), and X12 278 EDI transactions (15%). Faxed requests are manually triaged by intake specialists who key data into the Facets core system. Clinical reviewers then access 12+ disparate EMR systems to gather clinical evidence, cross-reference against InterQual/MCG guidelines (partially digitized), and render determination. Determinations are communicated back via fax, portal notification, or X12 278 response.",
+      "tools_in_use": ["TriZetto Facets", "InterQual", "MCG Health", "Multiple EMR systems", "Fax servers", "Custom web portal", "X12 278 EDI gateway"],
       "pain_points": [
-        "Manual packaging design overload: creating/localizing variants for hundreds of SKUs is slow, expensive, and error-prone",
-        "Inconsistent quality and compliance: off-brand or non-compliant packaging due to decentralized processes",
-        "Slow approval cycles: bottlenecks with multiple stakeholders in each region",
-        "Difficulty tracking regulatory compliance at scale: siloed files and manual compliance checking",
-        "Resource drain: skilled design teams overloaded with repetitive layout/resizing instead of strategic creative work"
+        "5-day average PA turnaround time — 3x industry best practice",
+        "60% of requests arrive via fax requiring manual data entry and OCR",
+        "Clinical staff spend 40% of time on PA paperwork instead of clinical review",
+        "450 FTEs dedicated to PA processing at ~$65K/FTE fully loaded ($29.25M annual labor)",
+        "15% auto-approval rate vs. 50-70% industry benchmark with AI",
+        "Fragmented clinical data across 12+ EMR systems with inconsistent FHIR adoption",
+        "No unified audit trail — compliance risk for HIPAA and CMS-0057-F",
+        "Provider abrasion — 14 hours/week per physician spent on PA (AMA survey)"
       ],
-      "annual_cost": "Not quantified (interview scenario)",
-      "volume": "Hundreds of localized variants per month across regional markets"
+      "annual_cost": "$29.25M labor + $4.5M infrastructure = ~$33.75M total PA operational cost",
+      "volume": "2.5M PA requests/month, 30M/year"
     },
     "desired_state": {
-      "description": "Automated GenAI pipeline that generates packaging variants from SKU briefs, maintains brand consistency, produces multiple aspect ratios, and organizes outputs systematically in S3. Frees design teams for strategic creative work.",
+      "description": "AI-driven PA processing using Autonomize AI multi-agent platform that automates intake, clinical data aggregation, guidelines matching, and determination for straightforward cases while routing complex cases to clinical reviewers with pre-assembled evidence packages. Fully FHIR-compliant PA APIs meeting CMS-0057-F requirements. Multi-tenant architecture supporting 20 LOBs.",
       "target_improvements": [
-        "Accelerate time-to-market for regional packaging variants",
-        "Ensure brand consistency across all markets via automated generation",
-        "Maximize local relevance through region-specific imagery and messaging",
-        "Reduce manual rework and approval cycle time",
-        "Track design effectiveness and compliance at scale"
+        "Reduce PA turnaround from 5 days to < 24 hours for auto-determined cases",
+        "Increase auto-determination rate from 15% to 60% in Phase 1",
+        "Reduce PA FTE count by 40% (180 FTEs) through automation",
+        "Achieve CMS-0057-F compliance before January 1, 2027 deadline",
+        "Unified audit trail for all PA decisions with full explainability",
+        "Single clinical data view aggregating all 12+ EMR sources via FHIR R4",
+        "Support all 20 LOBs on multi-tenant platform with configuration-driven rules"
       ]
     }
   },
 
   "ai_suitability_assessment": {
     "score": 9,
-    "rationale": "GenAI image generation is the core technology for this use case. The task involves generating visual variants from structured inputs (SKU briefs), which is a direct application of generative AI. All 6 suitability criteria score YES: repeatable generation task, structured input data available, current human process is inconsistent, clear time/cost savings, error tolerances compatible with iterative generation, and human review gates prevent autonomous risk.",
+    "recommendation": "strong_fit",
+    "rationale": "Prior authorization is a textbook AI automation use case: high-volume repeatable classification task with structured decision criteria (clinical guidelines), abundant historical training data (30M PA decisions/year), measurable accuracy metrics (approval/denial concordance with clinical review), and clear ROI. Multi-format ingestion (fax OCR, X12 parsing, FHIR standardization) is well-served by multi-agent AI orchestration.",
     "favorable_factors": [
-      "Image generation from structured prompts is a proven GenAI capability",
-      "Repeatable task: same pipeline processes different SKU briefs",
-      "Structured input (JSON SKU briefs) enables consistent prompt construction",
-      "Multiple aspect ratio generation is a natural fit for image generation APIs",
-      "Human review gates for brand compliance reduce autonomous decision risk",
-      "Measurable ROI: variants per hour vs. manual design time"
+      "High volume (2.5M/month) amortizes AI platform cost rapidly",
+      "Repeatable classification against codified clinical guidelines",
+      "Rich historical decision data for model training and validation",
+      "Clear measurable KPIs (turnaround time, auto-determination rate, accuracy)",
+      "Autonomize AI PA Copilot already deployed at 3 of top 5 US health plans",
+      "Regulatory deadline (CMS-0057-F) creates executive urgency and budget",
+      "Human-in-the-loop preserves clinical oversight for complex cases"
     ],
     "risk_factors": [
-      "GenAI image quality may not meet premium packaging standards without fine-tuning",
-      "Brand consistency requires careful prompt engineering or reference image conditioning",
-      "Regulatory text overlay (allergens, ingredients) needs precise placement — Pillow handles this reliably vs. relying on GenAI for text",
-      "PoC scope limits validation of production-scale reliability"
-    ],
-    "recommendation": "strong_fit"
+      "Auto-denial decisions carry regulatory and legal risk — Phase 1 excludes auto-denial",
+      "Fax OCR accuracy for handwritten clinical notes may have lower confidence",
+      "Clinical guidelines change quarterly — model must adapt without full retraining",
+      "PHI handling requires strict HIPAA compliance across all AI processing stages",
+      "20 LOB scaling introduces configuration complexity"
+    ]
   },
 
   "pain_points": [
-    "Manual packaging design overload: creating and localizing design variants for hundreds of SKUs per month is slow, expensive, and error-prone (Classification: Process inefficiency; Impact: days per variant; Pattern: GenAI automated generation)",
-    "Inconsistent quality and compliance: risk of off-brand, non-compliant packaging due to decentralized design processes and multiple agencies (Classification: Data quality / Compliance risk; Impact: brand damage, regulatory delays; Pattern: Automated brand compliance checks)",
-    "Slow approval cycles: bottlenecks in regulatory review and brand approval with multiple stakeholders per region (Classification: Process inefficiency; Impact: weeks of delay per cycle; Pattern: Automated pre-screening + approval tracking)",
-    "Difficulty tracking regulatory compliance at scale: siloed design files and manual compliance checking (Classification: Compliance risk / Integration gap; Impact: non-compliant designs reaching production; Pattern: Centralized asset management + compliance logging)",
-    "Resource drain: skilled design and brand teams overloaded with repetitive layout/resizing requests instead of strategic creative work (Classification: Process inefficiency / Knowledge loss; Impact: reduced creative output; Pattern: GenAI handles repetitive variants, humans focus on creative direction)"
-  ],
-
-  "success_criteria": [
-    {
-      "id": "SC-001",
-      "metric": "Pipeline Functionality",
-      "description": "PoC accepts SKU brief JSON and produces packaging images in 3 aspect ratios",
-      "baseline": 0,
-      "target": 1,
-      "measurement": "Binary: pipeline runs end-to-end for at least 2 products",
-      "timeframe": "Phase 2 (core pipeline)"
-    },
-    {
-      "id": "SC-002",
-      "metric": "Multi-Product Support",
-      "description": "Pipeline processes at least 2 different products/flavors from a single SKU brief",
-      "baseline": 0,
-      "target": 2,
-      "measurement": "Count of distinct products with generated packaging",
-      "timeframe": "Phase 2 (core pipeline)"
-    },
-    {
-      "id": "SC-003",
-      "metric": "S3 Output Organization",
-      "description": "Generated assets are saved to S3 organized by SKU, Region, and format",
-      "baseline": 0,
-      "target": 1,
-      "measurement": "Binary: S3 structure matches SKU/Region/format hierarchy",
-      "timeframe": "Phase 3 (output quality)"
-    },
-    {
-      "id": "SC-004",
-      "metric": "Documentation Completeness",
-      "description": "README covers how to run, example I/O, key decisions, and assumptions",
-      "baseline": 0,
-      "target": 4,
-      "measurement": "Count of required README sections present",
-      "timeframe": "Phase 5 (docs and demo)"
-    },
-    {
-      "id": "SC-005",
-      "metric": "IaC Deployment",
-      "description": "AWS resources deployed via CloudFormation (not Terraform)",
-      "baseline": 0,
-      "target": 1,
-      "measurement": "Binary: CloudFormation stack deploys to CREATE_COMPLETE",
-      "timeframe": "Phase 1 (foundation)"
-    },
-    {
-      "id": "SC-006",
-      "metric": "Image Quality Inspection",
-      "description": "Each generated packaging image is visually inspectable and displays product name, at least one key attribute, and regulatory text in legible form.",
-      "baseline": 0,
-      "target": 1,
-      "measurement": "Human visual inspection of generated images — pass if product name and attributes are readable",
-      "timeframe": "End of Phase 2 (core pipeline complete)"
-    }
+    "PROCESS INEFFICIENCY: 5-day PA turnaround due to sequential manual workflow — clinical staff spend 40% of time on paperwork. Impact: $29.25M/year labor. Pattern: multi-agent AI pipeline.",
+    "DATA QUALITY: 60% fax-based intake requires manual data entry — high error rate. Impact: 15+ min/fax. Pattern: OCR + NLP ingestion agent.",
+    "INTEGRATION GAP: Clinical data fragmented across 12+ EMR systems. Impact: reviewers manually access multiple systems. Pattern: FHIR R4 facade + legacy connectors.",
+    "COMPLIANCE RISK: No unified audit trail — CMS-0057-F deadline Jan 2027. Impact: regulatory non-compliance. Pattern: immutable audit log + FHIR PA API.",
+    "SCALABILITY LIMIT: Manual process cannot scale to 20 LOBs. Impact: each LOB requires more FTEs. Pattern: multi-tenant config-driven rules engine.",
+    "KNOWLEDGE LOSS: Review expertise concentrated in senior staff. Impact: inconsistent determinations. Pattern: AI decision support + feedback loop."
   ],
 
   "stakeholders": [
     {
-      "name": "Interview Panel",
-      "role": "Senior Engineers + Hiring Manager",
-      "type": "reviewer",
-      "approval_authority": ["technical", "hiring"],
-      "communication_preference": "Live demo + code walkthrough (20-30 min)"
+      "name": "Dr. Sarah Chen",
+      "role": "Chief Medical Officer",
+      "type": "decision_maker",
+      "approval_authority": ["clinical-workflow", "clinical-accuracy", "patient-safety"],
+      "communication_preference": "Clinical outcome metrics, patient impact, weekly clinical review"
     },
     {
-      "name": "Candidate (Developer)",
-      "role": "Solutions Architect / Developer",
-      "type": "contributor",
-      "approval_authority": [],
-      "communication_preference": "Self-directed, AI-assisted development"
+      "name": "Marcus Williams",
+      "role": "VP of Operations",
+      "type": "decision_maker",
+      "approval_authority": ["operational", "staffing", "budget"],
+      "communication_preference": "Operational KPIs, FTE impact, cost savings, bi-weekly status"
+    },
+    {
+      "name": "Priya Patel",
+      "role": "Chief Information Officer",
+      "type": "decision_maker",
+      "approval_authority": ["technical", "budget", "strategic"],
+      "communication_preference": "Architecture diagrams, integration timelines, risk registers"
+    },
+    {
+      "name": "James Morrison",
+      "role": "Director of Compliance",
+      "type": "reviewer",
+      "approval_authority": ["compliance", "regulatory"],
+      "communication_preference": "Compliance mapping, audit trail specs, regulatory deadlines"
     }
   ],
 
   "functional_requirements": [
     {
       "id": "FR-001",
-      "title": "SKU Brief JSON Input",
-      "description": "Accept a structured JSON SKU brief containing: product(s) with at least 2 different products/flavors, target region/market, target audience/demographics, and key product attributes (e.g., organic, vegan, seasonal).",
+      "title": "Multi-format PA request ingestion",
+      "description": "Securely ingest PA requests from fax (OCR), web portal (API), and X12 278 EDI. Convert all formats into unified structured format for AI processing.",
       "priority": "must_have",
-      "complexity": "low",
+      "complexity": "high",
       "acceptance_criteria": [
-        "Accepts valid JSON SKU brief",
-        "Supports at least 2 products/flavors per brief",
-        "Parses region, audience, and attribute fields"
+        "Fax OCR >95% character accuracy on printed text",
+        "X12 278 parsed within 5 seconds",
+        "Portal API validates PA requests in real-time",
+        "All formats converge to common PA request data model"
       ],
       "dependencies": []
     },
     {
       "id": "FR-002",
-      "title": "S3 Asset Input and Reuse",
-      "description": "Accept input brand assets stored in AWS S3 and reuse them when available for packaging generation.",
-      "priority": "must_have",
-      "complexity": "medium",
-      "acceptance_criteria": [
-        "Reads brand assets from a configured S3 bucket",
-        "Detects when existing assets are available and reuses them",
-        "Falls through to generation when assets are missing"
-      ],
-      "dependencies": ["FR-001"]
-    },
-    {
-      "id": "FR-003",
-      "title": "GenAI Image Generation",
-      "description": "When brand assets are missing, generate new packaging assets using Amazon Nova Canvas (primary) or Titan Image Generator V2 (fallback) via AWS Bedrock in us-east-1. Retry/backoff on throttling. Cache results locally.",
+      "title": "Clinical data aggregation and standardization",
+      "description": "Securely access clinical data from FHIR R4 endpoints and legacy databases. Standardize into unified clinical view per patient. Support unstructured notes, lab results, patient history.",
       "priority": "must_have",
       "complexity": "high",
       "acceptance_criteria": [
-        "Calls Amazon Nova Canvas (amazon.nova-canvas-v1:0) as primary model in us-east-1",
-        "Falls back to Titan V2 (amazon.titan-image-generator-v2:0) on failure",
-        "Exponential backoff: 3 attempts, 2^n seconds between retries",
-        "Results cached to ~/.cache/pai-pipeline/ by content hash"
+        "FHIR R4 client retrieves patient data from compliant endpoints",
+        "Legacy connectors access clinical data via secure APIs",
+        "NLP extracts entities from unstructured clinical notes",
+        "Unified clinical view assembled within 30 seconds"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "FR-003",
+      "title": "AI-driven clinical review and determination",
+      "description": "Compare PA clinical evidence against InterQual/MCG guidelines using Autonomize AI multi-agent orchestration. Produce determination with confidence score and rationale.",
+      "priority": "must_have",
+      "complexity": "very_high",
+      "acceptance_criteria": [
+        ">=95% concordance with clinical reviewer decisions",
+        "Confidence score for every determination",
+        "Cases below 0.85 confidence routed to human reviewer",
+        "Clinical rationale with specific guideline citations",
+        "60% auto-determination within 6 months of go-live"
       ],
       "dependencies": ["FR-001", "FR-002"]
     },
     {
       "id": "FR-004",
-      "title": "Multi-Aspect-Ratio Packaging Output",
-      "description": "Create packaging designs in at least 3 aspect ratios: front label (1:1, 1024x1024), back label (9:16, 576x1024), and wraparound (16:9, 1024x576).",
+      "title": "Member eligibility verification",
+      "description": "Real-time eligibility check against Facets before PA determination. Verify enrollment, benefit coverage, and contract rules.",
       "priority": "must_have",
       "complexity": "medium",
       "acceptance_criteria": [
-        "Generates at least 3 distinct aspect ratios per product",
-        "Aspect ratios: 1:1 (1024x1024), 9:16 (576x1024), 16:9 (1024x576)",
-        "Each output is a valid PNG image file"
+        "Eligibility check within 3 seconds",
+        "Covers enrollment, benefit plan, service-specific coverage",
+        "Ineligible requests rejected with reason code"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "FR-005",
+      "title": "Human-in-the-loop clinical review workflow",
+      "description": "Route low-confidence cases to reviewers with pre-assembled evidence packages. Capture reviewer corrections for model improvement.",
+      "priority": "must_have",
+      "complexity": "medium",
+      "acceptance_criteria": [
+        "Complete evidence package — no additional system access needed",
+        "Reviewer can approve, deny, or request more info",
+        "Corrections captured for feedback loop",
+        "Reviewer decision time reduced 50%"
       ],
       "dependencies": ["FR-003"]
     },
     {
-      "id": "FR-005",
-      "title": "Product Messaging and Regulatory Info Overlay",
-      "description": "Display product messaging, key attributes, and regulatory information on the final packaging designs using Pillow text overlay. English at minimum.",
-      "priority": "must_have",
-      "complexity": "high",
-      "acceptance_criteria": [
-        "Product name, key attributes visible on packaging",
-        "Regulatory information (allergens, certifications) displayed",
-        "Text is legible and appropriately placed for each aspect ratio",
-        "English language at minimum"
-      ],
-      "dependencies": ["FR-003", "FR-004"]
-    },
-    {
       "id": "FR-006",
-      "title": "AWS Execution Environment",
-      "description": "Pipeline runs in AWS (us-east-1). Invoked via Claude Code custom skills. No argparse or CLI framework. AWS resources provisioned via CloudFormation. Budget unconstrained.",
+      "title": "PA determination response delivery",
+      "description": "Deliver determination back to originating system — fax, portal, or X12 278 — with rationale and conditions.",
       "priority": "must_have",
       "complexity": "medium",
       "acceptance_criteria": [
-        "Invoked via Claude Code /run-pipeline skill",
-        "AWS resources deployed via CloudFormation to us-east-1",
-        "Uses AWS CLI named profile 'pai-exercise' for credential management",
-        "Credentials sourced from ~/.aws/credentials — never hardcoded"
+        "Response in originating channel within 1 hour of determination",
+        "X12 278 response ASC X12 compliant",
+        "Portal includes determination, rationale, appeal instructions"
       ],
-      "dependencies": []
+      "dependencies": ["FR-003"]
     },
     {
       "id": "FR-007",
-      "title": "Organized S3 Output Storage",
-      "description": "Save generated packaging outputs to an AWS S3 folder, clearly organized by SKU, Region, and format.",
+      "title": "Comprehensive audit trail",
+      "description": "Immutable audit log for every PA decision with full traceability — decision maker, data considered, guidelines applied, confidence, overrides.",
       "priority": "must_have",
-      "complexity": "low",
+      "complexity": "medium",
       "acceptance_criteria": [
-        "Outputs saved to S3 bucket",
-        "Folder hierarchy: {SKU}/{Region}/{format}/",
-        "File naming convention is clear and consistent"
+        "Complete audit record within 5 seconds of determination",
+        "Immutable and tamper-evident records",
+        "Data lineage: source docs, clinical data, guidelines",
+        "Supports regulatory inquiry with full reconstruction",
+        "7-year retention per HIPAA"
       ],
-      "dependencies": ["FR-004"]
+      "dependencies": ["FR-003"]
     },
     {
       "id": "FR-008",
-      "title": "README Documentation",
-      "description": "Include comprehensive README explaining: how to run, example input/output, key design decisions, and assumptions/limitations.",
+      "title": "FHIR R4 Prior Authorization API (CMS-0057-F)",
+      "description": "FHIR R4 PA API per HL7 Da Vinci PAS Implementation Guide, meeting CMS-0057-F requirements.",
       "priority": "must_have",
-      "complexity": "low",
+      "complexity": "high",
       "acceptance_criteria": [
-        "How to run: setup and execution instructions (5-minute setup flow)",
-        "Example input: sample SKU brief JSON",
-        "Example output: sample generated packaging images or descriptions",
-        "Key design decisions documented (8-10 decisions with rationale)",
-        "Assumptions and limitations listed honestly"
+        "FHIR R4 endpoint per Da Vinci PAS IG",
+        "Real-time PA submission and status inquiry",
+        "Specific denial reason in response per CMS-0057-F",
+        "Compliant by January 1, 2027"
       ],
-      "dependencies": []
+      "dependencies": ["FR-001"]
     },
     {
       "id": "FR-009",
-      "title": "CI/CD Pipeline",
-      "description": "GitHub Actions CI/CD pipeline with automated testing (pytest), linting (ruff/flake8), dependency vulnerability scanning (pip-audit), and CloudFormation deployment workflow.",
-      "priority": "must_have",
-      "complexity": "medium",
+      "title": "Multi-LOB configuration engine",
+      "description": "Configuration-driven rules engine for 20 LOBs with LOB-specific rules, criteria, and workflows — without code changes.",
+      "priority": "should_have",
+      "complexity": "high",
       "acceptance_criteria": [
-        "GitHub Actions ci.yml runs lint and tests on every push",
-        "GitHub Actions deploy.yml runs CloudFormation deploy on main push",
-        "pip-audit runs in CI and fails on high/critical vulnerabilities",
-        "All action versions pinned to SHA hashes"
+        "New LOB onboarded via config in < 2 weeks",
+        "LOB rules isolated — no cross-LOB impact",
+        "Supports LOB-specific guidelines, thresholds, workflows",
+        "Config version-controlled with rollback"
       ],
-      "dependencies": ["FR-006"]
+      "dependencies": []
     },
     {
       "id": "FR-010",
-      "title": "Claude Code Interface Layer",
-      "description": "Claude Code CLI with 8 custom skills replaces all CLI/argparse interaction. Skills are defined in .claude/skills/ in the target repo. No argparse or CLI framework is used.",
-      "priority": "must_have",
-      "complexity": "low",
+      "title": "MLOps monitoring and model lifecycle",
+      "description": "Production monitoring with drift detection, alerting, and feedback loop from reviewer corrections to model improvement.",
+      "priority": "should_have",
+      "complexity": "high",
       "acceptance_criteria": [
-        "8 custom skills defined: /run-pipeline, /pipeline-status, /view-results, /deploy, /teardown, /health-check, /run-tests, /generate-demo",
-        "Skills invokable from Claude Code CLI in target repo",
-        "/run-pipeline accepts sku-brief-path argument",
-        "/deploy and /teardown have disable-model-invocation: true"
+        "Daily statistical drift detection (PSI, KS test)",
+        "Weekly outcome monitoring (overturn rate, appeal rate)",
+        "Automated drift alerts",
+        "Daily correction aggregation, weekly evaluation, monthly fine-tuning",
+        "A/B testing before production deployment"
       ],
-      "dependencies": []
+      "dependencies": ["FR-003"]
     },
     {
       "id": "FR-011",
-      "title": "Automated QA Hooks",
-      "description": "Claude Code hooks in .claude/settings.json enforce quality automatically: auto-lint on file edit/write, test gate on stop, destructive command guard on bash.",
-      "priority": "must_have",
-      "complexity": "low",
+      "title": "Operational dashboards and reporting",
+      "description": "Real-time dashboards: volume, turnaround, auto-determination rate, accuracy, queue depth, per-LOB breakdowns.",
+      "priority": "should_have",
+      "complexity": "medium",
       "acceptance_criteria": [
-        "PostToolUse on Edit|Write triggers auto-lint on changed files",
-        "Stop hook runs test suite and blocks completion if tests fail",
-        "PreToolUse on Bash validates no destructive AWS commands without confirmation"
+        "Executive dashboard: turnaround, cost savings, auto-determination rate",
+        "Operations dashboard: queue depth, workload, SLA compliance",
+        "Clinical dashboard: accuracy, guideline match, appeal rates",
+        "Per-LOB filtering"
       ],
-      "dependencies": ["FR-009"]
+      "dependencies": ["FR-003", "FR-007"]
     },
     {
       "id": "FR-012",
-      "title": "AWS MCP Server Integration",
-      "description": "AWS MCP servers configured in .mcp.json in the target repo. Enables natural language AWS administration via Claude Code. Uses uv-based Python packages (not npm).",
-      "priority": "must_have",
-      "complexity": "low",
-      "acceptance_criteria": [
-        "awslabs.aws-iac-mcp-server@latest configured for CloudFormation and IaC assistance",
-        "AWS Knowledge MCP Server configured (remote HTTP via fastmcp proxy)",
-        "All servers use Windows stdio transport with uv tool run command",
-        "No deprecated servers (Cloud Control API, CDK, Terraform) included"
-      ],
-      "dependencies": []
-    },
-    {
-      "id": "FR-013",
-      "title": "Brand Compliance Checks",
-      "description": "Optional (Phase 6): check generated packaging for brand compliance — logo presence, required color usage, font consistency. Uses Claude via Bedrock as LLM-as-judge.",
-      "priority": "nice_to_have",
-      "complexity": "high",
-      "acceptance_criteria": [
-        "Detects presence/absence of brand logo",
-        "Validates color palette against brand guidelines",
-        "Reports compliance status per generated asset"
-      ],
-      "dependencies": ["FR-003", "FR-004"]
-    },
-    {
-      "id": "FR-014",
-      "title": "Regulatory Content Checks",
-      "description": "Optional (Phase 6): flag missing allergen disclosures, ingredient lists, or certifications for target regions using a synthetic JSON lookup table.",
-      "priority": "nice_to_have",
-      "complexity": "high",
-      "acceptance_criteria": [
-        "Checks for required regulatory content per region",
-        "Flags missing allergen or ingredient information",
-        "Reports regulatory compliance status"
-      ],
-      "dependencies": ["FR-005"]
-    },
-    {
-      "id": "FR-015",
-      "title": "Approval Status Tracking",
-      "description": "Optional (Phase 6): track and log approval status for generated designs and generation results via manifest.json append — no separate database.",
+      "title": "Provider self-service PA status portal",
+      "description": "Real-time PA status inquiry for providers with secure authentication.",
       "priority": "nice_to_have",
       "complexity": "medium",
       "acceptance_criteria": [
-        "Logs generation results (success/failure, parameters used)",
-        "Tracks approval status per generated asset via manifest.json",
-        "Status queryable via /pipeline-status skill"
+        "Real-time status check via web portal",
+        "Secure provider authentication",
+        "Upload additional clinical documentation"
       ],
-      "dependencies": ["FR-007"]
+      "dependencies": ["FR-006"]
     }
   ],
 
   "non_functional_requirements": {
     "performance": {
-      "response_time_p95_ms": 60000,
-      "throughput_rps": 1,
-      "concurrent_users": 1
+      "response_time_p95_ms": 30000,
+      "throughput_rps": 100,
+      "concurrent_users": 500
     },
     "availability": {
-      "target_percent": 95.0,
-      "planned_maintenance_window": "N/A — PoC, not production"
+      "target_percent": 99.9,
+      "planned_maintenance_window": "Sundays 02:00-06:00 ET"
     },
     "scalability": {
-      "current_volume": "2-4 products per run (PoC)",
-      "projected_growth": "Hundreds of SKUs monthly (production scenario)",
-      "peak_multiplier": 1.0,
-      "geographic_regions": ["us-west", "eu", "latam", "apac"]
+      "current_volume": "2.5M PA requests/month",
+      "projected_growth": "20% YoY + 20 LOB expansion over 18 months",
+      "peak_multiplier": 2.5,
+      "geographic_regions": ["us-east-1", "us-west-2"]
     },
     "security": {
-      "authentication": ["AWS IAM"],
-      "authorization_model": "IAM policies — least privilege for S3 and Bedrock access. Named profile 'pai-exercise'.",
-      "data_classification": "internal_confidential",
-      "encryption_requirements": ["S3 server-side encryption (SSE-S3)", "S3 Block Public Access enabled on all buckets", "HTTPS for API calls"],
-      "compliance_frameworks": []
+      "authentication": ["OAuth 2.0", "SAML 2.0", "mTLS for system-to-system"],
+      "authorization_model": "RBAC with LOB-level data isolation",
+      "data_classification": "restricted",
+      "encryption_requirements": ["AES-256 at rest", "TLS 1.2+ in transit", "PHI field-level encryption"],
+      "compliance_frameworks": ["HIPAA", "CCPA", "CMS-0057-F", "HL7 FHIR R4"]
     },
     "data_residency": {
-      "required_regions": ["us-east-1"],
-      "prohibited_regions": [],
-      "data_retention_days": 90
-    },
-    "model_quality": {
-      "nfr_id": "NFR-008",
-      "primary_model": "amazon.nova-canvas-v1:0",
-      "primary_model_rationale": "Amazon Nova Canvas scores TIFA 0.897 and ImageReward 1.250 per Amazon Nova Technical Report (arxiv 2506.12103). Higher ImageReward than competing tier-equivalent models. Built-in inpainting/outpainting for future enhancement. Only available in us-east-1 — confirms region choice.",
-      "fallback_model": "amazon.titan-image-generator-v2:0",
-      "fallback_rationale": "Available in us-east-1. Sufficient for dev/iterate tiers. Lower cost per image.",
-      "removed_model": "stability.sd3-5-large-v1:0",
-      "removed_rationale": "Only available in us-west-2 (confirmed via AWS docs). No cross-region inference profile available. Nova Canvas scores higher on available benchmarks. SD3.5 Large moved to BACKLOG for future consideration if cross-region inference becomes available.",
-      "text_reasoning_model": "anthropic.claude-sonnet-4-6",
-      "text_reasoning_model_id": "anthropic.claude-sonnet-4-6",
-      "text_reasoning_package": "anthropic[bedrock]",
-      "text_reasoning_client": "AnthropicBedrock(aws_region='us-east-1')",
-      "text_reasoning_iam": "bedrock:InvokeModel on foundation-model ARN",
-      "selection_must_be_justified": true
+      "required_regions": ["US"],
+      "prohibited_regions": ["Non-US jurisdictions for PHI"],
+      "data_retention_days": 2555
     }
   },
 
   "data_landscape": {
     "sources": [
       {
-        "name": "SKU Brief",
-        "type": "file",
-        "format": "JSON",
-        "volume": "1-10 KB per brief",
-        "pii_present": false,
-        "quality_notes": "Structured input — schema-validated against sku_brief_schema.json"
+        "name": "TriZetto Facets Core System",
+        "type": "database",
+        "format": "Proprietary API + SQL Server",
+        "volume": "45M member records",
+        "pii_present": true,
+        "quality_notes": "Authoritative for enrollment, benefits, contract rules."
       },
       {
-        "name": "Brand Assets",
+        "name": "Fax Server / Inbound Fax Queue",
         "type": "file",
-        "format": "PNG/JPG images in S3",
-        "volume": "1-50 MB per asset set",
-        "pii_present": false,
-        "quality_notes": "Client-provided brand images (logos, product photos). Synthetic/placeholder for PoC."
+        "format": "TIFF/PDF images",
+        "volume": "1.5M faxed PA requests/month",
+        "pii_present": true,
+        "quality_notes": "Variable quality — printed forms readable, handwritten requires specialized OCR."
       },
       {
-        "name": "GenAI Image API (Bedrock)",
+        "name": "Provider Web Portal",
         "type": "api",
-        "format": "PNG output",
-        "volume": "6-12 images per pipeline run (3 aspect ratios x 2-4 products)",
-        "pii_present": false,
-        "quality_notes": "Primary: Nova Canvas. Fallback: Titan V2. Both in us-east-1."
+        "format": "REST JSON",
+        "volume": "625K PA requests/month",
+        "pii_present": true,
+        "quality_notes": "Structured, high quality."
       },
       {
-        "name": "Pipeline Run Manifest",
+        "name": "X12 278 EDI Gateway",
         "type": "file",
-        "format": "JSON",
-        "volume": "1-5 KB per run",
+        "format": "ASC X12 278",
+        "volume": "375K PA requests/month",
+        "pii_present": true,
+        "quality_notes": "Highly structured standard EDI."
+      },
+      {
+        "name": "FHIR R4 Clinical Data Endpoints",
+        "type": "api",
+        "format": "FHIR R4 JSON",
+        "volume": "Queried per PA for clinical evidence",
+        "pii_present": true,
+        "quality_notes": "Newer EMR systems. ~40% of clinical data."
+      },
+      {
+        "name": "Legacy Clinical Databases",
+        "type": "database",
+        "format": "Oracle, SQL Server, DB2",
+        "volume": "~60% of clinical data",
+        "pii_present": true,
+        "quality_notes": "Inconsistent schemas. Some HL7 v2 compliant."
+      },
+      {
+        "name": "Clinical Guidelines (InterQual/MCG)",
+        "type": "api",
+        "format": "Proprietary API + structured criteria",
+        "volume": "~10K clinical criteria",
         "pii_present": false,
-        "quality_notes": "Written to S3 and local outputs/runs/. Enables run history without a database."
+        "quality_notes": "Digitized. Updated quarterly."
       }
     ],
     "integration_points": [
       {
-        "system": "AWS S3 (us-east-1)",
+        "system": "TriZetto Facets",
         "direction": "bidirectional",
-        "protocol": "AWS SDK (boto3)",
-        "auth_method": "IAM named profile 'pai-exercise'"
+        "protocol": "REST API + JDBC",
+        "auth_method": "Service account + API key"
       },
       {
-        "system": "Amazon Bedrock (us-east-1)",
-        "direction": "write",
-        "protocol": "AWS SDK (boto3 for image gen; anthropic[bedrock] for text reasoning)",
-        "auth_method": "IAM named profile 'pai-exercise'"
+        "system": "Fax Server",
+        "direction": "read",
+        "protocol": "SFTP + webhook",
+        "auth_method": "SSH key"
       },
       {
-        "system": "GitHub Actions",
-        "direction": "write",
-        "protocol": "GitHub Actions YAML workflows",
-        "auth_method": "GitHub Secrets (AWS credentials) or OIDC federation"
+        "system": "Provider Web Portal",
+        "direction": "bidirectional",
+        "protocol": "REST API",
+        "auth_method": "OAuth 2.0"
+      },
+      {
+        "system": "X12 278 EDI Gateway",
+        "direction": "bidirectional",
+        "protocol": "AS2 / SFTP",
+        "auth_method": "Certificate mTLS"
+      },
+      {
+        "system": "FHIR R4 Endpoints",
+        "direction": "read",
+        "protocol": "FHIR R4 REST",
+        "auth_method": "SMART on FHIR (OAuth 2.0)"
+      },
+      {
+        "system": "Legacy Clinical DBs",
+        "direction": "read",
+        "protocol": "JDBC / HL7 v2",
+        "auth_method": "Service account"
+      },
+      {
+        "system": "Autonomize AI Genesis Platform",
+        "direction": "bidirectional",
+        "protocol": "REST API + Kafka",
+        "auth_method": "mTLS + API key"
+      },
+      {
+        "system": "InterQual / MCG Guidelines",
+        "direction": "read",
+        "protocol": "REST API",
+        "auth_method": "API key"
       }
     ]
   },
 
   "constraints": {
-    "budget_range": "Unconstrained — optimize for quality and development speed. Expected: $5-25 for PoC run (Bedrock API costs). No Free Tier restriction.",
-    "timeline_weeks": 0,
-    "timeline_note": "Interview take-home exercise — AI-accelerated delivery, estimated 1 work day with Claude Code assistance. 0 = deadline not formally specified; submission timing is interview-driven.",
+    "budget_range": "Enterprise-scale — justified by $33.75M annual PA cost and CMS-0057-F mandate",
+    "timeline_weeks": 12,
+    "timeline_note": "12-week roadmap: Discovery, Architecture Sign-Off, Integration Build, QA/UAT, Go-Live",
     "timeline_flexibility": "hard",
     "technology_restrictions": [
-      "CloudFormation for IaC (not Terraform — simpler for PoC, self-contained YAML)",
-      "GitHub for source code hosting (public repo: praeducer/pai-take-home-exercise)",
-      "Python 3.12 for pipeline code",
-      "Claude Code CLI with custom skills as interface layer — no argparse or Click CLI framework",
-      "AWS us-east-1 as primary region (Nova Canvas + Titan V2 + Claude all available)"
+      "Must use Autonomize AI Genesis Platform for AI orchestration",
+      "Payer AWS infrastructure for integration and data platform",
+      "All PHI processing within payer VPC (HIPAA)",
+      "FHIR R4 compliance for CMS-0057-F"
     ],
-    "team_constraints": "Solo developer with AI-assisted development (Claude Code + Sonnet). AI handles all coding, testing, and scaffolding. Human handles: AWS console setup (Bedrock model access), credential configuration (aws configure), GitHub repo creation, approval gates."
+    "team_constraints": "Autonomize AI: platform + AI engineering. Payer: integration devs, clinical SMEs, compliance. External SI may augment."
   },
+
+  "success_criteria": [
+    {
+      "id": "SC-001",
+      "metric": "PA Auto-Determination Rate",
+      "description": "Percentage of PA requests auto-determined by AI without human review",
+      "baseline": 15,
+      "target": 60,
+      "measurement": "Auto-determined / total PA, monthly",
+      "timeframe": "6 months post go-live"
+    },
+    {
+      "id": "SC-002",
+      "metric": "PA Turnaround Time",
+      "description": "Average hours from receipt to determination for auto-determined cases",
+      "baseline": 120,
+      "target": 24,
+      "measurement": "Hours, P50",
+      "timeframe": "3 months post go-live"
+    },
+    {
+      "id": "SC-003",
+      "metric": "Clinical Accuracy",
+      "description": "Concordance with clinical reviewer on blinded sample",
+      "baseline": 0,
+      "target": 95,
+      "measurement": "% agreement on 500 cases/month sample",
+      "timeframe": "3 months post go-live"
+    },
+    {
+      "id": "SC-004",
+      "metric": "FTE Reduction",
+      "description": "PA processing FTE reduction through automation",
+      "baseline": 450,
+      "target": 270,
+      "measurement": "Active PA FTE headcount",
+      "timeframe": "12 months post go-live"
+    },
+    {
+      "id": "SC-005",
+      "metric": "CMS-0057-F Compliance",
+      "description": "CMS PA Final Rule FHIR API requirements met",
+      "baseline": 0,
+      "target": 100,
+      "measurement": "% of requirements implemented and tested",
+      "timeframe": "Before January 1, 2027"
+    },
+    {
+      "id": "SC-006",
+      "metric": "Audit Trail Completeness",
+      "description": "PA decisions with complete audit trail",
+      "baseline": 30,
+      "target": 100,
+      "measurement": "Decisions with full audit / total",
+      "timeframe": "Go-live"
+    }
+  ],
 
   "scope_boundaries": {
     "in_scope": [
-      "GenAI packaging image generation pipeline (Nova Canvas primary, Titan V2 fallback)",
-      "SKU brief JSON input parsing and schema validation",
-      "S3 input asset retrieval and reuse",
-      "Multi-aspect-ratio output generation (1:1, 9:16, 16:9)",
-      "Product messaging and regulatory text overlay via Pillow",
-      "Organized S3 output storage (SKU/Region/format)",
-      "AWS CloudFormation deployment (us-east-1)",
-      "Claude Code custom skills as interface layer (8 skills)",
-      "GitHub Actions CI/CD (must-have: ci.yml + deploy.yml)",
-      "AWS MCP servers for natural language AWS administration (.mcp.json)",
-      "Automated QA hooks (.claude/settings.json)",
-      "--dry-run mode for zero-cost pipeline validation",
-      "Pipeline run manifest (flat JSON, no database)",
-      "README documentation with examples and design decisions"
+      "PA request ingestion from fax, web portal, X12 278 EDI",
+      "Clinical data aggregation from FHIR R4 and legacy sources",
+      "AI-driven clinical review and determination via Autonomize AI",
+      "Member eligibility verification via Facets",
+      "Human-in-the-loop workflow for complex cases",
+      "PA determination response delivery",
+      "HIPAA-compliant audit trail",
+      "FHIR R4 PA API per CMS-0057-F / Da Vinci PAS",
+      "Multi-LOB configuration engine for 20 LOBs",
+      "MLOps monitoring with drift detection and feedback loop",
+      "12-week implementation roadmap",
+      "Multi-tenant scaling architecture"
     ],
     "out_of_scope": [
-      "Production-scale deployment or auto-scaling",
-      "Web application UI or dashboard",
-      "Multi-user authentication or RBAC",
-      "Real regulatory compliance databases",
-      "Brand asset library management system",
-      "A/B testing or analytics pipeline",
-      "Multi-language localization beyond English",
-      "Fine-tuned GenAI models",
-      "argparse or Click CLI framework (replaced by Claude Code skills)",
-      "PostgreSQL or any relational database (flat JSON + S3 only for PoC)",
-      "stability.sd3-5-large-v1:0 (us-west-2 only — moved to BACKLOG)"
+      "Claims adjudication and payment processing",
+      "Provider credentialing and network management",
+      "Member enrollment and benefits administration (read-only Facets access)",
+      "EMR/EHR system modification",
+      "Physical infrastructure provisioning",
+      "Custom clinical guidelines development",
+      "Appeals and grievances (future phase)",
+      "Code generation or implementation (architecture only)"
     ],
-    "justification": "Scoped to a PoC demonstrating technical approach, GenAI integration capability, and AI-native development practices. Production features (scale, multi-user, analytics, relational DB) and out-of-region models are outside PoC scope. Budget unconstrained — quality and speed are the optimization targets."
+    "justification": "Scope bounded to PA lifecycle from ingestion through determination. Adjacent systems accessed read-only. Implementation excluded per SA scope boundary."
   },
 
   "assumptions": [
-    "AWS account 730007904340 is available with Bedrock model access enableable in us-east-1",
-    "Amazon Nova Canvas (amazon.nova-canvas-v1:0) and Titan V2 (amazon.titan-image-generator-v2:0) must be explicitly enabled in the AWS Bedrock console before pipeline use",
-    "Claude Sonnet 4.6 (anthropic.claude-sonnet-4-6) must be explicitly enabled in the AWS Bedrock console",
-    "SKU brief JSON schema is defined by the developer (not provided by the interviewer)",
-    "Brand assets for the PoC can be synthetic/placeholder images",
-    "Regulatory information overlay is text-based (not from a real regulatory database)",
-    "The PoC demonstrates the pipeline pattern — production quality images are not expected",
-    "Single-region deployment (us-east-1) is sufficient for the PoC",
-    "Interview panel evaluates technical approach, code quality, and architecture decisions — not pixel-perfect design output",
-    "AI-assisted development hours (Claude Code + Sonnet) are the operative unit for estimates — not raw human labor hours",
-    "GitHub repo praeducer/pai-take-home-exercise is public — no secrets or credentials committed",
-    "uv (Python package manager for MCP server execution) and AWS CLI 2.x+ are available. Node.js is not required — AWS MCP servers use uv tool run."
+    "Client is a large US health plan (~45M members, 20 LOBs)",
+    "Autonomize AI Genesis Platform and PA Copilot are production-ready, HIPAA-certified",
+    "Payer has existing AWS infrastructure with VPC and IAM",
+    "TriZetto Facets APIs available and documented",
+    "InterQual/MCG clinical guidelines licensed and digitized",
+    "40%+ clinical data sources support FHIR R4; rest via legacy connectors",
+    "12-week timeline for initial production with first LOB (Commercial)",
+    "Additional LOBs onboarded post-go-live via configuration",
+    "Clinical SMEs available 50% during integration build",
+    "Existing HIPAA controls extend to new solution",
+    "Auto-denial excluded from Phase 1 — auto-approval only"
   ],
 
   "_metadata": {
     "author": "sa-agent",
-    "date": "2026-03-18",
-    "validation_status": "complete",
-    "version": "2.0",
+    "date": "2026-03-20",
+    "validation_status": "valid",
+    "version": "1.0",
     "discovery_method": "extraction_from_notes",
-    "discovery_tier": "STANDARD",
-    "discovery_date": "2026-03-18",
+    "discovery_tier": "COMPREHENSIVE",
+    "discovery_date": "2026-03-20",
     "discovery_duration_minutes": 0,
-    "participants": ["sa-agent"],
-    "completeness": "complete",
-    "changelog": "v2.0: CI/CD upgraded to must_have (FR-009), Claude Code interface added (FR-010), QA hooks added (FR-011), AWS MCP servers added (FR-012), old FR-009-011 renumbered FR-013-015. SC-006 added. NFR-008 model quality added. Budget unconstrained. Nova Canvas primary model (SD3.5 removed — us-west-2 only). Region confirmed us-east-1."
+    "participants": ["Paul Prae (SA)", "Interview Assignment PDF", "Autonomize AI Research", "Career Data"],
+    "completeness": "complete"
   }
 }

@@ -1,0 +1,351 @@
+{
+  "$schema": "./schemas/estimate.schema.json",
+  "$depends_on": [
+    "requirements.json",
+    "architecture.json",
+    "data_model.json",
+    "security_review.json"
+  ],
+  "engagement_id": "eng-2026-003",
+  "version": "2.1",
+  "last_updated": "2026-03-19",
+  "status": "complete",
+  "currency": "USD",
+  "methodology": "three_point",
+  "confidence_level": "medium",
+  "complexity_rating": "medium",
+  "complexity_factors": [
+    "Bedrock model access no longer requires manual console enablement \u2014 Amazon models (Nova Canvas, Titan V2) auto-enable on first invocation; Anthropic Claude Sonnet 4.6 requires aws-marketplace:Subscribe in IAM for auto-enablement",
+    "Pillow text overlay coordinate tuning per aspect ratio requires iterative refinement \u00e2\u20ac\u201d AI-assisted but may need multiple passes",
+    "Claude Code skill scaffolding (8 skills + hooks + .mcp.json) adds scope vs. v1.0 CLI approach, offset by lower per-skill complexity",
+    "GitHub Actions CI/CD with OIDC or Secrets configuration adds new scope vs. v1.0 (was out-of-scope)",
+    "All development hours are AI-assisted (Claude Code + Sonnet) \u00e2\u20ac\u201d not raw human labor. 3-5\u00c3\u2014 multiplier over manual for boilerplate; ~1\u00c3\u2014 for novel problem-solving (Pillow coordinates, prompt engineering)"
+  ],
+  "complexity_assessment": {
+    "score": 4,
+    "max_score": 10,
+    "rating": "medium",
+    "buffer_percent": 25,
+    "factors": {
+      "novel_technology_stack": {
+        "score": 1,
+        "note": "Bedrock image generation (Nova Canvas) and AnthropicBedrock text client are relatively new API patterns"
+      },
+      "multiple_integrations": {
+        "score": 1,
+        "note": "3 integrations: S3 + Bedrock image generation + Bedrock text reasoning \u00e2\u20ac\u201d just above 2-integration baseline"
+      },
+      "high_performance_requirements": {
+        "score": 0,
+        "note": "P95 60s/image target, 1 concurrent user \u00e2\u20ac\u201d trivially achievable"
+      },
+      "data_pipeline_complexity": {
+        "score": 0,
+        "note": "Linear pipeline with clear inputs/outputs \u00e2\u20ac\u201d no branching, streaming, or fan-out"
+      },
+      "unfamiliar_tech_stack": {
+        "score": 1,
+        "note": "Claude Code custom skills scaffold plus AnthropicBedrock client are new additions vs. v1.0"
+      },
+      "evolving_requirements": {
+        "score": 0,
+        "note": "Well-defined PoC scope with explicit acceptance criteria \u00e2\u20ac\u201d requirements locked at v2.0"
+      },
+      "critical_external_dependencies": {
+        "score": 2,
+        "note": "Bedrock console enablement retired \u2014 Amazon models auto-enable on first invocation. Claude Sonnet 4.6 needs aws-marketplace:Subscribe in IAM policy (one-line addition). G-001 is now a first-invocation verify, not a blocking pre-start console step."
+      },
+      "security_compliance_requirements": {
+        "score": 0,
+        "note": "IAM + SSE-S3 + S3 Block Public Access \u00e2\u20ac\u201d no regulated compliance frameworks for PoC"
+      },
+      "real_time_processing": {
+        "score": 0,
+        "note": "Batch skill-invoked execution \u00e2\u20ac\u201d not real-time or event-driven"
+      },
+      "complex_business_logic": {
+        "score": 0,
+        "note": "Straightforward pipeline \u00e2\u20ac\u201d no conditional domain-specific rules beyond model tier selection"
+      }
+    }
+  },
+  "loe_breakdown": {
+    "total_hours": 9.5,
+    "total_hours_with_buffer": 12.3,
+    "by_phase": [
+      {
+        "phase": "P-001: Foundation",
+        "hours": 1.5,
+        "weeks": 0.04,
+        "parallel": false,
+        "notes": "AI-assisted. Repo creation, directory structure, CloudFormation (S3 + IAM + Budget alarm), venv + requirements.txt, CLAUDE.md, 8 Claude Code skill stubs (.claude/skills/), .claude/settings.json hooks, .mcp.json AWS MCP servers, initial commit + push. Human gates (Bedrock console, AWS configure) are not in these hours."
+      },
+      {
+        "phase": "P-002: Core Pipeline",
+        "hours": 3.0,
+        "weeks": 0.08,
+        "parallel": false,
+        "notes": "AI-assisted. C-002 SKU Parser, C-003 Asset Manager, C-004 Prompt Constructor, C-005 Image Generator (dev tier, 1:1 ratio, retry/backoff), C-006 Text Overlay (1:1 layout), C-007 Output Manager + manifest, C-012 Text Reasoning Engine (AnthropicBedrock). /run-pipeline skill invokes pipeline. Minimum demo state after this phase."
+      },
+      {
+        "phase": "P-003: Output Quality",
+        "hours": 2.25,
+        "weeks": 0.06,
+        "parallel": false,
+        "notes": "AI-assisted. Extend C-005 to all 3 model tiers + image caching (~/.cache/pai-pipeline/). Extend C-006 to all 3 aspect ratios (1:1, 9:16, 16:9) with correct layouts. --dry-run mode end-to-end. Full run produces 6+ images (2 products \u00c3\u2014 3 ratios). /pipeline-status and /view-results skills functional."
+      },
+      {
+        "phase": "P-004: CI/CD and Testing",
+        "hours": 1.75,
+        "weeks": 0.04,
+        "parallel": false,
+        "notes": "AI-assisted. GitHub Actions ci.yml (ruff lint + pytest unit tests + pip-audit on push), deploy.yml (CloudFormation deploy on main). Pytest test suite: unit tests for all 5 pipeline modules + integration test (dry-run). ruff/flake8 linting. Verify PostToolUse auto-lint and Stop test gate hooks."
+      },
+      {
+        "phase": "P-005: Docs and Demo",
+        "hours": 1.0,
+        "weeks": 0.025,
+        "parallel": false,
+        "notes": "AI-assisted. README.md (setup, how-to-run, example I/O, design decisions, assumptions). BACKLOG.md (future roadmap). 4 demo SKU briefs in inputs/demo_briefs/. /generate-demo skill produces full demo dataset. demo-script.md. Final git tag v1.0.0."
+      }
+    ],
+    "by_component": [
+      {
+        "component": "C-001 Claude Code Interface (8 skills)",
+        "hours": 0.5,
+        "complexity": "low"
+      },
+      {
+        "component": "C-002 SKU Brief Parser + JSON schema validation",
+        "hours": 0.5,
+        "complexity": "low"
+      },
+      {
+        "component": "C-003 Asset Manager (S3 read/write/key builder)",
+        "hours": 0.5,
+        "complexity": "low"
+      },
+      {
+        "component": "C-004 Prompt Constructor",
+        "hours": 0.5,
+        "complexity": "low"
+      },
+      {
+        "component": "C-005 Image Generator (Bedrock, retry/backoff, caching)",
+        "hours": 1.0,
+        "complexity": "medium"
+      },
+      {
+        "component": "C-006 Text Overlay Engine (Pillow, 3 aspect ratios)",
+        "hours": 1.25,
+        "complexity": "medium"
+      },
+      {
+        "component": "C-007 Output Manager (S3 + flat JSON manifest)",
+        "hours": 0.75,
+        "complexity": "low"
+      },
+      {
+        "component": "C-008 IaC Stack (CloudFormation: S3 + IAM + Budget)",
+        "hours": 0.5,
+        "complexity": "low"
+      },
+      {
+        "component": "C-009 Claude Code Hooks (.claude/settings.json)",
+        "hours": 0.25,
+        "complexity": "low"
+      },
+      {
+        "component": "C-010 GitHub Actions (ci.yml + deploy.yml)",
+        "hours": 0.75,
+        "complexity": "low"
+      },
+      {
+        "component": "C-011 AWS MCP Servers (.mcp.json)",
+        "hours": 0.25,
+        "complexity": "low"
+      },
+      {
+        "component": "C-012 Text Reasoning Engine (AnthropicBedrock)",
+        "hours": 0.5,
+        "complexity": "low"
+      },
+      {
+        "component": "CLAUDE.md + README + BACKLOG documentation",
+        "hours": 0.75,
+        "complexity": "low"
+      },
+      {
+        "component": "Test Suite (pytest unit + integration)",
+        "hours": 1.0,
+        "complexity": "low"
+      },
+      {
+        "component": "Demo data (4 SKU briefs + /generate-demo)",
+        "hours": 0.5,
+        "complexity": "low"
+      }
+    ],
+    "risk_buffer": {
+      "percent": 25,
+      "hours": 2.4,
+      "rationale": "Medium complexity (4/10): G-001 first-invocation verify (low risk \u2014 auto-enablement), Pillow coordinate tuning for 3 aspect ratios, and potential GitHub Actions OIDC/credential setup issues justify 25% buffer over PERT baseline of 9.83h. AI-assisted development partially offsets this with faster iteration cycles."
+    },
+    "three_point_detail": {
+      "optimistic_hours": 6.0,
+      "most_likely_hours": 9.5,
+      "pessimistic_hours": 15.0,
+      "pert_formula": "(O + 4\u00c3\u2014ML + P) / 6",
+      "pert_hours": 9.83,
+      "note": "Optimistic: AI completes pipeline first-pass, Bedrock auto-enables on first invocation (no wait), no Pillow iteration needed. Most likely: typical AI-assisted session with 1-2 Pillow coordinate passes and one CI/CD auth issue. Pessimistic: IAM marketplace permission missing from policy (10-min fix), Pillow text wrapping requires 3+ passes per ratio, GitHub Actions OIDC setup requires troubleshooting."
+    }
+  },
+  "team_composition": [
+    {
+      "role": "AI Implementation Agent (Claude Code + Sonnet)",
+      "count": 1,
+      "experience_level": "expert",
+      "allocation_percent": 80,
+      "duration_weeks": 1,
+      "hourly_rate": 0,
+      "total_cost": 0,
+      "responsibilities": [
+        "All 12 components (C-001 through C-012): implementation, testing, documentation",
+        "CloudFormation authoring and deployment commands",
+        "GitHub Actions workflow authoring",
+        "8 Claude Code skill files and settings.json hooks",
+        "Test suite (pytest), README, BACKLOG, demo data"
+      ]
+    },
+    {
+      "role": "Paul Praeducer \u00e2\u20ac\u201d Human Architect / Decision Maker",
+      "count": 1,
+      "experience_level": "senior",
+      "allocation_percent": 20,
+      "duration_weeks": 1,
+      "hourly_rate": 0,
+      "total_cost": 0,
+      "responsibilities": [
+        "HUMAN ACTION: Add aws-marketplace:Subscribe/Unsubscribe/ViewSubscriptions to IAM user policy (Claude Sonnet 4.6 auto-enablement); run aws configure --profile pai-exercise; approve visual quality gates G-002 and G-003",
+        "HUMAN GATE: Run aws configure --profile pai-exercise and verify sts get-caller-identity",
+        "HUMAN GATE: Verify gh auth status, create GitHub repo praeducer/pai-take-home-exercise",
+        "Architecture decision approval and approve/continue gates between phases",
+        "Human inspection of generated images at Phase 2 completion (minimum demo state gate)",
+        "Human review of CI/CD passing checkmarks before Phase 5"
+      ]
+    }
+  ],
+  "cost_model": {
+    "development": {
+      "internal_team": 0,
+      "contractors": 0,
+      "training": 0,
+      "total": 0,
+      "note": "Take-home interview exercise \u00e2\u20ac\u201d developer time is candidate's own. Professional rate reference: 10-12 AI-assisted hours \u00c3\u2014 $150-200/hr SA rate = $1,500-2,400 if engaged commercially."
+    },
+    "infrastructure_monthly": {
+      "aws_s3_storage": 0,
+      "aws_cloudformation": 0,
+      "total": 0
+    },
+    "infrastructure_monthly_notes": "S3 storage for PoC outputs (~100MB) is negligible ($0.023/GB \u00e2\u2020\u2019 <$0.01/month). CloudFormation is free. No compute infrastructure (no Lambda, no EC2). Budget is unconstrained \u00e2\u20ac\u201d optimize for quality and speed, not cost minimization.",
+    "infrastructure_first_year": 0.12,
+    "third_party_monthly": {
+      "bedrock_nova_canvas_per_run": 0.48,
+      "bedrock_titan_v2_per_run": 0.12,
+      "bedrock_claude_sonnet_text_reasoning_per_run": 0.003,
+      "total": 0
+    },
+    "third_party_monthly_notes": "Per-run costs: Nova Canvas (final tier) $0.04/image \u00c3\u2014 12 images = $0.48/run (source: aws.amazon.com/nova/pricing/). Titan V2 (dev tier) $0.01/image \u00c3\u2014 12 = $0.12/run (source: aws.amazon.com/bedrock/pricing/). Claude Sonnet 4.6 text reasoning ~1K tokens/run \u00c3\u2014 $3/MTok input = ~$0.003/run. Total expected for PoC: 10 dev runs + 5 final runs + 4 demo SKU briefs at final tier = ~$5 total.",
+    "genai_per_run": {
+      "dev_tier_titan_v2_12_images": 0.12,
+      "final_tier_nova_canvas_12_images": 0.48,
+      "text_reasoning_per_run_estimate": 0.003,
+      "total_expected_poc_development": 5.0,
+      "note": "Per-run cost at 3 aspect ratios \u00c3\u2014 2 products \u00c3\u2014 2 images each (2 products = 12 images total per run). Budget unconstrained \u00e2\u20ac\u201d quality over cost. Text reasoning cost is negligible at PoC scale."
+    },
+    "total_first_year": 5.12,
+    "tco_3_year": {
+      "year_1": 5.12,
+      "year_2": 0,
+      "year_3": 0,
+      "total": 5.12,
+      "note": "PoC has no ongoing maintenance cost after interview. Production evolution would add: S3 storage at scale, CloudWatch Logs retention, Bedrock production traffic at $0.04-0.48/packaging set depending on tier."
+    },
+    "roi": {
+      "annual_savings_estimate": 0,
+      "payback_period_months": 0,
+      "roi_3_year_percent": 0,
+      "note": "ROI not quantified for interview PoC. Production reference: manual packaging design ~2-4 hours/SKU variant at $50-100/hr agency rate. At 100 variants/month = $10,000-40,000/month manual cost. GenAI automation at $0.04-0.48/variant = $4-48/month \u00e2\u20ac\u201d 99%+ cost reduction per variant, pending production validation."
+    }
+  },
+  "three_pass_context": {
+    "current_pass": 2,
+    "pass_name": "Plan estimate \u00e2\u20ac\u201d AI-assisted development",
+    "accuracy_target": "\u00c2\u00b140%",
+    "estimation_basis": "Post-architecture v2.0 + security review v2.0 + data model v2.0. Component breakdown is well-understood. Estimates reflect AI-assisted development (Claude Code + Sonnet), not raw human labor. External dependency (Bedrock model access) remains the primary schedule risk.",
+    "human_action_list": [
+      "Add aws-marketplace:Subscribe, aws-marketplace:Unsubscribe, aws-marketplace:ViewSubscriptions to IAM user policy \u2014 required for Claude Sonnet 4.6 first-invocation auto-enablement. Amazon models (Nova Canvas, Titan V2) need no action. ~1 minute.",
+      "Run: aws configure --profile pai-exercise (enter Access Key ID, Secret, region=us-east-1, output=json). Verify: aws sts get-caller-identity --profile pai-exercise returns account 730007904340.",
+      "Verify: gh auth status shows authenticated as praeducer. If not: gh auth login --web.",
+      "Create GitHub repo: gh repo create praeducer/pai-take-home-exercise --public --clone --gitignore Python",
+      "After Phase 3: Human inspection of 6+ generated images \u00e2\u20ac\u201d confirm text overlay readable across all 3 aspect ratios (this is the G-002/G-003 gate and minimum demo state approval).",
+      "After Phase 4: Check GitHub Actions tab \u00e2\u20ac\u201d confirm ci.yml and deploy.yml show green checkmarks on main branch (G-004 gate)."
+    ],
+    "caveats": [
+      "All hours are AI-assisted wall-clock time \u00e2\u20ac\u201d Claude Code executes at roughly 3-5\u00c3\u2014 human speed for boilerplate, approximately equal for novel problem-solving",
+      "Human gate resolution time (Bedrock access, AWS configure) is not included in AI-assisted hours \u00e2\u20ac\u201d it runs in parallel",
+      "Pillow text overlay is the highest-variance task \u00e2\u20ac\u201d coordinate mapping for 3 aspect ratios may require 2-3 AI iteration passes",
+      "GitHub Actions OIDC setup requires creating an Identity Provider in IAM console \u00e2\u20ac\u201d this adds ~15 minutes human time if OIDC is chosen over GitHub Secrets",
+      "Bedrock pricing verified against public pricing pages as of 2026-03; prices may change at any time"
+    ]
+  },
+  "optimization_strategies": [
+    {
+      "strategy": "Use Titan V2 (dev tier) during all development iterations, Nova Canvas only for demo",
+      "savings": "75% cost reduction per run ($0.12 vs $0.48 for 12 images)",
+      "trade_off": "Lower visual quality during development \u00e2\u20ac\u201d acceptable since Pillow coordinate debugging does not require production-quality images",
+      "effort": "low"
+    },
+    {
+      "strategy": "Image caching in ~/.cache/pai-pipeline/ keyed by content hash",
+      "savings": "Eliminates duplicate Bedrock calls when iterating on text overlay \u00e2\u20ac\u201d each re-run after a Pillow change costs $0 for images already generated",
+      "trade_off": "Requires local disk space (~5-10MB per run)",
+      "effort": "low"
+    },
+    {
+      "strategy": "--dry-run mode for all pipeline testing and debugging",
+      "savings": "Zero GenAI cost \u00e2\u20ac\u201d validates SKU brief parsing, prompt construction, and S3 manifest without Bedrock invocations",
+      "trade_off": "Does not validate actual image quality \u00e2\u20ac\u201d must switch to real run before Phase 3 gate",
+      "effort": "low"
+    },
+    {
+      "strategy": "AWS Budget alarm at $25 with email notification",
+      "savings": "Prevents surprise charges if caching breaks or --dry-run flag is accidentally omitted in a loop",
+      "trade_off": "Minor CloudFormation resource addition",
+      "effort": "low"
+    }
+  ],
+  "assumptions": [
+    "All development hours are AI-assisted (Claude Code + Sonnet) \u00e2\u20ac\u201d not raw human labor hours",
+    "Paul's active decision-making time (approvals, AWS console, git) is ~20% of total session time",
+    "Amazon Bedrock serverless models in us-east-1 auto-enable on first invocation \u2014 no console enablement step required. Anthropic models (Claude Sonnet 4.6) require aws-marketplace:Subscribe in IAM for auto-enablement. Amazon, DeepSeek, Mistral, Meta, and Qwen models do not require marketplace permissions.",
+    "Nova Canvas pricing: $0.04/standard quality image at 1024\u00c3\u20141024 (source: aws.amazon.com/nova/pricing/)",
+    "Titan Image Generator V2 pricing: $0.01/image at 1024\u00c3\u20141024 (source: aws.amazon.com/bedrock/pricing/)",
+    "Claude Sonnet 4.6 via Bedrock: $3.00/MTok input tokens (source: aws.amazon.com/bedrock/pricing/)",
+    "Budget is unconstrained \u00e2\u20ac\u201d quality and development speed take priority over cost minimization",
+    "No third-party licenses required \u00e2\u20ac\u201d Python, boto3, anthropic, Pillow, pytest, ruff are all open source",
+    "Developer has local Python 3.12+ environment, uv (Python package manager for MCP server execution), and AWS CLI 2.x+. Node.js is NOT required \u00e2\u20ac\u201d AWS MCP servers run via uv tool run, not npx.",
+    "GitHub account praeducer exists and gh CLI is authenticated",
+    "PoC does not require production-quality packaging imagery \u00e2\u20ac\u201d functional demonstration is sufficient"
+  ],
+  "_metadata": {
+    "author": "sa-agent",
+    "date": "2026-03-18",
+    "validation_status": "complete",
+    "version": "2.0",
+    "estimator": "sa-agent",
+    "estimation_date": "2026-03-18",
+    "last_updated": "2026-03-19"
+  }
+}

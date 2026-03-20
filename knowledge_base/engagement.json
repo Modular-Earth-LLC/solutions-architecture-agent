@@ -1,98 +1,40 @@
 {
   "$schema": "./schemas/engagement.schema.json",
-  "engagement_id": "eng-2026-003",
-  "title": "PAI Packaging Automation PoC",
-  "engagement_type": "greenfield",
-  "status": "approved",
-  "created_date": "2026-03-17",
-  "last_updated": "2026-03-18",
-  "version": "2.0",
+  "engagement_id": "eng-2026-004",
+  "title": "AI-Driven Prior Authorization — Autonomize AI",
+  "engagement_type": "assessment",
+  "status": "in_progress",
+  "created_date": "2026-03-20",
+  "last_updated": "2026-03-20",
+  "version": "1.0",
   "client": {
-    "name": "PAI (Adobe)",
-    "industry": "Technology / Creative Software",
+    "name": "Fictional US Health Plan (Autonomize AI Interview)",
+    "industry": "Healthcare / Health Insurance (Payer)",
     "contact": "Interview Panel",
     "size": "enterprise"
   },
   "lifecycle_state": {
     "requirements": {
       "status": "complete",
-      "version": "2.0",
+      "version": "1.0",
       "file": "requirements.json",
-      "last_updated": "2026-03-18",
-      "reviewed": true,
-      "review_id": "R-003",
-      "review_score": 9.1,
-      "depth": "STANDARD"
+      "last_updated": "2026-03-20",
+      "reviewed": false,
+      "depth": "COMPREHENSIVE"
     },
     "architecture": {
-      "status": "complete",
-      "version": "2.0",
+      "status": "not_started",
+      "version": null,
       "file": "architecture.json",
-      "last_updated": "2026-03-18",
-      "reviewed": true,
-      "review_id": "R-004",
-      "review_score": 8.8,
-      "depth": "STANDARD"
-    },
-    "data_model": {
-      "status": "complete",
-      "version": "2.0",
-      "file": "data_model.json",
-      "last_updated": "2026-03-18",
-      "reviewed": true,
-      "review_id": "R-005",
-      "review_score": 9.1,
-      "depth": "STANDARD"
-    },
-    "security_review": {
-      "status": "complete",
-      "version": "2.0",
-      "file": "security_review.json",
-      "last_updated": "2026-03-18",
-      "reviewed": true,
-      "review_id": "R-006",
-      "review_score": 9.0,
-      "depth": "STANDARD"
-    },
-    "estimate": {
-      "status": "complete",
-      "version": "2.0",
-      "file": "estimate.json",
-      "last_updated": "2026-03-18",
-      "reviewed": true,
-      "review_id": "R-007",
-      "review_score": 9.1,
-      "depth": "STANDARD"
-    },
-    "project_plan": {
-      "status": "complete",
-      "version": "2.0",
-      "file": "project_plan.json",
-      "last_updated": "2026-03-18",
-      "reviewed": true,
-      "review_id": "R-008",
-      "review_score": 9.1,
-      "depth": "STANDARD"
+      "reviewed": false
     }
   },
-  "review_summary": {
-    "total_reviews": 10,
-    "v2_reviews": 8,
-    "v2_average_score": 9.05,
-    "latest_overall_score": 9.05,
-    "pass_fail": "PASS",
-    "blocking_findings": 0,
-    "open_findings": 3,
-    "open_p1_findings": [],
-    "resolved_after_review": ["RF-012", "RF-013", "RF-015", "RF-017", "RF-018"],
-    "wa_gap_note": "Architecture WA parallel agent review: 6.8/10. Self-assessed values corrected to match. OpEx/Reliability/Performance gaps are PoC-appropriate and documented in BACKLOG. Not blocking."
-  },
-  "engagement_depth": "STANDARD",
-  "tags": ["poc", "genai", "cpg", "packaging", "image-generation", "interview-take-home", "claude-code", "ai-assisted-dev"],
+  "engagement_depth": "COMPREHENSIVE",
+  "tags": ["healthcare", "payer", "prior-authorization", "genai", "multi-agent", "hipaa", "interview-take-home", "autonomize-ai", "mlops"],
   "_metadata": {
     "author": "sa-agent",
-    "date": "2026-03-18",
+    "date": "2026-03-20",
     "validation_status": "valid",
-    "version": "2.0"
+    "version": "1.0"
   }
 }

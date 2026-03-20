@@ -1,0 +1,713 @@
+{
+  "$schema": "./schemas/project_plan.schema.json",
+  "$depends_on": [
+    "requirements.json",
+    "architecture.json",
+    "estimate.json"
+  ],
+  "engagement_id": "eng-2026-003",
+  "version": "2.1",
+  "last_updated": "2026-03-19",
+  "status": "complete",
+  "approach": "AI-assisted sub-day task blocks \u00e2\u20ac\u201d not sprint-based. Claude Code executes all implementation; human resolves console-only gates and approves phase transitions.",
+  "total_duration_weeks": 1,
+  "start_date": "2026-03-18",
+  "target_end_date": "2026-03-18",
+  "phases": [
+    {
+      "id": "P-001",
+      "name": "Foundation",
+      "start_week": 1,
+      "end_week": 1,
+      "objectives": [
+        "GitHub repo created at praeducer/pai-take-home-exercise (public)",
+        "CloudFormation stack deployed: S3 input + output buckets (S3 Block Public Access enabled), IAM role",
+        "Bedrock model access enabled: amazon.nova-canvas-v1:0, amazon.titan-image-generator-v2:0, anthropic.claude-sonnet-4-6",
+        "Python venv with all pinned dependencies installed",
+        "Claude Code scaffolding complete: CLAUDE.md, 8 skill stubs (.claude/skills/), hooks (.claude/settings.json), MCP servers (.mcp.json)"
+      ],
+      "deliverables": [
+        "infra/cloudformation/stack.yaml \u00e2\u20ac\u201d S3 input + output buckets with Block Public Access, IAM role, AWS Budget alarm",
+        "requirements.txt \u00e2\u20ac\u201d all deps pinned (boto3, pillow, anthropic, pytest, ruff, jsonschema, pip-audit)",
+        ".claude/skills/ \u00e2\u20ac\u201d 8 skill stub files (run-pipeline, pipeline-status, view-results, deploy, teardown, health-check, run-tests, generate-demo)",
+        ".claude/settings.json \u00e2\u20ac\u201d PostToolUse lint hook, Stop test gate hook, PreToolUse Bash guard hook",
+        ".mcp.json \u00e2\u20ac\u201d AWS IaC MCP server (uv stdio) and AWS Knowledge MCP server (remote HTTP)",
+        "CLAUDE.md \u00e2\u20ac\u201d repo purpose, skill invocations, architecture summary",
+        "Initial repo structure committed and pushed to praeducer/pai-take-home-exercise"
+      ],
+      "success_criteria": [
+        "aws cloudformation describe-stacks --stack-name pai-exercise returns CREATE_COMPLETE",
+        "aws sts get-caller-identity --profile pai-exercise returns account 730007904340",
+        "aws bedrock list-foundation-models --profile pai-exercise lists nova-canvas-v1:0 and claude-sonnet-4-6",
+        "python -c 'import boto3, PIL, anthropic, jsonschema; print(\"deps OK\")' exits 0",
+        "git remote -v shows origin pointing to github.com/praeducer/pai-take-home-exercise",
+        "DECISION GATE G-001 PASSED before proceeding"
+      ],
+      "team_allocation": [
+        "Claude Code AI Agent (80%)",
+        "Paul \u00e2\u20ac\u201d AWS console + CLI setup (20%)"
+      ],
+      "dependencies": [
+        "HUMAN REQUIRED: Verify IAM user policy includes aws-marketplace:Subscribe/Unsubscribe/ViewSubscriptions \u2014 required for Claude Sonnet 4.6 first-invocation auto-enablement. Amazon models (Nova Canvas, Titan V2) need no action.",
+        "HUMAN REQUIRED: Run aws configure --profile pai-exercise and verify sts get-caller-identity",
+        "HUMAN REQUIRED: gh auth status shows authenticated as praeducer; run gh auth login if not",
+        "Python 3.12+ installed locally",
+        "Node.js LTS installed (for MCP npx/uv commands)",
+        "AWS CLI 2.x installed and on PATH"
+      ],
+      "risks": [
+        "G-001: Amazon models (Nova Canvas, Titan V2) auto-enable on first invocation. Claude Sonnet 4.6 requires aws-marketplace:Subscribe in IAM for auto-enablement \u2014 missing permission causes first invocation failure (10-min IAM fix, not a 24h wait).",
+        "GitHub repo creation requires authenticated gh CLI \u00e2\u20ac\u201d verify gh auth status before P-001 starts"
+      ]
+    },
+    {
+      "id": "P-002",
+      "name": "Core Pipeline",
+      "start_week": 1,
+      "end_week": 1,
+      "objectives": [
+        "Working end-to-end pipeline: SKU brief JSON \u00e2\u2020\u2019 1 image per product (1:1 ratio) in S3",
+        "Pipeline invokable via /run-pipeline skill",
+        "MINIMUM DEMO STATE: one /run-pipeline invocation produces \u00e2\u2030\u00a52 images in S3"
+      ],
+      "deliverables": [
+        "src/schemas/sku_brief_schema.json \u00e2\u20ac\u201d JSON schema with required product fields",
+        "inputs/sample_sku_brief.json \u00e2\u20ac\u201d 2+ products (e.g., Organic Trail Mix Original and Dark Chocolate)",
+        "src/pipeline/sku_parser.py \u00e2\u20ac\u201d parse + validate SKU brief against schema",
+        "src/pipeline/asset_manager.py \u00e2\u20ac\u201d S3 read/write, output key builder {SKU}/{Region}/{format}/",
+        "src/pipeline/prompt_constructor.py \u00e2\u20ac\u201d f-string templates with product name, attributes, region",
+        "src/pipeline/image_generator.py \u00e2\u20ac\u201d dev tier (Titan V2), 1:1 ratio, retry/backoff (3 attempts, 2^n seconds)",
+        "src/pipeline/text_overlay.py \u00e2\u20ac\u201d Pillow text rendering for 1:1 layout (product name, attributes, regulatory footer)",
+        "src/pipeline/output_manager.py \u00e2\u20ac\u201d S3 upload + manifest.json (E-006) local and S3 write",
+        "src/pipeline/run_pipeline.py \u00e2\u20ac\u201d orchestrator: SKU parser \u00e2\u2020\u2019 prompt \u00e2\u2020\u2019 generate \u00e2\u2020\u2019 overlay \u00e2\u2020\u2019 upload \u00e2\u2020\u2019 manifest",
+        "src/pipeline/text_reasoning.py \u00e2\u20ac\u201d AnthropicBedrock client (C-012) for prompt construction assistance",
+        ".claude/skills/run-pipeline.md \u00e2\u20ac\u201d skill updated to invoke run_pipeline.py with sku-brief-path"
+      ],
+      "success_criteria": [
+        "/run-pipeline inputs/sample_sku_brief.json completes without error",
+        "S3 output bucket shows \u00e2\u2030\u00a52 images (one per product) under {sku_id}/{region}/front_label/",
+        "Pipeline run manifest written to both S3 and local outputs/runs/",
+        "Human inspects images and confirms text overlay is readable (MINIMUM DEMO STATE GATE G-002)",
+        "PAI_DRY_RUN=1 run completes with zero Bedrock API calls"
+      ],
+      "team_allocation": [
+        "Claude Code AI Agent (100%)"
+      ],
+      "dependencies": [
+        "P-001 complete \u00e2\u20ac\u201d G-001 passed, CloudFormation deployed, Bedrock accessible"
+      ],
+      "risks": [
+        "Pillow text overlay coordinate mapping for 1:1 ratio may require 1-2 AI iteration passes \u00e2\u20ac\u201d timebox to 45 minutes",
+        "AnthropicBedrock client requires explicit aws_region='us-east-1' \u00e2\u20ac\u201d does not read ~/.aws/config for region automatically"
+      ]
+    },
+    {
+      "id": "P-003",
+      "name": "Output Quality",
+      "start_week": 1,
+      "end_week": 1,
+      "objectives": [
+        "All 3 aspect ratios (1:1 front label, 9:16 back label, 16:9 wraparound) working",
+        "Image caching (~/.cache/pai-pipeline/) reduces development iteration time",
+        "--dry-run mode end-to-end (zero Bedrock cost for testing)",
+        "2+ products \u00c3\u2014 3 ratios = 6+ images per pipeline run, organized in S3"
+      ],
+      "deliverables": [
+        "src/pipeline/image_generator.py \u00e2\u20ac\u201d updated for all 3 model tiers and all 3 aspect ratios with dimension mapping",
+        "src/pipeline/text_overlay.py \u00e2\u20ac\u201d updated for 9:16 and 16:9 layouts (distinct text zones per ratio)",
+        "src/pipeline/run_pipeline.py \u00e2\u20ac\u201d iterates all ratios \u00c3\u2014 all products",
+        "Image caching: SHA-256 hash key, ~/.cache/pai-pipeline/ directory",
+        "--dry-run flag: 1\u00c3\u20141 placeholder image, no Bedrock calls, dry_run=true in manifest",
+        ".claude/skills/pipeline-status.md \u00e2\u20ac\u201d reads outputs/runs/*.json manifests, shows run table",
+        ".claude/skills/view-results.md \u00e2\u20ac\u201d lists S3 objects per SKU, optionally opens images"
+      ],
+      "success_criteria": [
+        "Full run produces \u00e2\u2030\u00a56 images (2 products \u00c3\u2014 3 ratios) in S3 organized as {SKU}/{region}/front_label/, back_label/, wraparound/",
+        "Human inspects all 3 aspect ratios \u00e2\u20ac\u201d text overlay readable across all formats (G-003 gate)",
+        "Second run with same brief is faster (cache hit observed)",
+        "PAI_DRY_RUN=1 completes with no S3 image uploads and manifest shows dry_run: true",
+        "/pipeline-status shows recent run table in Claude Code"
+      ],
+      "team_allocation": [
+        "Claude Code AI Agent (100%)"
+      ],
+      "dependencies": [
+        "P-002 complete \u00e2\u20ac\u201d G-002 passed, pipeline producing \u00e2\u2030\u00a52 images"
+      ],
+      "risks": [
+        "Pillow text layout differences across 3 aspect ratios \u00e2\u20ac\u201d 9:16 tall format and 16:9 wide format require distinct coordinate zones; timebox to 1 hour total across all 3 layouts",
+        "Cache key collision possible if prompt hashing implementation has bugs \u00e2\u20ac\u201d verify with identical + slightly different prompts"
+      ]
+    },
+    {
+      "id": "P-004",
+      "name": "CI/CD and Testing",
+      "start_week": 1,
+      "end_week": 1,
+      "objectives": [
+        "GitHub Actions ci.yml passes: ruff lint + pytest unit tests + pip-audit on every push",
+        "GitHub Actions deploy.yml runs CloudFormation update on main push",
+        "pytest test suite covers all 5 pipeline modules (unit) + 1 integration test (dry-run)",
+        "Claude Code hooks verified: auto-lint on file edit, test gate on Stop"
+      ],
+      "deliverables": [
+        ".github/workflows/ci.yml \u00e2\u20ac\u201d lint (ruff) + pytest (unit) + pip-audit; triggers on push and PR",
+        ".github/workflows/deploy.yml \u00e2\u20ac\u201d CloudFormation deploy; triggers on main push only",
+        "tests/test_sku_parser.py \u00e2\u20ac\u201d valid/invalid brief, 2-product brief, field validation",
+        "tests/test_prompt_constructor.py \u00e2\u20ac\u201d prompt contains product name, attributes, region",
+        "tests/test_image_generator.py \u00e2\u20ac\u201d dry-run returns bytes, cache hit skips Bedrock",
+        "tests/test_text_overlay.py \u00e2\u20ac\u201d output is bytes, correct dimensions per ratio",
+        "tests/test_asset_manager.py \u00e2\u20ac\u201d S3 key builder produces correct structure",
+        "tests/test_integration.py \u00e2\u20ac\u201d marked @pytest.mark.integration; full pipeline --dry-run",
+        "Makefile or pyproject.toml \u00e2\u20ac\u201d make audit, make test, make lint targets",
+        "GitHub Actions SHA-pinned action versions in both workflow files"
+      ],
+      "success_criteria": [
+        "git push origin main triggers ci.yml \u00e2\u20ac\u201d green checkmark within 2 minutes",
+        "pytest tests/ -v -m 'not integration' passes with all unit tests green",
+        "ruff check src/ exits 0 (zero lint errors)",
+        "pip-audit exits 0 (no high/critical vulnerabilities in pinned deps)",
+        "Claude Code PostToolUse hook auto-lints a changed .py file (observe in Claude Code output)",
+        "DECISION GATE G-004 PASSED: GitHub Actions tab shows green on main"
+      ],
+      "team_allocation": [
+        "Claude Code AI Agent (100%)"
+      ],
+      "dependencies": [
+        "P-003 complete \u00e2\u20ac\u201d G-003 passed, all 3 ratios working"
+      ],
+      "risks": [
+        "GitHub Actions AWS credentials setup (OIDC or Secrets) requires IAM Identity Provider creation in console \u00e2\u20ac\u201d human task, 15 minutes",
+        "pip-audit may flag pinned dependency with known CVE \u00e2\u20ac\u201d upgrade to patch version and re-pin"
+      ]
+    },
+    {
+      "id": "P-005",
+      "name": "Docs and Demo",
+      "start_week": 1,
+      "end_week": 1,
+      "objectives": [
+        "README renders correctly on github.com with images embedded",
+        "4+ demo SKU briefs generate demo dataset (24+ images in S3)",
+        "Repo published at github.com/praeducer/pai-take-home-exercise with v1.0.0 tag",
+        "5-minute demo script rehearsable by interviewer"
+      ],
+      "deliverables": [
+        "README.md \u00e2\u20ac\u201d setup, how-to-run, example I/O with image embeds, design decisions, assumptions/limitations, backlog",
+        "BACKLOG.md \u00e2\u20ac\u201d future roadmap (PostgreSQL, Rekognition, multi-language, production scaling)",
+        "docs/design-decisions.md \u00e2\u20ac\u201d deep-dive: model selection rationale, Pillow vs server-side, flat JSON vs DB, Claude Code as interface",
+        "inputs/demo_briefs/ \u00e2\u20ac\u201d trail-mix-us.json, granola-bar-latam.json, energy-drink-apac.json, protein-bar-eu.json",
+        "outputs/demo/ \u00e2\u20ac\u201d best images downloaded from S3 for README embeds",
+        ".claude/skills/generate-demo.md \u00e2\u20ac\u201d runs all demo briefs with --model-tier final",
+        "docs/demo-script.md \u00e2\u20ac\u201d 5-step flow: architecture \u00e2\u2020\u2019 run-pipeline \u00e2\u2020\u2019 view results \u00e2\u2020\u2019 S3 \u00e2\u2020\u2019 CI/CD",
+        "git tag v1.0.0 pushed to origin"
+      ],
+      "success_criteria": [
+        "Visiting github.com/praeducer/pai-take-home-exercise shows README with embedded images",
+        "All README sections present and accurate (verified by human review)",
+        "Demo script can be executed end-to-end in \u00e2\u2030\u00a45 minutes",
+        "CI/CD badge in README shows green",
+        "DECISION GATE G-005 PASSED: human confirms repo is demo-ready"
+      ],
+      "team_allocation": [
+        "Claude Code AI Agent (80%)",
+        "Paul \u00e2\u20ac\u201d final human review and approval (20%)"
+      ],
+      "dependencies": [
+        "P-004 complete \u00e2\u20ac\u201d G-004 passed, CI/CD green on main"
+      ],
+      "risks": [
+        "README image embeds require outputs/demo/ images to be committed to repo \u00e2\u20ac\u201d verify LFS not needed for PNG files of this size (~1-5MB)",
+        "Demo SKU briefs with --model-tier final invoke Nova Canvas (4 briefs \u00c3\u2014 2 products \u00c3\u2014 3 ratios \u00c3\u2014 $0.04 = ~$1) \u00e2\u20ac\u201d acceptable with unconstrained budget"
+      ]
+    },
+    {
+      "id": "P-006",
+      "name": "Enhancements (Optional)",
+      "start_week": 1,
+      "end_week": 1,
+      "objectives": [
+        "Brand compliance checks via Claude Sonnet 4.6 LLM-as-judge",
+        "Regulatory content checks via synthesized JSON lookup table by region",
+        "Approval tracking appended to manifest.json (no separate database)"
+      ],
+      "deliverables": [
+        "src/pipeline/brand_checker.py \u00e2\u20ac\u201d LLM-as-judge via AnthropicBedrock: returns {compliant, issues, confidence}",
+        "src/pipeline/regulatory_checker.py \u00e2\u20ac\u201d JSON lookup: data/regulatory_requirements.json by region",
+        "tests/test_brand_checker.py, tests/test_regulatory_checker.py",
+        "manifest.json compliance section: {brand: {...}, regulatory: {...}}"
+      ],
+      "success_criteria": [
+        "Brand checker returns meaningful assessment for 2+ test images",
+        "Regulatory checker catches missing allergen disclosure for at least 1 configured test region",
+        "Manifest compliance section present after P-006 run",
+        "/pipeline-status shows compliance PASS/FAIL/WARN column"
+      ],
+      "team_allocation": [
+        "Claude Code AI Agent (100%)"
+      ],
+      "dependencies": [
+        "P-005 complete \u00e2\u20ac\u201d G-005 passed, repo published and demo-ready"
+      ],
+      "risks": [
+        "OPTIONAL PHASE: only start if P-005 is complete and interview is not imminent",
+        "Brand compliance LLM-as-judge results are non-deterministic \u00e2\u20ac\u201d document as indicative, not authoritative"
+      ]
+    }
+  ],
+  "decision_gates": [
+    {
+      "id": "G-001",
+      "name": "Bedrock First-Invocation Gate",
+      "blocking": true,
+      "after_phase": "P-001 pre-check (before coding starts)",
+      "criteria": [
+        "aws bedrock list-foundation-models --profile pai-exercise lists nova-canvas-v1:0 and titan-image-generator-v2:0",
+        "aws sts get-caller-identity --profile pai-exercise returns account 730007904340",
+        "Test invocation of amazon.titan-image-generator-v2:0 (cheapest, $0.01/img) succeeds \u2014 confirms credential chain and auto-enablement"
+      ],
+      "options": {
+        "go": "Proceed to P-001 coding (Claude Code scaffolding, CloudFormation)",
+        "conditional_go": "Nova Canvas pending approval \u00e2\u20ac\u201d use Titan V2 as temporary primary; switch to Nova Canvas when approved",
+        "no_go": "First invocation failed \u2014 verify IAM policy includes bedrock:InvokeModel and aws-marketplace:Subscribe; confirm profile credentials are set"
+      },
+      "decider": "Paul (CLI verification \u2014 no console action required for Amazon models; Amazon Nova, Titan, DeepSeek, Mistral, Meta, Qwen auto-enable without marketplace perms)",
+      "evidence_required": "Successful test invocation output OR dry-run pass. aws bedrock list-foundation-models showing nova-canvas-v1:0 in results."
+    },
+    {
+      "id": "G-002",
+      "name": "First Image Gate \u00e2\u20ac\u201d Minimum Demo State",
+      "blocking": true,
+      "after_phase": "P-002",
+      "criteria": [
+        "/run-pipeline inputs/sample_sku_brief.json completes without error",
+        "S3 output bucket contains \u00e2\u2030\u00a52 images (one per product, 1:1 ratio)",
+        "Human opens generated images and confirms text overlay is readable"
+      ],
+      "options": {
+        "go": "Proceed to P-003 (all 3 aspect ratios, quality improvements)",
+        "conditional_go": "Images generated but text overlay imperfect \u00e2\u20ac\u201d ship as-is for minimum demo, iterate in P-003",
+        "no_go": "Bedrock returning errors consistently or images are blank \u00e2\u20ac\u201d diagnose before proceeding"
+      },
+      "decider": "Paul (human image inspection)",
+      "evidence_required": "Human has visually confirmed at least 1 generated image with readable product name"
+    },
+    {
+      "id": "G-003",
+      "name": "Full Requirements Gate",
+      "blocking": true,
+      "after_phase": "P-003",
+      "criteria": [
+        "Full pipeline run produces \u00e2\u2030\u00a56 images (2 products \u00c3\u2014 3 aspect ratios) in S3",
+        "S3 organized as {SKU}/{region}/front_label/, back_label/, wraparound/",
+        "Human confirms all 3 aspect ratios are visually correct and text is legible",
+        "Manifest.json written to both S3 and local outputs/runs/"
+      ],
+      "options": {
+        "go": "Proceed to P-004 (CI/CD and testing)",
+        "conditional_go": "All 3 ratios functional but one layout imperfect \u00e2\u20ac\u201d proceed if text is minimally readable",
+        "no_go": "One or more aspect ratios producing blank/corrupt images \u00e2\u20ac\u201d diagnose before proceeding"
+      },
+      "decider": "Paul (human visual inspection of all 3 formats)",
+      "evidence_required": "aws s3 ls s3://{output-bucket}/ --recursive showing front_label/, back_label/, wraparound/ directories"
+    },
+    {
+      "id": "G-004",
+      "name": "CI/CD Gate",
+      "blocking": true,
+      "after_phase": "P-004",
+      "criteria": [
+        "GitHub Actions ci.yml shows green checkmark on main branch",
+        "GitHub Actions deploy.yml ran successfully on last main push",
+        "pytest tests/ -v -m 'not integration' passes locally"
+      ],
+      "options": {
+        "go": "Proceed to P-005 (docs and demo preparation)",
+        "conditional_go": "ci.yml passing but deploy.yml has credential issues \u00e2\u20ac\u201d proceed to docs, fix deploy async",
+        "no_go": "Unit tests failing or pip-audit blocking on high CVE \u00e2\u20ac\u201d must fix before proceeding"
+      },
+      "decider": "Paul (GitHub Actions tab review)",
+      "evidence_required": "Screenshot or URL of GitHub Actions tab showing green checkmarks on main"
+    },
+    {
+      "id": "G-005",
+      "name": "Demo Readiness Gate",
+      "blocking": false,
+      "after_phase": "P-005",
+      "criteria": [
+        "github.com/praeducer/pai-take-home-exercise shows README with embedded images",
+        "Demo script can be executed in \u00e2\u2030\u00a45 minutes by Paul",
+        "CI/CD badge green in README",
+        "git tag v1.0.0 pushed to origin"
+      ],
+      "options": {
+        "go": "Submit repo link to interview panel \u00e2\u20ac\u201d exercise complete",
+        "conditional_go": "Repo functional but README images not embedded \u00e2\u20ac\u201d submit with S3 links instead",
+        "no_go": "Core pipeline not working (should not reach G-005 without G-002/G-003 passing)"
+      },
+      "decider": "Paul (final human review before submission)",
+      "evidence_required": "github.com repo URL reviewed by Paul; demo-script.md rehearsed successfully"
+    }
+  ],
+  "sprints": [
+    {
+      "id": "BLOCK-1",
+      "name": "Foundation Setup",
+      "duration_hours": 1.5,
+      "phase": "P-001",
+      "goal": "Repo created, AWS stack deployed, Claude Code scaffolded, G-001 verified",
+      "tasks": [
+        "gh repo create praeducer/pai-take-home-exercise --public --clone --gitignore Python",
+        "Create directory structure: src/, tests/, infra/cloudformation/, .claude/skills/, .github/workflows/",
+        "Write infra/cloudformation/stack.yaml (S3 \u00c3\u2014 2 with Block Public Access, IAM role, Budget alarm)",
+        "aws cloudformation deploy --stack-name pai-exercise --capabilities CAPABILITY_IAM",
+        "python -m venv .venv && pip install boto3 pillow anthropic pytest ruff jsonschema pip-audit",
+        "Pin requirements.txt with exact versions",
+        "Write CLAUDE.md \u00e2\u20ac\u201d project purpose, skills index, architecture summary",
+        "Scaffold 8 Claude Code skill stubs in .claude/skills/ (run-pipeline through generate-demo)",
+        "Write .claude/settings.json \u00e2\u20ac\u201d PostToolUse lint, Stop test gate, PreToolUse Bash guard",
+        "Write .mcp.json \u00e2\u20ac\u201d awslabs.aws-iac-mcp-server@latest (uv stdio), AWS Knowledge MCP (remote HTTP)",
+        "GATE G-001: verify Bedrock model access",
+        "git add . && git commit -m 'feat(phase-01): foundation complete' && git push"
+      ],
+      "time_block": "Hours 0-1.5 (session start)"
+    },
+    {
+      "id": "BLOCK-2",
+      "name": "Pipeline Modules",
+      "duration_hours": 2.0,
+      "phase": "P-002",
+      "goal": "All 5 pipeline modules implemented and importable; SKU brief parses and validates",
+      "tasks": [
+        "Write src/schemas/sku_brief_schema.json with required fields",
+        "Write inputs/sample_sku_brief.json (2+ products, trail mix example)",
+        "Implement src/pipeline/sku_parser.py \u00e2\u20ac\u201d parse_sku_brief + validate_sku_brief",
+        "Implement src/pipeline/asset_manager.py \u00e2\u20ac\u201d check_s3_asset, download_s3_asset, upload_output, build_output_key",
+        "Implement src/pipeline/prompt_constructor.py \u00e2\u20ac\u201d build_image_prompt + build_text_overlay_content",
+        "Implement src/pipeline/text_reasoning.py \u00e2\u20ac\u201d AnthropicBedrock(aws_region='us-east-1') client wrapper",
+        "Implement src/pipeline/image_generator.py \u00e2\u20ac\u201d generate_image with retry/backoff + 1\u00c3\u20141 dry-run placeholder"
+      ],
+      "time_block": "Hours 1.5-3.5"
+    },
+    {
+      "id": "BLOCK-3",
+      "name": "Overlay, Output, and First Full Run",
+      "duration_hours": 1.25,
+      "phase": "P-002",
+      "goal": "Pipeline end-to-end: /run-pipeline produces \u00e2\u2030\u00a52 images in S3; G-002 human gate passed",
+      "tasks": [
+        "Implement src/pipeline/text_overlay.py \u00e2\u20ac\u201d apply_overlay for 1:1 layout (title, attributes, regulatory)",
+        "Implement src/pipeline/output_manager.py \u00e2\u20ac\u201d write_manifest to S3 + local",
+        "Implement src/pipeline/run_pipeline.py \u00e2\u20ac\u201d orchestrator for all products \u00c3\u2014 1:1 ratio",
+        "Update .claude/skills/run-pipeline.md to invoke run_pipeline.py",
+        "Run: /run-pipeline inputs/sample_sku_brief.json",
+        "GATE G-002: Paul opens images and confirms text overlay is readable",
+        "git commit -m 'feat(phase-02): core pipeline \u00e2\u20ac\u201d SKU parser to S3 upload'"
+      ],
+      "time_block": "Hours 3.5-4.75"
+    },
+    {
+      "id": "BLOCK-4",
+      "name": "All 3 Ratios + Caching + Dry-Run",
+      "duration_hours": 2.25,
+      "phase": "P-003",
+      "goal": "6+ images per run, S3 organized by format, caching working, G-003 human gate passed",
+      "tasks": [
+        "Update image_generator.py: dimension map for 1:1 (1024\u00c3\u20141024), 9:16 (576\u00c3\u20141024), 16:9 (1024\u00c3\u2014576)",
+        "Update text_overlay.py: 9:16 layout (product top, description mid, regulatory bottom) + 16:9 layout (name left, attributes right, regulatory strip)",
+        "Update run_pipeline.py to iterate all 3 ratios \u00c3\u2014 all products",
+        "Implement image caching: SHA-256 hash of (prompt+dimensions+model_id), ~/.cache/pai-pipeline/",
+        "Implement --dry-run mode end-to-end (env var PAI_DRY_RUN or flag)",
+        "Update .claude/skills/pipeline-status.md and view-results.md",
+        "Run full pipeline: verify 6+ images in S3 organized by format",
+        "GATE G-003: Paul inspects all 3 ratios",
+        "git commit -m 'feat(phase-03): all 3 aspect ratios, caching, dry-run, manifest'"
+      ],
+      "time_block": "Hours 4.75-7.0"
+    },
+    {
+      "id": "BLOCK-5",
+      "name": "CI/CD and Test Suite",
+      "duration_hours": 1.75,
+      "phase": "P-004",
+      "goal": "GitHub Actions green on main, full unit test suite passing, G-004 gate passed",
+      "tasks": [
+        "Write tests/test_sku_parser.py, test_prompt_constructor.py, test_image_generator.py, test_text_overlay.py, test_asset_manager.py",
+        "Write tests/test_integration.py @pytest.mark.integration \u00e2\u20ac\u201d full dry-run via subprocess",
+        "Write .github/workflows/ci.yml (SHA-pinned actions: checkout + setup-python)",
+        "Write .github/workflows/deploy.yml (AWS credentials via GitHub Secrets or OIDC)",
+        "Write Makefile with: make test, make lint, make audit targets",
+        "Run: ruff check src/ && pytest tests/ -v -m 'not integration'",
+        "git push origin main \u00e2\u20ac\u201d trigger CI; verify GitHub Actions tab",
+        "GATE G-004: Paul confirms green checkmarks on main",
+        "git commit -m 'feat(phase-04): CI/CD, full test suite, auto-lint hooks'"
+      ],
+      "time_block": "Hours 7.0-8.75"
+    },
+    {
+      "id": "BLOCK-6",
+      "name": "Docs, Demo Data, Publish",
+      "duration_hours": 1.0,
+      "phase": "P-005",
+      "goal": "README renders with images on GitHub, demo rehearsed, v1.0.0 tagged",
+      "tasks": [
+        "Write README.md (all required sections, image embeds from outputs/demo/)",
+        "Write BACKLOG.md (PostgreSQL, Rekognition, multi-language, production scaling)",
+        "Write docs/design-decisions.md",
+        "Create inputs/demo_briefs/ (4 SKU briefs)",
+        "Run: /generate-demo \u00e2\u20ac\u201d 4 briefs \u00c3\u2014 final tier",
+        "Download demo images from S3 to outputs/demo/",
+        "Write docs/demo-script.md",
+        "git tag v1.0.0 -m 'PoC complete \u00e2\u20ac\u201d all exercise requirements met'",
+        "git push origin main && git push origin v1.0.0",
+        "GATE G-005: Paul reviews github.com repo and confirms demo-ready"
+      ],
+      "time_block": "Hours 8.75-9.75"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "M-001",
+      "name": "AWS Environment Ready \u00e2\u20ac\u201d G-001 Passed",
+      "target_date": "2026-03-18",
+      "phase": "P-001",
+      "gate_type": "review"
+    },
+    {
+      "id": "M-002",
+      "name": "Minimum Demo State \u00e2\u20ac\u201d First Image in S3",
+      "target_date": "2026-03-18",
+      "phase": "P-002",
+      "gate_type": "demo"
+    },
+    {
+      "id": "M-003",
+      "name": "Full Exercise Requirements Met \u00e2\u20ac\u201d All 3 Ratios",
+      "target_date": "2026-03-18",
+      "phase": "P-003",
+      "gate_type": "review"
+    },
+    {
+      "id": "M-004",
+      "name": "CI/CD and Quality Gates Passing",
+      "target_date": "2026-03-18",
+      "phase": "P-004",
+      "gate_type": "review"
+    },
+    {
+      "id": "M-005",
+      "name": "PoC Complete \u00e2\u20ac\u201d Demo Ready \u00e2\u20ac\u201d v1.0.0 Tagged",
+      "target_date": "2026-03-18",
+      "phase": "P-005",
+      "gate_type": "signoff"
+    }
+  ],
+  "critical_path": [
+    "HUMAN ACTION: Verify IAM policy includes aws-marketplace:Subscribe for Claude Sonnet 4.6 auto-enablement \u2014 Amazon models auto-enable on first invocation \u00e2\u20ac\u201d MUST complete before BLOCK-1",
+    "HUMAN GATE: aws configure --profile pai-exercise \u00e2\u20ac\u201d MUST complete before CloudFormation deploy",
+    "CloudFormation deploy \u00e2\u2020\u2019 G-001 gate (Bedrock accessible) \u00e2\u2020\u2019 BLOCK-2 pipeline modules",
+    "image_generator.py \u00e2\u2020\u2019 text_overlay.py \u00e2\u2020\u2019 run_pipeline.py \u00e2\u2020\u2019 first full run \u00e2\u2020\u2019 G-002 (MINIMUM DEMO STATE)",
+    "All 3 aspect ratios \u00e2\u2020\u2019 caching \u00e2\u2020\u2019 dry-run \u00e2\u2020\u2019 G-003 \u00e2\u2020\u2019 CI/CD setup \u00e2\u2020\u2019 G-004",
+    "G-004 (CI/CD green) \u00e2\u2020\u2019 README + demo data \u00e2\u2020\u2019 G-005 \u00e2\u2020\u2019 v1.0.0 tag \u00e2\u2020\u2019 submission",
+    "NOTE: Claude Code scaffolding (CLAUDE.md, skills, hooks, MCP) is parallel to CloudFormation during BLOCK-1 \u00e2\u20ac\u201d not on critical path",
+    "NOTE: Test suite (BLOCK-5) is critical for CI/CD gate G-004 but does not block image generation quality work in P-003"
+  ],
+  "risk_register": [
+    {
+      "id": "R-001",
+      "category": "technical",
+      "risk": "Bedrock model access not enabled before development starts \u00e2\u20ac\u201d G-001 blocks all pipeline work",
+      "likelihood": "medium",
+      "impact": "high",
+      "mitigation": "Enable Nova Canvas, Titan V2, and Claude Sonnet 4.6 in Bedrock console before first BLOCK-1 task. This is the highest-value pre-work step and takes ~5 minutes in the console.",
+      "owner": "Paul (human console action)",
+      "trigger": "aws bedrock list-foundation-models does not show nova-canvas-v1:0"
+    },
+    {
+      "id": "R-002",
+      "category": "technical",
+      "risk": "Nova Canvas text rendering quality insufficient for packaging label copy",
+      "likelihood": "low",
+      "impact": "medium",
+      "mitigation": "Nova Canvas scored ImageReward 1.250 per Amazon Nova Technical Report (arxiv 2506.12103) \u00e2\u20ac\u201d strong text-to-image fidelity for packaging use case. If quality is unsatisfactory: adjust prompt, use negative prompts, or accept Titan V2 for PoC demonstration.",
+      "owner": "Claude Code AI Agent",
+      "trigger": "Generated images miss product name or attributes entirely in 3+ test runs"
+    },
+    {
+      "id": "R-003",
+      "category": "technical",
+      "risk": "Pillow text overlay coordinate mapping for 9:16 and 16:9 ratios requires more iteration than estimated",
+      "likelihood": "medium",
+      "impact": "low",
+      "mitigation": "Timebox text overlay per ratio to 20 minutes. If layout is imperfect after timebox, ship with functional (not pixel-perfect) overlay \u00e2\u20ac\u201d PoC standard is demonstrability, not production quality. Move coordinate tuning to BACKLOG.",
+      "owner": "Claude Code AI Agent",
+      "trigger": "Text overlaps critical image elements or is truncated on 2+ test runs per ratio"
+    },
+    {
+      "id": "R-004",
+      "category": "technical",
+      "risk": "GitHub Actions CI/CD credential setup (OIDC or Secrets) requires additional human IAM configuration",
+      "likelihood": "medium",
+      "impact": "low",
+      "mitigation": "Use GitHub Secrets (simpler) for initial deploy.yml setup. OIDC federation is preferred but adds 15 minutes of IAM Identity Provider setup in console. If OIDC is blocked, GitHub Secrets with short-lived key rotation is acceptable for PoC.",
+      "owner": "Paul (human IAM console action if OIDC chosen)",
+      "trigger": "deploy.yml GitHub Actions run fails with credential error on first push"
+    },
+    {
+      "id": "R-005",
+      "category": "resource",
+      "risk": "GenAI API costs unexpectedly high due to demo data generation (final tier runs)",
+      "likelihood": "low",
+      "impact": "low",
+      "mitigation": "Budget is unconstrained. Expected total: ~$5. AWS Budget alarm at $25 provides early warning. All development runs use Titan V2 (dev tier, $0.12/run). Nova Canvas (final tier, $0.48/run) only for demo generation in P-005.",
+      "owner": "Paul (Budget alarm monitoring)",
+      "trigger": "AWS Budget alarm at $25 threshold fires"
+    },
+    {
+      "id": "R-006",
+      "category": "technical",
+      "risk": "Claude Code hooks not triggering correctly \u00e2\u20ac\u201d auto-lint or test gate not firing as expected",
+      "likelihood": "low",
+      "impact": "low",
+      "mitigation": "Verify hooks by editing a .py file and observing lint output in Claude Code after P-001. hooks in .claude/settings.json use PostToolUse on Edit|Write and Stop event \u00e2\u20ac\u201d confirm Claude Code version supports these event types.",
+      "owner": "Claude Code AI Agent",
+      "trigger": "Edit a Python file and lint hook does not run within 5 seconds"
+    },
+    {
+      "id": "R-007",
+      "category": "technical",
+      "risk": "AnthropicBedrock text reasoning adds latency to pipeline, slowing iteration",
+      "likelihood": "low",
+      "impact": "low",
+      "mitigation": "Text reasoning (C-012) is optional enhancement to prompt construction \u00e2\u20ac\u201d if it adds >5s latency per image, disable it and fall back to f-string templates for PoC scope. Claude Sonnet 4.6 typical P50 latency is <2s for short prompts.",
+      "owner": "Claude Code AI Agent",
+      "trigger": "Per-image pipeline time exceeds 60s P50 (NFR-001) with text reasoning enabled"
+    },
+    {
+      "id": "R-008",
+      "category": "timeline",
+      "risk": "Scope expansion in P-005 (README details, demo data quality) delays G-005",
+      "likelihood": "medium",
+      "impact": "low",
+      "mitigation": "Timebox P-005 to 1 hour. README follows a template from docs/design-decisions.md. Demo data uses /generate-demo skill \u00e2\u20ac\u201d one invocation handles all 4 briefs. P-006 enhancements are strictly optional.",
+      "owner": "Claude Code AI Agent",
+      "trigger": "BLOCK-6 exceeds 1.5 hours wall clock"
+    }
+  ],
+  "dependencies": {
+    "internal": [
+      {
+        "from": "P-001",
+        "to": "P-002",
+        "type": "finish_to_start"
+      },
+      {
+        "from": "P-002",
+        "to": "P-003",
+        "type": "finish_to_start"
+      },
+      {
+        "from": "P-003",
+        "to": "P-004",
+        "type": "finish_to_start"
+      },
+      {
+        "from": "P-004",
+        "to": "P-005",
+        "type": "finish_to_start"
+      },
+      {
+        "from": "P-005",
+        "to": "P-006",
+        "type": "finish_to_start"
+      },
+      {
+        "from": "BLOCK-2",
+        "to": "BLOCK-3",
+        "type": "finish_to_start"
+      },
+      {
+        "from": "BLOCK-3",
+        "to": "BLOCK-4",
+        "type": "finish_to_start"
+      },
+      {
+        "from": "BLOCK-4",
+        "to": "BLOCK-5",
+        "type": "finish_to_start"
+      },
+      {
+        "from": "BLOCK-5",
+        "to": "BLOCK-6",
+        "type": "finish_to_start"
+      }
+    ],
+    "external": [
+      {
+        "dependency": "HUMAN ACTION: Add aws-marketplace:Subscribe, aws-marketplace:Unsubscribe, aws-marketplace:ViewSubscriptions to IAM user policy \u2014 required for Claude Sonnet 4.6 first-invocation auto-enablement. Amazon models need no action.",
+        "owner": "Paul",
+        "needed_by": "2026-03-18",
+        "status": "required before first Claude Sonnet 4.6 invocation (not a blocking pre-start gate for Amazon models)"
+      },
+      {
+        "dependency": "HUMAN ACTION: Run aws configure --profile pai-exercise \u00e2\u20ac\u201d enter Access Key ID, Secret, region us-east-1",
+        "owner": "Paul",
+        "needed_by": "2026-03-18",
+        "status": "required before CloudFormation deploy in P-001"
+      },
+      {
+        "dependency": "HUMAN ACTION: Verify gh auth status shows authenticated as praeducer; run gh auth login if not",
+        "owner": "Paul",
+        "needed_by": "2026-03-18",
+        "status": "required before GitHub repo creation in BLOCK-1"
+      },
+      {
+        "dependency": "HUMAN ACTION: Visual inspection of generated images at G-002 (minimum demo state) and G-003 (all 3 ratios)",
+        "owner": "Paul",
+        "needed_by": "2026-03-18",
+        "status": "required gates \u00e2\u20ac\u201d P-003 and P-004 cannot start without human approval"
+      },
+      {
+        "dependency": "Target repo local path: C:\\dev\\pai-take-home-exercise (must exist before BLOCK-1)",
+        "owner": "Paul",
+        "needed_by": "2026-03-18",
+        "status": "created by gh repo create --clone in BLOCK-1 task 1"
+      }
+    ]
+  },
+  "communication_plan": {
+    "stakeholder_updates": "AI-assisted self-directed PoC. Implementation agent (Claude Code) reports to Paul at each decision gate (G-001 through G-005). No external status updates required until G-005 (repo published for interview panel).",
+    "demo_schedule": [
+      "Live demo to Adobe interview panel: 20-30 minutes covering architecture overview + live pipeline execution",
+      "Demo agenda: (1) Architecture overview 5min, (2) Code walkthrough via Claude Code skills 5min, (3) Live /run-pipeline execution 5min, (4) S3 output browsing 2min, (5) GitHub Actions CI/CD review 2min, (6) Q&A remaining time",
+      "Target repo: github.com/praeducer/pai-take-home-exercise (public, with README images and v1.0.0 tag)",
+      "Reference: docs/demo-script.md for 5-step flow"
+    ],
+    "decision_points": [
+      {
+        "date": "2026-03-18",
+        "decision": "Model selection confirmation: Nova Canvas (primary) vs Titan V2 (dev/fallback) \u00e2\u20ac\u201d based on Bedrock access confirmation at G-001",
+        "decider": "Paul \u00e2\u20ac\u201d verify nova-canvas-v1:0 accessible, not just Titan"
+      },
+      {
+        "date": "2026-03-18",
+        "decision": "GitHub Actions credentials approach: OIDC federation (preferred) vs GitHub Secrets (simpler) \u00e2\u20ac\u201d based on available time and IAM console access at P-004",
+        "decider": "Paul \u00e2\u20ac\u201d choose based on time available during P-004"
+      },
+      {
+        "date": "2026-03-18",
+        "decision": "Phase 6 (Enhancements) inclusion: brand compliance + regulatory checks \u00e2\u20ac\u201d only if G-005 passes with time remaining",
+        "decider": "Paul \u00e2\u20ac\u201d go/no-go based on interview timeline"
+      }
+    ]
+  },
+  "_metadata": {
+    "author": "sa-agent",
+    "date": "2026-03-18",
+    "validation_status": "complete",
+    "version": "2.0",
+    "planner": "sa-agent",
+    "planning_date": "2026-03-18",
+    "last_updated": "2026-03-19"
+  }
+}
