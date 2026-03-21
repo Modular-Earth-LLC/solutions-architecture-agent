@@ -4,7 +4,7 @@
 This document captures the configuration for controlling a Claude Code desktop session remotely from an iOS device using the Claude mobile app.
 
 ## Prerequisites
-- Claude Code >= v2.1.51 (current: v2.1.80)
+- Claude Code >= v2.1.51 (current: v2.1.79 — verified)
 - Pro, Max, Team, or Enterprise plan
 - Authentication via `/login` to claude.ai (not API key)
 - Claude iOS app installed: https://apps.apple.com/us/app/claude-by-anthropic/id6473753684
@@ -62,6 +62,40 @@ claude remote-control --name "SA Agent" --spawn worktree --capacity 4
 | "Disabled by organization policy" | Admin must enable at claude.ai/admin-settings/claude-code |
 | Session disconnects | Terminal must stay open; extended outage >10min causes timeout |
 | Can't find session on iOS | Ensure same claude.ai account on both devices |
+
+## What's Done (Automated by Claude Code)
+- [x] Feature branch merged to main (no conflicts, no work lost)
+- [x] `Bash(claude *)` permission added to `.claude/settings.json`
+- [x] SessionStart hook added — validates version + env vars on every session
+- [x] `hooks/session-remote-ready.sh` created and tested (outputs "Remote iOS control ready")
+- [x] `grep -oP` portability fix applied (→ `grep -oE`)
+- [x] Feature branch deleted (local + remote)
+- [x] Claude Code v2.1.79 confirmed (>= 2.1.51 requirement met)
+
+## What You Need to Do (3 steps, ~2 minutes)
+
+### Step 1: Install Claude iOS app (if not already)
+Download from: https://apps.apple.com/us/app/claude-by-anthropic/id6473753684
+
+### Step 2: Ensure same account on both devices
+Log into the Claude iOS app with the same claude.ai account you use for Claude Code on your desktop. If you use a different login method on each, run `/logout` then `/login` in Claude Code to re-authenticate via claude.ai.
+
+### Step 3: Start Remote Control
+In your Claude Code terminal, type:
+```
+/remote-control SA Agent
+```
+This displays a QR code and URL. Scan the QR code with the Claude iOS app, or open the URL in Safari on your phone. You're connected.
+
+**For future sessions**, start with remote control enabled:
+```bash
+claude --remote-control "SA Agent"
+```
+
+**For background server mode** (persistent, supports multiple sessions):
+```bash
+claude remote-control --name "SA Agent" --spawn worktree --capacity 4
+```
 
 ## Multi-Device Sync
 - Messages sync across terminal, browser, and phone
