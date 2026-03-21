@@ -16,21 +16,21 @@
       "iterations": [
         {
           "iteration": 1,
-          "focus": "Completeness and assignment requirement coverage",
-          "findings_count": 5,
-          "score": 8.6
+          "scores": { "score": 8.6, "max": 10, "notes": "Completeness and assignment requirement coverage" },
+          "overall_score": 8.6,
+          "findings_count": 5
         },
         {
           "iteration": 2,
-          "focus": "Cross-reference consistency and numerical accuracy",
-          "findings_count": 3,
-          "score": 8.8
+          "scores": { "score": 8.8, "max": 10, "notes": "Cross-reference consistency and numerical accuracy" },
+          "overall_score": 8.8,
+          "findings_count": 3
         },
         {
           "iteration": 3,
-          "focus": "Final polish — TRM validation against assignment PDF",
-          "findings_count": 1,
-          "score": 8.9
+          "scores": { "score": 8.9, "max": 10, "notes": "Final polish — TRM validation against assignment PDF" },
+          "overall_score": 8.9,
+          "findings_count": 1
         }
       ],
       "scores": {
@@ -48,9 +48,9 @@
           "priority": "P1",
           "severity": "medium",
           "category": "completeness",
-          "description": "WA scores in architecture.json are self-assessed (7.0-8.5 range). Parallel WA reviewer agents were launched but scores not yet calibrated.",
+          "finding": "WA scores in architecture.json are self-assessed (7.0-8.5 range). Parallel WA reviewer agents were launched but scores not yet calibrated.",
           "recommendation": "When WA agent results arrive, update architecture.json well_architected_scores with agent-provided values. Self-assessment typically overestimates by 1-2 points.",
-          "status": "acknowledged",
+          "status": "deferred",
           "resolution": "WA agents running in background. Scores will be updated when they complete."
         },
         {
@@ -58,9 +58,9 @@
           "priority": "P2",
           "severity": "low",
           "category": "technical_soundness",
-          "description": "AWS infrastructure monthly cost of $33K/month cites 'AWS published pricing as of March 2026' but does not include specific pricing page URLs.",
+          "finding": "AWS infrastructure monthly cost of $33K/month cites 'AWS published pricing as of March 2026' but does not include specific pricing page URLs.",
           "recommendation": "Note in estimate.json that pricing should be verified against aws.amazon.com/pricing before client delivery. Enterprise pricing typically 20-30% lower than published on-demand rates.",
-          "status": "acknowledged",
+          "status": "deferred",
           "resolution": "Added pricing_notes caveat in estimate.json infrastructure_monthly section."
         },
         {
@@ -68,7 +68,7 @@
           "priority": "P2",
           "severity": "low",
           "category": "consistency",
-          "description": "Engagement.json lifecycle_state does not include proposal entry. Proposal was written to outputs/ but lifecycle not tracked.",
+          "finding": "Engagement.json lifecycle_state does not include proposal entry. Proposal was written to outputs/ but lifecycle not tracked.",
           "recommendation": "Add lifecycle_state.proposal entry to engagement.json.",
           "status": "resolved",
           "resolution": "Will add proposal lifecycle entry."
@@ -78,7 +78,7 @@
           "priority": "P0",
           "severity": "medium",
           "category": "completeness",
-          "description": "Assignment requirement R1.1a asks to 'clearly label all major components and integration mechanisms'. The system context Mermaid diagram labels components but edge labels are minimal.",
+          "finding": "Assignment requirement R1.1a asks to 'clearly label all major components and integration mechanisms'. The system context Mermaid diagram labels components but edge labels are minimal.",
           "recommendation": "Edge labels in system context diagram already include protocol labels (SFTP, REST API, AS2/SFTP, FHIR R4 Query, Eligibility API, etc.). This is sufficient for a presentation diagram. Detailed protocols documented in data_flows section.",
           "status": "resolved",
           "resolution": "Verified — edge labels present. Component table provides additional detail."
@@ -88,9 +88,9 @@
           "priority": "P2",
           "severity": "low",
           "category": "clarity",
-          "description": "Proposal speaker notes for Slide 2 (Executive Summary) could more explicitly reference Paul's relevant experience at Arine (50M members, 45+ health plans) to establish credibility.",
+          "finding": "Proposal speaker notes for Slide 2 (Executive Summary) could more explicitly reference Paul's relevant experience at Arine (50M members, 45+ health plans) to establish credibility.",
           "recommendation": "Speaker notes already reference Arine in Slide 1 intro. Consider adding a brief callout: 'At Arine, I manage the data platform supporting similar PA workflows across 45 health plans.'",
-          "status": "acknowledged",
+          "status": "deferred",
           "resolution": "Minor enhancement for presenter to add during delivery."
         }
       ],
