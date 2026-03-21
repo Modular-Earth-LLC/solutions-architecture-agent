@@ -1,90 +1,98 @@
-# eng-2026-004: UAT Checklist — Deliverable Verification
+# eng-2026-004: Human Review Checklist
 
-Use this checklist to verify all key deliverables before the interview panel presentation.
-
-## Legend
-- **Confidence**: HIGH = well-grounded in verified research/experience | MEDIUM = sound reasoning but limited external validation | LOW = requires your expert judgment
-- **Priority**: MUST = verify before interview | SHOULD = verify if time permits | COULD = nice to have
+> **For Paul Prae only.** These items require your expert judgment, manual verification, or authorization decisions that Claude Code cannot make autonomously.
 
 ---
 
-## 1. Assignment Requirement Coverage
+## 1. Technical Decisions to Validate
 
-| # | Requirement | Slide | Status | Priority |
-|---|------------|-------|--------|----------|
-| 1.1 | System context diagram showing PA request flow | 3-4 | Verify diagram renders, all components labeled | MUST |
-| 1.1a | Major components labeled (systems, services, data stores) | 3-4 | Check component table completeness | MUST |
-| 1.1b | Integration mechanisms labeled (APIs, queues, file transfer) | 3-4 | Check edge labels on Mermaid diagram | MUST |
-| 1.2a | Inbound PA Request Ingestion design | 5-6 | Verify fax/portal/EDI flows are clear | MUST |
-| 1.2b | Clinical Data Access with FHIR/HL7 role specified | 7 | Verify FHIR/HL7 table is accurate | MUST |
-| 1.3 | Top 3 security risks with specific mitigations | 8-9 | Verify mitigations are architectural patterns (not generic) | MUST |
-| 2.1 | Executive summary for CIO/C-Suite | 2 | Read aloud — does it resonate for a non-technical audience? | MUST |
-| 2.2 | 12-week roadmap with decision points | 10 | Verify phases match assignment suggestion | MUST |
-| 3.1 | MLOps architecture (drift + feedback loop) | 11 | Verify PSI/KS claims are technically accurate | MUST |
-| 3.2 | Multi-tenant vs multi-instance justification | 12 | Verify trade-off table is balanced | MUST |
+These are design choices where your domain expertise is the final authority.
+
+| # | Decision | Current Choice | Your Action | Why You |
+|---|----------|---------------|-------------|---------|
+| TD-1 | **Autonomize AI deploys on Azure, not AWS** | Architecture assumes AWS PrivateLink to Autonomize AI. But their Azure Marketplace listing and Pegasus Program suggest Azure-native deployment. | Ask Autonomize AI in the interview: "What's your deployment model for AWS-primary payers?" Adjust deployment diagram if needed. | Only you can ask this in the interview. |
+| TD-2 | **60% auto-determination target** | Set at 60% for Phase 1. Altais achieved 50%. Industry benchmarks: 50-76%. | Is 60% the right balance of ambition vs. credibility for this audience? Your Arine experience with similar scale processing is the benchmark. | Clinical operations judgment call. |
+| TD-3 | **12-week timeline feasibility** | 5 phases, 13 FTEs, first LOB only. Aggressive if legacy DB connectors are complex. | Is 4 weeks for core integration build realistic with 4 senior devs? Consider your experience with similar enterprise integrations at AWS/Booz Allen. | You've done this at enterprise scale. |
+| TD-4 | **Kafka partitions vs topics for LOB isolation** | Current: partition-level. STRIDE recommends topic-level. Trade-off: topic-level = stronger isolation but 20x more topics to manage. | Which matches your operational experience? At Arine, how is multi-tenant data isolation handled in streaming? | Your Kafka operational experience. |
+| TD-5 | **TriZetto Facets API assumptions** | Assumed REST API + JDBC. Real Facets deployments vary. | If asked, acknowledge this is validated during Discovery (Week 1-2). Do you have Facets experience to draw on? | Payer core system knowledge. |
+| TD-6 | **Hourly rates ($150-$250/hr)** | US market senior consulting rates. Not cited from specific source. | Do these feel right? Does Autonomize AI use different rate structures? | Market rate knowledge. |
 
 ---
 
-## 2. Technical Accuracy — Areas Requiring Your Review
+## 2. Presentation Review (Read Aloud)
 
-### HIGH CONFIDENCE (verified by research agents)
-- [x] AWS services exist and are production-ready (10/10 verified)
-- [x] CMS-0057-F deadlines and requirements (verified from CMS.gov)
-- [x] FHIR R4 resource types for Da Vinci PAS (verified from HL7.org)
-- [x] HIPAA Security Rule sections cited correctly
-- [x] Numerical consistency across all deliverables
+Do these before the interview. No AI can substitute for hearing yourself present.
 
-### MEDIUM CONFIDENCE — Review These
-| # | Item | Why Review | What to Check |
-|---|------|-----------|---------------|
-| MC-1 | **Autonomize AI platform capabilities** | Based on web research, not hands-on experience. "3 of top 5 health plans" is vendor-sourced. | Verify Genesis Platform, PA Copilot, AI Studio features match what you'll be told in the interview. Ask about deployment model (Azure vs. AWS). |
-| MC-2 | **60% auto-determination target** | Industry benchmarks suggest 50-76% is achievable, but depends heavily on clinical case mix and LOB. | Is 60% conservative enough for a first LOB? Autonomize AI's Altais case study claims 50% — our target is only slightly higher. |
-| MC-3 | **$33K/month infrastructure estimate** | Based on published AWS on-demand pricing. Enterprise pricing typically 20-30% lower. Textract volume ($5K/month) depends on actual fax page count. | Sanity check: does $33K/month feel right for this scale? Your Arine experience with similar scale data processing is the best benchmark. |
-| MC-4 | **SageMaker PSI support** | KS test is natively supported. PSI requires custom monitoring container. Our architecture references both. | Verify you're comfortable explaining this distinction in the interview. Could mention Wasserstein Distance as alternative. |
-| MC-5 | **SMART on FHIR implementation on AWS** | AWS provides reference architecture (Cognito + HealthLake) but it's not a turnkey managed service. Requires customization. | Verify you're comfortable explaining this as "reference architecture + custom integration" not "turn-key feature." |
-
-### LOW CONFIDENCE — Definitely Review These
-| # | Item | Why Review | What to Check |
-|---|------|-----------|---------------|
-| LC-1 | **Autonomize AI deployment on AWS** | Research shows Autonomize AI emphasizes Azure deployments (Azure Marketplace listing, Pegasus Program). Our architecture assumes AWS connectivity via PrivateLink. | Ask Autonomize AI directly: do they support AWS-hosted deployments? Or is cross-cloud connectivity (Azure ↔ AWS PrivateLink) the actual pattern? This could change the deployment view diagram. |
-| LC-2 | **Inter-agent security within Genesis Platform** | STRIDE Spoofing T-005 flagged that inter-agent authentication within Autonomize AI's platform is a black box. We can't verify their internal security posture. | In the interview, frame this as a contractual requirement: "We'd need to validate inter-agent authentication controls as part of the BAA." Shows security depth without claiming knowledge you don't have. |
-| LC-3 | **TriZetto Facets API capabilities** | We assumed REST API + JDBC access for eligibility. Real Facets deployments vary significantly by payer. | If asked about Facets integration specifics, acknowledge this is configurable and would be validated during the Discovery phase (Week 1-2). |
-| LC-4 | **12-week timeline feasibility** | Aggressive for full integration build + security hardening + UAT. Achievable if Autonomize AI provides turnkey PA Copilot. Risk: legacy DB connectors could take longer than estimated. | Your experience with similar enterprise integrations is the best judge. Is 4 weeks for core integration build realistic with 4 senior devs? |
-| LC-5 | **Hourly rates in estimate** | $150-$250/hr rates based on US market consulting rates. Not cited from a specific source. | Verify these feel right for the roles described. Autonomize AI may have different rate expectations for their team. |
+| # | Check | Time | How |
+|---|-------|------|-----|
+| PR-1 | **Read all 12 slide speaker notes aloud** | 60 min | Time yourself. Target ~5 min/slide. Mark any notes that feel unnatural or too long. |
+| PR-2 | **Review executive summary (Slide 2) as a CIO** | 5 min | Does it answer "why should I care?" in the first 30 seconds? |
+| PR-3 | **Review security slide (8-9) for specificity** | 5 min | Are mitigations architectural patterns (PrivateLink, SMART on FHIR, KMS) not generic ("use encryption")? |
+| PR-4 | **Review MLOps slide (11) for principal-level depth** | 5 min | Does it demonstrate strategic thinking beyond "we monitor for drift"? |
+| PR-5 | **Review multi-tenant slide (12) for trade-off clarity** | 5 min | Is the multi-tenant vs multi-instance justification convincing? |
+| PR-6 | **Verify your intro (Slide 1) establishes credibility** | 2 min | Does it mention Arine (50M members), AWS (3 years), and healthcare AI specifically? |
 
 ---
 
-## 3. Presentation Quality
+## 3. Diagrams — Visual Quality Check
 
-| # | Check | Priority | Status |
-|---|-------|----------|--------|
-| P-1 | Read all speaker notes aloud — do they flow for a 1-hour panel? | MUST | |
-| P-2 | Render all 6 Mermaid diagrams to PNG/SVG — do they look professional? | MUST | |
-| P-3 | Does the executive summary (Slide 2) stand alone for a CIO audience? | MUST | |
-| P-4 | Are security mitigations specific (tokenization, PrivateLink) not generic ("use encryption")? | MUST | |
-| P-5 | Does the MLOps slide (11) demonstrate senior/principal-level depth? | SHOULD | |
-| P-6 | Does the multi-tenant slide (12) clearly justify the trade-off decision? | SHOULD | |
-| P-7 | Are all numbers consistent across slides (2.5M/month, 45M members, 60% target, etc.)? | MUST | Verified |
-| P-8 | Does the intro (Slide 1) establish your credibility effectively? | SHOULD | |
+SVGs are rendered in `outputs/eng-2026-004/diagrams/`. Open each in a browser.
 
----
-
-## 4. Cross-Deliverable Consistency
-
-| # | Check | Files | Status |
-|---|-------|-------|--------|
-| C-1 | Requirements FRs map to architecture components | requirements.json → architecture.json | Verified |
-| C-2 | Architecture components map to estimate LOE | architecture.json → estimate.json | Verified |
-| C-3 | Estimate phases match project plan phases | estimate.json → project_plan.json | Verified |
-| C-4 | Project plan milestones match proposal roadmap | project_plan.json → proposal.md | Verified |
-| C-5 | Security threats map to proposal security slide | security_review.json → proposal.md Slide 8-9 | Verified |
-| C-6 | All KB files pass schema validation | `python tests/validate_knowledge_base.py` | 10/10 PASS |
+| # | Diagram | File | What to Check |
+|---|---------|------|---------------|
+| DG-1 | System Context | `01-system-context.svg` | All 5 subgroups visible? Edge labels readable? No overlapping nodes? |
+| DG-2 | Ingestion Flow | `02-ingestion-flow.svg` | 3 channels clearly separated? Processing pipeline reads top-to-bottom? |
+| DG-3 | Clinical Data | `03-clinical-data.svg` | FHIR vs Legacy paths distinct? "JDBC via PrivateLink" label visible? |
+| DG-4 | MLOps | `04-mlops.svg` | Feedback loop clearly circular? Daily/Weekly/Monthly cadence readable? |
+| DG-5 | Multi-Tenant | `05-multi-tenant.svg` | Shared vs LOB-specific model path clear? All 4 LOB rules visible? |
+| DG-6 | Deployment | `06-deployment.svg` | Multi-AZ visible? PrivateLink connections to on-prem clear? |
 
 ---
 
-## 5. Sign-Off
+## 4. Authorization and Tooling Decisions
+
+Things only you can approve or configure.
+
+| # | Decision | Options | Your Action |
+|---|----------|---------|-------------|
+| AT-1 | **Mermaid Chart account** | See comparison below. Free tier sufficient for this project. Paid adds team collaboration and API. | Sign up at mermaid.ai. Free account lets you edit diagrams in browser. Paid ($8/mo) adds API access for MCP integration. |
+| AT-2 | **Mermaid MCP vs CLI** | See comparison below. CLI (`mmdc`) works now. MCP adds live editing but cloud connector is currently broken. | CLI is working and diagrams are rendered. MCP is optional upgrade. |
+| AT-3 | **PowerPoint conversion** | Options: (a) Manual — paste SVGs into slides, (b) `md-to-docx` pipeline, (c) Marp CLI for markdown-to-pptx | Choose your preferred method. Claude Code can help with any of them. |
+| AT-4 | **Remote monitoring** | `/remote-control eng-2026-004` in terminal enables iOS monitoring. | Run the command when you want to monitor Claude Code remotely. |
+
+### Mermaid Chart: MCP vs CLI vs Free vs Paid
+
+| Feature | `mmdc` CLI (installed) | Mermaid Chart MCP (cloud) | Free Account | Pro ($8/mo) |
+|---------|----------------------|--------------------------|-------------|-------------|
+| **Render to SVG/PNG** | Yes | Yes | Yes (in browser) | Yes |
+| **Validate syntax** | Yes (fails on error) | Yes (returns error details) | Yes | Yes |
+| **Edit in browser** | No | No | Yes (mermaid.ai editor) | Yes |
+| **API access** | N/A | Via cloud connector | No | Yes |
+| **Team collaboration** | No | No | No | Yes |
+| **Diagram storage** | Local files only | No (renders only) | 5 diagrams | Unlimited |
+| **Custom themes** | Yes (`-t` flag) | Limited | Limited | Full |
+| **Works offline** | Yes | No | No | No |
+| **Current status** | Working | Broken (-32600 error) | Available | Available |
+| **Recommendation** | **Use this now** | Try again later | Sign up to edit | Upgrade if you want API |
+
+**Bottom line**: `mmdc` CLI handles everything we need (render + validate). The Mermaid Chart web editor (free account) is useful for visually tweaking diagrams before the interview. The MCP cloud connector adds no value over CLI until the -32600 error is resolved.
+
+---
+
+## 5. Contract and Compliance (Manual Only)
+
+| # | Item | Your Action |
+|---|------|-------------|
+| CC-1 | **Autonomize AI HIPAA BAA** | Verify BAA is in place or will be before production deployment. Mention in interview as a contractual requirement. |
+| CC-2 | **Autonomize AI right-to-audit clause** | Negotiate into contract: right to audit, annual SOC 2 report delivery, breach notification SLA. |
+| CC-3 | **Inter-agent security attestation** | Request formal documentation of Genesis Platform inter-agent authentication controls. Frame as BAA requirement. |
+| CC-4 | **Pen test vendor selection** | Identify and engage a third-party pen test firm for pre-go-live assessment. Scope: cross-tenant isolation + prompt injection. |
+
+---
+
+## Sign-Off
 
 | Reviewer | Date | Status | Notes |
 |----------|------|--------|-------|
-| AI Agent (Claude Opus 4.6) | 2026-03-21 | PASS (8.8/10) | All checks automated. Low-confidence items flagged above. |
+| AI Agent (Claude Opus 4.6) | 2026-03-21 | PASS (8.8/10) | Automated checks complete. Human items flagged above. |
 | Paul Prae | | | |

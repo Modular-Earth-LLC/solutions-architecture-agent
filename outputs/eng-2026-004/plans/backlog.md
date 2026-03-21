@@ -1,38 +1,51 @@
-# eng-2026-004: Backlog — Fixes and Improvements
+# eng-2026-004: Backlog for Claude Code Plan Mode
 
-## P0 — Address Before Interview
+> **Usage**: Paste this file as context when running `/plan` in Claude Code to iterate on the solution architecture. Claude Code should pick up items by priority and execute autonomously.
 
-| # | Item | Source | Impact |
-|---|------|--------|--------|
-| 1 | **Calibrate WA scores with parallel agent results** | Review RF-001 | WA scores in `architecture.json` are self-assessed (7.0-8.5). Parallel WA agents ran but read stale KB file (eng-2026-003 race condition). Re-run WA reviewers against current architecture.json to get calibrated scores. |
-| 2 | **Validate all 6 Mermaid diagrams render correctly** | QA Phase 9 | Mermaid Chart MCP was unavailable during QA. Render each diagram to PNG/SVG and verify labels, edges, and layout before importing to PowerPoint. |
-| 3 | **Add Altais case study reference to proposal** | Autonomize AI research | Altais Health Solutions (10K+ physicians, 500K patients) achieved 45% PA review time reduction with Autonomize AI. This is a verified, named case study — stronger than the anonymized "3 of top 5" claim. Add to executive summary or appendix. |
-| 4 | **Verify CMS-0057-F turnaround requirements** | CMS research | Research confirmed: 72 hours urgent, 7 calendar days standard (effective Jan 1, 2026 — already in effect). Our architecture targets < 24 hours, which exceeds both. Verify proposal states this correctly. |
+## Instructions for Claude Code
 
-## P1 — Strengthen Technical Depth
+You are iterating on the AI-Driven Prior Authorization solution architecture (eng-2026-004). The following items are autonomous improvements you can make without human approval. Work through them in priority order. After each item, run `python tests/validate_knowledge_base.py`, commit, and push.
 
-| # | Item | Source | Impact |
-|---|------|--------|--------|
-| 5 | **Add SageMaker PSI note** | AWS verification agent | SageMaker Model Monitor supports KS test natively but PSI requires a custom monitoring container. Update architecture.json and slide 11 speaker notes to clarify: "KS test native, PSI via custom container." |
-| 6 | **Strengthen audit trail with external anchoring** | STRIDE Tampering T-004 | Current DynamoDB hash chain is internally consistent but not externally anchored. STRIDE agent recommends AWS QLDB or RFC 3161 timestamping for tamper-proof external verification. Consider adding to security slide. |
-| 7 | **Add per-LOB Kafka topics (not just partitions)** | STRIDE Info Disclosure T-004 | Current design uses partition-level LOB isolation. STRIDE agent recommends topic-level isolation (e.g., `pa-requests-commercial`) for stronger ACL enforcement. Evaluate trade-off: more topics = more operational overhead but stronger isolation. |
-| 8 | **Address Snowflake PHI exposure risk** | STRIDE Info Disclosure T-005 | Analytics pipeline replicates PHI to Snowflake before dbt masking. Add Snowflake Dynamic Data Masking policies as first-stage transform. Mention in security slide. |
-| 9 | **Incorporate FDA PCCP framework into MLOps slide** | MLOps research | FDA's Predetermined Change Control Plan (PCCP, Aug 2025) enables AI model updates post-clearance without new marketing applications. Relevant for interview — shows awareness of regulatory ML lifecycle. |
+Reference files:
+- `outputs/eng-2026-004/proposal.md` — 12-slide presentation (primary deliverable)
+- `knowledge_base/architecture.json` — architecture design
+- `knowledge_base/security_review.json` — STRIDE threat model
+- `knowledge_base/estimate.json` — cost model
+- `knowledge_base/project_plan.json` — 12-week roadmap
+- `outputs/eng-2026-004/research-context.md` — all research findings
 
-## P2 — Enrich Presentation
+---
 
-| # | Item | Source | Impact |
-|---|------|--------|--------|
-| 10 | **Add Q&A prep document** | Presentation strategy | Create anticipated questions and answers for the 1-hour panel. Cover: "Why Kafka over SQS?", "How do you handle fax OCR for handwritten notes?", "What happens if Autonomize AI goes down?", "How do you prevent prompt injection?", "Why multi-tenant not multi-instance?" |
-| 11 | **Add state-level PA regulation awareness** | CMS research | 18+ states enacted PA reforms in 2025. Indiana requires 24-hour urgent turnaround (stricter than federal 72 hours). Gold carding programs in Texas/Arkansas. Mention awareness in security/compliance slide. |
-| 12 | **Reference CAQH Index for cost benchmarks** | Autonomize AI research | Manual PA cost: $10.97-$12.88 per transaction (provider side), $3.14-$3.52 (payer side). Automated: ~$0.05 (payer). Use in executive summary to quantify per-transaction savings. |
-| 13 | **Add Wasserstein Distance to drift detection** | MLOps research | Evidently AI benchmark study recommends Wasserstein Distance as best overall compromise for large datasets. More sensitive than PSI, less noisy than KS. Consider adding as third drift metric. |
+## P0 — Fix Before Next Review
 
-## P3 — Future Enhancements (Post-Interview)
+| # | Task | What to Do | Files to Modify |
+|---|------|-----------|----------------|
+| 1 | **Re-run WA reviewers against current architecture.json** | Launch 6 parallel `solutions-architecture-agent:parallel-wa-reviewer` agents. Update `architecture.json` `well_architected_scores` with agent-returned scores. Replace `score_source` with `"parallel-wa-reviewer sub-agents"`. | `architecture.json` |
+| 2 | **Correct SageMaker PSI claim** | KS test is natively supported. PSI requires a custom monitoring container. Update `architecture.json` observability.metrics.ai_specific to clarify. Update proposal.md slide 11 speaker notes and drift detection table to say "PSI via custom SageMaker container". | `architecture.json`, `proposal.md` |
+| 3 | **Add Altais case study to proposal executive summary** | Altais Health Solutions: 10K+ physicians, 500K patients, 45% PA review time reduction, 54% error reduction, 50% auto-approval. This is the strongest verified Autonomize AI reference. Add to Slide 2 as a proof point alongside "3 of top 5 health plans". | `proposal.md` |
+| 4 | **Add CAQH Index cost benchmarks to executive summary** | Manual PA: $10.97-$12.88/transaction (provider), $3.14-$3.52 (payer). Automated: ~$0.05 (payer). Source: CAQH Index 2024. Add per-transaction savings math to Slide 2. | `proposal.md` |
 
-| # | Item | Source | Impact |
-|---|------|--------|--------|
-| 14 | **Convert proposal.md to PowerPoint** | Deliverable format | Use a markdown-to-pptx tool or manually create slides. Mermaid diagrams need PNG/SVG export first. |
-| 15 | **Build the demo** | Implementation prompt | Use `outputs/eng-2026-004/plans/implementation-prompt.md` in Claude Code plan mode. Target: 12-16 hours to build a working demo. |
-| 16 | **Add CCPA rights management to Phase 2 scope** | Security review F-004 | CCPA deletion and opt-out workflows deferred to Phase 2. Ensure data tagging in Phase 1 supports future compliance. |
-| 17 | **Negotiate Autonomize AI contract terms** | Security review F-005 | Right-to-audit clause, annual SOC 2 report, HIPAA BAA, breach notification obligations, data handling on termination. |
+## P1 — Strengthen Architecture
+
+| # | Task | What to Do | Files to Modify |
+|---|------|-----------|----------------|
+| 5 | **Add external audit trail anchoring** | STRIDE Tampering T-004 recommends AWS QLDB or RFC 3161 timestamping for tamper-proof external verification of DynamoDB hash chain. Add to `architecture.json` component C-011, `security_review.json` defense_in_depth layer 5, and proposal Slide 8-9. | `architecture.json`, `security_review.json`, `proposal.md` |
+| 6 | **Evaluate per-LOB Kafka topics vs partitions** | STRIDE Info Disclosure T-004 recommends topic-level isolation (`pa-requests-commercial`) over partition-level. Document trade-off in `architecture.json` `alternatives_considered`. If topic-level is chosen, update C-004, data flows, and multi-tenant diagram. | `architecture.json`, `proposal.md` |
+| 7 | **Add Snowflake Dynamic Data Masking** | Analytics pipeline replicates PHI before dbt masking. Add Snowflake DDM policies as first-stage transform in `architecture.json` C-014 and `security_review.json` defense_in_depth layer 4. | `architecture.json`, `security_review.json` |
+| 8 | **Add FDA PCCP framework to MLOps architecture** | FDA Predetermined Change Control Plan (PCCP, Aug 2025) enables AI model updates post-clearance. Add to `architecture.json` ai_ml_components and proposal Slide 11 speaker notes as regulatory awareness. | `architecture.json`, `proposal.md` |
+| 9 | **Add Wasserstein Distance to drift detection** | Evidently AI benchmark recommends WD as best compromise for large datasets. Add as third metric alongside PSI and KS in `architecture.json` and proposal Slide 11. | `architecture.json`, `proposal.md` |
+
+## P2 — Enrich Deliverables
+
+| # | Task | What to Do | Files to Modify |
+|---|------|-----------|----------------|
+| 10 | **Generate Q&A prep document** | Create `outputs/eng-2026-004/plans/qa-prep.md` with 15+ anticipated panel questions and detailed answers. Must cover: "Why Kafka?", "Why not SQS?", "Fax OCR for handwritten?", "Autonomize AI goes down?", "Prompt injection?", "Why multi-tenant?", "How does FHIR facade work?", "What if clinical accuracy < 95%?", "CMS-0057-F readiness?", "How do you handle auto-denial?" | New file: `qa-prep.md` |
+| 11 | **Add state-level PA regulation awareness** | 18+ states enacted PA reforms in 2025. Indiana: 24-hour urgent (stricter than federal 72hr). Texas/Arkansas gold carding. Add brief mention to proposal Slide 8-9 speaker notes. | `proposal.md` |
+| 12 | **Re-render diagrams to PNG** | Run `mmdc` with `-o .png` in addition to SVG for PowerPoint compatibility. Use `-b white` for clean backgrounds. | New files in `diagrams/` |
+
+## P3 — Future (Post-Interview)
+
+| # | Task | What to Do | Files to Modify |
+|---|------|-----------|----------------|
+| 13 | **Build the demo** | Use `outputs/eng-2026-004/plans/implementation-prompt.md` in Claude Code plan mode. 12-16 hour build target. | New project |
+| 14 | **Add CCPA rights management design** | Phase 2 scope. Design deletion and opt-out workflows. Ensure Phase 1 data tagging supports future compliance. | `security_review.json` |
