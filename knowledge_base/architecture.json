@@ -381,18 +381,23 @@
   },
 
   "well_architected_scores": {
-    "operational_excellence": 0,
-    "security": 0,
-    "reliability": 0,
-    "performance_efficiency": 0,
-    "cost_optimization": 0,
-    "sustainability": 0,
-    "overall": 0,
+    "operational_excellence": 6,
+    "security": 8,
+    "reliability": 6,
+    "performance_efficiency": 6,
+    "cost_optimization": 6,
+    "sustainability": 6,
+    "overall": 6.3,
     "notes": {
-      "placeholder": "Scores will be populated by parallel-wa-reviewer sub-agents"
+      "operational_excellence": "Strong observability intent but gaps in IaC, prompt versioning, runbooks, and CI/CD pipeline definition. LLMOps maturity Level 2.",
+      "security": "Strongest pillar. PHI tokenization, immutable audit, SMART on FHIR. Gaps: AI risk register (NIST AI RMF), indirect prompt injection, break-glass procedures, vendor security posture documentation.",
+      "reliability": "Sound structural foundation (async, blue-green, geo-redundant storage). Gaps: Service Bus geo-DR metadata-only, LLM single-provider dependency, no chaos testing, PostgreSQL zone-redundant HA not confirmed.",
+      "performance_efficiency": "Confidence routing and model tiering are strong. Critical gap: LLM provisioning strategy (PTU vs pay-as-you-go at 50 RPS). Missing: prompt caching, load test plan, OCR pipeline parallelization.",
+      "cost_optimization": "Good design-time cost awareness (routing, tiering, caching). Gaps: no cost monitoring/alerting, no PTU evaluation trigger, no prompt caching, no resource tagging strategy.",
+      "sustainability": "Serverless-first and confidence routing are genuine strengths. Gaps: no carbon measurement baseline, no model right-sizing program, no green computing targets."
     },
-    "score_source": "pending — parallel-wa-reviewer sub-agents to be invoked",
-    "calibration_note": "Scores will reflect independent parallel agent review. Placeholder zeros will be replaced."
+    "score_source": "parallel-wa-reviewer sub-agents (6 parallel assessments)",
+    "calibration_note": "Scores reflect independent parallel agent review with web research. These are rigorous production-readiness scores — the architecture is designed for an interview assignment, not production deployment. Many gaps are intentionally deferred to discovery/implementation phases."
   },
 
   "alternatives_considered": [
