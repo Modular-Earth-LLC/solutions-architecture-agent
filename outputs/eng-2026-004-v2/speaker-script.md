@@ -42,9 +42,9 @@ I'll take you through the architecture in tiers -- executive context, then techn
 
 ### Slide 2: Why This Architecture
 **Core (30 sec)**: "Manual PA is expensive and slow. Altais proved Autonomize cuts review time 45%, errors 54%. My architecture integrates that with safety controls."
-**Expanded**: CAQH Index $10.97 manual vs $0.05 automated. CMS-0057-F Phase 1 live. Clinicians keep final authority.
+**Expanded**: CAQH Index — $10.97 provider labor cost per manual PA, $3.52 payer side, $0.05 electronic. That's $3.47 savings per payer transaction ($3.52 − $0.05). CMS-0057-F Phase 1 live. Clinicians keep final authority.
 **For Kris**: This answers "why should I care?" -- lead with business outcomes.
-**Don't elaborate**: Don't dive into CAQH methodology or CMS rule details.
+**Don't elaborate**: Don't dive into CAQH methodology or CMS rule details. If asked: "CAQH measures labor costs — salaries, benefits, overhead — per transaction via annual industry survey."
 
 ### Slide 3: System Context
 **Core (30 sec)**: "Four actors, one AI platform in the middle. Providers submit through existing channels. Determinations flow back to payer core."

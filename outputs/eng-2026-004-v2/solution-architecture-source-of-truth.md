@@ -166,9 +166,14 @@ These are questions a thorough SA would ask before committing to implementation.
 
 | Metric | Value | Source |
 |---|---|---|
-| Manual PA cost (provider) | $10.97 per transaction | [2024 CAQH Index](https://www.caqh.org/hubfs/Index/2024%20Index%20Report/CAQH_IndexReport_2024_FINAL.pdf) |
-| Manual PA cost (payer) | $3.52 per transaction | Same |
-| Automated PA cost | ~$0.05 per transaction | Same |
+| Manual PA labor cost (provider) | $10.97 per transaction | [2024 CAQH Index](https://www.caqh.org/hubfs/Index/2024%20Index%20Report/CAQH_IndexReport_2024_FINAL.pdf), PA row |
+| Manual PA labor cost (payer) | $3.52 per transaction | Same |
+| Electronic PA cost (payer) | ~$0.05 per transaction | Same |
+| Payer savings per automated PA | $3.47 per transaction | $3.52 − $0.05 = $3.47 |
+
+> **CAQH methodology**: Costs are weighted average **labor costs** (salaries + wages + benefits + overhead) per transaction, measured via annual provider/plan survey. Excludes technology/system costs and time spent gathering information. The $10.97 provider figure and $3.52 payer figure reflect the same methodology applied to each side of the transaction.
+>
+> **Data vintage**: Per-transaction costs are from the **2024 CAQH Index** (2023 data) — the most recent with publicly verifiable per-transaction figures. The **[2025 CAQH Index](https://www.caqh.org/blog/2025-caqh-index-shows-u.s.-healthcare-avoided-258-billion-and-accelerated-automation-interoperability-and-ai-adoption)** (Feb 2026) estimates $515M annual PA savings opportunity but moved per-transaction data behind Index Pro paywall.
 | Review time reduction (Altais) | 45% | [BusinessWire Feb 2026](https://www.businesswire.com/news/home/20260224376992/en/Altais-Cuts-Prior-Authorization-Review-Time-by-45-and-Reduces-Manual-Errors-by-54-with-Autonomize-AI) |
 | Error reduction (Altais) | 54% | Same |
 | Auto-approval rate (Altais) | 50% | Same |

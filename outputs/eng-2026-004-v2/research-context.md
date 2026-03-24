@@ -179,13 +179,19 @@ Source: [BusinessWire Leadership Hires](https://www.businesswire.com/news/home/2
 ### Transaction Costs (2024 CAQH Index — verified)
 | Metric | Cost | Source |
 |--------|------|--------|
-| Manual PA — provider | $10.97 per transaction | [CAQH 2024 Index](https://www.caqh.org/hubfs/Index/2024%20Index%20Report/CAQH_IndexReport_2024_FINAL.pdf) |
-| Manual PA — payer | $3.52 per transaction | Same |
-| Fully electronic/automated PA | ~$0.05 per transaction | Same |
+| Manual PA labor cost — provider | $10.97 per transaction | [CAQH 2024 Index](https://www.caqh.org/hubfs/Index/2024%20Index%20Report/CAQH_IndexReport_2024_FINAL.pdf), PA row |
+| Manual PA labor cost — payer | $3.52 per transaction | Same |
+| Fully electronic PA — provider | $5.79 per transaction | Same |
+| Fully electronic PA — payer | ~$0.05 per transaction | Same |
+| Payer savings per automated PA | $3.47 per transaction | $3.52 − $0.05 = $3.47 |
 | Manual PA time (phone/fax) | 24 minutes per transaction | Same |
 | Manual PA time (portal) | 16 minutes per transaction | Same |
 | Electronic adoption rate | 35% of medical PAs | Same |
-| Potential annual savings (full electronic) | $494 million | Same |
+| Potential annual savings (full electronic) | $515 million | [2025 CAQH Index](https://www.caqh.org/blog/2025-caqh-index-shows-u.s.-healthcare-avoided-258-billion-and-accelerated-automation-interoperability-and-ai-adoption) |
+
+> **CAQH Index methodology**: The CAQH Index is an annual industry survey of providers and health plans. Per-transaction costs represent weighted average **labor costs** — salaries, wages, personnel benefits, and related overhead — converted from measured time per transaction. Costs **include only** the labor time to conduct the transaction itself. They **exclude** technology/system costs, time gathering information for the transaction, and follow-up time. The $10.97 (provider) and $3.52 (payer) figures reflect the same methodology applied to each side.
+>
+> **Data vintage**: Per-transaction costs ($10.97, $3.52, $0.05) are from the **2024 CAQH Index** (2023 data) — the most recent report with publicly available per-transaction figures. The **2025 CAQH Index** (Feb 2026, 2024 data) moved granular per-transaction data behind the Index Pro paywall; its public press release confirms $515M annual PA savings opportunity (up from $494M).
 
 ### Altais Case Study (February 2026 — verified)
 | Metric | Result | Status |

@@ -12,7 +12,7 @@
 
 **Answer (45 sec):**
 
-"The business case starts with cost: CAQH data shows a health plan pays $3.52 per PA transaction manually. Automated, that drops to roughly five cents. At a million PAs per month, that's $3.47 million in monthly savings potential from a single line item.
+"The business case starts with cost: the CAQH Index — an annual labor cost survey of providers and health plans — shows a health plan pays $3.52 in labor per manual PA transaction. Fully electronic, that drops to about five cents. That's $3.47 saved per transaction. At a million PAs per month, that's $3.47 million in monthly savings potential from a single line item.
 
 But the cost story isn't even the strongest argument. CMS-0057-F Phase 1 is already live -- January 2026. Non-compliance is an existential regulatory risk. And Altais proved in February 2026 that Autonomize's platform delivers 45% faster review, 54% fewer errors, and a 50% auto-determination rate.
 

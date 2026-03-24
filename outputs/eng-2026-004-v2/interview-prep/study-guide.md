@@ -325,13 +325,14 @@ Operational Procedures      -> A-11 (reviewer workflow), A-14 (Payer Core SLA), 
 
 | Metric | Value | Source |
 |---|---|---|
-| Manual PA cost (provider) | $10.97 | CAQH 2024 Index |
-| Manual PA cost (payer) | $3.52 | CAQH 2024 Index |
-| Automated PA cost | ~$0.05 | CAQH 2024 Index |
+| Manual PA labor cost (provider) | $10.97 | CAQH 2024 Index, PA row |
+| Manual PA labor cost (payer) | $3.52 | CAQH 2024 Index, PA row |
+| Electronic PA cost (payer) | ~$0.05 | CAQH 2024 Index, PA row |
+| Payer savings per automated PA | $3.47 | $3.52 − $0.05 = $3.47 |
 | Manual PA time (phone/fax) | 24 minutes per transaction | CAQH 2024 Index |
 | Manual PA time (portal) | 16 minutes per transaction | CAQH 2024 Index |
 | Electronic PA adoption rate | 35% of medical PAs | CAQH 2024 Index |
-| Potential annual savings (full electronic) | $494 million | CAQH 2024 Index |
+| Potential annual savings (full electronic) | $515 million | 2025 CAQH Index (Feb 2026) |
 | Altais review time reduction | 45% | BusinessWire Feb 2026 |
 | Altais error reduction | 54% | BusinessWire Feb 2026 |
 | Altais auto-determination | 50% | BusinessWire Feb 2026 |
