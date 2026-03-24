@@ -1,0 +1,24 @@
+flowchart LR
+    subgraph "Providers"
+        PROV["Healthcare Providers<br/>Physicians, Facilities"]
+    end
+
+    subgraph "Health Plan Systems"
+        CORE["Payer Core System<br/>Enrollment, Benefits, Contracts"]
+        CLIN["Clinical Data Sources<br/>FHIR R4 + Legacy DBs"]
+    end
+
+    subgraph "Autonomize AI Platform"
+        PA_COPILOT["PA Copilot<br/>AI-Driven Review Engine"]
+    end
+
+    subgraph "Regulatory"
+        CMS["CMS / State Regulators<br/>Compliance Reporting"]
+    end
+
+    PROV -->|"PA Requests<br/>Fax, Portal, X12 278"| PA_COPILOT
+    CORE -->|"Eligibility + Benefits<br/>REST API"| PA_COPILOT
+    CLIN -->|"Clinical Records<br/>FHIR R4 API"| PA_COPILOT
+    PA_COPILOT -->|"Determinations<br/>REST API"| CORE
+    PA_COPILOT -->|"Compliance Metrics<br/>CMS-0057-F"| CMS
+    PA_COPILOT -->|"Status Updates<br/>Portal / Fax"| PROV

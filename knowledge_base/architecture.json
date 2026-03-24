@@ -2,231 +2,192 @@
   "$schema": "./schemas/architecture.schema.json",
   "$depends_on": ["requirements.json"],
   "engagement_id": "eng-2026-004",
-  "version": "1.0",
-  "last_updated": "2026-03-20",
+  "version": "2.0",
+  "last_updated": "2026-03-23",
   "status": "complete",
 
   "executive_summary": {
-    "recommended_approach": "Deploy Autonomize AI's multi-agent PA Copilot integrated with the payer's AWS infrastructure via an event-driven integration layer (Kafka + FHIR R4 facade), enabling 60% auto-determination of prior authorization requests while maintaining full HIPAA compliance and CMS-0057-F readiness.",
+    "recommended_approach": "Integrate Autonomize AI's PA Copilot with the health plan's systems via an Azure-native event-driven architecture. AI-driven clinical review automates initial intake and determination with configurable confidence thresholds and mandatory human oversight for complex cases, reducing review time by 45% and achieving 50% auto-determination (based on Altais benchmarks).",
     "confidence_level": "high",
     "go_no_go": "go",
     "key_benefits": [
-      "60% auto-determination rate reduces PA turnaround from 5 days to < 24 hours",
-      "$11.7M annual savings from 40% FTE reduction (180 of 450 FTEs)",
-      "CMS-0057-F compliance via FHIR R4 PA API before January 2027 deadline",
-      "Multi-tenant architecture supports 20 LOBs without re-architecture",
-      "Proven platform — Autonomize AI already serves 3 of top 5 US health plans"
+      "45% PA review time reduction demonstrated by Altais deployment of same platform (Feb 2026)",
+      "50% auto-determination rate with configurable confidence threshold — immediate operational relief",
+      "54% manual error reduction through structured AI-assisted clinical review",
+      "CMS-0057-F compliance readiness — FHIR R4 API foundation meets Jan 2027 deadline",
+      "Azure-native deployment leverages Autonomize Pegasus Program membership and Azure Marketplace presence",
+      "Proven platform — Autonomize AI live with 3 of top 5 US health plans"
     ],
     "key_risks": [
-      "Fax OCR accuracy on handwritten notes may require manual fallback for 10-15% of faxed requests",
-      "Legacy clinical database integration complexity — 60% of clinical data in non-FHIR systems",
-      "12-week timeline is aggressive for full integration build — phased LOB rollout mitigates",
-      "Auto-denial excluded from Phase 1 — regulatory review required before Phase 2 activation"
+      "Fax OCR accuracy on handwritten clinical notes may require manual fallback for complex documents",
+      "Legacy clinical database integration complexity — requires per-system connector development during discovery",
+      "Auto-denial excluded from initial deployment — regulatory and clinical safety review required before activation",
+      "Autonomize platform specifics require discovery — no public API documentation available"
     ],
-    "total_investment_range": "Enterprise platform licensing + $3-5M implementation (12-week Phase 1)"
+    "total_investment_range": "Investment dependent on discovery findings and team composition — see progressive delivery phases for scope breakdown"
   },
 
   "tech_stack": {
     "llm": {
-      "provider": "Autonomize AI (Genesis Platform) + Amazon Bedrock",
-      "primary_model": "Autonomize AI PA Copilot multi-agent pipeline (proprietary)",
-      "fallback_model": "Amazon Bedrock Claude for supplementary clinical NLP",
-      "hosting": "Autonomize AI managed platform with secure connectivity to payer VPC",
-      "rationale": "Autonomize AI provides purpose-built healthcare AI agents optimized for PA workflows. Amazon Bedrock supplements with general-purpose clinical NLP for document processing. Both are HIPAA-eligible."
+      "provider": "Anthropic (Claude) via Azure AI Foundry",
+      "primary_model": "Claude Opus 4.6 (complex clinical review, multi-step reasoning)",
+      "fallback_model": "Claude Sonnet 4.6 (routine determinations, high throughput)",
+      "hosting": "Azure AI Foundry (Microsoft Foundry) — East US 2",
+      "rationale": "Claude available in Azure AI Foundry with healthcare connectors (CMS Coverage DB, ICD-10, NPI Registry). Azure is the only cloud with both Claude and GPT frontier models. Autonomize platform is Azure-native (Pegasus Program, Azure Marketplace). Healthcare-specific skills available at github.com/anthropics/healthcare."
     },
     "orchestration": {
-      "framework": "Autonomize AI Genesis Platform + AWS Step Functions",
-      "version": "Current production",
-      "pattern": "multi_agent",
-      "rationale": "Autonomize AI Genesis orchestrates the PA-specific multi-agent pipeline (ingestion, NLP, eligibility, guidelines, decision). AWS Step Functions orchestrates the integration workflow between payer systems and the Autonomize AI platform."
+      "framework": "Autonomize AI Genesis Platform + Azure AI Foundry Agent Service",
+      "version": "Current (March 2026)",
+      "pattern": "agent_loop",
+      "rationale": "Single orchestrator agent with specialized skills/tools (ReAct pattern). Autonomize PA Copilot as the core AI engine with configurable workflow. Azure Foundry Agent Service provides MCP support, observability, and enterprise security. Agent skills include: clinical data extraction, coverage criteria matching, eligibility verification, determination reasoning."
     },
     "backend": {
-      "language": "Python 3.12",
-      "framework": "FastAPI",
+      "language": "Python",
+      "framework": "FastAPI (demo) / Autonomize Platform APIs (production)",
       "api_style": "rest"
     },
     "frontend": {
-      "framework": "Existing provider portal (no new frontend)",
+      "framework": "Clinical reviewer dashboard (Autonomize AI Studio)",
       "type": "web_app",
-      "rationale": "PA determination integrates into existing provider portal and clinical reviewer workflows. No new user-facing application required in Phase 1."
+      "rationale": "Autonomize AI Studio provides low-code workflow customization and clinical review UI. Demo uses simple web interface (Streamlit or HTML/JS)."
     },
     "data_stores": {
-      "operational_db": {
-        "technology": "Amazon RDS PostgreSQL 16",
-        "hosting": "AWS Multi-AZ",
-        "purpose": "PA request records, determination history, reviewer assignments"
+      "primary_database": {
+        "technology": "Azure Database for PostgreSQL",
+        "hosting": "Azure managed service",
+        "purpose": "PA request records, determination history, audit logs, workflow state"
       },
-      "config_and_audit": {
-        "technology": "Amazon DynamoDB",
-        "hosting": "AWS On-Demand",
-        "purpose": "LOB configuration rules, immutable audit trail, real-time lookups"
+      "vector_store": {
+        "technology": "Azure AI Search (vector search) or pgvector extension",
+        "hosting": "Azure managed service",
+        "purpose": "Clinical guideline embeddings, coverage criteria search, semantic matching for clinical evidence"
       },
       "document_store": {
-        "technology": "Amazon S3",
-        "hosting": "AWS Standard + Intelligent-Tiering",
-        "purpose": "Fax images, clinical documents, ML model artifacts"
+        "technology": "Azure Blob Storage",
+        "hosting": "Azure managed service",
+        "purpose": "Fax images, clinical documents, PDF attachments, OCR results"
       },
-      "analytics": {
-        "technology": "Snowflake on AWS",
-        "hosting": "Snowflake managed (auto-suspend)",
-        "purpose": "Historical PA analytics, reporting, MLOps training data"
+      "cache": {
+        "technology": "Azure Cache for Redis",
+        "hosting": "Azure managed service",
+        "purpose": "Session state, eligibility lookup cache, rate limiting"
       },
-      "clinical_data": {
-        "technology": "AWS HealthLake (FHIR R4)",
-        "hosting": "AWS managed",
-        "purpose": "FHIR R4 data store for standardized clinical records, CMS-0057-F compliance"
+      "message_queue": {
+        "technology": "Azure Service Bus (Premium tier — HIPAA BAA covered)",
+        "hosting": "Azure managed service",
+        "purpose": "Asynchronous PA request processing, event-driven workflow orchestration, component decoupling. Kafka mentioned as future scale option."
       }
     },
     "infrastructure": {
-      "cloud_provider": "AWS",
-      "compute": "ECS Fargate (services) + Lambda (event processing)",
-      "container_orchestration": "Amazon ECS with Fargate",
+      "cloud_provider": "Microsoft Azure (primary)",
+      "compute": "Azure Container Apps (production) / Azure App Service (demo)",
+      "container_orchestration": "Azure Container Apps (managed Kubernetes)",
       "deployment_strategy": "blue_green",
-      "region": "us-east-1 (primary), us-west-2 (DR)",
-      "monitoring": "Amazon CloudWatch + Amazon QuickSight dashboards",
-      "logging": "CloudWatch Logs with structured JSON, 30-day hot retention"
+      "region": "East US 2 (primary) — co-located with Azure AI Foundry Claude models",
+      "monitoring": "Azure Monitor + Application Insights (OpenTelemetry)",
+      "logging": "Azure Monitor Logs (centralized, structured, HIPAA-compliant retention)"
     }
   },
 
   "component_design": [
     {
       "id": "C-001",
-      "name": "API Gateway",
-      "technology": "Amazon API Gateway + AWS WAF",
-      "purpose": "Secure entry point for provider portal PA submissions and FHIR R4 PA API (CMS-0057-F). Rate limiting, authentication, request validation.",
-      "inputs": ["Provider portal PA requests (REST)", "FHIR R4 PA requests (Da Vinci PAS)"],
-      "outputs": ["Validated PA request to Ingestion Service"],
-      "scalability": "Managed auto-scaling (API Gateway handles burst traffic natively)",
+      "name": "PA Request Ingestion Gateway",
+      "technology": "Azure API Management + Azure Functions",
+      "purpose": "Securely receives PA requests from all channels (fax, web portal, X12 278 EDI) and normalizes them into a canonical PA request format for downstream processing.",
+      "inputs": ["Fax images (SFTP/fax gateway)", "Web portal submissions (HTTPS)", "X12 278 transactions (SFTP/AS2)"],
+      "outputs": ["Normalized PA request (JSON) on Azure Service Bus"],
+      "scalability": "Horizontal — Azure Functions auto-scale by request volume",
       "cost_driver": true
     },
     {
       "id": "C-002",
-      "name": "Document Processing Service",
-      "technology": "AWS Lambda + Amazon Textract + Amazon Comprehend Medical",
-      "purpose": "OCR extraction from faxed documents (Textract), clinical entity extraction from unstructured text (Comprehend Medical), X12 278 parsing.",
-      "inputs": ["Fax images (TIFF/PDF) from S3", "X12 278 transactions from EDI gateway"],
-      "outputs": ["Structured PA request data with extracted clinical entities"],
-      "scalability": "Lambda auto-scales per document; Textract async API for batch fax processing",
+      "name": "Document Processing Pipeline",
+      "technology": "Azure AI Document Intelligence + Autonomize AI",
+      "purpose": "Extracts structured data from unstructured PA submissions — OCR for faxes, parsing for PDFs, clinical note extraction. Converts to structured format for AI engine.",
+      "inputs": ["Raw fax images", "PDF clinical documents", "Scanned forms"],
+      "outputs": ["Structured clinical data (patient demographics, diagnosis codes, procedure requests, clinical evidence)"],
+      "scalability": "Horizontal — scales per document volume",
       "cost_driver": true
     },
     {
       "id": "C-003",
-      "name": "Data Normalizer",
-      "technology": "AWS Lambda (Python)",
-      "purpose": "Normalize multi-format PA requests into unified PA Request schema. Validate completeness, map codes (ICD-10, CPT, HCPCS).",
-      "inputs": ["Structured output from Document Processing", "Portal JSON submissions", "X12 278 parsed data"],
-      "outputs": ["Unified PA Request object published to Kafka"],
-      "scalability": "Lambda auto-scales with request volume",
+      "name": "Member Eligibility Service",
+      "technology": "REST API integration with Payer Core System",
+      "purpose": "Validates member eligibility, retrieves benefit details, and confirms PA requirements for the requested service. First integration point — blocks processing if member is ineligible.",
+      "inputs": ["Member ID", "Service/procedure code", "Date of service"],
+      "outputs": ["Eligibility status", "Benefit details", "PA requirement flag", "Contract rules"],
+      "scalability": "Depends on Payer Core System API capacity — add caching layer",
       "cost_driver": false
     },
     {
       "id": "C-004",
-      "name": "Event Bus",
-      "technology": "Amazon MSK (Apache Kafka)",
-      "purpose": "Decoupled event streaming backbone. Topics: pa-requests, pa-enriched, pa-determinations, pa-responses, audit-events. Enables replay, ordering, and parallel consumer groups.",
-      "inputs": ["Unified PA Request from Normalizer", "Enriched PA from PA Copilot", "Determinations"],
-      "outputs": ["Events consumed by PA Copilot, Response Router, Audit Service, Analytics"],
-      "scalability": "Kafka partitioning by LOB ID enables parallel processing across 20 LOBs",
-      "cost_driver": true
+      "name": "Clinical Data Aggregation Service",
+      "technology": "Azure Health Data Services (FHIR R4) + Legacy DB Connectors",
+      "purpose": "Retrieves and standardizes clinical data needed for AI review — pulls from FHIR R4 endpoints and legacy databases, presents unified clinical context to the AI engine.",
+      "inputs": ["Patient identifier", "Relevant encounter/condition references"],
+      "outputs": ["Aggregated clinical context (FHIR R4 format): diagnoses, labs, procedures, clinical notes"],
+      "scalability": "Horizontal — parallelizable across data sources",
+      "cost_driver": false
     },
     {
       "id": "C-005",
-      "name": "FHIR R4 Facade",
-      "technology": "AWS HealthLake + FastAPI FHIR client + Legacy Data Adapters",
-      "purpose": "Unified clinical data access layer. Queries FHIR R4 endpoints via SMART on FHIR auth, transforms legacy DB records into FHIR R4 resources. Aggregates into Clinical Evidence Package per patient.",
-      "inputs": ["Patient ID + clinical data request from PA Copilot"],
-      "outputs": ["FHIR R4 Bundle (Patient, Condition, Observation, DiagnosticReport, MedicationRequest)"],
-      "scalability": "Horizontal via ECS Fargate tasks; connection pooling for legacy DB access",
+      "name": "Autonomize PA Copilot (AI Engine)",
+      "technology": "Autonomize AI Genesis Platform + Claude (via Azure AI Foundry)",
+      "purpose": "Core AI engine — reviews clinical evidence against coverage criteria, generates determination recommendation with confidence score and reasoning. Uses ReAct pattern with specialized skills: clinical data extraction, coverage matching, medical necessity assessment.",
+      "inputs": ["Normalized PA request", "Aggregated clinical context", "Coverage criteria", "Member benefits"],
+      "outputs": ["Determination recommendation (approve/deny/pend)", "Confidence score", "Clinical reasoning narrative", "Supporting evidence references"],
+      "scalability": "Horizontal — scales with LLM API throughput and concurrent agent instances",
       "cost_driver": true
     },
     {
       "id": "C-006",
-      "name": "Eligibility Service",
-      "technology": "ECS Fargate (Python/FastAPI)",
-      "purpose": "Real-time member eligibility verification against TriZetto Facets. Checks enrollment, benefit plan, service-specific coverage, and contract rules.",
-      "inputs": ["Member ID, service code, date of service"],
-      "outputs": ["Eligibility determination (eligible/ineligible with reason code)"],
-      "scalability": "Horizontal scaling with DynamoDB DAX cache for frequent lookups (5-min TTL)",
+      "name": "Determination Router",
+      "technology": "Azure Functions + Business rules engine",
+      "purpose": "Routes AI determination based on confidence threshold: high-confidence approvals auto-processed, low-confidence or denial cases routed to human clinical reviewer. Configurable per LOB.",
+      "inputs": ["AI determination with confidence score", "LOB-specific routing rules"],
+      "outputs": ["Auto-approved PA response", "Human review queue assignment", "Pend-for-info request"],
+      "scalability": "Horizontal — stateless routing logic",
       "cost_driver": false
     },
     {
       "id": "C-007",
-      "name": "PA Copilot Orchestrator",
-      "technology": "Autonomize AI Genesis Platform",
-      "purpose": "Multi-agent PA processing pipeline. Coordinates specialized agents: Document Agent, Clinical NLP Agent, Eligibility Agent, Guidelines Matching Agent, Decision Agent. Produces PA determination with confidence score and clinical rationale.",
-      "inputs": ["Unified PA Request from Kafka", "Clinical Evidence Package from FHIR Facade", "Eligibility result", "Guidelines criteria"],
-      "outputs": ["PA Determination (approve/pend) with confidence score, rationale, guideline citations"],
-      "scalability": "Managed by Autonomize AI platform; scales with agent instance count",
-      "cost_driver": true
+      "name": "Clinical Review Dashboard",
+      "technology": "Autonomize AI Studio",
+      "purpose": "Human clinical reviewer interface — presents AI recommendation, supporting evidence, and clinical context. Reviewer confirms, modifies, or overrides AI determination. Feedback captured for model improvement.",
+      "inputs": ["AI determination + reasoning", "Clinical context", "Coverage criteria"],
+      "outputs": ["Final determination (human-reviewed)", "Reviewer feedback/corrections", "Audit record"],
+      "scalability": "Scales with reviewer count — web-based, concurrent access",
+      "cost_driver": false
     },
     {
       "id": "C-008",
-      "name": "Guidelines Matching Service",
-      "technology": "ECS Fargate + InterQual/MCG API clients",
-      "purpose": "Query InterQual and MCG clinical guidelines APIs. Match PA request clinical evidence against applicable criteria. Return match result with specific guideline citations.",
-      "inputs": ["Clinical evidence summary, diagnosis codes, procedure codes"],
-      "outputs": ["Guideline match result with citations and coverage determination"],
-      "scalability": "Horizontal scaling; caching of guideline criteria sets (updated quarterly)",
+      "name": "Determination Response Service",
+      "technology": "Azure Functions + Azure Service Bus",
+      "purpose": "Writes final PA determination back to Payer Core System and sends response to requesting provider via appropriate channel (portal notification, X12 278 response, fax).",
+      "inputs": ["Final PA determination", "Original request channel metadata"],
+      "outputs": ["Payer Core System update", "Provider notification", "Audit trail entry"],
+      "scalability": "Horizontal — event-driven",
       "cost_driver": false
     },
     {
       "id": "C-009",
-      "name": "Human Review Workflow",
-      "technology": "AWS Step Functions + existing clinical review tools",
-      "purpose": "Route low-confidence cases (< 0.85) to clinical reviewers. Present pre-assembled evidence package. Capture reviewer decision and corrections for feedback loop.",
-      "inputs": ["PA Determination with confidence < 0.85", "Clinical Evidence Package"],
-      "outputs": ["Reviewer determination", "Correction data for MLOps feedback loop"],
-      "scalability": "Step Functions manages concurrent review workflows; scales with reviewer capacity",
+      "name": "LLMOps Pipeline",
+      "technology": "Azure Monitor + Custom eval framework + Autonomize AI",
+      "purpose": "Monitors AI model performance in production — tracks accuracy, hallucination rate, clinical safety metrics. Runs automated evals on determination samples. Captures human reviewer feedback for continuous improvement.",
+      "inputs": ["AI determinations", "Human reviewer corrections", "Outcome data (appeals, overturns)"],
+      "outputs": ["Performance dashboards", "Drift alerts", "Eval reports", "Retraining triggers"],
+      "scalability": "Batch processing — runs on schedule",
       "cost_driver": false
     },
     {
       "id": "C-010",
-      "name": "Response Router",
-      "technology": "AWS Lambda + SNS",
-      "purpose": "Deliver PA determination back to originating channel: portal notification, X12 278 response, or fax response letter. Format-aware routing based on inbound channel.",
-      "inputs": ["PA Determination from Kafka (pa-determinations topic)"],
-      "outputs": ["Portal notification (API callback)", "X12 278 response (EDI)", "Fax response (PDF via fax gateway)"],
-      "scalability": "Lambda auto-scales; SNS fan-out for multi-channel delivery",
-      "cost_driver": false
-    },
-    {
-      "id": "C-011",
-      "name": "Audit Service",
-      "technology": "AWS Lambda + DynamoDB (append-only)",
-      "purpose": "Immutable audit trail for every PA decision. Captures: decision maker (AI/human), data considered, guidelines applied, confidence score, overrides, timestamps. Cryptographic hash chain for tamper evidence.",
-      "inputs": ["Audit events from all components via Kafka (audit-events topic)"],
-      "outputs": ["Immutable audit records in DynamoDB", "Audit data replicated to Snowflake for analytics"],
-      "scalability": "DynamoDB on-demand scales automatically; Lambda processes audit events asynchronously",
-      "cost_driver": false
-    },
-    {
-      "id": "C-012",
-      "name": "LOB Configuration Engine",
-      "technology": "DynamoDB + FastAPI admin API",
-      "purpose": "Configuration-driven rules engine for 20 LOBs. Stores LOB-specific: approval thresholds, guideline sets, workflow steps, confidence thresholds, auto-determination eligibility. Version-controlled with rollback.",
-      "inputs": ["Admin configuration updates via API"],
-      "outputs": ["LOB-specific configuration consumed by PA Copilot and Decision Agent"],
-      "scalability": "DynamoDB handles config reads at any scale; DAX cache for hot path",
-      "cost_driver": false
-    },
-    {
-      "id": "C-013",
-      "name": "MLOps Pipeline",
-      "technology": "Amazon SageMaker (Model Monitor, Processing, Training, Endpoints)",
-      "purpose": "Production ML lifecycle: drift detection (PSI, KS test daily), outcome monitoring (weekly), reviewer feedback aggregation (daily), model fine-tuning (monthly), A/B testing before promotion.",
-      "inputs": ["Prediction logs from PA Copilot", "Reviewer corrections from Human Review", "Outcome data (appeals, overturns)"],
-      "outputs": ["Drift alerts (CloudWatch + SNS)", "Updated model artifacts (S3)", "A/B test results"],
-      "scalability": "SageMaker managed scaling; spot instances for training jobs",
-      "cost_driver": true
-    },
-    {
-      "id": "C-014",
-      "name": "Analytics and Dashboards",
-      "technology": "Snowflake + dbt + Amazon QuickSight",
-      "purpose": "Operational dashboards: PA volume, turnaround time, auto-determination rate, clinical accuracy, per-LOB breakdowns. Executive, operations, and clinical dashboard views.",
-      "inputs": ["PA processing events replicated from Kafka to Snowflake via CDC", "Audit data"],
-      "outputs": ["QuickSight dashboards", "Scheduled reports", "Ad-hoc SQL queries"],
-      "scalability": "Snowflake auto-scaling warehouses; QuickSight SPICE in-memory caching",
+      "name": "Audit and Compliance Service",
+      "technology": "Azure Monitor Logs + Azure Blob Storage (immutable)",
+      "purpose": "Maintains tamper-proof audit trail for all PA decisions — AI reasoning, human review actions, determination outcomes. Supports HIPAA audit requirements and regulatory reporting.",
+      "inputs": ["All system events: PA submissions, AI determinations, human reviews, final decisions"],
+      "outputs": ["Immutable audit logs", "Compliance reports", "CMS-0057-F metrics (approval/denial/appeal rates)"],
+      "scalability": "Append-only — grows with transaction volume",
       "cost_driver": false
     }
   ],
@@ -234,258 +195,240 @@
   "data_flows": [
     {
       "id": "DF-001",
-      "name": "Fax Ingestion",
-      "source": "Fax Server (SFTP)",
-      "destination": "S3 → Textract → Comprehend Medical → Normalizer → Kafka",
-      "protocol": "SFTP + S3 Events + Lambda",
-      "data_type": "TIFF/PDF → Extracted text → Clinical entities → Unified PA Request",
-      "latency_target_ms": 60000,
-      "encryption": "TLS 1.2 (transit) + S3 SSE-KMS (rest)"
+      "name": "PA Request Submission",
+      "source": "Provider (Fax/Portal/EDI)",
+      "destination": "PA Request Ingestion Gateway (C-001)",
+      "protocol": "HTTPS / SFTP / X12 278",
+      "data_type": "PA request (fax image, portal form, EDI transaction)",
+      "latency_target_ms": 5000,
+      "encryption": "TLS 1.2+ in transit"
     },
     {
       "id": "DF-002",
-      "name": "Portal PA Submission",
-      "source": "Provider Web Portal",
-      "destination": "API Gateway → Validator → Normalizer → Kafka",
-      "protocol": "REST API (HTTPS)",
-      "data_type": "JSON PA Request → Unified PA Request",
-      "latency_target_ms": 5000,
-      "encryption": "TLS 1.2 (transit) + field-level PHI encryption"
+      "name": "Document Processing",
+      "source": "Ingestion Gateway (C-001)",
+      "destination": "Document Processing Pipeline (C-002)",
+      "protocol": "Azure Service Bus",
+      "data_type": "Raw documents for OCR/extraction",
+      "latency_target_ms": 30000,
+      "encryption": "Azure Service Bus encryption + TLS"
     },
     {
       "id": "DF-003",
-      "name": "EDI X12 278 Ingestion",
-      "source": "EDI Gateway (AS2/SFTP)",
-      "destination": "S3 → X12 Parser → Normalizer → Kafka",
-      "protocol": "AS2 or SFTP",
-      "data_type": "ASC X12 278 → Parsed segments → Unified PA Request",
-      "latency_target_ms": 10000,
-      "encryption": "AS2 encryption + S3 SSE-KMS"
+      "name": "Eligibility Check",
+      "source": "Ingestion Gateway (C-001)",
+      "destination": "Member Eligibility Service (C-003)",
+      "protocol": "REST API (synchronous)",
+      "data_type": "Member ID + service code",
+      "latency_target_ms": 2000,
+      "encryption": "TLS 1.2+ / mutual TLS"
     },
     {
       "id": "DF-004",
-      "name": "Clinical Data Retrieval (FHIR)",
-      "source": "FHIR R4 EMR Endpoints",
-      "destination": "FHIR Facade → Clinical Evidence Package",
-      "protocol": "FHIR R4 REST API (SMART on FHIR OAuth 2.0)",
-      "data_type": "FHIR R4 Resources (Patient, Condition, Observation, DiagnosticReport)",
-      "latency_target_ms": 15000,
-      "encryption": "TLS 1.2 + SMART on FHIR token scoping"
+      "name": "Clinical Data Retrieval",
+      "source": "Autonomize PA Copilot (C-005)",
+      "destination": "Clinical Data Aggregation (C-004)",
+      "protocol": "FHIR R4 REST API + Legacy DB connectors",
+      "data_type": "Clinical records (diagnoses, labs, notes, procedures)",
+      "latency_target_ms": 5000,
+      "encryption": "TLS 1.2+ / OAuth 2.0 tokens"
     },
     {
       "id": "DF-005",
-      "name": "Clinical Data Retrieval (Legacy)",
-      "source": "Legacy Clinical Databases (Oracle, SQL Server, DB2)",
-      "destination": "Legacy Data Adapter → FHIR R4 transformation → Clinical Evidence Package",
-      "protocol": "JDBC via AWS PrivateLink",
-      "data_type": "Proprietary schemas → FHIR R4 Resources",
-      "latency_target_ms": 20000,
-      "encryption": "PrivateLink (private network) + TLS 1.2"
+      "name": "AI Clinical Review",
+      "source": "Normalized PA data + Clinical context",
+      "destination": "Autonomize PA Copilot (C-005)",
+      "protocol": "Internal API / Azure AI Foundry",
+      "data_type": "Structured PA request + clinical evidence + coverage criteria",
+      "latency_target_ms": 60000,
+      "encryption": "Azure VNet encryption + TLS"
     },
     {
       "id": "DF-006",
-      "name": "Eligibility Check",
-      "source": "Eligibility Service",
-      "destination": "TriZetto Facets Core System",
-      "protocol": "REST API + JDBC",
-      "data_type": "Eligibility query/response",
-      "latency_target_ms": 3000,
-      "encryption": "TLS 1.2 + service account authentication"
+      "name": "Determination Routing",
+      "source": "Autonomize PA Copilot (C-005)",
+      "destination": "Determination Router (C-006)",
+      "protocol": "Azure Service Bus",
+      "data_type": "AI determination + confidence score + reasoning",
+      "latency_target_ms": 1000,
+      "encryption": "Azure Service Bus encryption"
     },
     {
       "id": "DF-007",
-      "name": "PA Determination Flow",
-      "source": "PA Copilot (Autonomize AI)",
-      "destination": "Kafka (pa-determinations) → Response Router → Originating Channel",
-      "protocol": "Kafka + REST/AS2/Fax",
-      "data_type": "PA Determination with rationale, confidence, guideline citations",
-      "latency_target_ms": 30000,
-      "encryption": "TLS 1.2 + field-level encryption for PHI"
+      "name": "Human Review Queue",
+      "source": "Determination Router (C-006)",
+      "destination": "Clinical Review Dashboard (C-007)",
+      "protocol": "Azure Service Bus + WebSocket",
+      "data_type": "PA case with AI recommendation for human review",
+      "latency_target_ms": 2000,
+      "encryption": "TLS 1.2+"
     },
     {
       "id": "DF-008",
-      "name": "Audit Event Stream",
-      "source": "All components",
-      "destination": "Kafka (audit-events) → Audit Service → DynamoDB",
-      "protocol": "Kafka event stream",
-      "data_type": "Structured audit records (JSON)",
-      "latency_target_ms": 5000,
-      "encryption": "Kafka TLS + DynamoDB encryption at rest"
+      "name": "Determination Response",
+      "source": "Determination Router (C-006) / Clinical Review Dashboard (C-007)",
+      "destination": "Determination Response Service (C-008)",
+      "protocol": "Azure Service Bus",
+      "data_type": "Final PA determination",
+      "latency_target_ms": 2000,
+      "encryption": "TLS 1.2+"
     },
     {
       "id": "DF-009",
-      "name": "MLOps Feedback Loop",
-      "source": "Human Review Workflow (reviewer corrections)",
-      "destination": "DynamoDB → S3 (training data) → SageMaker (evaluation/training)",
-      "protocol": "DynamoDB Streams → Lambda → S3 → SageMaker",
-      "data_type": "Reviewer corrections, outcome data, prediction logs",
-      "latency_target_ms": 86400000,
-      "encryption": "S3 SSE-KMS + SageMaker encryption"
+      "name": "Payer Core Writeback",
+      "source": "Determination Response Service (C-008)",
+      "destination": "Payer Core System",
+      "protocol": "REST API / Database write",
+      "data_type": "PA determination record",
+      "latency_target_ms": 3000,
+      "encryption": "TLS 1.2+ / mutual TLS"
     },
     {
       "id": "DF-010",
-      "name": "Analytics Pipeline",
-      "source": "Kafka topics (all PA events)",
-      "destination": "Snowflake → dbt transformations → QuickSight",
-      "protocol": "Kafka Connect → Snowflake Snowpipe",
-      "data_type": "PA processing events, audit records, performance metrics",
-      "latency_target_ms": 300000,
-      "encryption": "Snowflake encryption + TLS"
+      "name": "Audit Trail",
+      "source": "All components",
+      "destination": "Audit and Compliance Service (C-010)",
+      "protocol": "Azure Monitor / Azure Service Bus",
+      "data_type": "System events, AI decisions, human actions",
+      "latency_target_ms": 5000,
+      "encryption": "Azure encryption at rest (immutable storage)"
     }
   ],
 
   "diagrams": {
     "system_context": {
       "format": "mermaid",
-      "code": "flowchart LR\n    subgraph \"Inbound Sources\"\n        FAX[\"Fax Server\"]\n        PORTAL[\"Provider Portal\"]\n        EDI_GW[\"EDI Gateway\"]\n    end\n\n    subgraph \"Integration Layer\"\n        INGEST[\"Ingestion Service\"]\n        KAFKA[\"Apache Kafka\"]\n        FHIR_FACADE[\"FHIR R4 Facade\"]\n        RESP[\"Response Router\"]\n    end\n\n    subgraph \"Autonomize AI\"\n        COPILOT[\"PA Copilot\"]\n    end\n\n    subgraph \"Payer Core\"\n        FACETS[\"TriZetto Facets\"]\n        CLINICAL[\"Clinical Data\"]\n        GUIDELINES[\"Clinical Guidelines\"]\n    end\n\n    subgraph \"Observability\"\n        AUDIT[\"Audit Service\"]\n        DASH[\"Dashboards\"]\n    end\n\n    FAX -->|\"SFTP\"| INGEST\n    PORTAL -->|\"REST API\"| INGEST\n    EDI_GW -->|\"AS2/SFTP\"| INGEST\n    INGEST -->|\"Unified PA Request\"| KAFKA\n    KAFKA -->|\"Event Stream\"| COPILOT\n    COPILOT -->|\"FHIR R4 Query\"| FHIR_FACADE\n    FHIR_FACADE -->|\"Clinical Bundle\"| CLINICAL\n    COPILOT -->|\"Eligibility API\"| FACETS\n    COPILOT -->|\"Criteria API\"| GUIDELINES\n    COPILOT -->|\"Determination\"| KAFKA\n    KAFKA --> RESP\n    RESP -->|\"Notification\"| PORTAL\n    RESP -->|\"X12 278\"| EDI_GW\n    KAFKA --> AUDIT\n    KAFKA --> DASH"
+      "code": "See outputs/eng-2026-004-v2/diagrams/01-system-context.mmd"
     },
-    "ingestion_flow": {
+    "component_architecture": {
       "format": "mermaid",
-      "code": "flowchart TB\n    subgraph \"Inbound Channels\"\n        FAX[\"Fax (TIFF/PDF)\"]\n        PORT[\"Portal (JSON)\"]\n        X12[\"EDI (X12 278)\"]\n    end\n\n    subgraph \"Document Processing\"\n        S3[\"Amazon S3\"]\n        TEXTRACT[\"Amazon Textract\"]\n        COMPREHEND[\"Comprehend Medical\"]\n        X12_PARSE[\"X12 278 Parser\"]\n    end\n\n    subgraph \"Normalization\"\n        NORMALIZE[\"Data Normalizer\"]\n        VALIDATE[\"Schema Validator\"]\n    end\n\n    KAFKA_OUT[\"Apache Kafka\"]\n\n    FAX -->|\"SFTP Upload\"| S3\n    S3 -->|\"S3 Event\"| TEXTRACT\n    TEXTRACT -->|\"Extracted Text\"| COMPREHEND\n    COMPREHEND -->|\"Clinical Entities\"| NORMALIZE\n    PORT -->|\"REST API\"| VALIDATE\n    VALIDATE --> NORMALIZE\n    X12 -->|\"AS2/SFTP\"| X12_PARSE\n    X12_PARSE --> NORMALIZE\n    NORMALIZE -->|\"Unified PA Request\"| KAFKA_OUT"
+      "code": "See outputs/eng-2026-004-v2/diagrams/02-component-architecture.mmd"
     },
-    "clinical_data_access": {
+    "pa_request_flow": {
       "format": "mermaid",
-      "code": "flowchart TB\n    subgraph \"FHIR R4 Sources\"\n        EMR_A[\"EMR System A\"]\n        EMR_B[\"EMR System B\"]\n    end\n\n    subgraph \"Legacy Sources\"\n        LEGACY_ORA[\"Legacy DB (Oracle)\"]\n        LEGACY_SQL[\"Legacy DB (SQL Server)\"]\n    end\n\n    subgraph \"FHIR R4 Facade\"\n        SMART[\"SMART on FHIR Auth\"]\n        FHIR_CLIENT[\"FHIR R4 Client\"]\n        LEGACY_ADAPT[\"Legacy Data Adapter\"]\n        AGGREGATOR[\"Clinical Aggregator\"]\n    end\n\n    EVIDENCE[\"Clinical Evidence Package\"]\n\n    EMR_A --> SMART\n    EMR_B --> SMART\n    SMART --> FHIR_CLIENT\n    FHIR_CLIENT --> AGGREGATOR\n    LEGACY_ORA -->|\"JDBC via PrivateLink\"| LEGACY_ADAPT\n    LEGACY_SQL -->|\"JDBC via PrivateLink\"| LEGACY_ADAPT\n    LEGACY_ADAPT -->|\"FHIR R4 Resources\"| AGGREGATOR\n    AGGREGATOR --> EVIDENCE"
-    },
-    "mlops_architecture": {
-      "format": "mermaid",
-      "code": "flowchart TB\n    subgraph \"Production\"\n        MODEL[\"PA Decision Model\"]\n        PREDICTIONS[\"Prediction Logs\"]\n        REVIEWER[\"Clinical Reviewer\"]\n    end\n\n    subgraph \"Monitoring\"\n        STAT_DRIFT[\"Statistical Drift\"]\n        OUTCOME_MON[\"Outcome Monitoring\"]\n        ALERTS[\"Alert Manager\"]\n    end\n\n    subgraph \"Feedback Loop\"\n        CORRECTIONS[\"Reviewer Corrections\"]\n        DAILY_AGG[\"Daily Aggregation\"]\n        WEEKLY_EVAL[\"Weekly Evaluation\"]\n        MONTHLY_TUNE[\"Monthly Fine-tuning\"]\n        AB_TEST[\"A/B Testing\"]\n    end\n\n    MODEL --> PREDICTIONS\n    PREDICTIONS -->|\"Daily PSI/KS Test\"| STAT_DRIFT\n    PREDICTIONS -->|\"Weekly Overturn Rate\"| OUTCOME_MON\n    STAT_DRIFT --> ALERTS\n    OUTCOME_MON --> ALERTS\n    REVIEWER -->|\"Approve/Override\"| CORRECTIONS\n    CORRECTIONS --> DAILY_AGG\n    DAILY_AGG --> WEEKLY_EVAL\n    WEEKLY_EVAL -->|\"Retrain if needed\"| MONTHLY_TUNE\n    MONTHLY_TUNE --> AB_TEST\n    AB_TEST -->|\"Promote if better\"| MODEL"
-    },
-    "multi_tenant_scaling": {
-      "format": "mermaid",
-      "code": "flowchart LR\n    subgraph \"Shared Platform\"\n        GW[\"API Gateway\"]\n        KAFKA[\"Kafka (LOB Partitions)\"]\n        COPILOT[\"PA Copilot\"]\n        SHARED_MODEL[\"Shared Base Model\"]\n    end\n\n    subgraph \"LOB Configuration\"\n        CONFIG[\"Config Engine\"]\n        LOB_COMM[\"Commercial Rules\"]\n        LOB_MA[\"Medicare Adv Rules\"]\n        LOB_MCAID[\"Medicaid Rules\"]\n        LOB_N[\"LOB N Rules\"]\n    end\n\n    subgraph \"LOB-Specific Models\"\n        FT_COMM[\"Fine-tuned: Commercial\"]\n        FT_MA[\"Fine-tuned: Medicare Adv\"]\n    end\n\n    GW --> KAFKA\n    KAFKA --> COPILOT\n    COPILOT --> CONFIG\n    CONFIG --> LOB_COMM\n    CONFIG --> LOB_MA\n    CONFIG --> LOB_MCAID\n    CONFIG --> LOB_N\n    COPILOT --> SHARED_MODEL\n    SHARED_MODEL --> FT_COMM\n    SHARED_MODEL --> FT_MA"
-    },
-    "deployment_view": {
-      "format": "mermaid",
-      "code": "flowchart TB\n    subgraph \"AWS us-east-1 (Primary)\"\n        subgraph \"Public Subnet\"\n            ALB[\"Application Load Balancer\"]\n            APIGW[\"API Gateway + WAF\"]\n        end\n        subgraph \"Private Subnet AZ-1\"\n            ECS_1[\"ECS Fargate Tasks\"]\n            RDS_P[\"RDS PostgreSQL (Primary)\"]\n        end\n        subgraph \"Private Subnet AZ-2\"\n            ECS_2[\"ECS Fargate Tasks\"]\n            RDS_S[\"RDS PostgreSQL (Standby)\"]\n        end\n        subgraph \"Data Services\"\n            MSK[\"Amazon MSK\"]\n            DDB[\"DynamoDB\"]\n            S3_STORE[\"Amazon S3\"]\n            HLAKE[\"AWS HealthLake\"]\n        end\n        subgraph \"ML Services\"\n            SM[\"SageMaker\"]\n        end\n    end\n\n    subgraph \"Autonomize AI\"\n        GENESIS[\"Genesis Platform\"]\n    end\n\n    subgraph \"Payer On-Prem\"\n        FACETS_SYS[\"TriZetto Facets\"]\n        LEGACY_DBS[\"Legacy Clinical DBs\"]\n    end\n\n    APIGW --> ALB\n    ALB --> ECS_1\n    ALB --> ECS_2\n    ECS_1 --> MSK\n    ECS_2 --> MSK\n    MSK -->|\"PrivateLink\"| GENESIS\n    ECS_1 --> HLAKE\n    ECS_1 -->|\"PrivateLink\"| LEGACY_DBS\n    ECS_1 -->|\"PrivateLink\"| FACETS_SYS\n    ECS_1 --> DDB\n    ECS_1 --> S3_STORE\n    ECS_1 --> SM"
+      "code": "See outputs/eng-2026-004-v2/diagrams/03-pa-request-flow.mmd"
     }
   },
 
   "cloud_infrastructure": {
     "services": {
-      "compute": ["Amazon ECS (Fargate)", "AWS Lambda", "AWS Step Functions"],
-      "storage": ["Amazon S3", "Amazon RDS PostgreSQL", "Amazon DynamoDB", "AWS HealthLake"],
-      "networking": ["Amazon VPC", "AWS PrivateLink", "Application Load Balancer", "Amazon API Gateway"],
-      "security": ["AWS WAF", "AWS KMS", "AWS Secrets Manager", "AWS IAM", "AWS CloudTrail"],
-      "ai_ml": ["Amazon Textract", "Amazon Comprehend Medical", "Amazon SageMaker", "Amazon Bedrock"],
-      "streaming": ["Amazon MSK (Apache Kafka)"],
-      "monitoring": ["Amazon CloudWatch", "Amazon QuickSight", "AWS X-Ray"],
-      "analytics": ["Snowflake on AWS", "dbt"]
+      "compute": "Azure Container Apps (production), Azure App Service (demo)",
+      "ai_platform": "Azure AI Foundry (Claude models, Agent Service, MCP support)",
+      "healthcare_data": "Azure Health Data Services (FHIR R4)",
+      "messaging": "Azure Service Bus (Premium — HIPAA BAA)",
+      "database": "Azure Database for PostgreSQL (Flexible Server)",
+      "search": "Azure AI Search (vector + keyword hybrid)",
+      "storage": "Azure Blob Storage (immutable for audit, standard for documents)",
+      "identity": "Microsoft Entra ID (RBAC, SMART on FHIR)",
+      "monitoring": "Azure Monitor + Application Insights (OpenTelemetry)",
+      "networking": "Azure Virtual Network, Private Endpoints, Azure API Management"
     },
-    "deployment_pattern": "Container-based services on ECS Fargate for steady-state workloads + Lambda for event-driven processing (S3 triggers, Kafka consumers, audit event processing). Step Functions for workflow orchestration.",
-    "dr_strategy": {
+    "deployment_pattern": "Container-based with event-driven processing. Azure Container Apps for stateless services, Azure Functions for event handlers, Azure Service Bus for async messaging.",
+    "backup_dr": {
       "rto_hours": 4,
       "rpo_hours": 1,
-      "approach": "Multi-AZ within us-east-1 for HA. Cross-region S3 replication to us-west-2 for documents. RDS automated backups with cross-region snapshot copy. DynamoDB global tables for audit trail. MSK mirroring for Kafka topic replication.",
-      "failover": "Automated RDS failover within region. Manual cross-region failover for full DR scenario."
+      "strategy": "Azure-native geo-redundant storage, PostgreSQL read replicas, Service Bus geo-disaster recovery"
     },
-    "cost_optimization": {
-      "compute": "Fargate (no idle EC2) + Lambda (per-invocation pricing). Spot instances for SageMaker training.",
-      "storage": "S3 Intelligent-Tiering for documents. DynamoDB on-demand mode. RDS reserved instances for steady-state.",
-      "monitoring": "CloudWatch 30-day hot retention, archive to S3 Glacier for compliance retention.",
-      "tags": "Cost allocation tags per LOB for chargeback. Monthly cost reviews."
-    }
+    "cost_optimization": "Start with smallest viable SKUs, auto-scale based on PA volume. Azure AI Foundry pay-per-token (no reserved capacity needed). Service Bus Premium only where HIPAA requires it."
   },
 
   "ai_ml_components": {
-    "tool_gateway": {
-      "description": "Amazon API Gateway + AWS Lambda serves as the tool gateway, converting external API calls (Facets, InterQual, MCG, FHIR endpoints) into tool invocations for Autonomize AI agents. Centralized auth, rate limiting, and circuit breakers.",
-      "technologies": ["Amazon API Gateway", "AWS Lambda", "AWS Secrets Manager"]
-    },
-    "identity_layer": {
-      "description": "Multi-layer authentication: SMART on FHIR (OAuth 2.0) for clinical data access, mTLS for Autonomize AI platform connectivity, SAML 2.0 for clinical reviewer SSO, service accounts for system-to-system. JWT tokens with 15-minute expiry for JIT access.",
-      "technologies": ["OAuth 2.0", "SAML 2.0", "mTLS", "SMART on FHIR", "AWS IAM"]
-    },
-    "execution_runtime": {
-      "description": "Autonomize AI Genesis Platform provides the multi-agent execution runtime. Integration services run on ECS Fargate. Event processing on Lambda. Workflow orchestration via Step Functions.",
-      "technologies": ["Autonomize AI Genesis", "ECS Fargate", "Lambda", "Step Functions"]
-    },
-    "persistent_memory": {
-      "description": "DynamoDB for real-time state (PA request status, configuration). RDS PostgreSQL for relational PA records. S3 for document storage and ML artifacts. Snowflake for historical analytics and training data. AWS HealthLake for FHIR R4 clinical data store.",
-      "technologies": ["DynamoDB", "RDS PostgreSQL", "S3", "Snowflake", "AWS HealthLake"]
-    },
-    "multi_agent_pipeline": {
-      "description": "Autonomize AI PA Copilot orchestrates specialized agents in sequence: (1) Document Agent — OCR and entity extraction, (2) Clinical NLP Agent — clinical note understanding, (3) Eligibility Agent — member verification, (4) Guidelines Agent — criteria matching, (5) Decision Agent — determination with confidence scoring, (6) Response Agent — multi-format delivery. Supervisor-worker pattern with the PA Copilot as supervisor.",
-      "pattern": "Supervisor-Worker with sequential pipeline",
-      "agents": ["Document Agent", "Clinical NLP Agent", "Eligibility Agent", "Guidelines Agent", "Decision Agent", "Response Agent"]
-    }
+    "ai_engine": "Autonomize PA Copilot on Genesis Platform — compound AI with multiple specialized skills",
+    "llm_provider": "Claude (Anthropic) via Azure AI Foundry — Opus for complex review, Sonnet for routine",
+    "orchestration_pattern": "Single orchestrator agent with ReAct loop: receive PA → check eligibility → retrieve clinical data → match coverage criteria → generate determination → route based on confidence",
+    "agent_skills": [
+      "Clinical data extraction (NLP on unstructured notes)",
+      "Coverage criteria matching (guidelines + policy rules)",
+      "Eligibility verification (Payer Core API tool)",
+      "Medical necessity assessment (evidence synthesis)",
+      "ICD-10 / CPT code validation (Claude healthcare connector)",
+      "CMS Coverage DB lookup (Claude healthcare connector)"
+    ],
+    "guardrails": [
+      "Output validation — determination must include confidence score, reasoning, and evidence citations",
+      "Prompt injection defense — input sanitization, system prompt isolation",
+      "Hallucination detection — cross-reference AI claims against retrieved clinical data",
+      "Clinical safety — never auto-deny without human review (Phase 1)",
+      "PHI minimization — only pass necessary clinical data to LLM, tokenize identifiers"
+    ],
+    "human_in_the_loop": "Confidence threshold routing: high confidence (>configurable threshold) → auto-approve, below threshold → human clinical review queue. All denials require human review in Phase 1."
   },
 
   "observability": {
     "logging": {
-      "format": "Structured JSON with correlation ID (pa_request_id) across all services",
-      "aggregation": "CloudWatch Logs with Log Insights for querying",
-      "retention": "30 days hot (CloudWatch), 7 years cold (S3 Glacier) for HIPAA compliance",
-      "phi_handling": "PHI fields masked in logs. Full PHI available only in audit trail with elevated access."
+      "tool": "Azure Monitor Logs",
+      "format": "Structured JSON, OpenTelemetry-compatible",
+      "retention": "90 days hot, 7 years cold (HIPAA requirement)",
+      "phi_handling": "PHI logged only to HIPAA-compliant destinations, tokenized in general logs"
     },
     "metrics": {
-      "infrastructure": ["CPU utilization", "Memory usage", "Network I/O", "Disk I/O"],
-      "application": ["PA request volume (per LOB, per channel)", "Turnaround time (P50, P95, P99)", "Auto-determination rate", "Queue depth", "Error rate"],
-      "ai_specific": ["Model confidence distribution", "Guideline match rate", "Drift score (PSI)", "Reviewer override rate", "Appeal rate"],
-      "cost": ["Per-PA processing cost", "Textract cost per document", "Kafka throughput cost", "SageMaker training cost"]
+      "tool": "Azure Monitor + Application Insights",
+      "key_metrics": [
+        "PA processing latency (P50/P95/P99)",
+        "Auto-determination rate (by LOB)",
+        "AI confidence score distribution",
+        "Human review queue depth and wait time",
+        "LLM token usage and cost per determination",
+        "Clinical accuracy (agreement with human reviewer)",
+        "CMS-0057-F compliance rate (% within timeline)"
+      ]
     },
     "tracing": {
-      "tool": "AWS X-Ray",
-      "scope": "End-to-end request tracing from ingestion through determination delivery",
-      "correlation": "pa_request_id propagated across all services and Kafka messages",
-      "sampling": "100% for errors, 10% for successful requests in production"
+      "tool": "Application Insights (distributed tracing)",
+      "scope": "End-to-end request tracing from PA submission through determination response",
+      "correlation": "Trace ID propagated across all components via Azure Service Bus message properties"
     }
   },
 
   "well_architected_scores": {
-    "operational_excellence": 7.5,
-    "security": 8.5,
-    "reliability": 7.0,
-    "performance_efficiency": 7.5,
-    "cost_optimization": 7.0,
-    "sustainability": 7.0,
-    "overall": 7.4,
+    "operational_excellence": 0,
+    "security": 0,
+    "reliability": 0,
+    "performance_efficiency": 0,
+    "cost_optimization": 0,
+    "sustainability": 0,
+    "overall": 0,
     "notes": {
-      "operational_excellence": "Strong: event-driven architecture, structured logging, blue/green deployment, CloudWatch dashboards. Gap: runbooks and incident response procedures not yet defined. Recommendation: document runbooks during integration build phase.",
-      "security": "Strong: multi-layer auth (SMART on FHIR, mTLS, SAML), PHI field-level encryption, immutable audit trail, WAF on API Gateway, PrivateLink for network isolation. Gap: penetration testing and security certification timeline not specified. Recommendation: schedule pen test before go-live.",
-      "reliability": "Strong: multi-AZ ECS, Kafka event durability with replay, circuit breakers, human fallback path. Gap: cross-region DR is manual failover — not automated. Recommendation: automate DR failover with Route 53 health checks for Phase 2.",
-      "performance_efficiency": "Strong: event-driven async processing, DynamoDB DAX caching, Kafka partitioning by LOB. Gap: 30-second P95 target is generous — could optimize with pre-computed clinical evidence caching. Recommendation: benchmark actual latency in QA/UAT.",
-      "cost_optimization": "Strong: serverless-first (Fargate, Lambda), S3 lifecycle policies, DynamoDB on-demand, Snowflake auto-suspend. Gap: Autonomize AI platform licensing cost not quantified. Recommendation: negotiate usage-based pricing aligned with auto-determination volume.",
-      "sustainability": "Strong: serverless eliminates idle compute, multi-tenant shares infra across 20 LOBs, batch MLOps reduces training compute. Gap: no carbon-aware scheduling or renewable energy commitments documented."
+      "placeholder": "Scores will be populated by parallel-wa-reviewer sub-agents"
     },
-    "score_source": "self-assessment (preliminary) — parallel-wa-reviewer agents running, scores will be calibrated",
-    "calibration_note": "Preliminary self-assessment scores. Will be replaced by parallel-wa-reviewer sub-agent scores when they complete. Self-assessment may overestimate by 1-2 points."
+    "score_source": "pending — parallel-wa-reviewer sub-agents to be invoked",
+    "calibration_note": "Scores will reflect independent parallel agent review. Placeholder zeros will be replaced."
   },
 
   "alternatives_considered": [
     {
-      "name": "Monolithic PA Processing Application",
-      "summary": "Single application handling all PA processing logic without multi-agent decomposition",
-      "why_rejected": "Cannot scale independently per function. Harder to customize per LOB. Does not leverage Autonomize AI's agent marketplace. Contradicts the event-driven, microservices architecture needed for 2.5M requests/month."
+      "name": "Apache Kafka for message queuing",
+      "summary": "Kafka provides higher throughput event streaming with log compaction and replay capabilities",
+      "why_rejected": "Azure Service Bus is simpler to operate, HIPAA BAA covered on Premium tier, sufficient for PA volumes. Kafka recommended as future scale option if throughput exceeds Service Bus capacity. Aligns with Phase 0 decision TD-3."
     },
     {
-      "name": "Multi-Instance Per LOB",
-      "summary": "Deploy separate PA processing stack per line of business (20 instances)",
-      "why_rejected": "20x infrastructure cost. Operational overhead of managing 20 deployments. Inconsistent updates across LOBs. Paul explicitly chose multi-tenant with config isolation — shared platform is more cost-effective for same-payer LOBs."
+      "name": "Multi-agent architecture (separate agents per skill)",
+      "summary": "Dedicated agents for OCR, eligibility, clinical review, determination — each with own LLM context",
+      "why_rejected": "Single orchestrator agent with skills is simpler, reduces inter-agent coordination overhead, aligns with Autonomize PA Copilot compound AI model. Multi-agent scales better at 80+ concurrent tasks (Mount Sinai research) but PA workflow is sequential, not parallel. Phase 0: single agent with skills preferred."
     },
     {
-      "name": "Direct Legacy DB Access (No FHIR Facade)",
-      "summary": "Connect AI system directly to legacy clinical databases without FHIR standardization layer",
-      "why_rejected": "Creates tight coupling to legacy schemas. Does not prepare for CMS-0057-F FHIR API requirement. Every legacy system change would require AI pipeline changes. FHIR facade provides abstraction and future-proofing."
+      "name": "AWS-primary deployment",
+      "summary": "Paul has 5 AWS certifications and deep AWS experience. AWS has SageMaker, Bedrock, HealthLake.",
+      "why_rejected": "Autonomize AI is Azure-native (Pegasus Program, Azure Marketplace, Azure deployments confirmed). Interview is for Autonomize AI role. Azure AI Foundry provides Claude + GPT models. AWS experience translates to Azure concepts. Phase 0 decision TD-1."
     },
     {
-      "name": "Batch Processing Instead of Event-Driven",
-      "summary": "Process PA requests in hourly or daily batches instead of real-time event streaming",
-      "why_rejected": "Cannot achieve < 24-hour turnaround target. CMS-0057-F requires real-time PA status inquiry. Provider experience degrades with batch delays. Kafka event streaming provides both real-time and replay capabilities."
+      "name": "LangChain/LangGraph for orchestration",
+      "summary": "Popular open-source framework for LLM application development",
+      "why_rejected": "Autonomize Genesis Platform provides healthcare-specific orchestration. Anthropic SDK (native) preferred for Claude integration with healthcare connectors. Adding LangChain creates unnecessary abstraction layer. Industry direction: native SDKs over frameworks for single-provider deployments."
     },
     {
-      "name": "Full Retraining Instead of Fine-Tuning for MLOps",
-      "summary": "Retrain the PA decision model from scratch on every feedback cycle",
-      "why_rejected": "Excessive compute cost for monthly cycles. Risk of catastrophic forgetting. Fine-tuning on reviewer corrections preserves base model knowledge while adapting to drift. Full retraining reserved for major guideline version changes (annual)."
+      "name": "Detailed FHIR R4 / Da Vinci Implementation Guide conformance",
+      "summary": "Full SMART on FHIR integration with Da Vinci Prior Auth IG",
+      "why_rejected": "Phase 0 decision TD-4: FHIR R4 label only, limited depth. Paul's FHIR experience is at label level. Deep FHIR conformance is a discovery-phase activity with clinical informaticists, not an architecture decision."
     }
   ],
 
   "_metadata": {
     "author": "sa-agent",
-    "date": "2026-03-20",
-    "validation_status": "valid",
-    "version": "1.0",
-    "architect": "Paul Prae",
-    "design_method": "event-driven microservices with multi-agent AI orchestration"
+    "date": "2026-03-23",
+    "validation_status": "complete",
+    "version": "2.0",
+    "architect": "Paul Prae (SA) + sa-agent (autonomous v2 iteration)",
+    "design_method": "Generic-first design with Azure mapping per Phase 0 decisions"
   }
 }

@@ -1,0 +1,45 @@
+flowchart LR
+    subgraph "Production"
+        AI_DET["AI Determinations<br/>Confidence + Reasoning"]
+        HUMAN_FB["Human Reviewer<br/>Corrections + Overrides"]
+        OUTCOMES["Outcome Data<br/>Appeals, Overturns"]
+    end
+
+    subgraph "Evaluation Pipeline"
+        COLLECT["Data Collection<br/>Determination Samples"]
+        EVAL["Automated Evals<br/>Accuracy, Safety, Hallucination"]
+        BENCH["Benchmark Suite<br/>Golden Test Cases"]
+    end
+
+    subgraph "Monitoring"
+        DRIFT["Performance Monitoring<br/>Accuracy Trends"]
+        ALERTS["Drift Alerts<br/>Threshold Triggers"]
+        DASH["LLMOps Dashboard<br/>Azure Monitor"]
+    end
+
+    subgraph "Improvement Loop"
+        DATASET["Updated Eval Dataset<br/>From Reviewer Corrections"]
+        RETRAIN["Model Evaluation<br/>New vs Current"]
+        DEPLOY["Staged Rollout<br/>Blue-Green Deployment"]
+    end
+
+    subgraph "Guardrails"
+        INPUT_G["Input Guardrails<br/>PHI Filtering, Prompt Safety"]
+        OUTPUT_G["Output Guardrails<br/>Clinical Validity Check"]
+    end
+
+    AI_DET --> COLLECT
+    HUMAN_FB --> COLLECT
+    OUTCOMES --> COLLECT
+    COLLECT --> EVAL
+    EVAL --> BENCH
+    EVAL --> DRIFT
+    DRIFT --> ALERTS
+    DRIFT --> DASH
+    ALERTS -->|"Degradation Detected"| DATASET
+    HUMAN_FB --> DATASET
+    DATASET --> RETRAIN
+    RETRAIN -->|"Improved"| DEPLOY
+    DEPLOY --> AI_DET
+    AI_DET --> INPUT_G
+    INPUT_G --> OUTPUT_G
