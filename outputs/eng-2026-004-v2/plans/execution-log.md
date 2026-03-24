@@ -24,3 +24,21 @@
 - KB validation: PASS
 - Committed and pushed
 
+### Phase 3: Architecture Redesign — COMPLETE
+- 10 components, 10 data flows, 6 diagrams (all rendered SVG+PNG)
+- Azure-primary stack: AI Foundry + Service Bus + Container Apps + Health Data Services
+- Single agent + skills (ReAct pattern) — not multi-agent
+- Source of truth document written
+- 6 WA reviewer agents launched (scores pending)
+- KB validation: PASS
+- Committed and pushed
+
+### Phase 4: Security & Compliance Review — COMPLETE
+- 8 STRIDE threats identified (2 critical, 4 high, 1 medium, 1 low)
+- AI-specific controls prioritized: prompt injection, PHI tokenization, output validation
+- 5-layer defense-in-depth architecture
+- HIPAA/SOC2/CMS-0057-F compliance mapping
+- 3 open findings (all medium/low — discovery-phase items)
+- KB validation: PASS
+- Committed and pushed
+

@@ -1,503 +1,299 @@
 {
   "$schema": "./schemas/project_plan.schema.json",
-  "$depends_on": ["requirements.json", "architecture.json", "estimate.json"],
+  "$depends_on": ["requirements.json", "architecture.json"],
   "engagement_id": "eng-2026-004",
-  "version": "1.0",
-  "last_updated": "2026-03-20",
+  "version": "2.0",
+  "last_updated": "2026-03-23",
   "status": "complete",
 
-  "approach": "Scrum with 2-week sprints, 6 sprints over 12 weeks. Decision gates between each major phase. Architectural decision points mapped to sprint boundaries.",
+  "approach": "Progressive delivery with AI features front-loaded. Each phase produces a deployable, demonstrable system. Phases are sequenced by value delivery, not waterfall stages. Timeline is relative — actual durations depend on discovery findings and team composition.",
   "total_duration_weeks": 12,
-  "start_date": "2026-04-06",
-  "target_end_date": "2026-06-26",
+  "start_date": "2026-04-01",
+  "target_end_date": "2026-06-30",
 
   "phases": [
     {
       "id": "P-001",
-      "name": "Discovery and Architecture Sign-Off",
+      "name": "Phase 0: Demo & Proof of Value",
       "start_week": 1,
-      "end_week": 2,
+      "end_week": 1,
       "objectives": [
-        "Validate architecture with payer technical team",
-        "Confirm Autonomize AI integration approach and API contracts",
-        "Establish development environment and CI/CD pipeline",
-        "Finalize LOB selection for Phase 1 (recommend: Commercial)"
+        "Build working demo that proves the AI-driven PA review concept",
+        "Validate Anthropic PA review skill capabilities with mock clinical data",
+        "Demonstrate end-to-end flow: PA submission → AI review → determination with reasoning"
       ],
       "deliverables": [
-        "Signed Architecture Decision Record (ADR)",
-        "Autonomize AI integration contract and API specifications",
-        "AWS infrastructure base (VPC, subnets, IAM roles, KMS keys)",
-        "CI/CD pipeline (GitHub Actions → ECR → ECS)",
-        "Development and staging environments provisioned"
+        "CLI tool or API using Anthropic PA review skill + Claude healthcare connectors",
+        "Mock PA cases with realistic clinical data",
+        "Demo walkthrough script aligned to presentation narrative",
+        "Azure deployment (App Service or Container Apps)"
       ],
       "success_criteria": [
-        "Architecture approved by CIO and CMO",
-        "Autonomize AI API access confirmed and tested",
-        "Infrastructure-as-code deploying cleanly to dev environment",
-        "Team onboarded and sprint 1 capacity confirmed"
+        "Demo processes a PA request end-to-end with AI-generated clinical reasoning",
+        "Determination includes confidence score, evidence citations, and coverage criteria matching",
+        "Demo is accessible via URL for panel to interact with"
       ],
-      "team_allocation": ["SA/Tech Lead 100%", "DevOps 100%", "AI/ML Engineers 50%", "PM 75%"],
-      "dependencies": ["Autonomize AI contract signed", "AWS account access provisioned", "Facets API documentation provided"],
-      "risks": ["Autonomize AI API contract negotiation delay", "AWS account provisioning delay"]
+      "team_allocation": ["Paul Prae (SA, AI-assisted development)"],
+      "dependencies": [],
+      "risks": ["Anthropic PA review skill may not cover all demo scenarios — mitigate with mock data and focused use cases"]
     },
     {
       "id": "P-002",
-      "name": "Integration Build — Core Pipeline",
-      "start_week": 3,
+      "name": "Phase 1: Production MVP",
+      "start_week": 2,
       "end_week": 6,
       "objectives": [
-        "Build ingestion pipeline (fax OCR, portal API, X12 278 parser)",
-        "Build FHIR R4 Facade with legacy data adapters",
-        "Build eligibility service (Facets integration)",
-        "Deploy Kafka event bus with PA request topics",
-        "Implement audit service with immutable DynamoDB trail"
+        "Deploy core PA automation for a single LOB with single integration channel",
+        "Integrate Autonomize PA Copilot with payer eligibility system",
+        "Establish confidence-based routing with human review workflow",
+        "Deploy LLMOps monitoring baseline"
       ],
       "deliverables": [
-        "Ingestion service processing all 3 channels (fax, portal, EDI)",
-        "FHIR R4 Facade with at least 2 EMR integrations",
-        "Eligibility service with Facets API integration",
-        "Kafka event bus with pa-requests, pa-determinations, audit-events topics",
-        "Audit service with complete decision logging",
-        "Data normalizer producing unified PA Request objects"
+        "PA Copilot integrated with payer eligibility API",
+        "Single-channel ingestion (web portal — most structured, lowest risk)",
+        "Clinical data access via FHIR R4 endpoints (modern sources only)",
+        "Determination Router with configurable confidence threshold",
+        "Clinical Review Dashboard (Autonomize AI Studio) for human reviewers",
+        "Audit trail for all AI determinations",
+        "LLMOps dashboard with accuracy and confidence monitoring"
       ],
       "success_criteria": [
-        "End-to-end data flow: portal submission → Kafka → FHIR query → eligibility check",
-        "Fax OCR processing test documents with >95% accuracy on printed text",
-        "X12 278 transactions parsing correctly against ASC X12 test files",
-        "Audit trail capturing all events with correct hash chain",
-        "FHIR R4 client successfully querying test FHIR endpoint"
+        "PA requests processed end-to-end for single LOB",
+        "Auto-determination rate meets configurable target (starting conservative)",
+        "Human reviewers can see AI recommendations and provide feedback",
+        "Audit trail captures AI reasoning for every determination",
+        "CMS-0057-F timeline compliance demonstrated for processed requests"
       ],
-      "team_allocation": ["Integration Devs 100%", "Backend Devs 100%", "SA/Tech Lead 75%", "DevOps 75%", "AI/ML Engineers 25%"],
-      "dependencies": ["P-001 complete", "Facets test environment access", "FHIR test endpoint access", "Sample fax documents for OCR testing"],
-      "risks": ["Legacy DB connector complexity", "Facets API rate limiting", "FHIR endpoint authentication issues"]
+      "team_allocation": ["Discovery findings determine team size and composition"],
+      "dependencies": ["Payer Core API access", "FHIR R4 endpoint availability", "Autonomize platform onboarding"],
+      "risks": ["Payer Core API latency may exceed targets", "FHIR endpoint data quality may vary", "Autonomize platform onboarding timeline uncertainty"]
     },
     {
       "id": "P-003",
-      "name": "AI Integration and Autonomize AI Platform",
-      "start_week": 5,
-      "end_week": 8,
+      "name": "Phase 2: Scale",
+      "start_week": 7,
+      "end_week": 10,
       "objectives": [
-        "Integrate Autonomize AI PA Copilot with Kafka event pipeline",
-        "Configure multi-agent pipeline (Document → NLP → Eligibility → Guidelines → Decision)",
-        "Build guidelines matching service (InterQual/MCG integration)",
-        "Implement human review workflow (Step Functions)",
-        "Configure LOB rules engine for Commercial LOB"
+        "Add fax ingestion channel (highest volume, highest ROI)",
+        "Add legacy database connectors for clinical data",
+        "Scale to additional LOBs with per-LOB configuration",
+        "Implement advanced LLMOps: eval pipeline, drift detection, feedback loop"
       ],
       "deliverables": [
-        "PA Copilot processing PA requests from Kafka and producing determinations",
-        "Guidelines matching service with InterQual API integration",
-        "Human review workflow routing low-confidence cases to reviewer queue",
-        "LOB configuration engine with Commercial LOB rules loaded",
-        "Response router delivering determinations to portal and EDI",
-        "AI guardrails: prompt injection prevention, output validation, confidence thresholds"
+        "Fax OCR ingestion pipeline (Azure AI Document Intelligence)",
+        "Legacy clinical database connectors",
+        "LOB configuration framework (rules engine per LOB)",
+        "Automated eval pipeline with golden test cases",
+        "Drift detection and alerting",
+        "Human feedback → eval dataset update loop"
       ],
       "success_criteria": [
-        "End-to-end PA determination: submission → AI review → determination → response",
-        "Confidence scoring working with 0.85 threshold routing to human review",
-        "Guidelines matching returning correct InterQual citations for test cases",
-        "Human reviewer receiving pre-assembled evidence package",
-        "Response router delivering determination in correct format per originating channel"
+        "Fax channel processing with acceptable OCR accuracy",
+        "Multiple LOBs processing with LOB-specific routing rules",
+        "Eval pipeline running on schedule with accuracy trending",
+        "Clinical reviewer feedback systematically captured and used"
       ],
-      "team_allocation": ["AI/ML Engineers 100%", "Integration Devs 75%", "Backend Devs 100%", "SA/Tech Lead 50%", "Clinical SMEs 50%"],
-      "dependencies": ["P-002 Kafka and FHIR Facade operational", "InterQual API access", "Autonomize AI platform access", "Clinical test cases from SMEs"],
-      "risks": ["Autonomize AI integration complexity", "InterQual API compatibility", "Clinical accuracy below target"]
+      "team_allocation": ["Discovery findings determine team size and composition"],
+      "dependencies": ["Phase 1 production stability", "Fax gateway integration", "Legacy DB access credentials and schemas"],
+      "risks": ["Fax OCR accuracy on handwritten notes", "Legacy DB connector complexity varies by system", "LOB rule differences may be larger than expected"]
     },
     {
       "id": "P-004",
-      "name": "QA, UAT, and Security Hardening",
-      "start_week": 9,
-      "end_week": 11,
-      "objectives": [
-        "Integration testing across all components",
-        "Performance testing at production scale (2.5M/month throughput)",
-        "Security hardening and HIPAA compliance verification",
-        "UAT with clinical SMEs using real-world PA scenarios",
-        "Penetration testing for cross-tenant and prompt injection",
-        "HIPAA breach tabletop exercise"
-      ],
-      "deliverables": [
-        "Integration test suite covering all 10 data flows",
-        "Performance test results demonstrating P95 < 30s at target load",
-        "Security assessment report from pen test vendor",
-        "UAT sign-off from clinical SMEs",
-        "HIPAA compliance checklist (all controls verified)",
-        "Breach response tabletop exercise report",
-        "Operational runbooks for incident response"
-      ],
-      "success_criteria": [
-        "All integration tests passing",
-        "P95 latency < 30s at 2x peak load (stress test)",
-        "No critical or high findings from pen test (or mitigated before go-live)",
-        "Clinical accuracy >= 95% concordance on UAT test cases",
-        "Breach tabletop exercise completed with < 1-hour notification workflow verified"
-      ],
-      "team_allocation": ["QA Engineer 100%", "All developers 75%", "DevOps 100%", "Compliance Analyst 100%", "Clinical SMEs 75%", "SA/Tech Lead 50%"],
-      "dependencies": ["P-003 complete", "Pen test vendor engaged", "UAT test cases from clinical SMEs"],
-      "risks": ["Pen test findings requiring significant remediation", "Clinical accuracy below 95% target", "Performance bottlenecks at scale"]
-    },
-    {
-      "id": "P-005",
-      "name": "Go-Live and Hypercare",
-      "start_week": 12,
+      "name": "Phase 3: Enterprise",
+      "start_week": 11,
       "end_week": 12,
       "objectives": [
-        "Production deployment (blue/green) for Commercial LOB",
-        "MLOps monitoring activation (drift detection, alerting)",
-        "Operational dashboards live",
-        "Hypercare support with rapid response to production issues",
-        "Go-live communication to provider network"
+        "X12 278 EDI integration",
+        "Multi-tenant vs multi-instance scaling decision (informed by Phase 2 learnings)",
+        "Advanced analytics and reporting (CMS-0057-F public metrics)",
+        "Operational maturity: runbooks, incident response, capacity planning"
       ],
       "deliverables": [
-        "Production deployment completed and verified",
-        "MLOps pipeline active (SageMaker Model Monitor running)",
-        "QuickSight dashboards live for operations, clinical, and executive views",
-        "Hypercare support roster and escalation procedures",
-        "Go-live communication to Commercial LOB provider network",
-        "Phase 2 planning document (next LOB onboarding)"
+        "EDI ingestion channel",
+        "Scaling architecture recommendation (based on actual LOB performance data)",
+        "CMS-0057-F compliance reporting dashboard",
+        "Operational runbooks and incident response procedures",
+        "Capacity planning model based on actual usage data"
       ],
       "success_criteria": [
-        "Production system processing live PA requests for Commercial LOB",
-        "Auto-determination rate tracking toward 60% target",
-        "No critical production incidents in first 48 hours",
-        "Monitoring alerting correctly on test scenarios",
-        "Dashboards showing real-time PA metrics"
+        "All ingestion channels operational (portal, fax, EDI)",
+        "20 LOBs supportable with documented configuration approach",
+        "CMS-0057-F compliance metrics meeting regulatory thresholds",
+        "System operational with documented support procedures"
       ],
-      "team_allocation": ["DevOps 100%", "SA/Tech Lead 100%", "Backend Devs 50%", "AI/ML Engineers 50%", "PM 100%", "Clinical SMEs 25%"],
-      "dependencies": ["P-004 complete", "Production go-live approval from CIO", "Provider communication plan approved"],
-      "risks": ["Production deployment issues", "Unexpected production load patterns", "Provider adoption resistance"]
+      "team_allocation": ["Discovery findings determine team size and composition"],
+      "dependencies": ["Phase 2 LOB scaling learnings", "CMS-0057-F reporting requirements finalization"],
+      "risks": ["Multi-tenant vs multi-instance decision may require architecture changes", "EDI complexity varies by trading partner"]
     }
   ],
 
   "decision_gates": [
     {
       "id": "G-001",
-      "name": "Architecture Sign-Off",
-      "timing": "End of Week 2",
-      "phase": "P-001",
-      "criteria": [
-        "Architecture reviewed and approved by CIO (Priya Patel)",
-        "Autonomize AI API contract signed",
-        "Security architecture approved by Compliance (James Morrison)",
-        "Development environment operational"
-      ],
-      "decider": "Priya Patel (CIO)",
-      "options": {
-        "go": "Proceed to Integration Build",
-        "conditional_go": "Proceed with identified risks documented and mitigation plan",
-        "no_go": "Revisit architecture. Re-engage Autonomize AI on contract terms."
-      }
+      "name": "Post-Discovery Gate",
+      "phase": "Before P-002",
+      "criteria": ["Architecture validated with actual system APIs", "Autonomize platform capabilities confirmed", "Team composition agreed", "Phase 1 scope confirmed"],
+      "decision_options": ["GO to Phase 1", "Conditional GO with scope adjustment", "PAUSE for additional discovery"]
     },
     {
       "id": "G-002",
-      "name": "Integration Checkpoint",
-      "timing": "End of Week 6",
-      "phase": "P-002",
-      "criteria": [
-        "End-to-end data flow operational in staging",
-        "All 3 ingestion channels processing test data",
-        "FHIR Facade connecting to at least 2 clinical data sources",
-        "Budget and timeline on track (< 15% variance)"
-      ],
-      "decider": "Priya Patel (CIO) + Marcus Williams (VP Ops)",
-      "options": {
-        "go": "Proceed to AI Integration",
-        "conditional_go": "Proceed with reduced scope (e.g., portal-only ingestion for go-live, fax in Phase 2)",
-        "no_go": "Pause AI integration. Resolve integration blockers before proceeding."
-      }
+      "name": "Post-MVP Gate",
+      "phase": "End of P-002",
+      "criteria": ["Single LOB processing successfully", "Auto-determination rate meeting target", "Clinical accuracy validated", "Audit trail complete"],
+      "decision_options": ["GO to Phase 2", "Conditional GO with fixes", "Extend Phase 1"]
     },
     {
       "id": "G-003",
-      "name": "Pre-Production Readiness",
-      "timing": "End of Week 11",
-      "phase": "P-004",
-      "criteria": [
-        "All integration tests passing",
-        "Pen test complete with no unresolved critical/high findings",
-        "Clinical accuracy >= 95% on UAT cases",
-        "Breach tabletop exercise completed",
-        "Operational runbooks approved",
-        "HIPAA BAA with Autonomize AI executed"
-      ],
-      "decider": "Priya Patel (CIO) + Dr. Sarah Chen (CMO) + James Morrison (Compliance)",
-      "options": {
-        "go": "Proceed to production deployment",
-        "conditional_go": "Deploy with limited auto-determination (higher confidence threshold) and increased monitoring",
-        "no_go": "Delay go-live. Address critical findings. Re-test."
-      }
+      "name": "Pre-Enterprise Gate",
+      "phase": "End of P-003",
+      "criteria": ["Multiple LOBs operational", "Fax channel performing acceptably", "LLMOps pipeline stable", "Scaling approach validated"],
+      "decision_options": ["GO to Phase 3", "Conditional GO", "Continue Phase 2 optimization"]
     }
   ],
 
-  "sprints": [
-    {
-      "id": "S-01",
-      "name": "Foundation Sprint",
-      "weeks": "1-2",
-      "phase": "P-001",
-      "goal": "Infrastructure provisioned, CI/CD operational, architecture signed off",
-      "capacity_points": 200,
-      "key_work_items": [
-        "AWS CDK infrastructure deployment (VPC, subnets, IAM, KMS)",
-        "CI/CD pipeline: GitHub Actions → ECR → ECS blue/green",
-        "Kafka cluster (MSK) provisioned with PA topics",
-        "Autonomize AI API integration test (connectivity verified)",
-        "Architecture review meeting with payer technical team"
-      ]
-    },
-    {
-      "id": "S-02",
-      "name": "Ingestion Sprint",
-      "weeks": "3-4",
-      "phase": "P-002",
-      "goal": "All 3 ingestion channels processing test data into Kafka",
-      "capacity_points": 260,
-      "key_work_items": [
-        "Document Processing Service: Textract OCR + Comprehend Medical NLP",
-        "X12 278 parser with ASC X12 grammar validation",
-        "Portal API with schema validation and OAuth 2.0",
-        "Data Normalizer: unified PA Request schema",
-        "Fax → S3 → Textract → Comprehend → Normalizer → Kafka pipeline"
-      ]
-    },
-    {
-      "id": "S-03",
-      "name": "Clinical Data Sprint",
-      "weeks": "5-6",
-      "phase": "P-002 + P-003 start",
-      "goal": "FHIR Facade operational, eligibility service live, Autonomize AI integration started",
-      "capacity_points": 260,
-      "key_work_items": [
-        "FHIR R4 Facade with SMART on FHIR auth",
-        "Legacy Data Adapter (first 2 legacy DB connectors)",
-        "Clinical Data Aggregator producing FHIR Bundles",
-        "Eligibility Service with Facets API integration",
-        "Autonomize AI PA Copilot Kafka consumer integration (start)"
-      ]
-    },
-    {
-      "id": "S-04",
-      "name": "AI Decision Sprint",
-      "weeks": "7-8",
-      "phase": "P-003",
-      "goal": "End-to-end PA determination working in staging",
-      "capacity_points": 260,
-      "key_work_items": [
-        "PA Copilot multi-agent pipeline configuration",
-        "Guidelines Matching Service (InterQual API integration)",
-        "Decision Agent confidence scoring and threshold routing",
-        "Human Review Workflow (Step Functions)",
-        "Response Router (portal notification, X12 278 response)",
-        "Audit Service with immutable DynamoDB trail"
-      ]
-    },
-    {
-      "id": "S-05",
-      "name": "QA and Security Sprint",
-      "weeks": "9-10",
-      "phase": "P-004",
-      "goal": "All integration tests passing, pen test complete, UAT started",
-      "capacity_points": 240,
-      "key_work_items": [
-        "Integration test suite (all 10 data flows)",
-        "Performance testing at 2x peak load",
-        "Security hardening: WAF rules, PHI log redaction verification",
-        "Pen test coordination and remediation",
-        "UAT clinical scenarios with SMEs",
-        "HIPAA compliance checklist verification"
-      ]
-    },
-    {
-      "id": "S-06",
-      "name": "Go-Live Sprint",
-      "weeks": "11-12",
-      "phase": "P-004 + P-005",
-      "goal": "Production deployment, monitoring active, Commercial LOB live",
-      "capacity_points": 200,
-      "key_work_items": [
-        "UAT sign-off and remediation",
-        "Breach tabletop exercise",
-        "MLOps pipeline activation (SageMaker Model Monitor)",
-        "QuickSight dashboards deployment",
-        "Blue/green production deployment",
-        "Hypercare monitoring and rapid response",
-        "Phase 2 planning: next LOB selection"
-      ]
-    }
-  ],
+  "sprints": [],
 
   "milestones": [
     {
       "id": "M-001",
-      "name": "Architecture Approved",
-      "target_date": "2026-04-17",
+      "name": "Demo Ready",
       "phase": "P-001",
-      "gate_type": "approval"
+      "gate_type": "demo"
     },
     {
       "id": "M-002",
-      "name": "All Ingestion Channels Operational",
-      "target_date": "2026-05-01",
+      "name": "Single-LOB MVP Live",
       "phase": "P-002",
-      "gate_type": "demo"
-    },
-    {
-      "id": "M-003",
-      "name": "End-to-End PA Determination in Staging",
-      "target_date": "2026-05-29",
-      "phase": "P-003",
-      "gate_type": "demo"
-    },
-    {
-      "id": "M-004",
-      "name": "Pre-Production Readiness Approved",
-      "target_date": "2026-06-19",
-      "phase": "P-004",
       "gate_type": "signoff"
     },
     {
-      "id": "M-005",
-      "name": "Production Go-Live (Commercial LOB)",
-      "target_date": "2026-06-26",
-      "phase": "P-005",
+      "id": "M-003",
+      "name": "Multi-Channel / Multi-LOB",
+      "phase": "P-003",
+      "gate_type": "review"
+    },
+    {
+      "id": "M-004",
+      "name": "Enterprise Ready",
+      "phase": "P-004",
       "gate_type": "signoff"
     }
   ],
 
   "critical_path": [
-    "AWS infrastructure provisioned (P-001)",
-    "Kafka event bus operational (P-001)",
-    "FHIR R4 Facade with clinical data access (P-002)",
-    "Autonomize AI PA Copilot integration (P-003)",
-    "Guidelines Matching Service with InterQual (P-003)",
-    "End-to-end PA determination flow (P-003)",
-    "Integration testing complete (P-004)",
-    "Pen test and remediation (P-004)",
-    "Pre-production readiness sign-off (P-004)",
-    "Production deployment (P-005)"
+    "Autonomize platform onboarding",
+    "Payer Core API integration",
+    "Single-LOB PA processing (Phase 1 MVP)",
+    "Fax OCR pipeline (Phase 2)",
+    "Multi-LOB configuration framework (Phase 2)",
+    "EDI integration (Phase 3)",
+    "CMS-0057-F compliance reporting (Phase 3)"
   ],
 
   "risk_register": [
     {
       "id": "R-001",
       "category": "technical",
-      "risk": "Autonomize AI API integration more complex than anticipated",
+      "risk": "Autonomize platform capabilities differ from public documentation — limited API access may constrain integration options",
       "likelihood": "medium",
       "impact": "high",
-      "mitigation": "Start integration in Week 3 (Sprint 2). Dedicate 2 AI/ML engineers full-time. Autonomize AI provides integration support engineer.",
-      "owner": "SA/Tech Lead",
-      "trigger": "API contract not finalized by end of Week 2"
+      "mitigation": "Discovery phase includes platform deep-dive with Autonomize engineering. Architecture designed with abstraction layer to adapt to actual platform capabilities.",
+      "owner": "SA team"
     },
     {
       "id": "R-002",
       "category": "technical",
-      "risk": "Legacy clinical DB connectors require custom schema mapping per EMR vendor",
-      "likelihood": "high",
+      "risk": "Fax OCR accuracy on handwritten clinical notes below acceptable threshold, causing high manual review rates",
+      "likelihood": "medium",
       "impact": "medium",
-      "mitigation": "Scope Phase 1 to 2 EMR integrations. Build adapter pattern for easy addition. Remaining EMRs in Phase 2.",
-      "owner": "Integration Developers",
-      "trigger": "More than 3 unique legacy schemas discovered during Sprint 3"
+      "mitigation": "Phased fax rollout — start with printed/typed faxes, iterate on handwritten. Low-confidence OCR results routed to manual review. Azure AI Document Intelligence custom model training as backup.",
+      "owner": "AI/ML team"
     },
     {
       "id": "R-003",
       "category": "technical",
-      "risk": "Fax OCR accuracy below 95% target on handwritten clinical notes",
-      "likelihood": "medium",
-      "impact": "medium",
-      "mitigation": "Use Textract for printed text (>95% accuracy). Route handwritten documents to human review. Measure accuracy early in Sprint 2.",
-      "owner": "AI/ML Engineers",
-      "trigger": "OCR accuracy < 90% on test document set"
+      "risk": "LLM clinical accuracy insufficient for auto-determination at target threshold",
+      "likelihood": "low",
+      "impact": "high",
+      "mitigation": "Start with conservative confidence threshold (high bar for auto-approve). Continuous eval with golden test cases. Human reviewer feedback loop improves accuracy over time. Traditional ML classifier as triage tool if needed.",
+      "owner": "AI/ML team"
     },
     {
       "id": "R-004",
-      "category": "resource",
-      "risk": "Clinical SMEs unavailable at critical points (UAT, guidelines validation)",
-      "likelihood": "medium",
-      "impact": "high",
-      "mitigation": "Schedule SME availability in advance. Identify backup SMEs. Pre-build UAT test case library.",
-      "owner": "Project Manager",
-      "trigger": "SME availability < 25% during Sprint 4 or 5"
+      "category": "timeline",
+      "risk": "Legacy clinical database integration more complex than estimated — undocumented schemas, poor data quality",
+      "likelihood": "high",
+      "impact": "medium",
+      "mitigation": "Phase 1 uses FHIR R4 endpoints only. Legacy DB integration deferred to Phase 2. Discovery phase inventories all legacy systems and data quality.",
+      "owner": "Integration team"
     },
     {
       "id": "R-005",
-      "category": "timeline",
-      "risk": "Pen test findings require significant remediation delaying go-live",
+      "category": "resource",
+      "risk": "Key clinical domain expertise not available on team — incorrect coverage criteria interpretation",
       "likelihood": "medium",
       "impact": "high",
-      "mitigation": "Engage pen test vendor by Week 7 (not Week 9). Run preliminary security scan in Sprint 4. Address findings in Sprint 5.",
-      "owner": "Compliance Analyst",
-      "trigger": "More than 2 high-severity findings from pen test"
-    },
-    {
-      "id": "R-006",
-      "category": "technical",
-      "risk": "Clinical accuracy below 95% concordance target at UAT",
-      "likelihood": "low",
-      "impact": "critical",
-      "mitigation": "Start accuracy testing in Sprint 4 with sample cases. Iteratively tune guidelines matching. Increase confidence threshold if accuracy lags. Conditional go-live with higher threshold.",
-      "owner": "AI/ML Engineers + Clinical SMEs",
-      "trigger": "Accuracy < 90% at end of Sprint 4"
-    },
-    {
-      "id": "R-007",
-      "category": "resource",
-      "risk": "Autonomize AI platform outage during integration testing",
-      "likelihood": "low",
-      "impact": "medium",
-      "mitigation": "Build human-fallback workflow early (Sprint 4). Design integration to gracefully degrade. Include SLA requirements in contract.",
-      "owner": "SA/Tech Lead",
-      "trigger": "Platform unavailable > 4 hours during Sprints 3-4"
+      "mitigation": "Clinical SME required for validation (not implementation). Coverage criteria maintained by clinical team, not engineering. AI eval includes clinical review sampling.",
+      "owner": "Project lead"
     }
   ],
 
   "dependencies": {
     "internal": [
-      { "from": "P-001 Infrastructure", "to": "P-002 Integration Build", "type": "finish_to_start" },
-      { "from": "P-002 Kafka + FHIR", "to": "P-003 AI Integration", "type": "finish_to_start" },
-      { "from": "P-003 AI Integration", "to": "P-004 QA/UAT", "type": "finish_to_start" },
-      { "from": "P-004 QA/UAT", "to": "P-005 Go-Live", "type": "finish_to_start" },
-      { "from": "Ingestion Service", "to": "PA Copilot Integration", "type": "finish_to_start" },
-      { "from": "FHIR Facade", "to": "Clinical Data Aggregation", "type": "finish_to_start" },
-      { "from": "Eligibility Service", "to": "PA Decision Flow", "type": "finish_to_start" },
-      { "from": "Guidelines Service", "to": "PA Decision Flow", "type": "finish_to_start" },
-      { "from": "Audit Service", "to": "HIPAA Compliance Verification", "type": "finish_to_start" }
+      { "from": "P-001", "to": "P-002", "type": "finish_to_start" },
+      { "from": "P-002", "to": "P-003", "type": "finish_to_start" },
+      { "from": "P-003", "to": "P-004", "type": "finish_to_start" }
     ],
     "external": [
-      { "dependency": "Autonomize AI API contract and access credentials", "owner": "Autonomize AI Sales", "needed_by": "2026-04-17", "status": "pending" },
-      { "dependency": "Facets API documentation and test environment access", "owner": "Payer IT", "needed_by": "2026-04-10", "status": "pending" },
-      { "dependency": "FHIR R4 test endpoint access (at least 2 EMR systems)", "owner": "Payer IT", "needed_by": "2026-04-24", "status": "pending" },
-      { "dependency": "InterQual API access and license confirmation", "owner": "Payer Clinical Ops", "needed_by": "2026-04-24", "status": "pending" },
-      { "dependency": "Sample fax documents for OCR testing (50+ documents)", "owner": "Payer Operations", "needed_by": "2026-04-17", "status": "pending" },
-      { "dependency": "X12 278 test transaction files", "owner": "Payer EDI Team", "needed_by": "2026-04-17", "status": "pending" },
-      { "dependency": "Clinical SME availability (50% allocation Weeks 7-12)", "owner": "Payer CMO", "needed_by": "2026-04-06", "status": "pending" },
-      { "dependency": "Pen test vendor engagement", "owner": "Payer Security", "needed_by": "2026-05-15", "status": "pending" },
-      { "dependency": "HIPAA BAA with Autonomize AI", "owner": "Payer Legal", "needed_by": "2026-06-12", "status": "pending" }
+      {
+        "dependency": "Autonomize AI platform access and onboarding",
+        "owner": "Autonomize AI team",
+        "needed_by": "2026-04-15",
+        "status": "pending"
+      },
+      {
+        "dependency": "Payer Core System API documentation and credentials",
+        "owner": "Health Plan IT team",
+        "needed_by": "2026-04-15",
+        "status": "pending"
+      },
+      {
+        "dependency": "FHIR R4 endpoint access and test data",
+        "owner": "Health Plan clinical systems team",
+        "needed_by": "2026-04-30",
+        "status": "pending"
+      }
     ]
   },
 
   "communication_plan": {
-    "stakeholder_updates": "Weekly status report (Mondays) to CIO, CMO, VP Ops, and Compliance Director. Includes: sprint progress, risks, decisions needed, budget tracking.",
+    "stakeholder_updates": "Weekly status reports to project sponsor. Sprint demos every 2 weeks. Monthly executive summary. Risk escalation as-needed.",
     "demo_schedule": [
-      "Week 2: Architecture walkthrough and infrastructure demo → CIO, CMO",
-      "Week 4: Ingestion pipeline demo (fax OCR, portal, EDI processing) → VP Ops, CIO",
-      "Week 6: Integration checkpoint — end-to-end data flow demo → All stakeholders",
-      "Week 8: AI determination demo — live PA processing in staging → CMO, VP Ops, Clinical SMEs",
-      "Week 10: UAT results and security assessment briefing → CIO, CMO, Compliance",
-      "Week 12: Go-live demo and production metrics → All stakeholders + executive leadership"
+      "Phase 0 Demo: AI-driven PA review with mock data",
+      "Phase 1 Demo: Single-LOB end-to-end PA processing",
+      "Phase 2 Demo: Multi-channel ingestion + multi-LOB",
+      "Phase 3 Demo: Enterprise readiness + compliance reporting"
     ],
     "decision_points": [
-      { "date": "2026-04-17", "decision": "Architecture sign-off (G-001)", "decider": "Priya Patel (CIO)" },
-      { "date": "2026-05-15", "decision": "Integration checkpoint (G-002)", "decider": "CIO + VP Ops" },
-      { "date": "2026-05-29", "decision": "First LOB selection confirmation", "decider": "VP Ops + CMO" },
-      { "date": "2026-06-19", "decision": "Pre-production readiness (G-003)", "decider": "CIO + CMO + Compliance" },
-      { "date": "2026-06-26", "decision": "Production go-live approval", "decider": "CIO" }
+      {
+        "date": "End of Discovery",
+        "decision": "Phase 1 scope and timeline confirmation",
+        "decider": "Project sponsor + SA team"
+      },
+      {
+        "date": "End of Phase 1",
+        "decision": "GO/NO-GO for multi-LOB scaling",
+        "decider": "Project sponsor + Clinical operations lead"
+      }
     ]
   },
 
   "_metadata": {
     "author": "sa-agent",
-    "date": "2026-03-20",
-    "validation_status": "valid",
-    "version": "1.0",
-    "planner": "Paul Prae",
-    "planning_date": "2026-03-20"
+    "date": "2026-03-23",
+    "validation_status": "complete",
+    "version": "2.0",
+    "planner": "sa-agent (autonomous v2 iteration)",
+    "planning_date": "2026-03-23"
   }
 }
