@@ -2,311 +2,298 @@
   "$schema": "./schemas/requirements.schema.json",
   "$depends_on": [],
   "engagement_id": "eng-2026-004",
-  "version": "1.0",
-  "last_updated": "2026-03-20",
+  "version": "2.0",
+  "last_updated": "2026-03-23",
   "status": "complete",
 
   "client_context": {
-    "legal_name": "National Consolidated Health Plan (fictional composite)",
-    "brand_name": "NCHP",
+    "legal_name": "Fictional US Health Plan (Autonomize AI Interview Assignment)",
+    "brand_name": "Large US-based Health Plan (Payer)",
     "industry": "Healthcare / Health Insurance (Payer)",
     "company_size": "enterprise",
     "ai_maturity": "intermediate",
-    "ai_history": "Deployed rules-based auto-adjudication for claims. No AI/ML in prior authorization. Exploring Autonomize AI platform for PA automation. CIO has executive mandate for AI-driven operational efficiency."
+    "ai_history": "Complex, decentralized IT environment. Partial FHIR adoption. Manual PA processing with fragmented clinical data across multiple systems. Exploring AI-driven automation through Autonomize AI platform."
   },
 
   "problem_statement": {
-    "title": "High-Cost, Slow Prior Authorization Processing Due to Manual Review and Fragmented Systems",
-    "summary": "NCHP processes ~2.5M prior authorization requests per month across 45M covered lives and 20 lines of business. Current PA processing relies on manual review of faxed requests (60% of volume), fragmented clinical data across 12+ EMR systems, and poor integration with their TriZetto Facets core administration platform. Average turnaround is 5 business days, with only 15% auto-approval rate. The CMS Prior Authorization Final Rule (CMS-0057-F) requires FHIR-based PA APIs and faster turnaround by January 1, 2027, creating regulatory urgency.",
+    "title": "AI-Driven Prior Authorization Automation via Autonomize AI Platform",
+    "summary": "A large US-based health plan is experiencing high costs and long turnaround times for prior authorization processing due to manual fax review, fragmented clinical data across multiple systems, and poor integration with existing claims and core administration platforms. The goal is to design an integrated solution using Autonomize AI's platform to automate initial intake, clinical review, and determination of PA requests.",
     "current_state": {
-      "process_description": "PA requests arrive via fax (60%), proprietary web portal (25%), and X12 278 EDI transactions (15%). Faxed requests are manually triaged by intake specialists who key data into the Facets core system. Clinical reviewers then access 12+ disparate EMR systems to gather clinical evidence, cross-reference against InterQual/MCG guidelines (partially digitized), and render determination. Determinations are communicated back via fax, portal notification, or X12 278 response.",
-      "tools_in_use": ["TriZetto Facets", "InterQual", "MCG Health", "Multiple EMR systems", "Fax servers", "Custom web portal", "X12 278 EDI gateway"],
-      "pain_points": [
-        "5-day average PA turnaround time — 3x industry best practice",
-        "60% of requests arrive via fax requiring manual data entry and OCR",
-        "Clinical staff spend 40% of time on PA paperwork instead of clinical review",
-        "450 FTEs dedicated to PA processing at ~$65K/FTE fully loaded ($29.25M annual labor)",
-        "15% auto-approval rate vs. 50-70% industry benchmark with AI",
-        "Fragmented clinical data across 12+ EMR systems with inconsistent FHIR adoption",
-        "No unified audit trail — compliance risk for HIPAA and CMS-0057-F",
-        "Provider abrasion — 14 hours/week per physician spent on PA (AMA survey)"
+      "process_description": "Prior authorization requests arrive via fax, proprietary web portal, and X12 278 transactions. Clinical reviewers manually gather data from disparate systems (FHIR endpoints and legacy databases), review clinical evidence against coverage criteria, and make determinations. The process is labor-intensive, error-prone, and slow.",
+      "tools_in_use": [
+        "Payer Core System (member enrollment, benefits, contract rules)",
+        "Provider Portals / EDI (fax, web portal, X12 278 ingestion)",
+        "Clinical Data Sources (EMR-agnostic FHIR stores, legacy databases)",
+        "Manual fax processing"
       ],
-      "annual_cost": "$29.25M labor + $4.5M infrastructure = ~$33.75M total PA operational cost",
-      "volume": "2.5M PA requests/month, 30M/year"
+      "pain_points": [
+        "Manual review of faxed PA requests — labor-intensive, error-prone",
+        "Fragmented clinical data spread across multiple systems (FHIR endpoints and legacy databases)",
+        "Poor integration between clinical data sources and claims/core administration platforms",
+        "High operational costs for PA processing",
+        "Long turnaround times for PA determinations",
+        "Difficulty meeting CMS-0057-F compliance timeline (7-day standard, 72-hour expedited)"
+      ],
+      "annual_cost": "Not specified — industry benchmark: $10.97 per manual PA transaction (provider side), $3.41 per payer transaction (2024 CAQH Index)",
+      "volume": "Not specified — industry benchmark for top-5 payer: 1-3M PA requests/month"
     },
     "desired_state": {
-      "description": "AI-driven PA processing using Autonomize AI multi-agent platform that automates intake, clinical data aggregation, guidelines matching, and determination for straightforward cases while routing complex cases to clinical reviewers with pre-assembled evidence packages. Fully FHIR-compliant PA APIs meeting CMS-0057-F requirements. Multi-tenant architecture supporting 20 LOBs.",
+      "description": "An integrated AI-driven PA processing system built on Autonomize AI's platform that automates initial intake, clinical review, and determination. Reduces manual effort, improves compliance with CMS-0057-F timelines, and scales across multiple lines of business.",
       "target_improvements": [
-        "Reduce PA turnaround from 5 days to < 24 hours for auto-determined cases",
-        "Increase auto-determination rate from 15% to 60% in Phase 1",
-        "Reduce PA FTE count by 40% (180 FTEs) through automation",
-        "Achieve CMS-0057-F compliance before January 1, 2027 deadline",
-        "Unified audit trail for all PA decisions with full explainability",
-        "Single clinical data view aggregating all 12+ EMR sources via FHIR R4",
-        "Support all 20 LOBs on multi-tenant platform with configuration-driven rules"
+        "Automated PA request intake from all channels (fax, portal, EDI)",
+        "AI-driven clinical review against coverage criteria with human-in-the-loop for complex cases",
+        "Configurable auto-determination with confidence-based routing",
+        "Standardized clinical data access via FHIR R4 with legacy database bridging",
+        "Reduced PA turnaround time to meet CMS-0057-F requirements",
+        "Scalability across 20 lines of business with per-LOB configurability"
       ]
     }
   },
 
   "ai_suitability_assessment": {
     "score": 9,
-    "recommendation": "strong_fit",
-    "rationale": "Prior authorization is a textbook AI automation use case: high-volume repeatable classification task with structured decision criteria (clinical guidelines), abundant historical training data (30M PA decisions/year), measurable accuracy metrics (approval/denial concordance with clinical review), and clear ROI. Multi-format ingestion (fax OCR, X12 parsing, FHIR standardization) is well-served by multi-agent AI orchestration.",
+    "rationale": "Prior authorization is a textbook AI automation use case: repeatable classification task with structured criteria, high volume, significant manual labor, measurable outcomes, and documented reference implementations (Altais 45% review time reduction, 50% auto-approval). Human-in-the-loop for complex/high-risk cases mitigates autonomous decision risk.",
     "favorable_factors": [
-      "High volume (2.5M/month) amortizes AI platform cost rapidly",
-      "Repeatable classification against codified clinical guidelines",
-      "Rich historical decision data for model training and validation",
-      "Clear measurable KPIs (turnaround time, auto-determination rate, accuracy)",
-      "Autonomize AI PA Copilot already deployed at 3 of top 5 US health plans",
-      "Regulatory deadline (CMS-0057-F) creates executive urgency and budget",
-      "Human-in-the-loop preserves clinical oversight for complex cases"
+      "Repeatable clinical review task with structured coverage criteria",
+      "High transaction volume creates strong ROI from automation",
+      "Reference data available (clinical guidelines, coverage databases, ICD-10, NPI)",
+      "Current manual process has documented inconsistency (54% error reduction possible per Altais)",
+      "Industry benchmarks validate automation feasibility (Cohere: 90% auto-approval)",
+      "CMS-0057-F regulatory deadline creates urgency and executive sponsorship",
+      "Autonomize AI platform purpose-built for this domain with proven deployments"
     ],
     "risk_factors": [
-      "Auto-denial decisions carry regulatory and legal risk — Phase 1 excludes auto-denial",
-      "Fax OCR accuracy for handwritten clinical notes may have lower confidence",
-      "Clinical guidelines change quarterly — model must adapt without full retraining",
-      "PHI handling requires strict HIPAA compliance across all AI processing stages",
-      "20 LOB scaling introduces configuration complexity"
-    ]
+      "Auto-denial carries regulatory and patient safety risk — requires robust guardrails",
+      "Clinical data fragmentation may limit AI accuracy until data integration matures",
+      "Model drift in healthcare requires continuous monitoring (clinical guidelines change quarterly)"
+    ],
+    "recommendation": "strong_fit"
   },
 
   "pain_points": [
-    "PROCESS INEFFICIENCY: 5-day PA turnaround due to sequential manual workflow — clinical staff spend 40% of time on paperwork. Impact: $29.25M/year labor. Pattern: multi-agent AI pipeline.",
-    "DATA QUALITY: 60% fax-based intake requires manual data entry — high error rate. Impact: 15+ min/fax. Pattern: OCR + NLP ingestion agent.",
-    "INTEGRATION GAP: Clinical data fragmented across 12+ EMR systems. Impact: reviewers manually access multiple systems. Pattern: FHIR R4 facade + legacy connectors.",
-    "COMPLIANCE RISK: No unified audit trail — CMS-0057-F deadline Jan 2027. Impact: regulatory non-compliance. Pattern: immutable audit log + FHIR PA API.",
-    "SCALABILITY LIMIT: Manual process cannot scale to 20 LOBs. Impact: each LOB requires more FTEs. Pattern: multi-tenant config-driven rules engine.",
-    "KNOWLEDGE LOSS: Review expertise concentrated in senior staff. Impact: inconsistent determinations. Pattern: AI decision support + feedback loop."
+    "Process inefficiency: Manual fax review is the dominant PA intake channel, requiring human reading, data entry, and routing — highest cost per transaction",
+    "Integration gap: Clinical data spread across FHIR endpoints and legacy databases with no unified access layer — reviewers manually query multiple systems",
+    "Compliance risk: CMS-0057-F Phase 1 (Jan 2026) requires 7-day standard / 72-hour expedited decisions and specific denial reasons — manual process struggles to meet these timelines consistently",
+    "Scalability limit: Current process cannot scale across 20 LOBs without proportional FTE increase — each LOB has slightly different administrative rules requiring manual configuration",
+    "Data quality: Unstructured clinical notes, varied document formats (fax images, PDFs, HL7 messages), and inconsistent data standards across provider systems reduce review accuracy",
+    "Knowledge loss: Clinical review expertise concentrated in individual reviewers — no systematic capture of decision rationale for training or audit"
+  ],
+
+  "success_criteria": [
+    {
+      "id": "SC-001",
+      "metric": "PA Review Time Reduction",
+      "description": "Reduction in average time to complete a PA review from submission to determination",
+      "baseline": 100,
+      "target": 55,
+      "measurement": "Median time (minutes) from PA submission to determination, measured monthly",
+      "timeframe": "Within 90 days of production deployment"
+    },
+    {
+      "id": "SC-002",
+      "metric": "Auto-Determination Rate",
+      "description": "Percentage of PA requests resolved without human clinical review",
+      "baseline": 0,
+      "target": 50,
+      "measurement": "Percentage of total PA requests auto-determined (approved or pended for info) per month",
+      "timeframe": "Within 90 days of production deployment, configurable threshold"
+    },
+    {
+      "id": "SC-003",
+      "metric": "Manual Error Reduction",
+      "description": "Reduction in errors identified in PA processing (wrong codes, missed criteria, incomplete reviews)",
+      "baseline": 100,
+      "target": 46,
+      "measurement": "Error rate per 1000 PA transactions, compared to pre-deployment baseline",
+      "timeframe": "Within 90 days of production deployment"
+    },
+    {
+      "id": "SC-004",
+      "metric": "CMS-0057-F Compliance Rate",
+      "description": "Percentage of PA determinations meeting CMS-mandated timelines (7-day standard, 72-hour expedited)",
+      "baseline": 0,
+      "target": 95,
+      "measurement": "Percentage of determinations completed within regulatory timelines per month",
+      "timeframe": "At go-live"
+    },
+    {
+      "id": "SC-005",
+      "metric": "Clinical Accuracy",
+      "description": "Accuracy of AI-assisted PA determinations compared to clinical reviewer consensus",
+      "baseline": 0,
+      "target": 95,
+      "measurement": "Agreement rate between AI recommendation and final clinical determination on audited sample",
+      "timeframe": "Ongoing, measured quarterly"
+    }
   ],
 
   "stakeholders": [
     {
-      "name": "Dr. Sarah Chen",
-      "role": "Chief Medical Officer",
+      "name": "Kris Nair",
+      "role": "Co-Founder & COO, Autonomize AI",
       "type": "decision_maker",
-      "approval_authority": ["clinical-workflow", "clinical-accuracy", "patient-safety"],
-      "communication_preference": "Clinical outcome metrics, patient impact, weekly clinical review"
+      "approval_authority": ["hiring", "solution direction", "go-to-market"],
+      "communication_preference": "Business value, ROI, go-to-market impact. Non-technical executive lens."
     },
     {
-      "name": "Marcus Williams",
-      "role": "VP of Operations",
-      "type": "decision_maker",
-      "approval_authority": ["operational", "staffing", "budget"],
-      "communication_preference": "Operational KPIs, FTE impact, cost savings, bi-weekly status"
-    },
-    {
-      "name": "Priya Patel",
-      "role": "Chief Information Officer",
-      "type": "decision_maker",
-      "approval_authority": ["technical", "budget", "strategic"],
-      "communication_preference": "Architecture diagrams, integration timelines, risk registers"
-    },
-    {
-      "name": "James Morrison",
-      "role": "Director of Compliance",
+      "name": "Suresh Gopalakrishnan",
+      "role": "Solutions Architect, Autonomize AI (since Feb 2026)",
       "type": "reviewer",
-      "approval_authority": ["compliance", "regulatory"],
-      "communication_preference": "Compliance mapping, audit trail specs, regulatory deadlines"
+      "approval_authority": ["technical architecture", "integration design"],
+      "communication_preference": "Payer domain realism, integration depth. 4.5 years Elevance Health experience."
+    },
+    {
+      "name": "Ujjwal Rajbhandari",
+      "role": "VP Solutions & Delivery Engineering, Autonomize AI",
+      "type": "reviewer",
+      "approval_authority": ["technical architecture", "cloud infrastructure", "delivery"],
+      "communication_preference": "Cloud architecture, scalability, enterprise patterns. Ex-Google Cloud (4.5yr), Ex-Dell (16yr), TOGAF certified."
     }
   ],
 
   "functional_requirements": [
     {
       "id": "FR-001",
-      "title": "Multi-format PA request ingestion",
-      "description": "Securely ingest PA requests from fax (OCR), web portal (API), and X12 278 EDI. Convert all formats into unified structured format for AI processing.",
+      "title": "High-Level System Context Diagram",
+      "description": "Provide a clear, high-level system context diagram illustrating the flow of a single PA request from Provider/Payer source system, through Autonomize AI platform, and back to Payer Core System for final determination. Clearly label all major components and integration mechanisms.",
       "priority": "must_have",
-      "complexity": "high",
+      "complexity": "medium",
       "acceptance_criteria": [
-        "Fax OCR >95% character accuracy on printed text",
-        "X12 278 parsed within 5 seconds",
-        "Portal API validates PA requests in real-time",
-        "All formats converge to common PA request data model"
+        "Shows PA request flow end-to-end: Provider → Autonomize AI → Payer Core",
+        "Labels all major components (systems, services, data stores)",
+        "Labels all integration mechanisms (APIs, message queues, file transfer)",
+        "Fits on 1-2 presentation slides"
       ],
       "dependencies": []
     },
     {
       "id": "FR-002",
-      "title": "Clinical data aggregation and standardization",
-      "description": "Securely access clinical data from FHIR R4 endpoints and legacy databases. Standardize into unified clinical view per patient. Support unstructured notes, lab results, patient history.",
+      "title": "Inbound PA Request Ingestion Design",
+      "description": "Detail the integration strategy for securely and reliably ingesting varied PA request types (fax, X12 278) and converting them into a structured format for the AI engine.",
       "priority": "must_have",
       "complexity": "high",
       "acceptance_criteria": [
-        "FHIR R4 client retrieves patient data from compliant endpoints",
-        "Legacy connectors access clinical data via secure APIs",
-        "NLP extracts entities from unstructured clinical notes",
-        "Unified clinical view assembled within 30 seconds"
-      ],
-      "dependencies": []
-    },
-    {
-      "id": "FR-003",
-      "title": "AI-driven clinical review and determination",
-      "description": "Compare PA clinical evidence against InterQual/MCG guidelines using Autonomize AI multi-agent orchestration. Produce determination with confidence score and rationale.",
-      "priority": "must_have",
-      "complexity": "very_high",
-      "acceptance_criteria": [
-        ">=95% concordance with clinical reviewer decisions",
-        "Confidence score for every determination",
-        "Cases below 0.85 confidence routed to human reviewer",
-        "Clinical rationale with specific guideline citations",
-        "60% auto-determination within 6 months of go-live"
-      ],
-      "dependencies": ["FR-001", "FR-002"]
-    },
-    {
-      "id": "FR-004",
-      "title": "Member eligibility verification",
-      "description": "Real-time eligibility check against Facets before PA determination. Verify enrollment, benefit coverage, and contract rules.",
-      "priority": "must_have",
-      "complexity": "medium",
-      "acceptance_criteria": [
-        "Eligibility check within 3 seconds",
-        "Covers enrollment, benefit plan, service-specific coverage",
-        "Ineligible requests rejected with reason code"
-      ],
-      "dependencies": []
-    },
-    {
-      "id": "FR-005",
-      "title": "Human-in-the-loop clinical review workflow",
-      "description": "Route low-confidence cases to reviewers with pre-assembled evidence packages. Capture reviewer corrections for model improvement.",
-      "priority": "must_have",
-      "complexity": "medium",
-      "acceptance_criteria": [
-        "Complete evidence package — no additional system access needed",
-        "Reviewer can approve, deny, or request more info",
-        "Corrections captured for feedback loop",
-        "Reviewer decision time reduced 50%"
-      ],
-      "dependencies": ["FR-003"]
-    },
-    {
-      "id": "FR-006",
-      "title": "PA determination response delivery",
-      "description": "Deliver determination back to originating system — fax, portal, or X12 278 — with rationale and conditions.",
-      "priority": "must_have",
-      "complexity": "medium",
-      "acceptance_criteria": [
-        "Response in originating channel within 1 hour of determination",
-        "X12 278 response ASC X12 compliant",
-        "Portal includes determination, rationale, appeal instructions"
-      ],
-      "dependencies": ["FR-003"]
-    },
-    {
-      "id": "FR-007",
-      "title": "Comprehensive audit trail",
-      "description": "Immutable audit log for every PA decision with full traceability — decision maker, data considered, guidelines applied, confidence, overrides.",
-      "priority": "must_have",
-      "complexity": "medium",
-      "acceptance_criteria": [
-        "Complete audit record within 5 seconds of determination",
-        "Immutable and tamper-evident records",
-        "Data lineage: source docs, clinical data, guidelines",
-        "Supports regulatory inquiry with full reconstruction",
-        "7-year retention per HIPAA"
-      ],
-      "dependencies": ["FR-003"]
-    },
-    {
-      "id": "FR-008",
-      "title": "FHIR R4 Prior Authorization API (CMS-0057-F)",
-      "description": "FHIR R4 PA API per HL7 Da Vinci PAS Implementation Guide, meeting CMS-0057-F requirements.",
-      "priority": "must_have",
-      "complexity": "high",
-      "acceptance_criteria": [
-        "FHIR R4 endpoint per Da Vinci PAS IG",
-        "Real-time PA submission and status inquiry",
-        "Specific denial reason in response per CMS-0057-F",
-        "Compliant by January 1, 2027"
+        "Covers fax ingestion pathway with OCR/document processing",
+        "Covers X12 278 EDI ingestion pathway",
+        "Describes conversion to structured format",
+        "Addresses security and reliability of ingestion"
       ],
       "dependencies": ["FR-001"]
     },
     {
-      "id": "FR-009",
-      "title": "Multi-LOB configuration engine",
-      "description": "Configuration-driven rules engine for 20 LOBs with LOB-specific rules, criteria, and workflows — without code changes.",
-      "priority": "should_have",
+      "id": "FR-003",
+      "title": "Clinical Data Access Design",
+      "description": "Detail how the AI system will securely access and standardize clinical data needed for review, given data spread across FHIR endpoints and legacy databases. Specify the role of FHIR/HL7.",
+      "priority": "must_have",
       "complexity": "high",
       "acceptance_criteria": [
-        "New LOB onboarded via config in < 2 weeks",
-        "LOB rules isolated — no cross-LOB impact",
-        "Supports LOB-specific guidelines, thresholds, workflows",
-        "Config version-controlled with rollback"
+        "Describes access to FHIR R4 endpoints",
+        "Describes bridging to legacy databases",
+        "Specifies FHIR/HL7 role in standardization",
+        "Addresses security boundaries for PHI access"
       ],
-      "dependencies": []
+      "dependencies": ["FR-001"]
     },
     {
-      "id": "FR-010",
-      "title": "MLOps monitoring and model lifecycle",
-      "description": "Production monitoring with drift detection, alerting, and feedback loop from reviewer corrections to model improvement.",
-      "priority": "should_have",
+      "id": "FR-004",
+      "title": "Security and Compliance Risk Mitigation",
+      "description": "Identify the top 3 security and compliance risks for the solution. Propose a specific architectural pattern or control to mitigate each risk, ensuring HIPAA adherence.",
+      "priority": "must_have",
+      "complexity": "medium",
+      "acceptance_criteria": [
+        "Identifies exactly 3 security/compliance risks",
+        "Each risk has a specific mitigation pattern (not generic advice)",
+        "Mitigations are architectural (e.g., tokenization, VPC peering, mutual TLS)",
+        "Explicit HIPAA compliance mapping"
+      ],
+      "dependencies": ["FR-001"]
+    },
+    {
+      "id": "FR-005",
+      "title": "Executive Summary",
+      "description": "A non-technical summary of the solution's value proposition and why the proposed architecture best solves the client's problem, targeted at CIO/C-Suite.",
+      "priority": "must_have",
+      "complexity": "low",
+      "acceptance_criteria": [
+        "Non-technical language accessible to C-Suite",
+        "Clearly states value proposition",
+        "Explains why this architecture is the best solution",
+        "Fits on 1 slide"
+      ],
+      "dependencies": ["FR-001", "FR-002", "FR-003", "FR-004"]
+    },
+    {
+      "id": "FR-006",
+      "title": "Implementation Phases Roadmap",
+      "description": "Outline the major phases of implementation (Discovery, Architecture Sign-Off, Integration Build, QA/UAT, Go-Live). Focus on architectural decision points.",
+      "priority": "must_have",
+      "complexity": "medium",
+      "acceptance_criteria": [
+        "Covers all major phases with relative sequencing",
+        "Identifies architectural decision points",
+        "Phase descriptions focus on deliverables, not calendar dates",
+        "Fits on 1-2 slides"
+      ],
+      "dependencies": ["FR-001"]
+    },
+    {
+      "id": "FR-007",
+      "title": "LLMOps Architecture for AI Model Monitoring",
+      "description": "Design the high-level LLMOps architecture to monitor AI model performance in production. Include drift detection and automated feedback loops.",
+      "priority": "must_have",
       "complexity": "high",
       "acceptance_criteria": [
-        "Daily statistical drift detection (PSI, KS test)",
-        "Weekly outcome monitoring (overturn rate, appeal rate)",
-        "Automated drift alerts",
-        "Daily correction aggregation, weekly evaluation, monthly fine-tuning",
-        "A/B testing before production deployment"
+        "Describes drift/performance degradation detection approach",
+        "Describes automated feedback loop architecture",
+        "Distinguishes LLM evaluation from traditional ML monitoring",
+        "Addresses guardrails and human feedback integration",
+        "Fits on 1-2 slides"
       ],
-      "dependencies": ["FR-003"]
+      "dependencies": ["FR-001"]
     },
     {
-      "id": "FR-011",
-      "title": "Operational dashboards and reporting",
-      "description": "Real-time dashboards: volume, turnaround, auto-determination rate, accuracy, queue depth, per-LOB breakdowns.",
-      "priority": "should_have",
-      "complexity": "medium",
+      "id": "FR-008",
+      "title": "Future State Scaling Architecture",
+      "description": "Propose an architectural approach (multi-tenant vs. multi-instance) for scaling across 20 LOBs. Justify the model for long-term scalability, configurability, cost, isolation, and complexity.",
+      "priority": "must_have",
+      "complexity": "high",
       "acceptance_criteria": [
-        "Executive dashboard: turnaround, cost savings, auto-determination rate",
-        "Operations dashboard: queue depth, workload, SLA compliance",
-        "Clinical dashboard: accuracy, guideline match, appeal rates",
-        "Per-LOB filtering"
+        "Proposes and justifies multi-tenant vs. multi-instance decision",
+        "Addresses per-LOB configurability without re-architecture",
+        "Considers cost, isolation, and complexity trade-offs",
+        "Honest about trade-offs and unknowns",
+        "Fits on 1 slide"
       ],
-      "dependencies": ["FR-003", "FR-007"]
-    },
-    {
-      "id": "FR-012",
-      "title": "Provider self-service PA status portal",
-      "description": "Real-time PA status inquiry for providers with secure authentication.",
-      "priority": "nice_to_have",
-      "complexity": "medium",
-      "acceptance_criteria": [
-        "Real-time status check via web portal",
-        "Secure provider authentication",
-        "Upload additional clinical documentation"
-      ],
-      "dependencies": ["FR-006"]
+      "dependencies": ["FR-001"]
     }
   ],
 
   "non_functional_requirements": {
     "performance": {
-      "response_time_p95_ms": 30000,
+      "response_time_p95_ms": 5000,
       "throughput_rps": 100,
       "concurrent_users": 500
     },
     "availability": {
       "target_percent": 99.9,
-      "planned_maintenance_window": "Sundays 02:00-06:00 ET"
+      "planned_maintenance_window": "Weekly, off-peak hours"
     },
     "scalability": {
-      "current_volume": "2.5M PA requests/month",
-      "projected_growth": "20% YoY + 20 LOB expansion over 18 months",
-      "peak_multiplier": 2.5,
-      "geographic_regions": ["us-east-1", "us-west-2"]
+      "current_volume": "Not specified — design for top-5 payer scale (1-3M PA requests/month)",
+      "projected_growth": "20 LOBs with per-LOB configuration",
+      "peak_multiplier": 3.0,
+      "geographic_regions": ["US"]
     },
     "security": {
-      "authentication": ["OAuth 2.0", "SAML 2.0", "mTLS for system-to-system"],
-      "authorization_model": "RBAC with LOB-level data isolation",
+      "authentication": ["Microsoft Entra ID", "OAuth 2.0", "SMART on FHIR"],
+      "authorization_model": "RBAC with least-privilege, role-based access per LOB",
       "data_classification": "restricted",
-      "encryption_requirements": ["AES-256 at rest", "TLS 1.2+ in transit", "PHI field-level encryption"],
-      "compliance_frameworks": ["HIPAA", "CCPA", "CMS-0057-F", "HL7 FHIR R4"]
+      "encryption_requirements": ["AES-256 at rest", "TLS 1.2+ in transit", "Customer-managed encryption keys for PHI"],
+      "compliance_frameworks": ["HIPAA Privacy Rule", "HIPAA Security Rule", "HIPAA Breach Notification", "CMS-0057-F", "SOC 2 Type 2"]
     },
     "data_residency": {
       "required_regions": ["US"],
-      "prohibited_regions": ["Non-US jurisdictions for PHI"],
+      "prohibited_regions": [],
       "data_retention_days": 2555
     }
   },
@@ -314,237 +301,135 @@
   "data_landscape": {
     "sources": [
       {
-        "name": "TriZetto Facets Core System",
+        "name": "Payer Core System",
+        "type": "api",
+        "format": "Proprietary API / Database",
+        "volume": "Member enrollment, benefits, contract rules for all covered lives",
+        "pii_present": true,
+        "quality_notes": "Structured data, high quality — source of truth for eligibility and benefits"
+      },
+      {
+        "name": "Provider Portals / EDI",
+        "type": "api",
+        "format": "Fax (images), X12 278, proprietary web portal submissions",
+        "volume": "All inbound PA requests — fax is dominant channel",
+        "pii_present": true,
+        "quality_notes": "Mixed quality — faxes are unstructured images, X12 is structured, portal is semi-structured"
+      },
+      {
+        "name": "Clinical Data Sources (FHIR)",
+        "type": "api",
+        "format": "FHIR R4 resources (Patient, Encounter, Observation, DiagnosticReport)",
+        "volume": "Clinical notes, lab results, patient history",
+        "pii_present": true,
+        "quality_notes": "Modern systems with FHIR R4 endpoints — structured and standardized"
+      },
+      {
+        "name": "Clinical Data Sources (Legacy)",
         "type": "database",
-        "format": "Proprietary API + SQL Server",
-        "volume": "45M member records",
+        "format": "Proprietary database formats, HL7 v2 messages",
+        "volume": "Historical clinical data from legacy EMR systems",
         "pii_present": true,
-        "quality_notes": "Authoritative for enrollment, benefits, contract rules."
-      },
-      {
-        "name": "Fax Server / Inbound Fax Queue",
-        "type": "file",
-        "format": "TIFF/PDF images",
-        "volume": "1.5M faxed PA requests/month",
-        "pii_present": true,
-        "quality_notes": "Variable quality — printed forms readable, handwritten requires specialized OCR."
-      },
-      {
-        "name": "Provider Web Portal",
-        "type": "api",
-        "format": "REST JSON",
-        "volume": "625K PA requests/month",
-        "pii_present": true,
-        "quality_notes": "Structured, high quality."
-      },
-      {
-        "name": "X12 278 EDI Gateway",
-        "type": "file",
-        "format": "ASC X12 278",
-        "volume": "375K PA requests/month",
-        "pii_present": true,
-        "quality_notes": "Highly structured standard EDI."
-      },
-      {
-        "name": "FHIR R4 Clinical Data Endpoints",
-        "type": "api",
-        "format": "FHIR R4 JSON",
-        "volume": "Queried per PA for clinical evidence",
-        "pii_present": true,
-        "quality_notes": "Newer EMR systems. ~40% of clinical data."
-      },
-      {
-        "name": "Legacy Clinical Databases",
-        "type": "database",
-        "format": "Oracle, SQL Server, DB2",
-        "volume": "~60% of clinical data",
-        "pii_present": true,
-        "quality_notes": "Inconsistent schemas. Some HL7 v2 compliant."
-      },
-      {
-        "name": "Clinical Guidelines (InterQual/MCG)",
-        "type": "api",
-        "format": "Proprietary API + structured criteria",
-        "volume": "~10K clinical criteria",
-        "pii_present": false,
-        "quality_notes": "Digitized. Updated quarterly."
+        "quality_notes": "Fragmented, inconsistent formats — requires extraction and normalization"
       }
     ],
     "integration_points": [
       {
-        "system": "TriZetto Facets",
+        "system": "Payer Core System",
         "direction": "bidirectional",
-        "protocol": "REST API + JDBC",
-        "auth_method": "Service account + API key"
+        "protocol": "REST API / Database connector",
+        "auth_method": "Service account with least privilege"
       },
       {
-        "system": "Fax Server",
+        "system": "Provider Portal / EDI Gateway",
         "direction": "read",
-        "protocol": "SFTP + webhook",
-        "auth_method": "SSH key"
-      },
-      {
-        "system": "Provider Web Portal",
-        "direction": "bidirectional",
-        "protocol": "REST API",
-        "auth_method": "OAuth 2.0"
-      },
-      {
-        "system": "X12 278 EDI Gateway",
-        "direction": "bidirectional",
-        "protocol": "AS2 / SFTP",
-        "auth_method": "Certificate mTLS"
+        "protocol": "HTTPS / SFTP / X12 278",
+        "auth_method": "Mutual TLS / API key"
       },
       {
         "system": "FHIR R4 Endpoints",
         "direction": "read",
-        "protocol": "FHIR R4 REST",
-        "auth_method": "SMART on FHIR (OAuth 2.0)"
+        "protocol": "FHIR REST API",
+        "auth_method": "OAuth 2.0 / SMART on FHIR"
       },
       {
-        "system": "Legacy Clinical DBs",
+        "system": "Legacy Clinical Databases",
         "direction": "read",
-        "protocol": "JDBC / HL7 v2",
-        "auth_method": "Service account"
+        "protocol": "Database connector / HL7 v2 interface",
+        "auth_method": "Service account with network-level restriction"
       },
       {
-        "system": "Autonomize AI Genesis Platform",
+        "system": "Autonomize AI Platform (Genesis)",
         "direction": "bidirectional",
-        "protocol": "REST API + Kafka",
-        "auth_method": "mTLS + API key"
-      },
-      {
-        "system": "InterQual / MCG Guidelines",
-        "direction": "read",
-        "protocol": "REST API",
-        "auth_method": "API key"
+        "protocol": "REST API / Azure Service Bus",
+        "auth_method": "Microsoft Entra ID / API key"
       }
     ]
   },
 
   "constraints": {
-    "budget_range": "Enterprise-scale — justified by $33.75M annual PA cost and CMS-0057-F mandate",
+    "budget_range": "Not specified — interview assignment",
     "timeline_weeks": 12,
-    "timeline_note": "12-week roadmap: Discovery, Architecture Sign-Off, Integration Build, QA/UAT, Go-Live",
-    "timeline_flexibility": "hard",
+    "timeline_note": "Assignment specifies 12-week implementation roadmap. Phases provided with relative ordering. Actual timeline dependent on discovery findings and team composition.",
+    "timeline_flexibility": "moderate",
     "technology_restrictions": [
-      "Must use Autonomize AI Genesis Platform for AI orchestration",
-      "Payer AWS infrastructure for integration and data platform",
-      "All PHI processing within payer VPC (HIPAA)",
-      "FHIR R4 compliance for CMS-0057-F"
+      "Azure-primary cloud platform (TD-1)",
+      "Autonomize AI platform integrated, not replaced (TD-2)",
+      "Azure Service Bus for messaging, Kafka as future scale option (TD-3)",
+      "FHIR R4 label only, limited depth (TD-4)",
+      "LLM evals + guardrails + human feedback primary (TD-5)",
+      "No dollar amounts, no timeline numbers, no FTE counts (TD-7)"
     ],
-    "team_constraints": "Autonomize AI: platform + AI engineering. Payer: integration devs, clinical SMEs, compliance. External SI may augment."
+    "team_constraints": "Not specified — interview assignment"
   },
-
-  "success_criteria": [
-    {
-      "id": "SC-001",
-      "metric": "PA Auto-Determination Rate",
-      "description": "Percentage of PA requests auto-determined by AI without human review",
-      "baseline": 15,
-      "target": 60,
-      "measurement": "Auto-determined / total PA, monthly",
-      "timeframe": "6 months post go-live"
-    },
-    {
-      "id": "SC-002",
-      "metric": "PA Turnaround Time",
-      "description": "Average hours from receipt to determination for auto-determined cases",
-      "baseline": 120,
-      "target": 24,
-      "measurement": "Hours, P50",
-      "timeframe": "3 months post go-live"
-    },
-    {
-      "id": "SC-003",
-      "metric": "Clinical Accuracy",
-      "description": "Concordance with clinical reviewer on blinded sample",
-      "baseline": 0,
-      "target": 95,
-      "measurement": "% agreement on 500 cases/month sample",
-      "timeframe": "3 months post go-live"
-    },
-    {
-      "id": "SC-004",
-      "metric": "FTE Reduction",
-      "description": "PA processing FTE reduction through automation",
-      "baseline": 450,
-      "target": 270,
-      "measurement": "Active PA FTE headcount",
-      "timeframe": "12 months post go-live"
-    },
-    {
-      "id": "SC-005",
-      "metric": "CMS-0057-F Compliance",
-      "description": "CMS PA Final Rule FHIR API requirements met",
-      "baseline": 0,
-      "target": 100,
-      "measurement": "% of requirements implemented and tested",
-      "timeframe": "Before January 1, 2027"
-    },
-    {
-      "id": "SC-006",
-      "metric": "Audit Trail Completeness",
-      "description": "PA decisions with complete audit trail",
-      "baseline": 30,
-      "target": 100,
-      "measurement": "Decisions with full audit / total",
-      "timeframe": "Go-live"
-    }
-  ],
 
   "scope_boundaries": {
     "in_scope": [
-      "PA request ingestion from fax, web portal, X12 278 EDI",
-      "Clinical data aggregation from FHIR R4 and legacy sources",
-      "AI-driven clinical review and determination via Autonomize AI",
-      "Member eligibility verification via Facets",
-      "Human-in-the-loop workflow for complex cases",
-      "PA determination response delivery",
-      "HIPAA-compliant audit trail",
-      "FHIR R4 PA API per CMS-0057-F / Da Vinci PAS",
-      "Multi-LOB configuration engine for 20 LOBs",
-      "MLOps monitoring with drift detection and feedback loop",
-      "12-week implementation roadmap",
-      "Multi-tenant scaling architecture"
+      "High-level system architecture for AI-driven PA processing",
+      "Integration design for PA request ingestion and clinical data access",
+      "Security and compliance risk identification with architectural mitigations",
+      "Executive summary of solution value proposition",
+      "Implementation phases roadmap with architectural decision points",
+      "LLMOps architecture for AI model monitoring and feedback loops",
+      "Future state scaling architecture (multi-tenant vs. multi-instance)",
+      "Presentation materials (10-12 slides with speaker notes)",
+      "Demo prototype using Anthropic PA review skill"
     ],
     "out_of_scope": [
-      "Claims adjudication and payment processing",
-      "Provider credentialing and network management",
-      "Member enrollment and benefits administration (read-only Facets access)",
-      "EMR/EHR system modification",
-      "Physical infrastructure provisioning",
-      "Custom clinical guidelines development",
-      "Appeals and grievances (future phase)",
-      "Code generation or implementation (architecture only)"
+      "Code implementation or deployment scripts",
+      "Detailed FHIR resource mapping or Da Vinci IG conformance",
+      "EDI X12 278 message parsing specifications",
+      "Specific dollar cost estimates or FTE counts",
+      "Production infrastructure provisioning",
+      "Clinical guideline content creation",
+      "Autonomize AI platform internals (no public docs available)"
     ],
-    "justification": "Scope bounded to PA lifecycle from ingestion through determination. Adjacent systems accessed read-only. Implementation excluded per SA scope boundary."
+    "justification": "Scope aligned to interview assignment requirements (Parts 1-3) with Phase 0 decisions constraining depth and technology choices."
   },
 
   "assumptions": [
-    "Client is a large US health plan (~45M members, 20 LOBs)",
-    "Autonomize AI Genesis Platform and PA Copilot are production-ready, HIPAA-certified",
-    "Payer has existing AWS infrastructure with VPC and IAM",
-    "TriZetto Facets APIs available and documented",
-    "InterQual/MCG clinical guidelines licensed and digitized",
-    "40%+ clinical data sources support FHIR R4; rest via legacy connectors",
-    "12-week timeline for initial production with first LOB (Commercial)",
-    "Additional LOBs onboarded post-go-live via configuration",
-    "Clinical SMEs available 50% during integration build",
-    "Existing HIPAA controls extend to new solution",
-    "Auto-denial excluded from Phase 1 — auto-approval only"
+    "The client is a composite representing a top-5 US health plan — not a specific organization",
+    "Autonomize AI PA Copilot and Genesis Platform are the designated AI engine",
+    "The payer has a mix of modern (FHIR R4) and legacy (proprietary database) clinical data systems",
+    "Fax remains a significant PA intake channel alongside digital channels",
+    "CMS-0057-F compliance is a regulatory driver (Phase 1: Jan 2026 live, Phase 2: Jan 2027)",
+    "Solution deployed in Azure (aligned with Autonomize Azure marketplace presence)",
+    "Clinical reviewers retain final determination authority — AI augments, not replaces",
+    "Auto-approval is Phase 1; auto-denial requires additional safeguards (Phase 2+)",
+    "Budget, timeline specifics, and FTE counts intentionally omitted (TD-7)",
+    "Interview panel evaluates architectural thinking, not implementation completeness"
   ],
 
   "_metadata": {
     "author": "sa-agent",
-    "date": "2026-03-20",
+    "date": "2026-03-23",
     "validation_status": "valid",
-    "version": "1.0",
+    "version": "2.0",
     "discovery_method": "extraction_from_notes",
-    "discovery_tier": "COMPREHENSIVE",
-    "discovery_date": "2026-03-20",
+    "discovery_tier": "STANDARD",
+    "discovery_date": "2026-03-23",
     "discovery_duration_minutes": 0,
-    "participants": ["Paul Prae (SA)", "Interview Assignment PDF", "Autonomize AI Research", "Career Data"],
+    "participants": ["Paul Prae (SA)", "sa-agent (autonomous)"],
     "completeness": "complete"
   }
 }
