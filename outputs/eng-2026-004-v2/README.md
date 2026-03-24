@@ -1,88 +1,62 @@
 # eng-2026-004 v2: AI-Driven Prior Authorization
-## Solution Architecture — Autonomize AI Interview
-### Paul Prae | www.paulprae.com | March 24, 2026
+## Autonomize AI Interview | Paul Prae | www.paulprae.com
 
 ---
 
-## Quick Start
+## How to Use These Files
 
-1. **Open `proposal.md`** — Slide content with full speaker notes (this is the primary deliverable)
-2. **Open `presentation.md`** — GitHub-renderable version with inline Mermaid diagrams
-3. **Review `plans/uat-checklist-v2.md`** — Human review checklist before presenting
-4. **Review `plans/risk-assessment.md`** — Interview outcome risks and mitigations
-5. **Review `plans/decisions-made-without-paul.md`** — 3 decisions made during overnight execution
+| When | Open This | Purpose |
+|------|-----------|---------|
+| **Night before** | [interview-prep/study-guide.md](interview-prep/study-guide.md) | Azure mapping, diagram talking points, assumptions, key numbers |
+| **1 hour before** | [interview-prep/pre-show-checklist.md](interview-prep/pre-show-checklist.md) | Checklists, risk awareness, rehearsal items |
+| **During presentation** | [presentation.md](presentation.md) + [speaker-script.md](speaker-script.md) | Slides on screen + speaking notes in hand |
+| **During Q&A** | [interview-prep/quick-reference.md](interview-prep/quick-reference.md) | 18 anticipated questions with 60-second answers |
+| **Morning demo build** | [plans/demo-implementation-prompt.md](plans/demo-implementation-prompt.md) | Claude Code plan for building the PA review demo |
+| **Before sending email** | [email-draft.md](email-draft.md) | Email to panel with attachments |
 
-## Deliverables
+---
 
-### Primary Documents
+## File Index
+
+### Presentation
 | File | Description |
 |------|-------------|
-| `proposal.md` | 11-slide deck content with speaker notes, priority-tiered (A/B/C) |
-| `presentation.md` | GitHub-renderable Markdown deck with inline Mermaid diagrams |
-| `solution-architecture-source-of-truth.md` | Master reference document — all other docs are views of this |
-| `research-context.md` | Research findings with 50+ verified source URLs |
-| `requirements-traceability.md` | Assignment → slide mapping (27 requirements, 100% coverage) |
-| `email-draft.md` | Interview response email for panel |
+| [presentation.md](presentation.md) | 11-slide deck — standalone, GitHub-renderable, no speaker notes |
+| [speaker-script.md](speaker-script.md) | Speaking notes, timing, coaching, pivot guides — references presentation slides |
 
-### Slide Generation Prompts
-| File | Slide |
-|------|-------|
-| `slide-generation-prompts/slide-01-introduction.md` | Title & Introduction |
-| `slide-generation-prompts/slide-02-executive-summary.md` | Executive Summary |
-| `slide-generation-prompts/slide-03-high-level-architecture.md` | System Context |
-| `slide-generation-prompts/slide-04-system-architecture.md` | Component Architecture |
-| `slide-generation-prompts/slide-05-pa-processing-flow.md` | PA Processing Flow |
-| `slide-generation-prompts/slide-06-security.md` | Security & Zero Trust |
-| `slide-generation-prompts/slide-07-clinical-data.md` | Clinical Data Integration |
-| `slide-generation-prompts/slide-08-llmops.md` | LLMOps Pipeline |
-| `slide-generation-prompts/slide-09-roadmap.md` | Implementation Roadmap |
-| `slide-generation-prompts/slide-10-scaling.md` | Future State & Scaling |
-| `slide-generation-prompts/slide-11-discussion.md` | Discussion Starters |
+### Interview Prep (3 files, organized by when you use them)
+| File | When | Description |
+|------|------|-------------|
+| [study-guide.md](interview-prep/study-guide.md) | Night before | Azure↔AWS mapping, diagram talking points, 15 assumptions, key numbers |
+| [pre-show-checklist.md](interview-prep/pre-show-checklist.md) | 1 hour before | Checklists (email, content, demo, diagrams), risk tables, sign-off |
+| [quick-reference.md](interview-prep/quick-reference.md) | During Q&A | 18 panel questions with scripted answers, quick pivots table |
 
-### Interview Prep
+### Reference Documents
 | File | Description |
 |------|-------------|
-| `interview-prep/qa-prep.md` | 18 anticipated questions organized by panelist |
-| `interview-prep/technical-deep-dive.md` | Per-diagram talking points and depth guides |
-| `interview-prep/azure-aws-mapping.md` | Complete Azure↔AWS service mapping |
-| `interview-prep/assumptions-and-questions.md` | Discovery questions organized by interview flow |
-| `interview-prep/presentation-coaching.md` | Time management, pivot guides, opening/closing scripts |
+| [solution-architecture-source-of-truth.md](solution-architecture-source-of-truth.md) | Master architecture reference — all other docs are views of this |
+| [research-context.md](research-context.md) | Research findings with 50+ verified source URLs |
+| [requirements-traceability.md](requirements-traceability.md) | Assignment → slide mapping (27 requirements, 100% coverage) |
+| [email-draft.md](email-draft.md) | Interview email for panel |
 
-### Diagrams (6 progressive views)
-| File | View | Format |
-|------|------|--------|
-| `diagrams/01-system-context` | Business stakeholder view (3-4 components) | .mmd / .svg / .png |
-| `diagrams/02-component-architecture` | Internal components with Azure labels | .mmd / .svg / .png |
-| `diagrams/03-pa-request-flow` | PA lifecycle (submit → determine → respond) | .mmd / .svg / .png |
-| `diagrams/04-clinical-data-access` | FHIR R4 + legacy with security boundaries | .mmd / .svg / .png |
-| `diagrams/05-security-zero-trust` | Layered security with AI-specific controls | .mmd / .svg / .png |
-| `diagrams/06-llmops-pipeline` | Eval pipeline, guardrails, feedback loop | .mmd / .svg / .png |
+### Slide Generation (for Claude for PowerPoint)
+| File | Description |
+|------|-------------|
+| [slide-generation-prompts/README.md](slide-generation-prompts/README.md) | All 11 prompts referencing presentation.md as source of truth |
+
+### Diagrams (6 progressive views, 3 formats each)
+| Diagram | .mmd | .svg | .png |
+|---------|------|------|------|
+| 01 System Context | [mmd](diagrams/01-system-context.mmd) | [svg](diagrams/01-system-context.svg) | [png](diagrams/01-system-context.png) |
+| 02 Component Architecture | [mmd](diagrams/02-component-architecture.mmd) | [svg](diagrams/02-component-architecture.svg) | [png](diagrams/02-component-architecture.png) |
+| 03 PA Request Flow | [mmd](diagrams/03-pa-request-flow.mmd) | [svg](diagrams/03-pa-request-flow.svg) | [png](diagrams/03-pa-request-flow.png) |
+| 04 Clinical Data Access | [mmd](diagrams/04-clinical-data-access.mmd) | [svg](diagrams/04-clinical-data-access.svg) | [png](diagrams/04-clinical-data-access.png) |
+| 05 Security & Zero Trust | [mmd](diagrams/05-security-zero-trust.mmd) | [svg](diagrams/05-security-zero-trust.svg) | [png](diagrams/05-security-zero-trust.png) |
+| 06 LLMOps Pipeline | [mmd](diagrams/06-llmops-pipeline.mmd) | [svg](diagrams/06-llmops-pipeline.svg) | [png](diagrams/06-llmops-pipeline.png) |
 
 ### Plans
 | File | Description |
 |------|-------------|
-| `plans/demo-implementation-prompt.md` | Claude Code plan for demo build (March 24 morning) |
-| `plans/execution-log.md` | Autonomous overnight execution log |
-| `plans/decisions-made-without-paul.md` | 3 technical decisions made without Paul |
-| `plans/risk-assessment.md` | Interview outcome risks and mitigations |
-| `plans/uat-checklist-v2.md` | Human review checklist before presenting |
-
-## Architecture Summary
-
-- **10 components**, **10 data flows**, **6 diagrams**
-- **Azure-primary**: AI Foundry + Service Bus + Container Apps + Health Data Services
-- **AI Engine**: Autonomize PA Copilot + Claude (via Azure AI Foundry)
-- **Pattern**: Single agent with skills (ReAct), confidence-based routing
-- **Security**: PHI tokenization, prompt injection defense, tamper-proof audit trail
-- **Review Score**: 9.1/10 — PASS, 0 blockers
-
-## Review Score
-
-| Dimension | Score |
-|-----------|-------|
-| Completeness | 9.0 |
-| Technical Soundness | 9.0 |
-| Well-Architected | 8.0 |
-| Clarity | 9.5 |
-| Feasibility | 9.0 |
-| **Overall** | **9.1** |
+| [demo-implementation-prompt.md](plans/demo-implementation-prompt.md) | Claude Code plan for demo build (March 24 morning) |
+| [execution-log.md](plans/execution-log.md) | Autonomous overnight execution log |
+| [decisions-made-without-paul.md](plans/decisions-made-without-paul.md) | 3 technical decisions made overnight |

@@ -9,10 +9,10 @@
 ## Context
 
 **Who**: Paul Prae, Principal AI Engineer & Architect candidate at Autonomize AI
-**What**: Build a working demo of AI-driven PA review to present during afternoon interview
+**What**: Build a working demo of AI-driven PA review to present during an interview to accompany the presentation of an enterprise-grade solution architecture you can see here `C:\dev\solutions-architecture-agent\outputs\eng-2026-004-v2\proposal.md`
 **When**: One workday (March 24 morning). Presentation is afternoon.
 **Why**: Proves the architecture from the slide deck is implementable, demonstrates Paul's AI engineering skills, shows how Autonomize could leverage Claude for PA automation
-**Audience**: Kris Nair (COO), Suresh Gopalakrishnan (SA, ex-Elevance Health), Ujjwal Rajbhandari (VP Eng, ex-Google Cloud/Dell)
+**Audience**: Kris Nair (COO/CTO), Suresh Gopalakrishnan (SA, ex-Elevance Health), Ujjwal Rajbhandari (VP Eng, ex-Google Cloud/Dell)
 
 ## Foundation
 
