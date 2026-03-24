@@ -1,6 +1,6 @@
 # Solution Architecture — Source of Truth
 ## AI-Driven Prior Authorization | Autonomize AI
-### eng-2026-004 v2 | March 2026
+### March 2026
 
 > **This document is the master reference for all other deliverables.** The slide deck, speaker notes, email draft, and interview prep are all views of this document. When in doubt, this document is correct.
 
@@ -167,7 +167,7 @@ These are questions a thorough SA would ask before committing to implementation.
 | Metric | Value | Source |
 |---|---|---|
 | Manual PA cost (provider) | $10.97 per transaction | [2024 CAQH Index](https://www.caqh.org/hubfs/Index/2024%20Index%20Report/CAQH_IndexReport_2024_FINAL.pdf) |
-| Manual PA cost (payer) | $3.41 per transaction | Same |
+| Manual PA cost (payer) | $3.52 per transaction | Same |
 | Automated PA cost | ~$0.05 per transaction | Same |
 | Review time reduction (Altais) | 45% | [BusinessWire Feb 2026](https://www.businesswire.com/news/home/20260224376992/en/Altais-Cuts-Prior-Authorization-Review-Time-by-45-and-Reduces-Manual-Errors-by-54-with-Autonomize-AI) |
 | Error reduction (Altais) | 54% | Same |
@@ -182,7 +182,6 @@ These are questions a thorough SA would ask before committing to implementation.
 
 ## 9. Version History
 
-| Version | Date | Author | Changes |
-|---|---|---|---|
-| 1.0 | 2026-03-20 | sa-agent | Initial architecture (AWS-primary, multi-agent, Kafka, FHIR deep dive) |
-| 2.0 | 2026-03-23 | sa-agent (autonomous) | Complete redesign: Azure-primary, single agent + skills, Service Bus, FHIR R4 label only, no dollar estimates, generic-first design, assignment-aligned scope |
+| Version | Date | Description |
+|---|---|---|
+| 2.0 | 2026-03-23 | Azure-native architecture, single orchestrator pattern, assignment-aligned scope |

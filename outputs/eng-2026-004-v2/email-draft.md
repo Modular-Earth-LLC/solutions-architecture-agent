@@ -23,7 +23,7 @@ I'm sharing my materials ahead of our conversation so you can review at your con
 - **Live demo** — A working proof-of-concept I built showing AI-driven PA review with clinical reasoning [demo link placeholder]
 - **GitHub repository** — Architecture source files and diagrams
 
-I approached this as I would a real engagement — starting with the assignment requirements, researching Autonomize's platform and the PA landscape, then iterating the architecture through multiple review cycles. I used my **Solutions Architecture Agent** — a Claude Code plugin I built — to structure the discovery, design, and validation process. It's part of my portfolio demonstrating how I approach solution design with AI-augmented workflows.
+I approached this iteratively — researching Autonomize's platform and the PA landscape, then cycling through design, validation, and review.
 
 A few things I want to highlight:
 - The architecture is **Azure-native** to align with Autonomize's platform and Pegasus Program membership

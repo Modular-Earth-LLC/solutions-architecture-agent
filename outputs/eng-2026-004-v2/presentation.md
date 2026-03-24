@@ -285,7 +285,7 @@ Each phase produces a deployable, demonstrable system. Decision gates between ph
 | Claim | Source |
 |-------|--------|
 | $10.97 manual PA cost (provider) | [2024 CAQH Index](https://www.caqh.org/hubfs/Index/2024%20Index%20Report/CAQH_IndexReport_2024_FINAL.pdf) |
-| $3.41 manual PA cost (payer) | Same |
+| $3.52 manual PA cost (payer) | Same |
 | ~$0.05 automated PA cost | Same |
 | 45% review time reduction | [Altais/Autonomize (Feb 2026)](https://www.businesswire.com/news/home/20260224376992/en/Altais-Cuts-Prior-Authorization-Review-Time-by-45-and-Reduces-Manual-Errors-by-54-with-Autonomize-AI) |
 | 54% error reduction | Same |

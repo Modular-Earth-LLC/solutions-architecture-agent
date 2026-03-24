@@ -1,5 +1,5 @@
 # Requirements Traceability Matrix
-## eng-2026-004 v2: AI-Driven Prior Authorization — Autonomize AI
+## AI-Driven Prior Authorization — Autonomize AI
 
 Every row maps an assignment requirement to where it is addressed. 100% coverage required.
 

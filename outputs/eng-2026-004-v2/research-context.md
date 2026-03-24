@@ -1,4 +1,4 @@
-# eng-2026-004 v2: Research Context
+# Research Context
 ## AI-Driven Prior Authorization — Autonomize AI Interview
 ### Research Date: March 23, 2026
 
@@ -180,14 +180,12 @@ Source: [BusinessWire Leadership Hires](https://www.businesswire.com/news/home/2
 | Metric | Cost | Source |
 |--------|------|--------|
 | Manual PA — provider | $10.97 per transaction | [CAQH 2024 Index](https://www.caqh.org/hubfs/Index/2024%20Index%20Report/CAQH_IndexReport_2024_FINAL.pdf) |
-| Manual PA — payer | $3.41 per transaction | Same |
+| Manual PA — payer | $3.52 per transaction | Same |
 | Fully electronic/automated PA | ~$0.05 per transaction | Same |
 | Manual PA time (phone/fax) | 24 minutes per transaction | Same |
 | Manual PA time (portal) | 16 minutes per transaction | Same |
 | Electronic adoption rate | 35% of medical PAs | Same |
 | Potential annual savings (full electronic) | $494 million | Same |
-
-**Note**: v1 cited $3.14 for payer cost — corrected to $3.41 per 2024 CAQH Index.
 
 ### Altais Case Study (February 2026 — verified)
 | Metric | Result | Status |
@@ -212,8 +210,6 @@ Source: [BusinessWire Leadership Hires](https://www.businesswire.com/news/home/2
 | PA increases burnout | 89% of physicians | Same |
 | Serious adverse events from PA | 23% report | Same |
 | Medicare Advantage PA denial rate | 6.4% | Same |
-
-**Note**: v1 cited "14 hours/week" — corrected to 12-13 hours per 2024 AMA survey.
 
 ### State PA Reforms (2025-2026)
 | State | Law | Key Provision | Effective |
@@ -313,6 +309,4 @@ Source: [MultiState PA Reform](https://www.multistate.us/insider/2025/8/14/prior
 |-------|-------|----------------|
 | Autonomize HITRUST certification | No public source found | Do not claim HITRUST — only cite SOC 2 Type 2 + HIPAA |
 | Claude healthcare connectors via API | Connectors confirmed in Claude UI, unclear if available via Anthropic API for custom apps | Frame as "Claude platform capability" not "API endpoint" |
-| v1 payer cost $3.14 | 2024 CAQH Index shows $3.41 | Use $3.41 with 2024 source |
-| v1 physician burden 14 hr/week | 2024 AMA survey shows 12-13 hr/week | Use 12-13 with 2024 source |
 | Autonomize "100+ agents" | Number from October 2025 launch — may have grown | Cite "100+" with date qualifier |

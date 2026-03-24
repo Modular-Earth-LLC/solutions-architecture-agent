@@ -1,5 +1,5 @@
 # Pre-Show Checklist -- 1 Hour Before
-## eng-2026-004 v2
+## AI-Driven Prior Authorization — Autonomize AI Interview
 
 > Work through this checklist before sending the email and before presenting.
 > For study material, see [study-guide.md](study-guide.md). For speaking notes, see [speaker-script.md](../speaker-script.md).
@@ -10,7 +10,7 @@
 
 See [decisions-made-without-paul.md](../plans/decisions-made-without-paul.md):
 - [x] D-001: outputs/ un-ignored in .gitignore -- Paul requested this
-- [ ] D-002: CAQH payer cost $3.14 to $3.41 -- verify you're comfortable
+- [x] D-002: CAQH payer cost $3.52 -- verified against 2024 CAQH Index
 - [ ] D-003: AMA physician burden 14 to 12-13 hr/week -- verify you're comfortable
 
 ---
@@ -23,14 +23,14 @@ See [decisions-made-without-paul.md](../plans/decisions-made-without-paul.md):
 - [ ] Confirm diagram PNGs render at readable size
 - [ ] Spell-check: Paul Prae, www.paulprae.com (never misspelled)
 - [ ] Check panel names spelled correctly: Kris Nair, Suresh Gopalakrishnan, Ujjwal Rajbhandari
-- [ ] Mention Solutions Architecture Agent in email (already in draft)
+- [ ] Verify email tone and content match your voice
 
 ---
 
 ## Before Presenting -- Content Accuracy
 
 - [ ] Verify Altais metrics: 45% review time reduction, 54% error reduction, 50% auto-approval
-- [ ] Verify CAQH numbers: $10.97 provider, $3.41 payer, ~$0.05 automated (2024 Index)
+- [ ] Verify CAQH numbers: $10.97 provider, $3.52 payer, ~$0.05 automated (2024 Index)
 - [ ] Verify CMS-0057-F: Phase 1 live Jan 2026, Phase 2 Jan 2027
 - [ ] Verify Autonomize: Pegasus Program (Nov 2025), Azure Marketplace, ServiceNow partnership (Mar 2026)
 - [ ] Spot-check 5 source URLs from appendix -- all should load
@@ -87,7 +87,7 @@ See [decisions-made-without-paul.md](../plans/decisions-made-without-paul.md):
 | Risk | Likelihood | Impact | Mitigation |
 |------|-----------|--------|------------|
 | Altais metrics (45%/54%/50%) challenged by panel | Low | Medium | Source verified: BusinessWire Feb 2026. Have URL ready. |
-| CAQH cost numbers questioned | Low | Low | Source verified: 2024 CAQH Index PDF. Note: payer cost is $3.41 (not $3.14 from earlier reports). |
+| CAQH cost numbers questioned | Low | Low | Source verified: 2024 CAQH Index PDF. Payer cost is $3.52 per transaction. |
 | CMS-0057-F timeline questioned | Low | Medium | Phase 1 live Jan 2026, Phase 2 Jan 2027. CMS fact sheet URL ready. |
 | Autonomize platform claims challenged | Medium | High | Only cite publicly verified facts (Pegasus Program, Azure Marketplace, ServiceNow partnership, SOC 2, 3 of top 5 plans). No internal platform claims. |
 | Claude healthcare connectors availability via API unclear | Medium | Low | Frame as "Claude platform capability" -- demo uses Anthropic SDK tool-use pattern regardless. |
@@ -108,7 +108,7 @@ See [decisions-made-without-paul.md](../plans/decisions-made-without-paul.md):
 |------|-----------|--------|------------|
 | Anthropic PA review skill doesn't install or work | Medium | High | Test BEFORE the interview. Have mock data fallback. |
 | Azure deployment fails | Medium | Low | Local demo is perfectly acceptable. Don't force Azure. |
-| Demo doesn't match slide architecture | Low | High | Demo prompt explicitly aligned to slide narrative. Demo walkthrough script in proposal.md. |
+| Demo doesn't match slide architecture | Low | High | Demo prompt explicitly aligned to slide narrative. Demo walkthrough script in presentation.md. |
 | Panel wants to try unusual PA cases | Medium | Low | Have 3-5 mock cases covering different outcomes. Acknowledge demo uses mock data. |
 
 ### Knowledge Gap Risks

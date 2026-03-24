@@ -1,5 +1,5 @@
 # Study Guide -- Night Before / Morning Of
-## eng-2026-004 v2
+## AI-Driven Prior Authorization — Autonomize AI Interview
 
 > Study this to build confidence. For the presentation itself, use [speaker-script.md](../speaker-script.md) alongside [presentation.md](../presentation.md).
 
@@ -326,7 +326,7 @@ Operational Procedures      -> A-11 (reviewer workflow), A-14 (Payer Core SLA), 
 | Metric | Value | Source |
 |---|---|---|
 | Manual PA cost (provider) | $10.97 | CAQH 2024 Index |
-| Manual PA cost (payer) | $3.41 | CAQH 2024 Index |
+| Manual PA cost (payer) | $3.52 | CAQH 2024 Index |
 | Automated PA cost | ~$0.05 | CAQH 2024 Index |
 | Manual PA time (phone/fax) | 24 minutes per transaction | CAQH 2024 Index |
 | Manual PA time (portal) | 16 minutes per transaction | CAQH 2024 Index |

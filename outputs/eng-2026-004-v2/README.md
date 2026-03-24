@@ -1,4 +1,4 @@
-# eng-2026-004 v2: AI-Driven Prior Authorization
+# AI-Driven Prior Authorization
 ## Autonomize AI Interview | Paul Prae | www.paulprae.com
 
 ---
@@ -53,6 +53,13 @@
 | 04 Clinical Data Access | [mmd](diagrams/04-clinical-data-access.mmd) | [svg](diagrams/04-clinical-data-access.svg) | [png](diagrams/04-clinical-data-access.png) |
 | 05 Security & Zero Trust | [mmd](diagrams/05-security-zero-trust.mmd) | [svg](diagrams/05-security-zero-trust.svg) | [png](diagrams/05-security-zero-trust.png) |
 | 06 LLMOps Pipeline | [mmd](diagrams/06-llmops-pipeline.mmd) | [svg](diagrams/06-llmops-pipeline.svg) | [png](diagrams/06-llmops-pipeline.png) |
+
+### Inputs
+| File | Description |
+|------|-------------|
+| [assignment.md](inputs/assignment.md) | Interview assignment — AI-Driven Prior Authorization scenario |
+| [stakeholder-profiles.md](inputs/stakeholder-profiles.md) | Panel profiles — Kris Nair, Suresh Gopalakrishnan, Ujjwal Rajbhandari |
+| [job-description.md](inputs/job-description.md) | Solutions Architect job description — Autonomize AI |
 
 ### Plans
 | File | Description |

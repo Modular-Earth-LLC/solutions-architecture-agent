@@ -1,5 +1,5 @@
 # Quick Reference -- During Q&A
-## eng-2026-004 v2
+## AI-Driven Prior Authorization — Autonomize AI Interview
 
 > Keep this open during the interview for fast lookup when the panel asks questions.
 > For full presentation flow, see [speaker-script.md](../speaker-script.md).
@@ -12,7 +12,7 @@
 
 **Answer (45 sec):**
 
-"The business case starts with cost: CAQH data shows a health plan pays $3.41 per PA transaction manually. Automated, that drops to roughly five cents. At a million PAs per month, that's $3.36 million in monthly savings potential from a single line item.
+"The business case starts with cost: CAQH data shows a health plan pays $3.52 per PA transaction manually. Automated, that drops to roughly five cents. At a million PAs per month, that's $3.47 million in monthly savings potential from a single line item.
 
 But the cost story isn't even the strongest argument. CMS-0057-F Phase 1 is already live -- January 2026. Non-compliance is an existential regulatory risk. And Altais proved in February 2026 that Autonomize's platform delivers 45% faster review, 54% fewer errors, and a 50% auto-determination rate.
 
@@ -28,7 +28,7 @@ My architecture integrates those capabilities with the right safety controls -- 
 
 "Progressive delivery means value at every phase. Phase 0 is a proof-of-concept -- a working AI PA review running against real clinical data within a few weeks. That's not a demo build -- it's the actual architecture, live, with real Autonomize APIs. It proves the concept before committing to full build.
 
-Phase 1 MVP deploys to a single line of business on a single intake channel. The first real auto-determination rate is measurable the day it goes live. Every PA that routes automatically instead of manually is immediate cost recovery -- $3.36 saved per transaction.
+Phase 1 MVP deploys to a single line of business on a single intake channel. The first real auto-determination rate is measurable the day it goes live. Every PA that routes automatically instead of manually is immediate cost recovery -- $3.47 saved per transaction.
 
 The key point: ROI doesn't wait for Phase 3. Each phase is designed to produce something real and measurable. And the architecture is reversible -- decision gates between phases use performance data, not optimism."
 
