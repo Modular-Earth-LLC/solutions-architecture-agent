@@ -5,8 +5,8 @@
   "engagement_type": "assessment",
   "status": "in_progress",
   "created_date": "2026-03-20",
-  "last_updated": "2026-03-20",
-  "version": "1.0",
+  "last_updated": "2026-03-24",
+  "version": "2.0",
   "client": {
     "name": "Fictional US Health Plan (Autonomize AI Interview)",
     "industry": "Healthcare / Health Insurance (Payer)",
@@ -16,27 +16,27 @@
   "lifecycle_state": {
     "requirements": {
       "status": "complete",
-      "version": "1.0",
+      "version": "2.0",
       "file": "requirements.json",
-      "last_updated": "2026-03-20",
-      "reviewed": false,
-      "depth": "COMPREHENSIVE"
+      "last_updated": "2026-03-23",
+      "reviewed": true,
+      "depth": "STANDARD"
     },
     "architecture": {
       "status": "complete",
-      "version": "1.0",
+      "version": "2.0",
       "file": "architecture.json",
-      "last_updated": "2026-03-20",
-      "reviewed": false,
+      "last_updated": "2026-03-23",
+      "reviewed": true,
       "depth": "COMPREHENSIVE"
     },
     "security_review": {
       "status": "complete",
-      "version": "1.0",
+      "version": "2.0",
       "file": "security_review.json",
-      "last_updated": "2026-03-20",
-      "reviewed": false,
-      "depth": "COMPREHENSIVE"
+      "last_updated": "2026-03-23",
+      "reviewed": true,
+      "depth": "STANDARD"
     },
     "estimate": {
       "status": "complete",
@@ -48,39 +48,39 @@
     },
     "project_plan": {
       "status": "complete",
-      "version": "1.0",
+      "version": "2.0",
       "file": "project_plan.json",
-      "last_updated": "2026-03-20",
-      "reviewed": false,
-      "depth": "COMPREHENSIVE"
+      "last_updated": "2026-03-23",
+      "reviewed": true,
+      "depth": "STANDARD"
     },
     "proposal": {
       "status": "complete",
-      "version": "1.0",
+      "version": "2.0",
       "file": "proposal.md",
-      "last_updated": "2026-03-20",
-      "reviewed": false,
+      "last_updated": "2026-03-23",
+      "reviewed": true,
       "depth": "COMPREHENSIVE"
     },
     "review": {
       "status": "complete",
-      "version": "1.0",
+      "version": "2.0",
       "file": "reviews.json",
-      "last_updated": "2026-03-20",
-      "reviewed": false
+      "last_updated": "2026-03-24",
+      "reviewed": true
     }
   },
   "review_summary": {
-    "total_reviews": 1,
-    "latest_overall_score": 8.8,
+    "total_reviews": 2,
+    "latest_overall_score": 9.1,
     "blocking_findings": 0
   },
   "engagement_depth": "COMPREHENSIVE",
-  "tags": ["healthcare", "payer", "prior-authorization", "genai", "multi-agent", "hipaa", "interview-take-home", "autonomize-ai", "mlops"],
+  "tags": ["healthcare", "payer", "prior-authorization", "genai", "azure", "hipaa", "interview-take-home", "autonomize-ai", "llmops", "claude"],
   "_metadata": {
     "author": "sa-agent",
-    "date": "2026-03-20",
+    "date": "2026-03-24",
     "validation_status": "valid",
-    "version": "1.0"
+    "version": "2.0"
   }
 }
