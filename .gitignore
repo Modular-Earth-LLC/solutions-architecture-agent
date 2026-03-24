@@ -3,8 +3,8 @@
 # Claude Code - local-only files
 .claude/settings.local.json
 
-# Proposal outputs (client-specific)
-outputs/
+# Proposal outputs — tracked for eng-2026-004 deliverables
+# outputs/
 
 # Environment and Secrets
 .env
@@ -93,7 +93,7 @@ site/
 docs/_build/
 
 # Knowledge base engagement data (may contain PII — NFR-017, NFR-018)
-knowledge_base/*.json
+# knowledge_base/*.json
 !knowledge_base/system_config.json
 
 # Input materials (client data, assignments — may contain PII/NDA content)
