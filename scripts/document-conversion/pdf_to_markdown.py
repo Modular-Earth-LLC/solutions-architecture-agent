@@ -13,7 +13,7 @@ Requirements:
     - pymupdf
 
 Installation:
-    pip install pdfplumber pymupdf
+    uv pip install pdfplumber pymupdf
 """
 
 import os
@@ -25,7 +25,7 @@ from typing import List, Tuple
 try:
     import pdfplumber
 except ImportError:
-    print("ERROR: pdfplumber not installed. Run: pip install pdfplumber")
+    print("ERROR: pdfplumber not installed. Run: uv pip install pdfplumber")
     sys.exit(1)
 
 

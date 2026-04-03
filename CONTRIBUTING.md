@@ -8,7 +8,7 @@ This is the single source of truth for contributing to the Solutions Architectur
 
 - **Claude Code CLI** — [install guide](https://docs.anthropic.com/en/docs/claude-code/overview)
 - **Git** — version control
-- **Python 3.10+** — for validation scripts (`pip install jsonschema`)
+- **Python 3.10+** and **[uv](https://docs.astral.sh/uv/)** — for validation scripts (`uv sync`)
 - Familiarity with the [ARCHITECTURE.md](ARCHITECTURE.md) design
 
 ---
@@ -249,7 +249,7 @@ python tests/test_end_to_end_example.py    # Example engagement schema + integra
 python tests/test_workflow_validation.py   # v1.1: depth tiers, checkpoints, new flows
 python tests/test_output_quality.py        # v1.1: name checks, length limits, templates
 
-# Optional (requires `pip install requests`)
+# Optional (requires `uv sync`)
 python tests/validate_urls.py              # External link health check
 ```
 

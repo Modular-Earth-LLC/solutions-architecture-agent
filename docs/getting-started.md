@@ -8,7 +8,7 @@ Get productive in 15 minutes.
 
 - **Claude Code CLI** — [install guide](https://docs.anthropic.com/en/docs/claude-code/overview)
 - **Git** — to clone the repository
-- **Python 3.10+** — for validation scripts (`pip install jsonschema`)
+- **Python 3.10+** and **[uv](https://docs.astral.sh/uv/)** — for validation scripts (`uv sync`)
 
 ---
 
@@ -20,9 +20,7 @@ git clone https://github.com/Modular-Earth-LLC/solutions-architecture-agent.git
 cd solutions-architecture-agent
 
 # 2. Install Python test dependencies
-python -m venv .venv && .venv/Scripts/activate  # Windows
-# source .venv/bin/activate                     # Linux/macOS
-pip install -r requirements.txt
+uv sync
 
 # 3. Load as Claude Code plugin
 claude --plugin-dir .

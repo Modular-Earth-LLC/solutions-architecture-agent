@@ -17,7 +17,7 @@ Converts PDF files to well-formatted Markdown with intelligent structure preserv
 
 **Installation:**
 ```bash
-pip install pdfplumber pymupdf
+uv pip install pdfplumber pymupdf
 ```
 
 **Usage:**

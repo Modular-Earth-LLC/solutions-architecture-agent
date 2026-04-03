@@ -107,7 +107,7 @@ python tests/validate_knowledge_base.py --file system_config
 python tests/validate_consistency.py
 ```
 
-Requires: `pip install 'jsonschema>=4.17'`
+Requires: `uv sync`
 
 ## PII Protection
 

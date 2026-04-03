@@ -16,7 +16,7 @@ from pathlib import Path
 try:
     from jsonschema import Draft202012Validator
 except ImportError:
-    print("Error: jsonschema library not installed. Run: pip install jsonschema")
+    print("Error: jsonschema library not installed. Run: uv sync")
     sys.exit(1)
 
 REPO_ROOT = Path(__file__).parent.parent

@@ -26,9 +26,7 @@ git clone https://github.com/Modular-Earth-LLC/solutions-architecture-agent.git
 cd solutions-architecture-agent
 
 # Install Python test dependencies
-python -m venv .venv && .venv/Scripts/activate  # Windows
-# source .venv/bin/activate                     # Linux/macOS
-pip install -r requirements.txt
+uv sync
 
 # Load plugin (development — reads live from this directory)
 claude --plugin-dir .

@@ -21,13 +21,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install jsonschema requests
+        run: uv pip install --system jsonschema requests
 
       - name: Schema validation
         run: python tests/validate_knowledge_base.py

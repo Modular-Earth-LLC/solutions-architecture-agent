@@ -20,7 +20,7 @@ try:
     from jsonschema import Draft202012Validator, ValidationError
 except ImportError:
     print("[ERROR] jsonschema library not installed or version too old")
-    print("Install with: pip install 'jsonschema>=4.17'")
+    print("Install with: uv sync")
     sys.exit(1)
 
 

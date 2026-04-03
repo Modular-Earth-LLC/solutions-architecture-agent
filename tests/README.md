@@ -124,7 +124,7 @@ Validates the healthcare IBMi migration example package:
 ### URL Validation (Optional)
 
 ```bash
-pip install requests  # Required for accessibility checks
+uv sync  # Installs all test dependencies including requests
 python tests/validate_urls.py
 ```
 
@@ -151,7 +151,7 @@ python tests/test_engagement_flow.py
 python tests/test_skill_independence.py
 python tests/validate_well_architected.py
 python tests/test_end_to_end_example.py
-python tests/validate_urls.py              # optional, requires: pip install requests
+python tests/validate_urls.py              # optional, requires: uv sync
 ```
 
 ### After Skill Changes
@@ -165,7 +165,7 @@ See [CONTRIBUTING.md § Manual Skill Testing](../CONTRIBUTING.md#manual-skill-te
 ### Setup
 
 ```bash
-pip install jsonschema
+uv sync
 ```
 
 Run all tests from the project root directory.
@@ -174,7 +174,7 @@ Run all tests from the project root directory.
 
 | Error | Fix |
 |-------|-----|
-| `jsonschema library not installed` | `pip install jsonschema` |
+| `jsonschema library not installed` | `uv sync` |
 | `Path not found` | Run from project root |
 | Schema validation fails | Check JSON syntax, review error message for specific field |
 

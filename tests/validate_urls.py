@@ -25,7 +25,7 @@ try:
 except ImportError:
     REQUESTS_AVAILABLE = False
     print("Note: requests library not available. Running extraction-only mode.")
-    print("Install with: pip install requests\n")
+    print("Install with: uv sync\n")
 
 REPO_ROOT = Path(__file__).parent.parent
 SCOPE_CONFIG = Path(__file__).parent / "url_validation_scope.json"
@@ -175,7 +175,7 @@ def validate_urls():
 
     if not REQUESTS_AVAILABLE:
         print("  Skipping accessibility checks (requests not installed)")
-        print("  Install with: pip install requests")
+        print("  Install with: uv sync")
         return url_locations, {}
 
     results = {}
@@ -236,7 +236,7 @@ def main():
     else:
         print(f"\nExtracted {len(url_locations)} unique URLs (extraction-only mode)")
         if not REQUESTS_AVAILABLE:
-            print("Install requests for accessibility testing: pip install requests")
+            print("Install requests for accessibility testing: uv sync")
         return 0
 
 

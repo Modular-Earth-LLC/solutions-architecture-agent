@@ -80,7 +80,7 @@ Cowork discovers plugins in trusted folders. Add the repo to trusted folders by 
 Required for running the validation test scripts. Not needed for plugin usage.
 
 ```bash
-pip install -r requirements.txt
+uv sync
 ```
 
 ### Run All Tests
@@ -111,8 +111,8 @@ python tests/validate_consistency.py
 | Issue | Fix |
 |-------|-----|
 | `claude: command not found` | Install Claude Code CLI: `npm install -g @anthropic-ai/claude-code` |
-| `python: command not found` | Install Python 3.10+: [python.org](https://www.python.org/downloads/) |
-| `No module named 'jsonschema'` | Run: `pip install -r requirements.txt` |
+| `python: command not found` | Install [uv](https://docs.astral.sh/uv/) which manages Python automatically |
+| `No module named 'jsonschema'` | Run: `uv sync` |
 | Plugin not loading in CLI | Check `claude plugin validate .` passes |
 | Skills not in Claude Desktop Cowork | Manually edit Desktop config per Environment 2 above |
 | VS Code doesn't see plugin | Ensure `.claude-plugin/plugin.json` exists and folder is workspace root |
