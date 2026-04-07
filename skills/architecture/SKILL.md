@@ -59,6 +59,10 @@ From `knowledge_base/integration_plan.json` (if exists) read:
 
 If `$ARGUMENTS` are provided, treat them as additional constraints or focus areas.
 
+**Brownfield ingestion (refactor-in-place mode):** If the engagement already has an existing architecture document (e.g., in a sister repo's `docs/architecture/solution-architecture.md`), the existing component IDs `C-NNN`, the existing Mermaid diagrams in `docs/architecture/diagrams/*.mmd`, and the existing tech stack table, read them **before** designing anything new. Preserve stable component IDs. Refactor in place — do not rewrite from scratch. Add new components only where genuinely new capabilities are introduced. Update the tech stack table with a dated decision-log entry for each changed choice. Follow `.claude/rules/brownfield-refactor.md` for the full rule set, and `.claude/rules/research-grounding.md` for citation discipline on every technology choice.
+
+**External-target mode:** If the final deliverable path is outside the SA agent's CWD, keep `knowledge_base/architecture.json` as source of truth and write the refactored markdown to the external path. For cross-repo writes, check for `COORDINATION-NOTES.md` / `COORDINATION-PROTOCOL.md` in the target repo's `.claude/plans/` and follow it literally (specific-path staging, pull --rebase, coordination entries before and after).
+
 ## 4. CORE WORKFLOW
 
 ### Step 1: Technology Stack Selection

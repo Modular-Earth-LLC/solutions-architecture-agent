@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "microsoft-learn": {
+      "type": "http",
+      "url": "https://mcp.deepsense.ai/microsoft_learn/mcp"
+    },
+    "cms-coverage-db": {
+      "type": "http",
+      "url": "https://mcp.deepsense.ai/cms_coverage/mcp"
+    },
+    "npi-registry": {
+      "type": "http",
+      "url": "https://mcp.deepsense.ai/npi_registry/mcp"
+    },
+    "icd10-codes": {
+      "type": "http",
+      "url": "https://mcp.deepsense.ai/icd10_codes/mcp"
+    }
+  }
+}

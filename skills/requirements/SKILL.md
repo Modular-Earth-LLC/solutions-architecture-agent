@@ -43,6 +43,10 @@ If `$ARGUMENTS` are provided, treat them as client context or meeting notes to p
 ## 4. CORE WORKFLOW
 
 > **Shortcut — rich context provided:** If `$ARGUMENTS` contains meeting notes, an RFP, a client brief, or any detailed context, skip Steps 1-2 entirely and go directly to **Step 3** to extract requirements. Use Steps 1-2 only for live interactive discovery sessions.
+>
+> **Shortcut — file-path ingestion (brownfield):** If `$ARGUMENTS` contains one or more absolute or project-relative file paths to approved requirements docs, RFPs, or meeting notes (e.g., `/requirements C:/dev/sister-repo/.claude/plans/requirements-analysis.md`), **read each file first** with the Read tool, then treat its contents as the authoritative source. Skip Steps 1-2. Do NOT modify the source markdown — it is already approved. This is purely an ingestion step to populate `knowledge_base/requirements.json` so downstream skills have structured data to consume. If the approved doc is the SSOT for downstream reference, set `_metadata.source_ssot` to the absolute file path and cite it from the KB file rather than duplicating its content.
+>
+> **External-target mode:** If the user specifies a target human-readable deliverable path outside the SA agent's CWD (e.g., "write to `C:/dev/sister-repo/docs/requirements.md`"), keep `knowledge_base/requirements.json` in the SA agent repo as source of truth, and write the external deliverable only on explicit instruction. Follow `.claude/rules/brownfield-refactor.md` for cross-repo coordination rules.
 
 ### Step 1: Tier Selection — Complexity Assessment
 

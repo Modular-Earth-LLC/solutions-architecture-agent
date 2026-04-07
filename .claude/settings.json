@@ -15,13 +15,23 @@
       "Bash(cat *)",
       "Bash(claude *)",
       "WebFetch",
-      "WebSearch"
+      "WebSearch",
+      "mcp__microsoft-learn__*",
+      "mcp__cms-coverage-db__*",
+      "mcp__npi-registry__*",
+      "mcp__icd10-codes__*"
     ],
     "deny": [
       "Bash(rm -rf *)",
       "Bash(git push --force*)"
     ]
   },
+  "enabledMcpjsonServers": [
+    "microsoft-learn",
+    "cms-coverage-db",
+    "npi-registry",
+    "icd10-codes"
+  ],
   "hooks": {
     "PreToolUse": [
       {

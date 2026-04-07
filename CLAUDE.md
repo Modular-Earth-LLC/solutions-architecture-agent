@@ -21,6 +21,8 @@ An AI agent covering the **solutions architecture lifecycle**: requirements disc
 | Deliverable Review | `/review` | LLM-as-judge, 3 iterations, 5 dimensions | `reviews.json` |
 
 @.claude/rules/guiding-principles.md
+@.claude/rules/brownfield-refactor.md
+@.claude/rules/research-grounding.md
 
 ## Engagement Lifecycle
 
@@ -29,6 +31,7 @@ An AI agent covering the **solutions architecture lifecycle**: requirements disc
 | Flow | Sequence | When |
 |------|----------|------|
 | **Greenfield** | req → arch → dm → sr → est → ppl → pro → rv | Complete 0-to-1 engagement |
+| **Brownfield** | ingest existing → req (shortcut, file-path) → research → arch (refactor in place) → diagrams → ppl → est → sr → rv | Existing-project refactor, handoff from another agent, pivot on live codebase. See `.claude/rules/brownfield-refactor.md`. |
 | **Migration** | req → ip → arch → dm → sr → est → ppl → pro → rv | Migration/modernization |
 | **Streamlined** | req → arch → est → pro | Small projects, time-constrained |
 | **Assessment** | req → arch → [sr] → pro | Discovery-only, pre-commitment |
@@ -45,6 +48,7 @@ When a user message arrives:
 2. If natural language → classify across 5 dimensions:
    - User objective, domain, current phase, target skill, context needed
    - If unambiguous → dispatch; if ambiguous → present 2-4 options
+   - **Brownfield detection**: if the user references existing file paths, an approved requirements doc, a sister repo, or uses verbs like "refactor in place", "preserve", "update the existing" → route to the **Brownfield** flow and load `.claude/rules/brownfield-refactor.md`
 3. **Scope Negotiation** — before invoking any skill, establish:
    - What is the final deliverable? (document, presentation, assessment, KB artifact)
    - Who is the audience? (client exec, technical team, internal review, interview panel)
